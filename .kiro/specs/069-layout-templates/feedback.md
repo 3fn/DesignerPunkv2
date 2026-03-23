@@ -207,6 +207,58 @@ Incorporated Leonardo R3 retraction. Key changes:
 
 Leonardo's self-correction is well-reasoned. The Spec 083 classification gate taught us that product-specific patterns masquerade as universal when you only exercise against one product. Applying that lesson to layout learning prevents the same mistake.
 
+#### [ADA R1]
+
+**What's solid:**
+
+- The two-layer framing (foundation vs infrastructure) is the right architecture. Layer 1 (vocabulary + literacy) is correctly identified as the critical layer. Templates without understanding produce specs that are technically correct but lack design coherence — Leonardo's own words, and he's right.
+- The scope reframe ("infrastructure, not product templates") is a lesson well-learned from 083. Creating production templates without product context would be speculative. The classification gate pattern is the right safeguard.
+- Leonardo's R3 retraction (don't revisit Working Class screens) shows good self-correction. The over-indexing risk is real — we saw it in the 083 gap report.
+- The responsive vs reactive distinction is important and well-framed. Responsive is per-platform viewport adaptation (token-driven, layout templates). Reactive is cross-platform experience differences (product-driven, Peter's decisions). Naming both in the vocabulary without building reactive templates is the right scope boundary.
+- The bidirectional literacy requirement (Leonardo specifies, platform agents implement, shared vocabulary) addresses a real failure mode. If Leonardo specs "spans 8 responsive columns at lg" and Kenya doesn't know what that means in SwiftUI, the problem just moves downstream.
+
+**Concerns and pushback:**
+
+1. **Token accuracy in the schema sketch.** Leonardo's D2 schema sketch references `gridMarginXs` in the xs breakpoint region. That's correct — the token exists. But the outline references the progressive column grid as "4→8→12→16" without noting that this progression is documented in Token-Family-Spacing.md's grid spacing table, not Token-Family-Responsive.md. The breakpoint tokens (Token-Family-Responsive.md) define viewport widths. The column counts and grid spacing (gutters, margins) are in Token-Family-Spacing.md. The outline conflates these two sources in several places — "breakpoint tokens, grid spacing tokens, progressive 4→8→12→16 column grid" reads as if they're all in one place. The steering doc (Layer 1) needs to be precise about which token family provides what. → design-outline.md § "Two-Layer Solution" Layer 1
+
+2. **The `gridMarginSm` gap.** Token-Family-Spacing.md notes: "`gridMarginSm` currently references `space300` (24px). The design specification calls for `space350` (28px), but this token doesn't exist in the primitive spacing scale yet." This is a known token gap that directly affects layout templates. If a template references `gridMarginSm` expecting 28px but gets 24px, the layout will be subtly wrong at the sm breakpoint. This spec should either (a) acknowledge the gap and note that templates use the current value (24px), or (b) flag it as a prerequisite for me to resolve before templates reference it. Either way, it shouldn't be invisible. → design-outline.md § "Two-Layer Solution" Layer 1
+
+3. **Template token references need governance.** Req 3 AC2 says templates "SHALL reference responsive tokens by name — not hardcoded values." Good. But which tokens? The grid spacing tokens are semantic tokens (I can use them freely per governance). The breakpoint tokens are also semantic. But if a template needs a value that doesn't exist as a token (like the 28px `gridMarginSm` gap), what happens? The template can't hardcode 28px (violates AC2), and the token doesn't exist yet. The spec should address this: either templates can only reference existing tokens (and the gap becomes a blocker), or templates can flag token needs that route to me for creation. → design-outline.md § "Layout Template Infrastructure"
+
+4. **The schema sketch uses `maxWidth: "640px"` — a hardcoded value.** This contradicts Req 3 AC2 ("reference responsive tokens by name — not hardcoded values"). Max-width for content regions isn't currently covered by any token. If the schema needs max-width, either (a) we need max-width tokens (new token creation — requires my review per governance), or (b) the schema allows hardcoded max-width as an exception to the token-first rule with explicit justification. This is a real design decision, not a nitpick — it determines whether the template schema can express content sizing or is limited to grid column spans. → design-outline.md § D2
+
+5. **No mention of the CSS grid generator.** The outline says "The responsive layout system exists (breakpoint tokens, grid spacing tokens, progressive 4→8→12→16 column grid, CSS grid generator)." The CSS grid generator is a build-time artifact that produces responsive grid CSS from tokens. If layout templates reference the same tokens the generator consumes, there's a potential for the template schema and the generator to express the same layout differently. The steering doc should clarify the relationship: does the generator implement what templates describe? Are they independent? Can a platform agent use the generator output directly from a template reference? → design-outline.md § "Problem Statement"
+
+6. **The learning approach is sound but has a token literacy dependency.** Leonardo needs to understand Token-Family-Responsive.md and Token-Family-Spacing.md § "Grid Spacing Tokens." These are my domain docs. If Leonardo has questions about the mathematical foundations (why gutters scale with column count, why margins use specific primitive references, why `gridMarginSm` is 24px instead of 28px), I should be available during the learning step. The spec doesn't flag this cross-domain touchpoint. → design-outline.md § "Two-Layer Solution" Layer 1
+
+**Overall assessment:** This is a well-motivated, well-scoped spec with strong architectural framing. The two-layer solution, the scope reframe, and the responsive/reactive distinction are all sound. My concerns are token-specific: the `gridMarginSm` gap, hardcoded values in the schema sketch, and the need for token governance clarity in template authoring. These are "resolve before or during design phase" items, not structural problems. Ready for formalization with those token questions addressed.
+
+#### [LINA R1]
+
+**What's solid:**
+
+- The two-layer framing is correct. Layer 1 (vocabulary + literacy) is the critical layer; Layer 2 (templates) is acceleration. This matches how experience patterns work — the pattern is useful, but understanding component composition is what makes an agent effective. Same principle at the layout level.
+- The scope reframe ("infrastructure, not product templates") is the right lesson from 083. We saw pattern gaps that looked universal during exercises but were heavily shaped by Working Class's data architecture. Applying the same classification gate to layout templates prevents repeating that mistake.
+- The architectural framing — page layout → content framing → component assembly as three distinct levels — is clean and matches how I think about the system. Experience patterns live at the content framing level. Layout templates live above that. They compose together but are authored independently. No coupling.
+- Leonardo's R3 retraction (don't revisit Working Class screens) is the right call. The learning approach (Peter interview + established design systems + generic scenarios) produces universal layout literacy, not product-anchored patterns.
+- Agent ownership is correctly resolved: I maintain templates in the Application MCP, Leonardo consumes them, platform agents implement. This is consistent with how experience patterns work — I author, Leonardo references, platform agents build.
+
+**Concerns and pushback:**
+
+1. **Template authoring is in my domain, but I have zero layout expertise.** The outline assigns me as template maintainer (D1, resolved by Spec 070). I build and maintain experience patterns — I understand component composition, nesting, roles, accessibility. But layout templates describe responsive grid behavior: column spans, breakpoint stacking, region sizing. That's a fundamentally different kind of knowledge. I can author YAML that conforms to a schema, but I can't make informed layout decisions the way I can make informed component composition decisions. My concern: I'll be a YAML typist, not a domain expert. The templates I author will be technically valid but may not encode good layout decisions. Who reviews my layout work? Leonardo is the consumer, not the reviewer. Ada owns the tokens but not the layout patterns. Peter is the layout authority, but he can't review every template. This needs a clearer quality gate than "Lina writes it." → design-outline.md § "Resolved Decisions" D1
+
+2. **The relationship between layout templates and experience patterns needs a concrete example.** The outline says "an agent places the pattern's component tree into the template's region." But how? If I'm specifying a `simple-form` pattern and a `centered-content-page` template, what does the composed result look like? Does the experience pattern YAML reference the layout template? Does the layout template reference compatible patterns? Or is the composition entirely in Leonardo's screen spec? The outline says "no enforcement of which templates pair with which patterns" — fine, but the *mechanism* of composition needs to be concrete enough for me to understand what I'm building. → design-outline.md § "Layout Template Infrastructure"
+
+3. **Ada's concern #4 (hardcoded max-width) is a real problem for template authoring.** If I'm authoring templates and the schema says "reference tokens by name, not hardcoded values" (Req 3 AC2), but the schema sketch includes `maxWidth: "640px"`, I don't know what to do. Do I hardcode it? Do I wait for a max-width token? Do I express it as a column span instead? This isn't a token governance question — it's a "what can I actually write in a template" question. The schema needs to resolve this before I can author anything. → design-outline.md § D2
+
+4. **The "guided, not validated" principle is correct but creates a quality gap.** Experience patterns are validated by `validate_assembly` — if I compose components incorrectly, the validator catches it. Layout templates are advisory only. That means a template with bad layout advice (wrong column spans, missing breakpoint behavior, stacking that doesn't work) has no automated check. The quality gate is entirely human review. For the initial small set of candidate templates, that's fine. If the template count grows with product work, manual review won't scale. Worth noting as a future concern, not a blocker. → design-outline.md § "Layout Template Infrastructure"
+
+5. **Agreeing with Ada's concern #1 — token source clarity matters for the steering doc.** When I author templates, I need to know which token family provides what. Breakpoint tokens (Token-Family-Responsive.md) define viewport widths. Grid spacing tokens (Token-Family-Spacing.md) define columns, gutters, margins. If the steering doc conflates these, I'll reference the wrong source when authoring. The steering doc should have a clear "token map" section: this token comes from here, that token comes from there. → design-outline.md § "Two-Layer Solution" Layer 1
+
+6. **The learning step should include me, not just Leonardo.** The outline focuses on Leonardo learning the grid system. But I'm the one authoring templates. If Leonardo learns the system and I don't, I'm authoring templates I don't understand. The Peter interview and design system study should include me as a participant, or I should have a parallel learning path. Otherwise I'm back to concern #1 — YAML typist, not domain expert. → design-outline.md § "Two-Layer Solution" Layer 1
+
+**Overall**: The spec is well-framed and correctly scoped. My main concern is the gap between "Lina maintains templates" and "Lina understands layout." The infrastructure work (schema, indexer, MCP tools) is squarely in my domain. The content work (authoring templates with good layout decisions) requires knowledge I don't currently have. The spec should address how I acquire that knowledge, not just how Leonardo does.
+
 ---
 
 ## Requirements Feedback
@@ -231,6 +283,141 @@ Leonardo's self-correction is well-reasoned. The Spec 083 classification gate ta
 4. **Req 5 (Validation)**: The interview with Peter + established design system study + generic scenarios. Does this match the learning approach from your R3?
 
 5. **General**: Missing requirements? Over-specified? Under-specified?
+
+#### [ADA R1]
+
+1. Req 1 AC1 lists "grid structure (column allocation to regions), breakpoint behavior (stacking, collapsing, reflow), and component sizing within regions (centering, max-width, fill behavior)." The max-width mention is important — it implies the vocabulary needs to express absolute sizing, not just column spans. But the token system doesn't have max-width tokens. If the vocabulary includes max-width, it's introducing a concept that isn't token-backed. Either the vocabulary should note that max-width is expressed as a hardcoded value (exception to token-first), or we need to consider whether max-width tokens belong in the system. This connects to my design outline concern #4. → requirements.md § "Requirement 1"
+
+2. Req 2 AC1 says the reference SHALL return "breakpoint token values, column counts per breakpoint, gutter tokens per breakpoint, and margin tokens per breakpoint." This is good — but the data comes from two different token families (Responsive for breakpoints, Spacing for grid gutters/margins/columns). The MCP reference needs to synthesize across both families into a unified grid system view. That's a presentation concern, not a token concern, but it's worth noting that the reference is a cross-family synthesis, not a single-family lookup. → requirements.md § "Requirement 2"
+
+3. Req 2 AC2 says the reference SHALL return "implementation patterns for web (CSS Grid), iOS (adaptive layout), and Android (Compose adaptive)." Token-Family-Spacing.md already has platform-specific grid patterns (CSS Grid, SwiftUI LazyVGrid, Compose LazyVerticalGrid). Token-Family-Responsive.md has platform-specific breakpoint usage. The MCP reference should draw from these existing docs rather than creating new platform patterns. Duplication would create a maintenance burden and a drift risk. → requirements.md § "Requirement 2"
+
+4. Req 3 AC2 says templates "SHALL reference responsive tokens by name — not hardcoded values." As flagged in my design outline feedback, the schema sketch includes `maxWidth: "640px"` which is a hardcoded value. The requirement and the schema sketch contradict each other. This needs resolution: either AC2 gets an exception for max-width (with justification), or the schema can't express max-width, or we create max-width tokens. → requirements.md § "Requirement 3"
+
+5. Req 3 AC3 says templates "SHALL be component-agnostic." Good — clean separation between layout (spatial regions) and assembly (component trees). No concerns.
+
+6. Req 5 AC4 includes "an interview with Peter about responsive layout decision-making and reference to established design systems." This is a learning activity, not a schema validation criterion. It's good that it's in the spec, but it reads oddly as an AC for "Schema Validation Through Generic Scenarios." Consider whether the interview and design system study belong in a separate requirement (learning/foundation) or as a precondition to Req 5 rather than an AC of it. → requirements.md § "Requirement 5"
+
+7. No requirement addresses the `gridMarginSm` token gap (24px actual vs 28px specified). If templates reference `gridMarginSm`, they'll get 24px. If the steering doc teaches the grid system, it needs to either document the gap or use the current value. This is a known issue in Token-Family-Spacing.md — the spec should acknowledge it. Not necessarily a requirement, but a noted dependency. → requirements.md (general)
+
+**Overall assessment:** The requirements are well-structured and cover the right scope. Req 1 (vocabulary) is correctly identified as critical. My concerns are token-specific: the max-width hardcoded value contradiction (Req 3 AC2 vs schema sketch), the cross-family synthesis needed for the grid reference (Req 2), and the `gridMarginSm` gap. The interview/study AC in Req 5 is good content but might be better positioned. Ready for design phase with the token governance questions resolved.
+
+#### [LINA R1]
+
+1. **Req 3 (Template Schema) is my primary implementation target.** AC1 says a template SHALL describe "regions with grid behavior per breakpoint, and stacking/reflow rules." This is clear and implementable — I can build a schema, indexer, and parser for this. AC2 (token references, not hardcoded values) is the right constraint but needs the max-width resolution Ada flagged. AC3 (component-agnostic) is the right boundary — templates describe space, not content. AC4 (clear error on malformed YAML) is standard indexer behavior I've built before (PatternIndexer, FamilyGuidanceIndexer). No concerns with the requirement structure. → requirements.md § "Requirement 3"
+
+2. **Req 4 (MCP Tools) mirrors experience patterns — clean.** `list_layout_templates` + `get_layout_template` follows the same pattern as `list_experience_patterns` + `get_experience_pattern`. I'll build the indexer and wire the tools the same way. AC4 explicitly says "follow the same query patterns" — good, that's my implementation guide. One question: does `list_layout_templates` need filtering (by context, by region count) or is browse-the-list sufficient for the initial set? The experience pattern list tool doesn't have filtering. If we're starting with 3-4 candidate templates, filtering is premature. → requirements.md § "Requirement 4"
+
+3. **Req 1 (Vocabulary) — I'm a consumer, not the author, but I have a stake.** The vocabulary determines how Leonardo expresses layout in screen specs, which determines what I need to understand when authoring templates that match those specs. If the vocabulary says "spans 8 responsive columns" and my template schema says `columns: "5-12"`, those need to be the same concept expressed consistently. The vocabulary and the schema should be co-designed, not sequential. → requirements.md § "Requirement 1"
+
+4. **Req 2 (Grid Reference) — agreeing with Ada's cross-family synthesis point.** The reference needs to present a unified grid system view from two token families (Responsive + Spacing). From my perspective as template author, I need one place to look up "at breakpoint md, how many columns, what gutter, what margin" — not two separate family lookups. The MCP reference should synthesize this. → requirements.md § "Requirement 2"
+
+5. **Req 5 (Validation) — the generic scenarios are my test cases.** AC1 lists three scenarios: single-region centered, multi-region with sidebar, multi-zone overview. These become the candidate templates I author to validate the schema works. That's 3 templates minimum. AC4 includes the Peter interview and design system study — agreeing with Ada that this reads as a learning activity, not a validation criterion. Consider splitting: Req 5 for schema validation (ACs 1-3), separate requirement or precondition for the learning step (AC4). Either way, I need the learning step to happen before or during my template authoring, not after. → requirements.md § "Requirement 5"
+
+6. **Missing requirement: template authoring guidance.** Req 3 defines the schema. Req 4 defines the tools. But nothing defines how templates are authored — what makes a good template, what layout decisions to encode, what to leave to Leonardo's per-screen specification. Experience patterns have the Component-Meta Authoring Guide and the Component Development Guide. Layout templates need equivalent guidance, even if it's thin for the initial set. Without it, I'm authoring templates based on schema compliance alone, not layout quality. This connects to my design outline concern #1 (YAML typist vs domain expert). → requirements.md (general)
+
+7. **No requirement addresses template lifecycle.** Experience patterns are `source: system` (universal) or `source: project` (product-specific). Will layout templates have the same distinction? When product work creates templates, do they start as `project` and graduate to `system` through the classification gate? The schema should support this from the start so we don't retrofit it later. → requirements.md (general)
+
+**Overall**: Requirements are well-structured and implementable. Reqs 3-4 are squarely in my domain and I can build them. My main additions: co-design vocabulary and schema together (not sequential), add template authoring guidance as a requirement, and consider template lifecycle (`system` vs `project` source). The max-width token question (Ada's concern) needs resolution before I can finalize the schema.
+
+#### [LEONARDO R1]
+
+**Responding to Thurgood's directed questions first, then Ada and Lina's items.**
+
+**1. Req 1 (Vocabulary) — do the ACs capture what I need?**
+
+Mostly yes. AC1 covers grid structure, breakpoint behavior, and component sizing within regions — the three things I identified in my design outline R1. AC2 covers reactive annotations. AC3 covers bidirectional literacy (platform agents can implement without Tier 1 clarification). AC4 covers delivery mechanism.
+
+One gap: AC1 says the vocabulary SHALL provide "canonical terms" but doesn't say it SHALL define a *specification format*. There's a difference between having terms ("column span," "stacking order," "max-width") and having a format for how I express them in a screen spec. Do I write prose? A structured section? A mini-YAML block? The vocabulary needs to define not just the words but the structure I use them in — otherwise three different Leonardo sessions will express the same layout three different ways, and platform agents are back to interpreting.
+
+Lina's point (#3) reinforces this: the vocabulary and the schema need to use the same concepts expressed consistently. If the vocabulary says "spans 8 responsive columns" and the schema says `columns: "5-12"`, that's a translation gap. Co-design, not sequential. → requirements.md § "Requirement 1"
+
+**2. Req 2 (Grid Reference) — right delivery for quick lookup?**
+
+Yes. MCP-queryable is the right delivery. Mid-spec, I'd query for:
+- "At breakpoint md, how many columns, what gutter, what margin?" — the unified grid view Ada (#2) and Lina (#4) both flagged
+- "What are the breakpoint viewport widths?" — to understand when transitions happen
+- "Platform-specific pattern for this grid structure?" — to sanity-check that what I'm specifying is implementable
+
+Agreeing with Ada (#2, #3): the reference needs to synthesize across Responsive and Spacing token families into one grid system view, and should draw from existing platform-specific patterns in those docs rather than creating new ones. → requirements.md § "Requirement 2"
+
+**3. Req 4 (MCP Tools) — missing anything?**
+
+No. `list_layout_templates` + `get_layout_template` is sufficient. Agreeing with Lina (#2) that filtering is premature for the initial set. Browse-the-list works for 3-4 candidate templates. Add filtering when the count justifies it.
+
+One thought: should `get_layout_template` return suggested experience pattern pairings? The outline says "no enforcement of which templates pair with which patterns," and I agree. But a `suggestedPatterns` field (advisory, not enforced) could help discovery. Not a requirement for this spec — noting it as a future consideration. → requirements.md § "Requirement 4"
+
+**4. Req 5 (Validation) — does this match my R3 learning approach?**
+
+Yes, with one structural concern. AC4 (Peter interview + design system study) is a learning activity, not a schema validation criterion. Ada (#6) and Lina (#5) both flagged this. I agree — the interview and study are prerequisites for good template authoring, not acceptance criteria for schema validation.
+
+Suggestion: split Req 5 into two:
+- **Req 5**: Schema validation through generic scenarios (ACs 1-3)
+- **Req 6**: Responsive layout learning foundation (the interview, design system study, and token documentation review)
+
+This makes the learning step a first-class requirement rather than an AC awkwardly attached to schema validation. It also makes sequencing explicit: Req 6 happens before or during Req 5, not after. → requirements.md § "Requirement 5"
+
+**5. General — missing requirements?**
+
+Three items from Ada and Lina that I think are real gaps:
+
+**a. Max-width token governance (Ada #1, #4; Lina #3).** The schema sketch uses `maxWidth: "640px"` — a hardcoded value that contradicts Req 3 AC2. This is a real design decision. My take: max-width for content regions is a legitimate layout concept that the token system doesn't currently cover. Options:
+- Create max-width tokens (new token family or extension — Ada's domain, requires governance review)
+- Allow hardcoded max-width as a documented exception to token-first, with justification
+- Express max-width as column spans only (e.g., "content spans 6 of 12 columns" instead of "max-width 640px")
+
+I lean toward option 3 for now — column spans are already token-backed and avoid the governance question. If column spans can't express the intent (some max-width constraints are absolute, not relative to the grid), then option 2 with explicit justification. Option 1 is the cleanest long-term but adds scope. Peter's call. → requirements.md § "Requirement 3"
+
+**b. Template authoring guidance (Lina #6).** Lina's right — the schema defines structure, but nothing defines what makes a *good* template. This is the same gap we'd have if we had a component schema but no Component Development Guide. For the initial candidate set, the learning step (Req 6 if split) partially addresses this — Lina participates in the learning and gains layout judgment. But a thin authoring guide section (in the steering doc or as a companion) would give Lina criteria beyond schema compliance. → requirements.md (general)
+
+**c. Template lifecycle (Lina #7).** `source: system` vs `source: project` should be in the schema from the start. Experience patterns have this. Layout templates should too. When product work creates templates, they start as `project` and graduate through the classification gate. Retrofitting this later is harder than including it now. → requirements.md § "Requirement 3"
+
+**One item I want to highlight from Lina's design outline feedback (#1, #6):** Lina flagged that she's assigned as template maintainer but has zero layout expertise. She's concerned about being a "YAML typist, not a domain expert." This is a legitimate concern and the requirements don't address it. The learning step (interview + design system study) should explicitly include Lina, not just Leonardo. She's authoring the templates — she needs the layout understanding to make informed decisions, not just schema-compliant ones. If Req 5 AC4 gets split into a separate learning requirement, Lina should be named as a participant alongside me. → requirements.md § "Requirement 5" / new Req 6
+
+**Overall assessment:** Requirements are well-structured. Req 1 (vocabulary) is correctly critical. Reqs 3-4 (schema + tools) are clean and implementable. The main gaps: specification format (not just terms) in Req 1, the max-width governance question in Req 3, splitting the learning step out of Req 5 into its own requirement, template authoring guidance, template lifecycle in the schema, and Lina's inclusion in the learning step. None of these are structural problems — they're refinements that make the requirements more complete and implementable.
+
+→ requirements.md §§ "Requirement 1", "Requirement 3", "Requirement 5"
+
+#### [THURGOOD R1] — Requirements Incorporation Notes
+
+Incorporated Ada R1, Lina R1, Leonardo R1 feedback into requirements.md. Key changes:
+
+**Max-width resolution (Ada #1/#4, Lina #3, Leonardo #5a):**
+- Peter's decision: max-width is a CSS property that consumes breakpoint tokens. `maxWidth: "breakpoint.sm"` not `maxWidth: "640px"`. No new token family needed.
+- Req 3 AC2 updated: "Max-width constraints SHALL be expressed using breakpoint tokens or as column spans — not hardcoded pixel values."
+- If neither breakpoints nor column spans express the intent, address then — not speculatively.
+
+**Req 5 split into Req 5 + Req 6 (Ada #6, Lina #5, Leonardo #4):**
+- Req 5: Schema validation through generic scenarios (ACs 1-3 only)
+- Req 6: Responsive layout learning foundation — interview, design system study, token review, authoring guidance
+- Both Leonardo and Lina named as participants (Lina #6, Leonardo highlight)
+
+**Specification format added to Req 1 (Leonardo #1):**
+- New AC5: vocabulary defines a consistent specification format, not just terms
+- New AC6: vocabulary and schema co-designed, not sequential (Lina #3)
+- New AC7: token source map in steering doc (Lina design outline #5)
+
+**Cross-family synthesis in Req 2 (Ada #2, Lina #4, Leonardo #2):**
+- AC1 updated: "unified grid system view synthesizing across token families"
+- AC2 updated: draw from existing platform patterns, don't create new ones (Ada #3)
+
+**Template lifecycle in Req 3 (Lina #7):**
+- New AC5: `source` field (`system` vs `project`) in schema from the start
+
+**Template authoring guidance (Lina #6, Leonardo #5b):**
+- Req 6 AC5: learning step produces thin authoring guidance
+
+**`gridMarginSm` gap (Ada #7):**
+- Acknowledged as known dependency in introduction, not a requirement
+
+**Lina's layout expertise (Lina design outline #1/#6):**
+- Addressed by including Lina in Req 6 learning step (AC4)
+- Authoring guidance (Req 6 AC5) gives her criteria beyond schema compliance
+
+**Not incorporated (noted for future):**
+- Leonardo's `suggestedPatterns` field idea — future consideration, not this spec
+- Lina's `list_layout_templates` filtering — premature for initial set
+- Lina's composition mechanism question (#2) — deferred to design phase
 
 ---
 
