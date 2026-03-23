@@ -43,18 +43,26 @@ Leonardo must internalize the responsive grid system as a core competency. This 
 
 1. **Grid system fluency** — the progressive 4→8→12→16 column grid, breakpoint tokens (`breakpoint.xs` through `breakpoint.lg`), grid gutter tokens (`gridGutterXs` through `gridGutterLg`), grid margin tokens (`gridMarginXs` through `gridMarginLg`). Not "it exists" but "I think in these terms."
 
-2. **Layout specification vocabulary** — a consistent way to express layout in screen specs that platform agents can implement. Column spans, breakpoint-specific behavior, stacking/reflow rules, component sizing behavior and positioning within regions.
+2. **Layout specification vocabulary** — a canonical way to express layout in screen specs that platform agents can implement without interpretation. This vocabulary must cover:
+   - **Grid structure**: column allocation to regions (e.g., "primary region spans 8 columns")
+   - **Breakpoint behavior**: what changes at each breakpoint (stacking, collapsing, reflow)
+   - **Component sizing within regions**: centering, max-width, fill behavior (e.g., "form centers within primary region, max-width 480px")
+   - **Responsive adaptation**: within-platform viewport changes — same content, different arrangement. This is what layout templates address.
+   - **Reactive annotations**: cross-platform experience differences — where the experience intentionally diverges between platforms (e.g., "this section exists on web and tablet but not phone," "bulk export available on web only"). These are product architecture decisions directed by Peter, not layout decisions. The vocabulary includes them so agents aren't caught off guard when they arise.
 
 3. **Platform translation awareness** — understanding that web uses CSS Grid with media queries, iOS uses adaptive layouts with size classes, Android uses Compose adaptive patterns. Leonardo doesn't implement, but he needs to know what's expressible on each platform so his specs are implementable.
 
-**Source material exists**: Token-Family-Responsive.md (breakpoint tokens, density tokens, responsive design patterns, cross-platform usage) and Token-Family-Spacing.md § "Grid Spacing Tokens" (gutter/margin tokens, progressive column grid, platform-specific patterns). This knowledge needs to be synthesized into guidance Leonardo can act on.
+4. **Bidirectional literacy** — the steering doc must serve both Leonardo (specification) and platform agents (implementation). If Leonardo specs "spans 8 responsive columns at lg" and a platform agent doesn't know how to translate that to their native responsive system, the problem just moves downstream. Shared vocabulary, shared foundation.
 
-**Delivery mechanism**: This could be:
-- A steering document (accessible to all agents via Docs MCP — preferred, since platform agents also benefit from understanding the grid system they're implementing)
-- Application MCP content (queryable layout guidance alongside experience patterns)
-- Both — steering doc for deep understanding, MCP for quick reference during specification
+**Source material exists**: Token-Family-Responsive.md (breakpoint tokens, density tokens, responsive design patterns, cross-platform usage) and Token-Family-Spacing.md § "Grid Spacing Tokens" (gutter/margin tokens, progressive column grid, platform-specific patterns). This knowledge needs to be synthesized into guidance that serves both specification and implementation.
 
-A dedicated Leonardo skill is an option if the above isn't sufficient, but the preference is shared access so all agents benefit.
+**Learning approach**: A design exercise focused on layout specification (similar to the Spec 083 component exercises) would be more effective than documentation alone. Leonardo learns by applying the grid system to real screens, discovering gaps in his understanding through practice.
+
+**Delivery mechanism**: Both a steering doc and MCP-queryable reference, serving different moments:
+- **Steering doc** (concise — principles + mental model, not exhaustive reference) for internalization. Loaded when doing screen specification work. Serves both Leonardo and platform agents.
+- **MCP-queryable reference** for mid-spec lookup — token values, platform-specific details, quick confirmation without loading a full document.
+
+A dedicated Leonardo skill is a last resort if shared access isn't sufficient. Preference is shared access so all agents benefit.
 
 ### Layer 2: Layout Templates (Acceleration)
 
@@ -79,6 +87,8 @@ The Application MCP handles content framing and component assembly. The Docs MCP
 Layout templates fill this gap as a **peer system to experience patterns**, not a child of them.
 
 **Note on scope boundary**: The Spec 083 gap report routed three items (#4 multi-section form, #7 filter bar, #13 empty state) to this spec. On review, those are content framing / component assembly concerns, not page-level layout problems. See gap report § "Routing Review Notes" for analysis. This spec addresses page-level responsive layout only.
+
+**Responsive vs reactive scope**: This spec *defines vocabulary* for both responsive (within-platform viewport adaptation) and reactive (cross-platform experience differences). It *builds templates* for responsive only. Reactive specification patterns will emerge through product work — but the language is ready when they do.
 
 ---
 
@@ -130,7 +140,24 @@ Layout templates are Application MCP content. Per the MCP Relationship Model:
 
 What does a layout template YAML look like? Needs to describe regions, breakpoint behavior, and grid positioning without becoming a full page blueprint.
 
-We now have 4 design exercises (Spec 083) providing real layout scenarios to test schema ideas against: centered profile form, feed with filter bar, notification list, multi-zone dashboard. A schema design exercise — adapting the experience pattern interview process for layout — would ground this in real needs.
+Leonardo's initial sketch (from R1 feedback):
+
+```yaml
+name: centered-content-page
+description: Single content area centered in viewport
+regions:
+  - name: content
+    grid:
+      lg: { columns: "5-12", maxWidth: "640px" }
+      md: { columns: "3-10" }
+      sm: { columns: "1-8", fullWidth: true }
+      xs: { fullWidth: true, margins: "gridMarginXs" }
+    stacking: null  # single region, no stacking
+```
+
+Key principles from Leonardo: regions + grid behavior per breakpoint + stacking rules. Enough to place component trees; not so much that it prescribes content. Component-agnostic — "primary content area: columns 1-8 at lg" yes, "primary content area contains a feed with cards" no.
+
+We have 4 design exercises (Spec 083) providing real layout scenarios to test schema ideas against. A schema design exercise would ground this in real needs.
 
 ### D3: MCP Surface
 
@@ -148,16 +175,13 @@ What level of layout do templates describe?
 - Region-level (how a content area subdivides)?
 - Both?
 
-Initial thinking: page-level. Container-Base handles region-level framing. However, the dashboard exercise (Spec 083) had distinct zones (stats, feed, preview) that sit between Container-Base and full-page layout — this may challenge the page-level-only assumption.
+**Leaning page-level only** (Leonardo R1 concurs). The dashboard exercise had stats + feed + preview zones, but those are content framing — Container-Base sections with different roles. The page-level question is "how do these zones arrange on the grid across breakpoints?" Region-level subdivision (e.g., 4 stat cards going from 4-across to 2x2 to stacked) may need region-level templates eventually, but should be discovered through implementation rather than pre-built.
 
 ### D5: Template Discovery
 
-How does an agent know which layout template to use? Options:
-- Context-based matching (similar to `find_components({ context })`)
-- Explicit recommendation in experience patterns ("this pattern works well with `centered-form` layout")
-- Agent judgment based on template descriptions
+How does an agent know which layout template to use?
 
-Likely a combination. Not yet resolved.
+**Leaning context-based matching** (Leonardo R1 concurs) — same model as `find_components({ context })`. Experience pattern cross-references as secondary hints ("commonly used with `centered-content-page` layout template"). Browse-a-list works for the initial small set but won't scale.
 
 ### D6: First Templates
 
@@ -172,11 +196,13 @@ These are starting points for a schema design exercise, not commitments.
 
 ### D7: Foundation Delivery Mechanism
 
-How does Leonardo's responsive layout literacy get delivered? Options:
-- **Steering document** (preferred) — accessible to all agents via Docs MCP. Platform agents also benefit from understanding the grid system they implement. Synthesizes Token-Family-Responsive.md and Token-Family-Spacing.md § "Grid Spacing Tokens" into actionable layout specification guidance.
-- **Application MCP content** — queryable layout reference alongside experience patterns. Quick-reference during specification work.
-- **Both** — steering doc for deep understanding, MCP for quick reference.
-- **Leonardo skill** (last resort) — if shared access isn't sufficient. Preference is against this since all agents benefit from layout understanding.
+**Converging on both** (Leonardo R1 aligns):
+- **Steering doc** (concise — principles + mental model, not exhaustive reference) for internalization. Serves both Leonardo (specification) and platform agents (implementation). Loaded when doing screen specification work.
+- **MCP-queryable reference** for mid-spec lookup — token values, platform-specific details, quick confirmation.
+
+The steering doc is more important. If Leonardo internalizes the system, he'll rarely need the MCP reference. The MCP reference without understanding produces specs that are technically correct but lack design coherence.
+
+Open sub-question: should the learning step include a layout-focused design exercise (Leonardo R1 recommendation)? Similar to Spec 083 component exercises but focused on specifying layout for real screens using the grid system.
 
 ---
 
