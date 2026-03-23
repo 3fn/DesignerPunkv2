@@ -209,6 +209,31 @@ Leonardo's self-correction is well-reasoned. The Spec 083 classification gate ta
 
 ---
 
+## Requirements Feedback
+
+### Context for Reviewers
+- 5 requirements covering: vocabulary (Req 1), grid reference (Req 2), template schema (Req 3), MCP tools (Req 4), schema validation exercise (Req 5)
+- Req 1 is the critical requirement — vocabulary enables layout specification with or without templates
+- Reqs 3-4 are infrastructure — schema + MCP tools that serve templates when product work creates them
+- Req 5 validates the infrastructure works using generic scenarios, not product-specific screens → design-outline.md § "Spec Scope"
+- Documentation waiver: no new tokens or components. Documentation requirements embedded in relevant reqs.
+- Reactive vocabulary is in Req 1 AC2 — vocabulary scope, not template scope → design-outline.md § "Responsive vs reactive scope"
+- Bidirectional literacy (Leonardo + platform agents) is in Req 1 AC3-4 → design-outline.md § "Two-Layer Solution" item 4
+
+#### [@LEONARDO] Requirements Review
+
+1. **Req 1 (Vocabulary)**: Do the ACs capture what you need? You flagged component sizing within regions, reactive annotations, and bidirectional literacy in R1. Are those adequately expressed?
+
+2. **Req 2 (Grid Reference)**: Is MCP-queryable reference the right delivery for quick lookup? What would you actually query for mid-spec?
+
+3. **Req 4 (MCP Tools)**: `list_layout_templates` + `get_layout_template` — mirrors experience patterns. Missing anything?
+
+4. **Req 5 (Validation)**: The interview with Peter + established design system study + generic scenarios. Does this match the learning approach from your R3?
+
+5. **General**: Missing requirements? Over-specified? Under-specified?
+
+---
+
 ## Design Feedback
 
 ### Context for Reviewers
