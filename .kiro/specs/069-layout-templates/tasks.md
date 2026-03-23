@@ -80,7 +80,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     - Capture in `learning-foundation.md` § "Authoring Guidance"
     - _Requirements: Req 6_
 
-- [ ] 2. Responsive Layout Steering Documentation
+- [x] 2. Responsive Layout Steering Documentation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -104,7 +104,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Responsive Layout Steering Documentation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Create steering document
+  - [x] 2.1 Create steering document
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood + Leonardo
@@ -116,7 +116,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     - Ada reviews Sections 1-2 (token source map, grid system mental model) before steering doc ships — same pattern as Lina reviewing Component Dev Guide in Spec 083
     - _Requirements: Req 1, Req 2_
 
-  - [ ] 2.2 Add template authoring guidance and common layout patterns
+  - [x] 2.2 Add template authoring guidance and common layout patterns
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood + Lina
@@ -124,7 +124,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     - Section 9: Common layout patterns — suggestive, evolving guidelines seeded from Task 1.2 design system study. Explicitly marked as not definitive.
     - _Requirements: Req 6_
 
-  - [ ] 2.3 Verify MCP queryability
+  - [x] 2.3 Verify MCP queryability
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood

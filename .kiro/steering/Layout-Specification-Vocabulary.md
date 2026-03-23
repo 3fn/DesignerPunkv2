@@ -428,3 +428,121 @@ Consistent does NOT mean identical. Each platform should feel native. Consistent
 The vocabulary in this document is platform-neutral. Avoid web-centric terms ("flexbox," "media query," "CSS grid") in screen specs — use the canonical terms (region, column span, stacking order) and let platform agents translate.
 
 For platform-specific grid implementation patterns (CSS Grid, SwiftUI adaptive layout, Compose grid), see Token-Family-Spacing.md § Grid Spacing Patterns.
+
+---
+
+## Section 8: Template Authoring Guidance
+
+This section serves both Lina (template author) and Leonardo (template consumer). It defines what makes a good template and where the boundary sits between template decisions and screen spec decisions.
+
+### What Belongs in a Template
+
+A template encodes **structural, reusable** layout decisions:
+
+- Region names and their functional purpose
+- Column allocation per breakpoint (which columns each region occupies)
+- Default stacking order when regions collapse vertically
+- Max-width constraints at the region level (via breakpoint token references)
+- Source lifecycle (`system` or `project`)
+
+### What Belongs in the Screen Spec
+
+A screen spec encodes **content-specific, per-page** decisions:
+
+- What content goes in each region
+- Adaptation strategy overrides (e.g., "this sidebar surface-switches instead of stacking")
+- Content constraints within regions (e.g., "body copy constrained to 66 characters")
+- Reactive annotations (region visibility, platform-specific differences)
+- Stacking order overrides based on content relationship
+- Component assembly within regions
+
+**The dividing line:** If the decision depends on what's *in* the region, it belongs in the screen spec. If the decision depends on the region's *spatial relationship* to other regions, it belongs in the template.
+
+### Authoring Checklist
+
+When creating a new template:
+
+- [ ] Does this layout appear on more than one screen? (If not, use screen spec instead)
+- [ ] Are all four breakpoints defined (xs, sm, md, lg)?
+- [ ] Did you start authoring at xs and expand outward?
+- [ ] Are regions named by function, not position?
+- [ ] Do column ranges use actual grid columns (1-indexed, within breakpoint column count)?
+- [ ] Are all token references in camelCase (`gridMarginSm`, `breakpointMd`)?
+- [ ] Is `source` set to `system` (shared) or `project` (product-specific)?
+- [ ] Is stacking order defined with positive integers, no duplicates?
+
+### Template Composition Model
+
+Templates compose upward from primitives:
+
+1. **Primitive templates** — basic structural shells (single region centered, header + open canvas). Reusable across almost any page type.
+2. **Specialized templates** — built on primitives by adding regions (primitive + sidebar, primitive + multi-zone). Reusable within a category of pages.
+3. **Page-specific layouts** — when no template fits. The screen spec describes the layout directly.
+
+The schema is flat — each template is self-contained. Inheritance (`extends`) is deferred until product work reveals duplication that justifies it. Migration would be additive.
+
+### Page Layout Templates (Future)
+
+Content templates (current scope) define region arrangement within the content area. Page templates (future) will define the full page structure — header, content area, tab bar, navigation chrome.
+
+**Decision: Composition.** Page templates will reference content templates by name (has-a relationship). A page *has* a content layout. Many pages share the same shell but have different content layouts.
+
+Content templates don't need modification for future page template support. The `name` field is the stable reference key.
+
+### Validator vs Authoring Quality
+
+The LayoutTemplateIndexer validator enforces structural correctness: required fields, valid token references, column ranges within breakpoint limits, stacking order rules. It does NOT enforce authoring quality — whether a template is reusable, whether regions are well-named, whether the layout makes design sense.
+
+A template can pass validation and still be a bad template. The validator is a floor, not a ceiling. This checklist and human review (Peter, Leonardo) are the quality layer.
+
+---
+
+## Section 9: Common Layout Patterns
+
+**These are suggestive guidelines, not definitive prescriptions.** They are seeded from established design system study and Peter's layout thinking. They will evolve as product work teaches what actually works.
+
+### Centered Content Page
+
+A single content region centered in the grid. The simplest layout — one region, no stacking.
+
+**When to use:** Login, registration, single-purpose forms, focused reading, onboarding flows. Any page with a singular intent and no supplemental content.
+
+**Character:** The content area is narrower than the viewport at wider breakpoints, creating generous whitespace. Max-width constraint prevents content from stretching uncomfortably wide.
+
+**Cross-system parallel:** Material Design 3's single-pane layout. Polaris's single-column pattern. Atlassian's fixed-narrow grid.
+
+### Sidebar Page
+
+Primary content alongside a persistent supplemental region. Two regions with stacking behavior at narrow viewports.
+
+**When to use:** Detail pages with contextual information, content feeds with filtering, any page where supplemental content recurs across multiple screens (not one-off contextual info — that belongs in the primary region).
+
+**Character:** Primary region gets the majority of columns. Sidebar is narrower but persistent. At narrow viewports, sidebar stacks below primary (default) or above (when sidebar content controls/influences primary).
+
+**Key decision:** Does the sidebar content need to be visible *before* the user engages with primary content? If yes, it stacks above. If it supplements after consumption, it stacks below.
+
+**Cross-system parallel:** Material Design 3's supporting pane canonical layout. Carbon's product and docs style model. Atlassian's layout with aside panel.
+
+### Multi-Zone Page
+
+Three or more regions with distinct purposes and independent grid behavior. The most complex common pattern.
+
+**When to use:** Dashboards, overview pages, pages requiring simultaneous access to multiple independent information streams. Rare — most pages are single-region or two-region.
+
+**Character:** Each zone has its own column allocation, scroll behavior, and content lifecycle. The zones are functionally independent — removing one doesn't break the others.
+
+**Key decision:** Do the zones genuinely need simultaneous visibility, or could they be sequential (stacked or tabbed)? Three+ regions is justified when the user's task requires cross-referencing between zones. If zones are consumed sequentially, a simpler layout with navigation between sections is better.
+
+**Cross-system parallel:** Material Design 3's list-detail canonical layout (when extended). Carbon's high-density interface style model.
+
+### Full-Width Content Page
+
+A single region spanning the full grid width. No centering, no max-width constraint.
+
+**When to use:** Data tables, search results, content that benefits from maximum horizontal space. Pages where the content itself determines its width (e.g., a table with many columns).
+
+**Character:** Content fills the available grid at every breakpoint. Margins come from the grid margin tokens, not from column allocation. No content constraint at the region level — the content type determines its own width behavior.
+
+**Key decision:** Does the content genuinely need full width, or would a centered layout with content constraints produce better readability? Full-width is appropriate for data-dense content; it's rarely appropriate for body copy.
+
+**Cross-system parallel:** Carbon's high-density interface style model. Atlassian's fixed-wide grid.
