@@ -212,6 +212,12 @@ These documents are **NOT auto-loaded**. Query them via MCP when needed. Organiz
 | Component-Family-Modal | `Component-Family-Modal.md` | Modal family work |
 | Component-Family-Data-Display | `Component-Family-Data-Display.md` | Data display family work |
 
+### Layout System
+
+| Document | Path | When to Load |
+|----------|------|-------------|
+| Layout Specification Vocabulary | `Layout-Specification-Vocabulary.md` | Screen specification, layout template authoring, implementing responsive layout |
+
 ### Integration & Tooling
 
 | Document | Path | When to Load |

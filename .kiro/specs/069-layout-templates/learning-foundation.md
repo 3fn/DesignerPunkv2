@@ -511,3 +511,50 @@ Content templates define region arrangement within the content area — the curr
 **Not built now.** Content templates are self-contained and don't need modification for future page template support. The `name` field is the stable reference key.
 
 Peter expects page templating will be needed soon once product development begins.
+
+### Lina's Authoring Notes
+
+**Added**: 2026-03-23
+
+Implementation-focused additions from the template infrastructure builder's perspective.
+
+**Schema validation boundaries — what the validator catches vs what it can't:**
+
+The LayoutTemplateIndexer validator enforces structural correctness: required fields, valid token references, column ranges within breakpoint limits, stacking order rules. It does NOT enforce authoring quality — whether a template is reusable, whether regions are well-named, whether the layout makes design sense. That's human review (Peter, Leonardo) and the authoring checklist above.
+
+This means a template can be valid YAML, pass all validation, and still be a bad template. The validator is a floor, not a ceiling. The authoring guidance in the steering doc (Section 8) is the quality layer on top of the validator.
+
+**Token reference format in YAML:**
+
+Templates reference tokens by their exact camelCase name as it appears in the token documentation. No dot notation, no aliases.
+
+| Field | Accepts | Examples |
+|-------|---------|---------|
+| `margins` | Grid margin tokens | `gridMarginXs`, `gridMarginSm`, `gridMarginMd`, `gridMarginLg` |
+| `maxWidth` | Breakpoint tokens | `breakpointXs`, `breakpointSm`, `breakpointMd`, `breakpointLg` |
+| `stacking.below` | Breakpoint tokens | `breakpointSm`, `breakpointMd`, `breakpointLg` |
+
+The validator rejects: density tokens (affect component internals, not grid structure), native platform tokens (implementation tokens, not specification tokens), any unrecognized token name.
+
+**Column range authoring rules:**
+
+- Format: `N-M` (1-indexed, inclusive) or `full-width`
+- N must be less than M
+- Both N and M must be within the breakpoint's column count (xs: 4, sm: 8, md: 12, lg: 16)
+- `full-width` is shorthand for "spans all available columns" — use it at xs and sm where content typically fills the viewport
+- `"1-1"` (single column) is valid but unusual — verify it's intentional
+- Column ranges express position AND width: `"4-9"` means "start at column 4, end at column 9" (6 columns wide, offset by 3)
+
+**Stacking order rules:**
+
+- Positive integers only, no duplicates within a template
+- Lower numbers stack higher (order 1 is above order 2)
+- `stacking: null` for single-region templates
+- Default stacking order follows workflow direction (Peter interview): controls above primary (lower order), supplements below primary (higher order)
+- Screen specs can override template stacking order — the template provides the default
+
+**Relationship to experience patterns:**
+
+Layout templates and experience patterns are independent systems that compose in Leonardo's screen spec. A template doesn't reference patterns; a pattern doesn't reference templates. Leonardo's screen spec says "use `sidebar-page` template, place `simple-form` pattern in the primary region." The composition happens at the specification level, not the YAML level.
+
+This means I don't need to add cross-references between the two systems. If we later find that certain templates and patterns are frequently paired, that's a discovery for the steering doc (Section 9, common layout patterns), not a schema change.
