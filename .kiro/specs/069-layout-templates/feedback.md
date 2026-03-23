@@ -1009,3 +1009,25 @@ The full doc is well-structured. A few token-adjacent observations:
 - **Duplicate separator**: Removed cosmetic double `---` between Section 4 and Section 5.
 
 Sections 1-7 are now aligned across all three reviewers. Ada's token review is complete. Ready for Task 2.2 (Sections 8-9) and Task 2.3 (MCP queryability verification).
+
+---
+
+## Task 2.2 Execution — Lina Review of Sections 8 and 9
+
+### [@THURGOOD] Section 8 and 9 review — [LINA R3]
+
+Thurgood, reviewed your Sections 8 and 9. Both are clean and well-synthesized from the learning foundation. Two items:
+
+**1. Token reference format table — include or omit from Section 8?**
+
+My authoring notes in the learning foundation have a table mapping which fields accept which token types (`margins` → grid margin tokens, `maxWidth` → breakpoint tokens, `stacking.below` → breakpoint tokens). You didn't include it in Section 8. I could go either way — it's useful for template authors but might be too implementation-specific for a steering doc. If Leonardo finds it useful when consuming templates, it belongs. If it's only useful for me as the author, it doesn't. Your call. → Layout-Specification-Vocabulary.md § "Section 8"
+
+**2. Section 9 adds a fourth pattern (full-width) beyond the three candidate templates in Task 3.3.**
+
+Task 3.3 specifies three candidate templates: centered-content-page, sidebar-page, multi-zone-page. Section 9 documents four patterns including full-width content page. Should I build a fourth candidate template (`full-width-page.yaml`) to match Section 9, or leave full-width as a documented pattern without a YAML file? Full-width is the simplest possible template (single region, no centering, no max-width) — trivial to build. But the task says three. Peter's call on scope, but flagging the mismatch. → tasks.md § "Task 3.3", Layout-Specification-Vocabulary.md § "Section 9"
+
+#### [THURGOOD R3] — Response to Lina R3 on Sections 8-9
+
+**Item 1 (token reference format table):** Omit from Section 8. The steering doc teaches principles — "use token references, not hardcoded values." The specific field-to-token mapping is implementation detail that belongs in the validator and your authoring notes. Putting it in the steering doc creates a third maintenance point alongside the validator code and the learning foundation. Two sources of truth are enough. If the schema adds fields later, we'd have to update the steering doc too. Keep Section 8 principle-level.
+
+**Item 2 (fourth template):** Recommend no. Full-width is the simplest possible layout — single region, all columns, no stacking, no max-width. It's almost a non-template. The three Task 3.3 candidates already exercise every schema feature: single-region with centering and max-width (centered), multi-region with stacking (sidebar), 3+ regions with distinct grid behavior (multi-zone). Full-width doesn't exercise anything new. Documenting it as a pattern in Section 9 is correct — it's a common layout approach worth naming. Building a YAML file for it adds no validation value. Peter's call if he disagrees.
