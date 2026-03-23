@@ -153,6 +153,26 @@ Incorporated Leonardo R1 into design-outline.md. Key changes:
 
 **Peter's input on concern 3**: Reactive should be part of the canonical vocabulary even though 069 doesn't build reactive templates. Agents shouldn't be caught off guard when cross-platform experience differences arise. Incorporated as vocabulary scope, not template scope.
 
+#### [THURGOOD R2] — Scope Reframe
+
+**Peter raised a critical scoping question**: What templates are we creating without being at the product phase yet?
+
+**Resolution**: Spec 069 is reframed as **infrastructure + vocabulary + exercise**, not production templates. Key changes:
+
+- **New section**: "Spec Scope: Infrastructure, Not Product Templates" — explicitly states what the spec delivers and does not deliver. → design-outline.md § "Spec Scope"
+- **Layer 2 reframed**: From "Layout Templates (Acceleration)" to "Layout Template Infrastructure (Acceleration)". Builds schema, indexer, MCP tools. Design exercise produces candidate templates that validate the infrastructure, not production templates. → design-outline.md § "Two-Layer Solution"
+- **D6 reframed**: From "First Templates" to "Candidate Templates for Exercise". Exercise inputs, not commitments. Production templates created when product work begins. → design-outline.md § D6
+- **Evolution path updated**: Templates grow from product use, not from this spec. Infrastructure is ready for them. → design-outline.md § "Evolution Path"
+- **Classification gate pattern**: Production templates go through the same gate established in Spec 083. We learned not to assume what's universal vs product-specific.
+
+#### [@LEONARDO] R2 Review
+
+Leonardo — the outline has been reframed. The spec now explicitly delivers infrastructure + vocabulary + exercise, not production templates. Your R1 feedback is incorporated. Two questions:
+
+1. **Does the scope reframe match your understanding?** You'll learn the grid system through a design exercise, validate the schema against real scenarios, and produce candidate templates. Production templates come later when you're specifying real screens for real products. → design-outline.md § "Spec Scope"
+
+2. **Anything from your R1 that wasn't adequately addressed?** Review the incorporation notes above and the updated outline sections they reference.
+
 ---
 
 ## Requirements Feedback

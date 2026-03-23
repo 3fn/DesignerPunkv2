@@ -2,10 +2,10 @@
 
 **Date**: 2026-03-04
 **Updated**: 2026-03-22
-**Purpose**: Ensure agents understand and communicate responsive page-level layout — both through foundational literacy and through reusable templates
+**Purpose**: Ensure agents understand and communicate responsive page-level layout — foundational literacy, specification vocabulary, and infrastructure for reusable templates
 **Organization**: spec-guide
 **Scope**: 069-layout-templates
-**Status**: Design outline — updated with Spec 070, 082, 083 outcomes
+**Status**: Design outline — updated with Spec 070, 082, 083 outcomes and Leonardo R1
 
 ---
 
@@ -35,6 +35,29 @@ This connects to the Product Handoff Protocol (Spec 070): Leonardo's screen spec
 
 ---
 
+## Spec Scope: Infrastructure, Not Product Templates
+
+No product is in active development yet. The Spec 083 design exercises were grounded in Working Class, but those were component selection exercises — not real screens being built for real users on real viewports. We don't have Leonardo specifying screens for platform agents to implement. We don't have platform agents hitting real layout problems on real devices.
+
+**Creating production templates now would be speculative.** "Centered content page" sounds reasonable, but we don't know what Working Class (or any product) actually needs until Leonardo is specifying real screens. Templates created without product context would be guesses dressed up as patterns.
+
+**What this spec delivers:**
+
+1. **Vocabulary and steering doc** (Layer 1) — system knowledge that doesn't require a product. The responsive grid exists. The tokens exist. Synthesizing them into a specification vocabulary that Leonardo and platform agents share is real, grounded work. This is like writing Token-Family-Spacing.md — you don't need a product to document how the spacing system works.
+
+2. **Template infrastructure** (Layer 2) — the YAML schema shape, MCP tools (`list_layout_templates`, `get_layout_template`), and indexer that serves them. Built and tested with example templates that validate the schema works, without those examples being "the templates."
+
+3. **Layout design exercise** — Leonardo applying the grid system to Working Class screens to learn the vocabulary and validate the schema. This produces *candidate* templates, not production ones — similar to how the Spec 083 exercises produced candidate patterns that went through a classification gate.
+
+**What this spec does NOT deliver:**
+
+- A committed set of production layout templates
+- Assumptions about which layout patterns are universal vs product-specific (we learned this lesson in Spec 083's classification gate)
+
+**Production templates get created when product work begins** — through real screen specification, real implementation, and the same classification gate pattern established in Spec 083. The infrastructure and vocabulary are ready for them.
+
+---
+
 ## Two-Layer Solution
 
 ### Layer 1: Responsive Layout Foundation (Critical)
@@ -56,7 +79,7 @@ Leonardo must internalize the responsive grid system as a core competency. This 
 
 **Source material exists**: Token-Family-Responsive.md (breakpoint tokens, density tokens, responsive design patterns, cross-platform usage) and Token-Family-Spacing.md § "Grid Spacing Tokens" (gutter/margin tokens, progressive column grid, platform-specific patterns). This knowledge needs to be synthesized into guidance that serves both specification and implementation.
 
-**Learning approach**: A design exercise focused on layout specification (similar to the Spec 083 component exercises) would be more effective than documentation alone. Leonardo learns by applying the grid system to real screens, discovering gaps in his understanding through practice.
+**Learning approach**: A design exercise focused on layout specification (similar to the Spec 083 component exercises) would be more effective than documentation alone. Leonardo learns by applying the grid system to real screens, discovering gaps in his understanding through practice. The exercise also validates the schema and vocabulary against real scenarios.
 
 **Delivery mechanism**: Both a steering doc and MCP-queryable reference, serving different moments:
 - **Steering doc** (concise — principles + mental model, not exhaustive reference) for internalization. Loaded when doing screen specification work. Serves both Leonardo and platform agents.
@@ -64,9 +87,11 @@ Leonardo must internalize the responsive grid system as a core competency. This 
 
 A dedicated Leonardo skill is a last resort if shared access isn't sufficient. Preference is shared access so all agents benefit.
 
-### Layer 2: Layout Templates (Acceleration)
+### Layer 2: Layout Template Infrastructure (Acceleration)
 
-YAML-based templates describing common page-level responsive layouts. They codify patterns so Leonardo doesn't specify from scratch every time. But they're a convenience layer on top of Layer 1, not a substitute for it.
+YAML-based templates describing page-level responsive layouts. They codify patterns so Leonardo doesn't specify from scratch every time. But they're a convenience layer on top of Layer 1, not a substitute for it.
+
+This spec builds the **infrastructure**: schema, indexer, MCP tools. The design exercise produces **candidate templates** that validate the infrastructure works. Production templates are created when product work begins.
 
 Templates still require specificity. "Use the centered-content-page template" isn't enough — Leonardo still specifies component sizing behavior and positioning within the template's regions. The template provides the grid structure; Leonardo provides the content-specific layout decisions within that structure.
 
@@ -88,17 +113,17 @@ Layout templates fill this gap as a **peer system to experience patterns**, not 
 
 **Note on scope boundary**: The Spec 083 gap report routed three items (#4 multi-section form, #7 filter bar, #13 empty state) to this spec. On review, those are content framing / component assembly concerns, not page-level layout problems. See gap report § "Routing Review Notes" for analysis. This spec addresses page-level responsive layout only.
 
-**Responsive vs reactive scope**: This spec *defines vocabulary* for both responsive (within-platform viewport adaptation) and reactive (cross-platform experience differences). It *builds templates* for responsive only. Reactive specification patterns will emerge through product work — but the language is ready when they do.
+**Responsive vs reactive scope**: This spec *defines vocabulary* for both responsive (within-platform viewport adaptation) and reactive (cross-platform experience differences). It *builds infrastructure and candidate templates* for responsive only. Reactive specification patterns will emerge through product work — but the language is ready when they do.
 
 ---
 
-## Layout Templates: Details
+## Layout Template Infrastructure
 
-### What They Are
+### What Templates Are
 
 YAML-based templates describing page-level responsive layout: regions, grid behavior across breakpoints, and how content areas respond to viewport changes. They reference responsive tokens (breakpoints, grid spacing) and describe spatial relationships — not components.
 
-### What They Are Not
+### What Templates Are Not
 
 - Not component assembly guides (that's experience patterns)
 - Not validation targets (layout is guided, not enforced)
@@ -157,7 +182,7 @@ regions:
 
 Key principles from Leonardo: regions + grid behavior per breakpoint + stacking rules. Enough to place component trees; not so much that it prescribes content. Component-agnostic — "primary content area: columns 1-8 at lg" yes, "primary content area contains a feed with cards" no.
 
-We have 4 design exercises (Spec 083) providing real layout scenarios to test schema ideas against. A schema design exercise would ground this in real needs.
+The design exercise will validate this schema against real layout scenarios and refine it.
 
 ### D3: MCP Surface
 
@@ -183,16 +208,16 @@ How does an agent know which layout template to use?
 
 **Leaning context-based matching** (Leonardo R1 concurs) — same model as `find_components({ context })`. Experience pattern cross-references as secondary hints ("commonly used with `centered-content-page` layout template"). Browse-a-list works for the initial small set but won't scale.
 
-### D6: First Templates
+### D6: Candidate Templates for Exercise
 
-What are the initial layout templates? Should be grounded in real needs through a design exercise focused specifically on page-level layout scenarios.
+The design exercise needs starting scenarios to test the schema against. These are not production templates — they're exercise inputs that validate the infrastructure.
 
 Candidates informed by Spec 083 exercises (layout aspects, not component aspects):
 - Centered content page (login, profile edit — single content area, centered in grid)
 - List page (feed, notifications — full-width scrollable content, optional sticky header)
 - Multi-zone page (dashboard — distinct content regions with different grid behavior)
 
-These are starting points for a schema design exercise, not commitments.
+Whether any of these become production templates depends on product work and classification gate review.
 
 ### D7: Foundation Delivery Mechanism
 
@@ -202,7 +227,7 @@ These are starting points for a schema design exercise, not commitments.
 
 The steering doc is more important. If Leonardo internalizes the system, he'll rarely need the MCP reference. The MCP reference without understanding produces specs that are technically correct but lack design coherence.
 
-Open sub-question: should the learning step include a layout-focused design exercise (Leonardo R1 recommendation)? Similar to Spec 083 component exercises but focused on specifying layout for real screens using the grid system.
+The learning step includes a layout-focused design exercise (Leonardo R1 recommendation). Similar to Spec 083 component exercises but focused on specifying layout for real screens using the grid system. This serves double duty: Leonardo learns the vocabulary, and the exercise validates the template schema.
 
 ---
 
@@ -218,7 +243,7 @@ Open sub-question: should the learning step include a layout-focused design exer
 
 ## What This Enables
 
-An agent building a login page would:
+Once this spec is complete, an agent building a login page would:
 1. Select components via `find_components({ context: 'login-forms' })`
 2. Get assembly guidance via `get_experience_pattern('simple-form')`
 3. Get layout guidance via `get_layout_template('centered-content-page')` — breakpoints, grid columns, supplemental content behavior
@@ -230,12 +255,12 @@ An agent building a one-off page with no matching template would:
 2. Specify layout from scratch using grid tokens, breakpoint behavior, and column spans
 3. Produce a screen spec with explicit layout that platform agents can implement without clarification
 
-The layout template bridges the gap between "here are your components" and "here's where they go on the page." The foundation ensures agents can bridge that gap even without a template.
+The layout foundation ensures agents can specify layout for any page. The template infrastructure accelerates common cases. Production templates grow from real product work.
 
 ---
 
 ## Evolution Path
 
-Templates grow through use. Initial set covers common patterns discovered through design exercises. As agents explore free-form layouts and produce good results, those become candidates for new templates. The system evolves bottom-up from real usage, not top-down from prescription.
+Templates grow through product use. The infrastructure built here supports template creation, indexing, and querying. As product work produces real screens, successful layout patterns become candidates for templates — reviewed through the same classification gate pattern established in Spec 083.
 
-Layout templates are guided, not enforced. Variability is important for exploration and critical to DesignerPunk's evolution. Templates and free-form application provide the tools to support both structured and exploratory work.
+Layout templates are guided, not enforced. Variability is important for exploration and critical to DesignerPunk's evolution. Templates and free-form specification provide the tools to support both structured and exploratory work.
