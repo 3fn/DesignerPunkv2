@@ -291,3 +291,21 @@
 **Product-specific items of note for Spec 081 (Product MCP)**:
 - #11 (dashboard layout) flagged as product primitive candidate
 - #5, #6, #9, #10 may inform Product MCP content types when that spec is scoped
+
+---
+
+## Routing Review Notes (2026-03-22)
+
+**Context**: During Spec 069 (Layout Templates) design outline review, Peter and Thurgood examined whether gaps #4, #7, and #13 — all routed to Spec 069 — are actually layout template problems or something else.
+
+**Observation**: Layout templates address page-level responsive concerns — viewport regions, grid columns, breakpoint adaptation. The three gaps routed to Spec 069 may not be layout problems:
+
+- **#4 (Multi-section form)**: The gap is about spacing *between* grouped sections within a form — which spacing tokens separate sections vs fields within a section. This is component assembly guidance (experience pattern territory), not page-level layout. The form doesn't care about the viewport or grid; it cares about internal spacing hierarchy.
+
+- **#7 (Filter bar + scrollable content)**: Two concerns conflated. "How Chip-Filter components arrange in a horizontal row" is component composition (Chip family guidance or experience pattern). "Filter bar stays fixed while content scrolls" is a scroll behavior pattern, not a responsive grid question. Neither describes regions, columns, or breakpoint adaptation.
+
+- **#13 (Empty state)**: "What to show when a section has no content" is a new experience pattern or component concern. No relationship to responsive layout.
+
+**Status**: Observations captured. No routing changes made. Final routing decisions deferred to execution planning — these items may reroute to experience pattern enrichment, family guidance, or new experience patterns rather than Spec 069.
+
+**Impact on Spec 069**: Spec 069 should be scoped on its own merits (does the agent understand how to use the responsive grid at the page level?) rather than driven by these gap report items. The design exercises in Spec 083 focused on component selection and assembly, not responsive viewport behavior — so the absence of page-level layout gaps in the exercises doesn't mean the layout problem isn't real.
