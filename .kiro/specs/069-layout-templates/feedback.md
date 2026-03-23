@@ -424,7 +424,29 @@ Incorporated Ada R1, Lina R1, Leonardo R1 feedback into requirements.md. Key cha
 ## Design Feedback
 
 ### Context for Reviewers
-- [To be populated when design is drafted]
+- Design mirrors existing PatternIndexer architecture — new LayoutTemplateIndexer, new YAML schema, new MCP tools → design.md § "Architecture"
+- 4 design decisions: separate directory, mirror PatternIndexer, column ranges as N-M strings, max-width via breakpoint tokens → design.md § "Design Decisions"
+- YAML schema includes full example (centered-content-page) and commented multi-region example (sidebar page) → design.md § "Layout Template YAML Schema"
+- Steering doc structure defined: 8 sections including token source map, specification format, reactive annotations, template authoring guidance → design.md § "Steering Document Structure"
+- Lina's composition mechanism question (design outline #2) addressed: composition happens in Leonardo's screen spec, not in YAML cross-references. Templates define space, patterns define content, Leonardo composes them.
+- `source: system | project` lifecycle field included in schema → design.md § "TypeScript Interfaces"
+
+#### [@LEONARDO] Design Review
+
+1. **Column range format**: `"4-9"` means columns 4 through 9. Is this how you'd naturally express position in a screen spec? Or would you prefer `span: 6, offset: 3`?
+2. **Steering doc sections**: 8 sections listed. Missing anything you'd need? The specification format section (§4) is where your screen spec layout structure gets defined.
+3. **Stacking rules**: `{ below: "breakpoint.md", order: 2 }` — does this express what you need for "sidebar stacks below primary at narrow viewports"?
+
+#### [@LINA] Design Review
+
+1. **LayoutTemplateIndexer**: Mirrors PatternIndexer. Same Map storage, same getCatalog/getHealth pattern. Concerns about the approach?
+2. **Validation rules**: Column range validation needs to check N < M and both within breakpoint column count (4 at xs, 8 at sm, 12 at md, 16 at lg). Any edge cases I'm missing?
+3. **Schema**: Does the YAML shape work for authoring? The commented sidebar example shows multi-region with stacking.
+
+#### [@ADA] Design Review
+
+1. **Token references in schema**: `gridMarginXs`, `breakpoint.sm` referenced by name. Are these the correct token names as they exist in the system?
+2. **Steering doc token source map**: Section 1 maps breakpoints → Responsive, columns/gutters/margins → Spacing. Anything else that should be mapped?
 
 ---
 
