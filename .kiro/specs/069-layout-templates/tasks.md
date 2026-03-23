@@ -142,7 +142,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
   **Success Criteria:**
   - `LayoutTemplateIndexer` parses, validates, and serves layout template YAML files
   - `list_layout_templates` and `get_layout_template` MCP tools operational
-  - At least 3 candidate templates (generic scenarios) indexable and queryable
+  - At least 4 candidate templates (3 generic scenarios + 1 primitive base) indexable and queryable
   - Full test suite passes with no regressions
 
   **Primary Artifacts:**
@@ -190,6 +190,8 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
       - `centered-content-page.yaml` — single region, centered in grid
       - `sidebar-page.yaml` — primary + sidebar regions, sidebar stacks below at narrow viewports
       - `multi-zone-page.yaml` — 3+ regions with distinct grid behavior
+    - Author 1 additional primitive template:
+      - `full-width-page.yaml` — single region, full-width at all breakpoints, no max-width. Serves as the conceptual base canvas — the simplest valid template and the starting point for building other templates.
     - All templates: `source: system`, all four breakpoints, token references by actual camelCase name
     - Note `gridMarginSm` known discrepancy (24px actual vs 28px design spec) in a YAML comment where referenced
     - Verify all 3 are indexable and queryable through MCP tools
