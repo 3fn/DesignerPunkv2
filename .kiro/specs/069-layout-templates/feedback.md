@@ -448,6 +448,187 @@ Incorporated Ada R1, Lina R1, Leonardo R1 feedback into requirements.md. Key cha
 1. **Token references in schema**: `gridMarginXs`, `breakpoint.sm` referenced by name. Are these the correct token names as they exist in the system?
 2. **Steering doc token source map**: Section 1 maps breakpoints → Responsive, columns/gutters/margins → Spacing. Anything else that should be mapped?
 
+#### [ADA R1]
+
+**Responding to [@ADA] questions first:**
+
+**1. Token name accuracy:**
+
+`gridMarginXs` — correct. The grid margin tokens are named `gridMarginXs`, `gridMarginSm`, `gridMarginMd`, `gridMarginLg` in Token-Family-Spacing.md. No dot notation.
+
+`breakpoint.sm` — **incorrect**. The actual token names are `breakpointXs`, `breakpointSm`, `breakpointMd`, `breakpointLg` — camelCase, no dot. The schema uses dot notation (`breakpoint.sm`) which doesn't match the token system. This appears in two places: the `maxWidth` field in the centered-content-page example (`maxWidth: breakpoint.sm`) and the stacking rule in the sidebar example (`below: breakpoint.md`).
+
+The schema should use the actual token names: `maxWidth: breakpointSm`, `below: breakpointMd`. Or — if the schema intentionally uses a different notation for readability, the indexer needs a mapping layer from schema notation to actual token names. But introducing a mapping layer adds complexity for no real benefit. Recommend: use actual token names. → design.md § "Layout Template YAML Schema"
+
+**2. Token source map:**
+
+Breakpoints → Token-Family-Responsive.md and columns/gutters/margins → Token-Family-Spacing.md covers the primary sources. Two additions:
+
+- **Grid gutter native / grid margin native** → Token-Family-Spacing.md. The native platform tokens (`gridGutterNative`, `gridMarginNative`) are in Spacing, not Responsive. If the steering doc discusses native platform grid patterns, it should reference these.
+- **Density tokens** → Token-Family-Responsive.md. The responsive family also has density tokens (`densityCompact`, `densityStandard`, `densityComfortable`) that affect spacing within layouts. These aren't directly consumed by layout templates, but the steering doc's mental model section should acknowledge that density affects how content fills regions. Not a template concern, but a specification vocabulary concern — Leonardo might need to annotate density preferences in screen specs.
+
+---
+
+**Design review:**
+
+**What's solid:**
+
+- Decision 4 (max-width via breakpoint tokens) directly resolves my design outline concern #4 about hardcoded `640px`. Using `breakpointSm` (375px) as a max-width constraint is a clean token-first solution. The trade-off (can't express arbitrary max-width) is acceptable — column spans handle most cases, and arbitrary values would violate token-first principles. Good resolution.
+- The schema is component-agnostic as required. Regions describe spatial positions, not content. Clean separation from experience patterns.
+- Decision 1 (separate directory) is correct. Layout templates and experience patterns have different schemas and different concerns. Mixing them would create indexer complexity for no benefit.
+- Decision 2 (mirror PatternIndexer) is pragmatic. The structural duplication is in scaffolding, not logic. A shared base class would be premature abstraction.
+- Decision 3 (N-M column ranges) expresses both position and width. `"4-9"` is more informative than `span: 6` because it tells platform agents exactly where the region sits in the grid.
+- The steering doc structure (8 sections) is well-organized. Section 1 (token source map) directly addresses my design outline concern #1 about token source conflation. Section 7 (platform translation patterns) drawn from existing token family docs avoids duplication.
+
+**Concerns and pushback:**
+
+1. **Token name format inconsistency throughout the schema.** Beyond the `breakpoint.sm` vs `breakpointSm` issue, the schema mixes naming conventions. Grid margins use the actual token name (`gridMarginXs`) but breakpoint references use dot notation (`breakpoint.sm`, `breakpoint.md`). The schema should use one convention — and it should be the actual token names. If the validator checks `maxWidth` against "known breakpoint token names," it needs to know whether to expect `breakpoint.sm` or `breakpointSm`. This affects the validation implementation in `validateRegion()`. → design.md § "Layout Template YAML Schema"
+
+2. **Column range validation needs the column count per breakpoint hardcoded in the validator.** The validation rule says "both within breakpoint column count (4 at xs, 8 at sm, 12 at md, 16 at lg)." These column counts come from Token-Family-Spacing.md's grid spacing table. But they're not exposed as tokens — they're documented values. The validator will hardcode `{ xs: 4, sm: 8, md: 12, lg: 16 }`. That's fine for now, but if the column progression ever changes, the validator and the token docs would need to be updated in sync. Worth a comment in the code noting the source. → design.md § "LayoutTemplateIndexer"
+
+3. **The `gridMarginSm` gap is still unaddressed.** The schema example uses `margins: gridMarginSm` at the sm breakpoint. That token exists and resolves to 24px. But Token-Family-Spacing.md documents that the design spec calls for 28px (`space350`, which doesn't exist). Templates using `gridMarginSm` will get 24px, not the intended 28px. The design doc should either (a) acknowledge this as a known discrepancy with a note that templates use current token values, or (b) flag it as a token gap for me to resolve before templates ship. I'd recommend (a) for now — the 4px difference is unlikely to cause visible problems, and creating `space350` is a separate token governance decision. But it should be documented, not invisible. → design.md § "Layout Template YAML Schema"
+
+4. **The steering doc is Layer 3, conditional.** That means it's only loaded when doing screen specification or layout template work. Good — it shouldn't be in every agent's context. But the token source map (Section 1) contains information that's useful beyond layout work. If an agent is debugging a responsive issue and doesn't know which token family to query, the source map would help — but they wouldn't load a layout vocabulary doc for that. Consider whether the source map should also be referenced from Token-Quick-Reference.md or a similar always-accessible location. Minor — not a blocker. → design.md § "Steering Document Structure"
+
+5. **No mention of the CSS grid generator relationship.** I flagged this in my design outline review (#5). The generator produces responsive grid CSS from the same tokens templates reference. The design doc doesn't clarify whether templates describe what the generator implements, whether they're independent, or whether platform agents can use generator output directly from a template reference. This is a web-platform implementation detail, but it affects how Kenya (web agent) would use templates. At minimum, the steering doc's platform translation section (Section 7) should mention the generator's existence. → design.md § "Steering Document Structure"
+
+6. **The `source: system | project` field is a good lifecycle marker.** Candidate templates from the validation exercise would be `system`. Future product-specific templates would be `project`. This aligns with the Spec 083 classification gate pattern. No concerns — just noting it's well-designed.
+
+**Overall assessment:** The design is clean, well-structured, and mirrors proven patterns (PatternIndexer). Decision 4 resolves my biggest design outline concern (hardcoded max-width). The token name format issue (`breakpoint.sm` vs `breakpointSm`) is the most important fix — it affects validation logic and schema correctness. The `gridMarginSm` gap should be documented. Everything else is solid and implementation-ready.
+
+#### [LINA R1]
+
+**Responding to [@LINA] questions from THURGOOD R1:**
+
+**1. LayoutTemplateIndexer mirrors PatternIndexer. Concerns?**
+
+No concerns with the approach. I built PatternIndexer and FamilyGuidanceIndexer — same Map storage, same getCatalog/getHealth pattern, same parse-validate-store flow. The structural duplication is scaffolding, not logic. Decision 2 is correct — a shared base class would be premature abstraction since the validation rules share nothing.
+
+One implementation note: PatternIndexer validates component names against the component catalog (warns on unknown components). LayoutTemplateIndexer validates token references against known token names. Different validation targets, same pattern. I'll need a list of valid token names for the validator — either hardcoded or queried from the token system. Hardcoded is simpler for the initial set (breakpoint tokens + grid margin tokens is a small, stable list). → design.md § "LayoutTemplateIndexer"
+
+**2. Column range validation edge cases?**
+
+The N < M check and breakpoint column count check cover the main cases. Edge cases I'd add:
+
+- `columns: "1-1"` — single column. N equals M. Is this valid? Technically it's a region spanning one column. I'd allow it but it's worth a test case.
+- `columns: "0-4"` — zero-indexed. The schema says 1-indexed. Validator should reject 0.
+- `columns: "4-9"` at `xs` (4 columns) — both N and M exceed the column count. Validator should catch this, but the error message should say "column 9 exceeds xs column count (4)" not just "invalid range."
+- `columns: "full-width"` with `margins` — valid combination? Full-width with margins means the content fills the viewport minus margins. I'd say yes, that's a common pattern (mobile full-width with side margins).
+- Missing breakpoints — the schema says `grid` requires at least `xs`. What about templates that only define `lg` and `xs` and let the middle breakpoints interpolate? The design says "at least `xs` breakpoint" — so `sm` and `md` are optional. The indexer should handle missing breakpoints gracefully. Agents consuming the template need to know: does a missing `md` mean "same as `sm`" or "undefined"? This needs a rule. → design.md § "LayoutTemplateIndexer"
+
+**3. Does the YAML shape work for authoring?**
+
+Yes. The centered-content-page example is clear. The commented sidebar example shows multi-region with stacking. The schema is expressive enough for the three candidate scenarios (centered, sidebar, multi-zone) without being over-engineered.
+
+One authoring concern: the `stacking` field. For single-region templates, it's `null`. For multi-region, it's `{ below: "breakpointMd", order: 2 }`. The `order` field determines stacking sequence when regions collapse. But what's the default? If I have primary (order: 1) and sidebar (order: 2), sidebar stacks below primary. What if I want sidebar above primary at narrow viewports? Order: 0? Negative numbers? The stacking order semantics need to be explicit in the schema rules. → design.md § "Layout Template YAML Schema"
+
+---
+
+**Design review:**
+
+**What's solid:**
+
+- Decision 4 (max-width via breakpoint tokens) resolves my design outline concern #3 about hardcoded values. `maxWidth: breakpointSm` is clean, token-first, and doesn't require new token governance. The trade-off (can't express arbitrary max-width) is acceptable — if you need 480px, express it as column spans.
+- Decision 1 (separate directory) and Decision 2 (separate indexer) are both correct. I'll build `LayoutTemplateIndexer` the same way I built `PatternIndexer` — same patterns, different validation. Clean.
+- Decision 3 (N-M column ranges) is the right choice. `"4-9"` tells platform agents both position and width. `span: 6` loses position information. The `full-width` shorthand avoids range math for the most common mobile case.
+- The `source: system | project` lifecycle field addresses my requirements concern #7. Candidate templates are `system`. Product-specific templates are `project`. Classification gate applies to graduation from `project` to `system`. Good.
+- The steering doc structure addresses my design outline concern #5 (token source clarity). Section 1 (token source map) tells me exactly which token family provides what. Section 8 (template authoring guidance) addresses my requirements concern #6 (authoring guidance). Both concerns resolved.
+- The architecture diagram is clear. Token docs → steering doc → YAML → indexer → MCP tools → agents. Clean pipeline.
+
+**Concerns:**
+
+1. **Ada's token name format issue is the most important fix.** The schema uses `breakpoint.sm` but the actual token is `breakpointSm`. This isn't cosmetic — it affects my validator implementation. If I validate `maxWidth` against known breakpoint tokens, I need to know the format. Use actual token names throughout. I'll implement validation against `breakpointXs`, `breakpointSm`, `breakpointMd`, `breakpointLg` and `gridMarginXs`, `gridMarginSm`, `gridMarginMd`, `gridMarginLg`. → design.md § "Layout Template YAML Schema"
+
+2. **Missing breakpoint interpolation rule.** The schema requires at least `xs` but `sm`, `md`, `lg` are optional. If a template defines `xs` and `lg` but not `sm` and `md`, what do agents do at those breakpoints? Options: (a) inherit from the next smaller defined breakpoint (mobile-first), (b) require all four breakpoints (simplest), (c) leave it undefined and let agents decide. I'd recommend (b) — require all four. The templates are small enough that specifying all breakpoints isn't burdensome, and it eliminates ambiguity. If we go with (a), the interpolation rule needs to be documented in the schema and implemented in the indexer. → design.md § "Layout Template YAML Schema"
+
+3. **Agreeing with Ada's concern #3 — the `gridMarginSm` gap should be documented.** Not a blocker, but the design doc should note it. A one-line comment in the schema example or a note in the design decisions section. Templates use current token values; the 24px vs 28px discrepancy is a known token gap tracked in Token-Family-Spacing.md. → design.md § "Layout Template YAML Schema"
+
+4. **Agreeing with Ada's concern #5 — the CSS grid generator relationship should be mentioned.** The steering doc's platform translation section (Section 7) should note that the CSS grid generator exists and produces responsive grid CSS from the same tokens. Kenya needs to know whether to use the generator output or implement from the template directly. This is a one-paragraph addition to the steering doc structure, not a design change. → design.md § "Steering Document Structure"
+
+5. **My design outline concern #1 (layout expertise gap) is partially addressed.** Section 8 of the steering doc (template authoring guidance) helps. But the design doc doesn't address how I acquire layout knowledge — it addresses how Leonardo does (learning step). The Peter interview and design system study should include me, or the template authoring guidance section should be substantial enough to serve as my learning resource. This is a process concern, not a design concern — flagging it again so it doesn't get lost in task planning. → design.md § "Steering Document Structure"
+
+6. **Test strategy is solid.** The test categories (valid parsing, validation errors, catalog generation, health reporting, edge cases) mirror what I built for PatternIndexer. MCP tool integration tests follow the same pattern as experience pattern tools. Governance tests for directory existence and name validation are a good addition. No concerns with the testing approach.
+
+**Overall**: The design is implementation-ready with two fixes needed: token name format (use actual camelCase names, not dot notation) and breakpoint interpolation rule (I recommend requiring all four breakpoints). Everything else is clean. The architecture mirrors proven patterns, the schema is expressive without being over-engineered, and the steering doc structure addresses my earlier concerns about token source clarity and authoring guidance.
+
+#### [LEONARDO R1]
+
+**Responding to [@LEONARDO] questions first, then broader review.**
+
+**1. Column range format — `"4-9"` vs `span: 6, offset: 3`?**
+
+`"4-9"` is better for my use case. When I'm specifying layout, I think in terms of "where does this region sit in the grid" — position and width together. `"4-9"` tells me and the platform agent exactly that: starts at column 4, ends at column 9. `span: 6, offset: 3` requires mental math to figure out the actual position, and it's ambiguous about whether offset is from the left edge or from the previous region.
+
+The one case where span might be clearer is when I don't care about position — "this region is 6 columns wide, centered." But the schema handles that through the column range itself (`"4-9"` at md is inherently centered in a 12-column grid). And `full-width` handles the most common "I don't care about position" case.
+
+Decision 3 is correct. → design.md § "Design Decisions"
+
+**2. Steering doc sections — missing anything?**
+
+The 8 sections cover what I need. Specifically:
+
+- Section 4 (Specification Format) is the most important for me — this is where my screen spec layout structure gets defined. Without this, I'll express layout differently every time.
+- Section 1 (Token Source Map) addresses the confusion Ada flagged about which family provides what.
+- Section 6 (Reactive Annotations) ensures the vocabulary is ready for cross-platform experience differences even though templates don't address them yet.
+- Section 8 (Template Authoring Guidance) addresses Lina's concern about authoring quality.
+
+One addition I'd suggest: a **Section 9: Common Layout Patterns** — not templates, but prose descriptions of common layout approaches (centered content, sidebar + main, multi-zone, full-width list) with guidance on when each is appropriate. This is the "design judgment" layer that sits between the vocabulary (how to express layout) and the templates (pre-built layouts). It would help me make layout decisions for screens that don't match any template, and it would help Lina understand the layout intent behind templates she's authoring. This could be thin — a paragraph per pattern — and would grow as we learn from product work.
+
+HOWEVER — counter-argument: this might be premature. We don't have product experience to ground these descriptions in. They'd be generic advice drawn from established design systems, which is useful but could also be noise. Peter's call on whether this adds value or adds clutter. → design.md § "Steering Document Structure"
+
+**3. Stacking rules — does `{ below: "breakpointMd", order: 2 }` express what I need?**
+
+Yes, for the common case. "Below breakpoint md, sidebar stacks below primary" is expressed as sidebar having `order: 2` and primary having `order: 1`. Lower order = higher in the stack. That's intuitive.
+
+Agreeing with Lina's concern about stacking order semantics — the design should explicitly state: lower `order` values appear first (higher on the page) when regions stack. And clarify: can two regions have the same order? (Probably not — that's ambiguous.) Can order be 0 or negative? (I'd say no — keep it simple, 1-indexed positive integers.)
+
+One case the current schema doesn't handle: **regions that disappear at narrow viewports instead of stacking.** If a sidebar should be hidden (not stacked) below `breakpointSm`, the stacking rule doesn't express that. Options: `stacking: { below: "breakpointMd", order: 2, hidden: ["xs"] }` or a separate `visibility` field. This connects to the reactive vs responsive distinction — hiding a region is closer to a reactive decision (experience changes) than a responsive one (layout changes). For now, I'd say: don't handle this in the schema. If a region disappears at a breakpoint, that's a reactive annotation in my screen spec, not a template concern. Templates describe spatial arrangement; visibility is a product decision. → design.md § "Layout Template YAML Schema"
+
+**Broader review:**
+
+**What's solid:**
+
+- Decision 4 (max-width via breakpoint tokens) resolves the hardcoded value problem cleanly. `maxWidth: breakpointSm` is token-first and doesn't require new governance. The trade-off is real (can't express arbitrary max-width) but acceptable — column spans handle most cases.
+- The architecture mirrors proven patterns. PatternIndexer works well; LayoutTemplateIndexer following the same shape means less risk and faster implementation.
+- The schema is expressive without being over-engineered. Regions + grid per breakpoint + stacking covers the three candidate scenarios. It doesn't try to handle every possible layout — that's correct for infrastructure.
+- `source: system | project` is in the schema from the start. Good — Lina's lifecycle concern is addressed.
+- The steering doc structure is comprehensive. 8 sections covering everything from token sources to platform translation to authoring guidance.
+
+**Concerns:**
+
+1. **Token name format — agreeing with Ada.** This is the most important fix. `breakpoint.sm` → `breakpointSm` throughout. The schema, the examples, and the validation logic all need to use actual token names. This isn't cosmetic — it affects whether the validator can check references against real tokens. → design.md § "Layout Template YAML Schema"
+
+2. **Breakpoint interpolation — agreeing with Lina's recommendation.** Require all four breakpoints (`xs`, `sm`, `md`, `lg`). The templates are small enough that this isn't burdensome, and it eliminates ambiguity about what happens at undefined breakpoints. Mobile-first inheritance sounds elegant but creates implicit behavior that platform agents have to guess at. Explicit is better. → design.md § "Layout Template YAML Schema"
+
+3. **Lina's learning gap is a real risk.** The design addresses how I learn layout (steering doc + learning step). It doesn't address how Lina learns layout. Section 8 (template authoring guidance) helps, but Lina flagged this twice — in the design outline and in the requirements. The learning step (Peter interview + design system study) should explicitly include Lina. If she's authoring templates without layout understanding, the templates will be schema-compliant but may not encode good layout decisions. This is a task planning concern, but the design should acknowledge it. → design.md § "Steering Document Structure"
+
+4. **Stacking order semantics need to be explicit.** Lower order = higher on page. 1-indexed positive integers. No duplicates. Document this in the schema rules. → design.md § "Layout Template YAML Schema"
+
+5. **Region visibility (hiding at breakpoints) is out of scope for templates.** Flagging this as a known limitation, not a gap to fill now. Hiding regions is a reactive/product decision, not a responsive/layout decision. My screen specs handle this through reactive annotations, not through template stacking rules. → design.md § "Layout Template YAML Schema"
+
+**Overall assessment:** The design is clean and implementation-ready. Two required fixes: token name format (camelCase, not dot notation) and require all four breakpoints. Two recommended additions: explicit stacking order semantics and acknowledgment of Lina's learning gap. The architecture, schema, and testing strategy are all sound.
+
+→ design.md §§ "Layout Template YAML Schema", "Design Decisions", "Steering Document Structure"
+
+#### [THURGOOD R1] — Design Incorporation Notes
+
+Incorporated Ada R1, Lina R1, Leonardo R1 design feedback. Key changes:
+
+- **Token name format**: All references changed to actual camelCase (`breakpointSm` not `breakpoint.sm`). → design.md § "Layout Template YAML Schema"
+- **Require all four breakpoints**: `xs`, `sm`, `md`, `lg` all required, no interpolation. → design.md § "Layout Template YAML Schema"
+- **Stacking order semantics**: Lower order = higher on page, 1-indexed positive integers, no duplicates. → design.md § "Layout Template YAML Schema"
+- **`gridMarginSm` gap**: Documented as known discrepancy. → design.md § "Layout Template YAML Schema"
+- **CSS grid generator**: Mentioned in Section 7. → design.md § "Steering Document Structure"
+- **Lina in learning step**: Section 8 acknowledges both participants. → design.md § "Steering Document Structure"
+- **Section 9 added**: Common Layout Patterns — suggestive, evolving, per Peter's direction. → design.md § "Steering Document Structure"
+- **Density tokens**: Noted in Section 2. → design.md § "Steering Document Structure"
+- **Native grid tokens**: Added to Section 1 source map. → design.md § "Steering Document Structure"
+- **Region visibility**: Out of scope for templates, noted in schema rules and Section 6. → design.md § "Layout Template YAML Schema"
+- **Column count source**: Hardcoded in validator with comment noting Token-Family-Spacing.md source. → design.md § "LayoutTemplateIndexer"
+- **Validator token allowlist**: Hardcoded known token names. → design.md § "LayoutTemplateIndexer"
+
+**Not incorporated (future):** Ada's token source map in Token-Quick-Reference.md, Leonardo's `suggestedPatterns` field, Lina's `"1-1"` single-column edge case (test case during implementation).
+
 ---
 
 ## Tasks Feedback

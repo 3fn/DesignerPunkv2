@@ -2,7 +2,7 @@
 
 **Date**: 2026-03-23
 **Spec**: 069 - Layout Templates
-**Status**: Design Phase
+**Status**: Design Phase — R1 feedback incorporated
 **Dependencies**: Spec 067 (Application MCP), Spec 070 (Agent Architecture), Spec 082 (Family Naming + Registry)
 
 ---
@@ -73,35 +73,35 @@ regions:
     grid:
       xs:
         columns: full-width               # Shorthand: spans all available columns
-        margins: gridMarginXs             # Token reference
+        margins: gridMarginXs             # Token reference (actual token name)
       sm:
         columns: 2-7                      # Column span (1-indexed, of 8 at sm)
-        margins: gridMarginSm
+        margins: gridMarginSm             # Note: resolves to 24px (spec calls for 28px, see Token-Family-Spacing.md)
       md:
         columns: 4-9                      # Column span (of 12 at md)
         margins: gridMarginMd
       lg:
         columns: 5-12                     # Column span (of 16 at lg)
         margins: gridMarginLg
-        maxWidth: breakpoint.sm            # Token reference, not hardcoded px
+        maxWidth: breakpointSm            # Token reference (actual camelCase name)
     stacking: null                         # No stacking (single region)
 
 # Multi-region example (sidebar page):
 # regions:
 #   - name: primary
 #     grid:
-#       lg: { columns: 1-11 }
-#       md: { columns: 1-8 }
-#       sm: { columns: full-width }
 #       xs: { columns: full-width }
-#     stacking: { below: breakpoint.md, order: 1 }
+#       sm: { columns: full-width }
+#       md: { columns: 1-8 }
+#       lg: { columns: 1-11 }
+#     stacking: { below: breakpointMd, order: 1 }
 #   - name: sidebar
 #     grid:
-#       lg: { columns: 12-16 }
-#       md: { columns: 9-12 }
-#       sm: { columns: full-width }
 #       xs: { columns: full-width }
-#     stacking: { below: breakpoint.md, order: 2 }
+#       sm: { columns: full-width }
+#       md: { columns: 9-12 }
+#       lg: { columns: 12-16 }
+#     stacking: { below: breakpointMd, order: 2 }
 ```
 
 **Schema rules:**
@@ -110,10 +110,13 @@ regions:
 - `description`: required, non-empty
 - `category`: required, non-empty
 - `regions`: required, non-empty array
-- Each region: `name` (required), `grid` (required, at least `xs` breakpoint), `stacking` (required, null for single-region)
-- Grid values reference tokens by name — `gridMarginXs`, `breakpoint.sm`, etc.
+- Each region: `name` (required), `grid` (required, **all four breakpoints required**: `xs`, `sm`, `md`, `lg`), `stacking` (required, null for single-region)
+- Grid values reference tokens by actual camelCase name — `gridMarginXs`, `breakpointSm`, etc. No dot notation.
 - `columns`: either `full-width` or `N-M` range (1-indexed within breakpoint column count)
-- `maxWidth`: optional, must reference a breakpoint token
+- `maxWidth`: optional, must reference a breakpoint token by actual name (`breakpointXs`, `breakpointSm`, `breakpointMd`, `breakpointLg`)
+- **Stacking order**: lower `order` values appear first (higher on page) when regions stack. 1-indexed positive integers, no duplicates within a template. Regions that should be hidden at narrow viewports are not expressed in templates — that's a reactive/product decision handled in Leonardo's screen spec via reactive annotations.
+
+**Known token gap**: `gridMarginSm` resolves to 24px. Token-Family-Spacing.md documents the design spec calls for 28px (`space350`), but that primitive token doesn't exist. Templates use current token values.
 
 ### TypeScript Interfaces
 
@@ -130,7 +133,7 @@ interface LayoutTemplate {
 interface LayoutRegion {
   name: string;
   description?: string;
-  grid: Record<Breakpoint, GridBehavior>;
+  grid: Record<'xs' | 'sm' | 'md' | 'lg', GridBehavior>;  // All four required
   stacking: StackingRule | null;
 }
 
@@ -182,10 +185,12 @@ class LayoutTemplateIndexer {
 - Required fields: `name`, `source`, `description`, `category`, `regions`
 - `source` must be `system` or `project`
 - `regions` must be non-empty array
-- Each region must have `name`, `grid` with at least `xs` breakpoint
-- `columns` must be `full-width` or valid `N-M` range
-- `maxWidth` must reference a known breakpoint token name
-- `stacking` must be null or have `below` (breakpoint reference) and `order` (number)
+- Each region must have `name`, `grid` with all four breakpoints (`xs`, `sm`, `md`, `lg`)
+- `columns` must be `full-width` or valid `N-M` range (1-indexed, N < M, both within breakpoint column count)
+- Column counts per breakpoint: `{ xs: 4, sm: 8, md: 12, lg: 16 }` (source: Token-Family-Spacing.md § "Grid Spacing Tokens" — hardcoded in validator, comment noting source)
+- `maxWidth` must reference a known breakpoint token name (`breakpointXs`, `breakpointSm`, `breakpointMd`, `breakpointLg`)
+- `stacking` must be null or have `below` (breakpoint token reference) and `order` (positive integer, 1-indexed, no duplicates within template)
+- Token references validated against a hardcoded allowlist of known token names (breakpoint tokens + grid margin tokens — small, stable set)
 
 ### MCP Tool Registration
 
@@ -214,14 +219,15 @@ Two new tools added to `index.ts`:
 `Layout-Specification-Vocabulary.md` — Layer 3, conditional loading when doing screen specification or layout template work.
 
 **Sections:**
-1. **Token Source Map** — which token family provides what: breakpoints (Responsive), columns/gutters/margins (Spacing)
-2. **Grid System Mental Model** — progressive 4→8→12→16 columns, how gutters and margins scale, the mathematical relationships
+1. **Token Source Map** — which token family provides what: breakpoints (Responsive), columns/gutters/margins (Spacing), native grid tokens (Spacing). All token names in actual camelCase format.
+2. **Grid System Mental Model** — progressive 4→8→12→16 columns, how gutters and margins scale, the mathematical relationships. Density tokens (Responsive) acknowledged as affecting how content fills regions.
 3. **Specification Vocabulary** — canonical terms with definitions (column span, region, stacking order, full-width, max-width constraint)
 4. **Specification Format** — the structured format Leonardo uses in screen specs to express layout (not prose — a consistent section structure)
 5. **Responsive Adaptation** — within-platform viewport changes, breakpoint-driven layout shifts
-6. **Reactive Annotations** — cross-platform experience differences, platform availability markers
-7. **Platform Translation Patterns** — how specification terms map to CSS Grid, SwiftUI adaptive layout, Compose adaptive patterns (drawn from existing token family docs, not new)
-8. **Template Authoring Guidance** — what makes a good template, what to encode vs leave to per-screen specification
+6. **Reactive Annotations** — cross-platform experience differences, platform availability markers. Region visibility (hiding at breakpoints) is a reactive decision expressed here, not in templates.
+7. **Platform Translation Patterns** — how specification terms map to CSS Grid, SwiftUI adaptive layout, Compose adaptive patterns (drawn from existing token family docs, not new). Notes the CSS grid generator's existence and its relationship to layout templates.
+8. **Template Authoring Guidance** — what makes a good template, what layout decisions to encode vs leave to per-screen specification. Serves both Lina (template author) and Leonardo (template consumer). Both participate in the Req 6 learning step.
+9. **Common Layout Patterns** (suggestive, evolving) — prose descriptions of common layout approaches (centered content, sidebar + main, multi-zone, full-width list) with guidance on when each is appropriate. Explicitly marked as suggestive guidelines that evolve with product learnings, not definitive prescriptions. Seeded from established design system study (Req 6), grows as product work teaches what actually works.
 
 ---
 
