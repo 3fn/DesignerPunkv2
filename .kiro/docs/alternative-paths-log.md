@@ -41,5 +41,16 @@ When we face a decision with multiple viable approaches and choose one path, the
 
 ## Log Entries
 
-*No entries yet.*
+### CSS Custom Properties Cannot Be Used in @media Queries
+
+**Date**: 2026-03-24
+**Context**: During Task 1.3 (showcase stylesheet, spec 084), breakpoint tokens (`--breakpoint-xs/sm/md/lg`) exist as CSS custom properties but cannot be used inside `@media` conditions. This is a CSS specification limitation — `@media (max-width: var(--breakpoint-md))` is invalid CSS. The showcase stylesheet uses hard-coded pixel values in media queries instead.
+**Direction Chosen**: Hard-coded breakpoint values in `@media` rules for the showcase site. Breakpoint tokens remain available for JavaScript-based responsive logic and documentation.
+**Alternative Considered**: (1) CSS `@custom-media` (spec draft, no browser support yet). (2) Sass/PostCSS preprocessing to resolve token values at build time. (3) JavaScript `matchMedia()` using token values for responsive behavior.
+**Trade-offs**: 
+- Chosen path offers: zero build step, works today, matches showcase zero-CI constraint
+- Chosen path sacrifices: breakpoint values duplicated between tokens and CSS media queries — drift risk
+- Alternative (2) would have offered: single source of truth for breakpoints
+- Alternative (2) would have sacrificed: zero-CI deployment model, adds build dependency
+**Revisit Trigger**: When `@custom-media` reaches baseline browser support, or when a future spec introduces a build step that could resolve token values into media queries. Also relevant for any web consumer of DesignerPunk tokens who needs responsive breakpoints — this is a system-wide limitation, not showcase-specific.
 

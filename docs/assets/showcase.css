@@ -1,0 +1,324 @@
+/**
+ * DesignerPunk Showcase Site Stylesheet
+ * Spec: 084 — GitHub Pages Showcase Site
+ * Agent: Lina (Task 1.3)
+ *
+ * All design values (colors, spacing, typography, radii) consume
+ * DesignerPunk tokens via CSS custom properties from tokens.css.
+ * Structural CSS (display, grid-template, position) is non-tokenizable.
+ */
+
+/* ============================================
+ * Reset & Base
+ * ============================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.showcase-page {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-100);
+  font-weight: var(--font-weight-400);
+  letter-spacing: var(--letter-spacing-100);
+  color: var(--color-text-default);
+  background-color: var(--color-structure-canvas);
+}
+
+/* ============================================
+ * Navigation
+ * ============================================ */
+
+.showcase-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-block: var(--space-150);
+  padding-inline: var(--grid-margin-sm);
+  background-color: var(--color-structure-canvas);
+  border-block-end: var(--border-width-100) solid var(--color-structure-border-subtle);
+}
+
+.showcase-nav-brand {
+  font-family: var(--font-family-display);
+  font-size: var(--typography-h-5-font-size);
+  font-weight: var(--font-weight-700);
+  color: var(--color-action-primary);
+  text-decoration: none;
+}
+
+.showcase-nav-links {
+  display: flex;
+  gap: var(--space-300);
+}
+
+.showcase-nav-links a {
+  font-family: var(--font-family-body);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--font-weight-500);
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.showcase-nav-links a:hover {
+  color: var(--color-action-primary);
+}
+
+/* ============================================
+ * Main Content
+ * ============================================ */
+
+.showcase-main {
+  max-width: 960px;
+  margin-inline: auto;
+  padding-inline: var(--grid-margin-sm);
+  padding-block: var(--space-400);
+}
+
+/* ============================================
+ * Sections
+ * ============================================ */
+
+.showcase-section {
+  padding-block: var(--space-sectioned-normal);
+  border-block-end: var(--border-width-100) solid var(--color-structure-border-subtle);
+}
+
+.showcase-section:last-child {
+  border-block-end: none;
+}
+
+.showcase-section h2 {
+  font-family: var(--typography-h-2-font-family);
+  font-size: var(--typography-h-2-font-size);
+  line-height: var(--typography-h-2-line-height);
+  font-weight: var(--typography-h-2-font-weight);
+  letter-spacing: var(--typography-h-2-letter-spacing);
+  color: var(--color-text-default);
+  margin-block-end: var(--space-related-normal);
+}
+
+.showcase-section p {
+  margin-block-end: var(--space-related-tight);
+  color: var(--color-text-default);
+}
+
+.showcase-section ul {
+  margin-block-end: var(--space-related-normal);
+  padding-inline-start: var(--space-300);
+}
+
+.showcase-section li {
+  margin-block-end: var(--space-grouped-normal);
+}
+
+.showcase-section a {
+  color: var(--color-action-navigation);
+  font-weight: var(--font-weight-500);
+}
+
+/* ============================================
+ * Hero
+ * ============================================ */
+
+.showcase-hero {
+  text-align: center;
+  padding-block: var(--space-600);
+}
+
+.showcase-hero h1 {
+  font-family: var(--typography-display-font-family);
+  font-size: var(--typography-display-font-size);
+  line-height: var(--typography-display-line-height);
+  font-weight: var(--typography-display-font-weight);
+  letter-spacing: var(--typography-display-letter-spacing);
+  color: var(--color-action-primary);
+  margin-block-end: var(--space-related-normal);
+}
+
+.showcase-hero em {
+  display: block;
+  font-family: var(--font-family-body);
+  font-size: var(--typography-body-lg-font-size);
+  line-height: var(--typography-body-lg-line-height);
+  font-style: normal;
+  color: var(--color-text-muted);
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* ============================================
+ * Stats Grid
+ * ============================================ */
+
+#stats .showcase-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-related-normal);
+  margin-block-start: var(--space-related-normal);
+}
+
+.showcase-stat {
+  text-align: center;
+  padding: var(--space-inset-200);
+  background-color: var(--color-structure-surface-primary);
+  border-radius: var(--radius-normal);
+}
+
+.showcase-stat-number {
+  display: block;
+  font-family: var(--font-family-display);
+  font-size: var(--typography-h-3-font-size);
+  font-weight: var(--font-weight-700);
+  color: var(--color-action-primary);
+}
+
+.showcase-stat-label {
+  display: block;
+  font-size: var(--typography-body-sm-font-size);
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-grouped-minimal);
+}
+
+/* ============================================
+ * Deep-Dive Pages
+ * ============================================ */
+
+.showcase-deep-dive .showcase-main {
+  padding-block-start: var(--space-300);
+}
+
+.showcase-back-link {
+  display: inline-block;
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--font-weight-500);
+  color: var(--color-action-navigation);
+  text-decoration: none;
+  margin-block-end: var(--space-separated-normal);
+}
+
+.showcase-back-link:hover {
+  color: var(--color-action-primary);
+}
+
+.showcase-deep-dive h1 {
+  font-family: var(--typography-h-1-font-family);
+  font-size: var(--typography-h-1-font-size);
+  line-height: var(--typography-h-1-line-height);
+  font-weight: var(--typography-h-1-font-weight);
+  margin-block-end: var(--space-related-loose);
+}
+
+.showcase-deep-dive h2 {
+  font-family: var(--typography-h-3-font-family);
+  font-size: var(--typography-h-3-font-size);
+  line-height: var(--typography-h-3-line-height);
+  font-weight: var(--typography-h-3-font-weight);
+  margin-block-start: var(--space-sectioned-tight);
+  margin-block-end: var(--space-related-normal);
+}
+
+.showcase-deep-dive h3 {
+  font-family: var(--typography-h-5-font-family);
+  font-size: var(--typography-h-5-font-size);
+  line-height: var(--typography-h-5-line-height);
+  font-weight: var(--typography-h-5-font-weight);
+  margin-block-start: var(--space-separated-normal);
+  margin-block-end: var(--space-related-tight);
+}
+
+.showcase-deep-dive p {
+  margin-block-end: var(--space-related-normal);
+}
+
+.showcase-deep-dive code {
+  font-family: var(--font-family-mono);
+  font-size: var(--typography-code-sm-font-size);
+  background-color: var(--color-structure-surface-primary);
+  padding: var(--space-grouped-minimal) var(--space-grouped-tight);
+  border-radius: var(--radius-subtle);
+}
+
+.showcase-deep-dive pre {
+  background-color: var(--color-structure-surface-secondary);
+  padding: var(--space-inset-200);
+  border-radius: var(--radius-small);
+  overflow-x: auto;
+  margin-block-end: var(--space-related-normal);
+}
+
+.showcase-deep-dive pre code {
+  background: none;
+  padding: 0;
+}
+
+/* ============================================
+ * Footer
+ * ============================================ */
+
+.showcase-footer {
+  text-align: center;
+  padding-block: var(--space-sectioned-normal);
+  padding-inline: var(--grid-margin-sm);
+  border-block-start: var(--border-width-100) solid var(--color-structure-border-subtle);
+  color: var(--color-text-muted);
+  font-size: var(--typography-body-sm-font-size);
+}
+
+.showcase-footer a {
+  color: var(--color-action-navigation);
+  text-decoration: none;
+}
+
+.showcase-footer p {
+  margin-block-end: var(--space-grouped-tight);
+}
+
+/* ============================================
+ * Responsive
+ * ============================================ */
+
+@media (max-width: 768px) {
+  .showcase-nav {
+    flex-direction: column;
+    gap: var(--space-related-tight);
+  }
+
+  .showcase-nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-related-tight);
+  }
+
+  .showcase-hero h1 {
+    font-size: var(--typography-h-1-font-size);
+  }
+
+  .showcase-section h2 {
+    font-size: var(--typography-h-3-font-size);
+  }
+}
+
+@media (min-width: 1024px) {
+  .showcase-nav {
+    padding-inline: var(--grid-margin-lg);
+  }
+
+  .showcase-main {
+    padding-inline: var(--grid-margin-lg);
+  }
+
+  .showcase-footer {
+    padding-inline: var(--grid-margin-lg);
+  }
+}

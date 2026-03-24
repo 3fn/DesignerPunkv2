@@ -9,7 +9,7 @@
 
 ## Task List
 
-- [ ] 1. Showcase Site Infrastructure
+- [x] 1. Showcase Site Infrastructure
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -57,7 +57,7 @@
     - Reference `tokens.css` in `docs/_layouts/default.html`
     - _Requirements: 8.1, 8.2_
 
-  - [ ] 1.3 Create showcase stylesheet
+  - [x] 1.3 Create showcase stylesheet
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -70,7 +70,7 @@
     - Ensure responsive behavior at mobile (320px) and desktop widths using breakpoint tokens
     - _Requirements: 8.1, 1.1, 1.2, 1.5_
 
-  - [ ] 1.4 Create landing page scaffold
+  - [x] 1.4 Create landing page scaffold
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -81,7 +81,7 @@
     - Verify page renders with correct layout and token styling
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 1.5 Enable GitHub Pages
+  - [x] 1.5 Enable GitHub Pages
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Peter
