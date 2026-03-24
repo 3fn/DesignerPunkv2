@@ -89,7 +89,7 @@
     - Verify site is accessible at the GitHub Pages URL
     - _Requirements: 9.1, 9.2_
 
-- [ ] 2. Content Creation
+- [x] 2. Content Creation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -116,7 +116,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Showcase Content Creation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Draft Architecture content
+  - [x] 2.1 Draft Architecture content
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -126,16 +126,16 @@
     - Content sections may include concrete stats inline at drafting discretion
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 7.1_
 
-  - [ ] 2.2 Draft Component Catalog content
+  - [x] 2.2 Draft Component Catalog content
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
-    - Draft landing page Component Catalog section: 11 families, contract-first development, inheritance architecture, composition model, cross-platform parity, accessibility (concept-level)
+    - Draft landing page Component Catalog section: 9 families, contract-first development, inheritance architecture, composition model, cross-platform parity, accessibility (concept-level)
     - Draft `docs/components.md` deep-dive: showcase components (Button, Badge, Input-Text), inheritance chain examples, contract examples, platform implementation comparison
     - Gather component stats: component count, family count, behavioral contract count, composition relationship count
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 7.1_
 
-  - [ ] 2.3 Draft Mathematical Foundation content
+  - [x] 2.3 Draft Mathematical Foundation content
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -143,7 +143,7 @@
     - Draft `docs/mathematics.md` deep-dive: modular scale derivation, baseline grid system, formula examples (spacing, typography, radius)
     - _Requirements: 4.1, 4.2, 4.3_
 
-  - [ ] 2.4 Draft Human-AI Collaboration content
+  - [x] 2.4 Draft Human-AI Collaboration content
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -151,7 +151,7 @@
     - Draft `docs/collaboration.md` deep-dive: agent domain specialization, ballot measure model, bias self-monitoring, spec development lifecycle, Peter's collaboration philosophy
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-  - [ ] 2.5 Draft Quality & Governance content
+  - [x] 2.5 Draft Quality & Governance content
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -159,7 +159,7 @@
     - Gather test stats: test count, suite count
     - _Requirements: 6.1, 6.2, 6.3, 7.1_
 
-  - [ ] 2.6 Draft Hero / Overview content
+  - [x] 2.6 Draft Hero / Overview content
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Peter
@@ -167,7 +167,7 @@
     - This is Peter's voice — agents do not draft this section
     - _Requirements: 1.1, 1.2_
 
-  - [ ] 2.7 Assemble and review
+  - [x] 2.7 Assemble and review
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Peter

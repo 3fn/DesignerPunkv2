@@ -46,7 +46,7 @@ DesignerPunk needs a public-facing showcase site that communicates the system's 
 
 #### Acceptance Criteria
 
-1. The Component Catalog section SHALL present the 11 Stemma families as the primary abstraction (not individual component count)
+1. The Component Catalog section SHALL present the 9 Stemma families as the primary abstraction (not individual component count)
 2. The Component Catalog section SHALL explain contract-first development (contracts authored before platform code)
 3. The Component Catalog section SHALL describe the inheritance architecture (base → variant → platform model)
 4. The Component Catalog section SHALL mention the composition model (schema-tracked relationships with resolved tokens)

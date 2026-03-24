@@ -28,7 +28,7 @@ This spec creates a GitHub Pages showcase site for DesignerPunk — a portfolio 
 
 **Section 3 — Component Catalog content scope:**
 
-- Leading with 11 families (not 30 individual components) is the right abstraction level — communicates system thinking, not a parts list → design-outline.md § "Component Catalog"
+- Leading with families (not 30 individual components) is the right abstraction level — communicates system thinking, not a parts list. **Correction (LINA R2, Task 2.2):** Codebase has 9 families, not 11. Updated across all spec docs → design-outline.md § "Component Catalog"
 - Behavioral contracts framing is good but undersells the key differentiator: contracts are a *specification layer authored before platform code*, not extracted after the fact. Recommend emphasizing contract-first development as the narrative → design-outline.md § "Component Catalog"
 - Missing: *inheritance architecture* — Stemma's base → variant → platform inheritance model (e.g., `Button-CTA` inherits from `Button-Base`, shared contracts, independent platform implementations) is architecturally unusual for design systems and worth a callout alongside the families overview → design-outline.md § "Component Catalog"
 - Missing: *composition model* — components compose other components with schema-tracked relationships and resolved tokens. Brief mention signals "this is a system, not a library" → design-outline.md § "Component Catalog"
@@ -51,7 +51,7 @@ This spec creates a GitHub Pages showcase site for DesignerPunk — a portfolio 
 **Agent coordination:**
 
 - Agreeing with Ada on parallelizable contributions. I can independently draft component catalog content (family overview, contract narrative, showcase examples) with no dependencies on Ada's or Thurgood's sections. Peter assembles. Should be explicit in tasks doc → design-outline.md § "Success Criteria"
-- I can own component-related stats for Section 7: component count (30 across 11 families), platform implementation count, behavioral contract count, composition relationship count → design-outline.md § "Technical Stats / At a Glance"
+- I can own component-related stats for Section 7: component count (30 across 9 families), platform implementation count, behavioral contract count, composition relationship count → design-outline.md § "Technical Stats / At a Glance"
 
 #### [THURGOOD R2]
 - Incorporated all ADA R1 items: derivation chain, unitless architecture, token count/coverage stats, math-on-deep-dive-only, `tokens.css` sync source, parallelizable contributions → design-outline.md § "Architecture" § "Mathematical Foundation" § "Technical Stats" § "Agent Coordination" § "Technical Approach"

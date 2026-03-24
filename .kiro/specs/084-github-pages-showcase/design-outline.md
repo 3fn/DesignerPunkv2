@@ -10,7 +10,7 @@
 
 ## Problem Statement
 
-DesignerPunk has substantial technical depth — 30 components across 11 Stemma families, a mathematically-derived token system, cross-platform generation, behavioral contracts, and a novel Human-AI collaboration model. None of this is visible to someone who doesn't clone the repo and dig through directories.
+DesignerPunk has substantial technical depth — 30 components across 9 Stemma families, a mathematically-derived token system, cross-platform generation, behavioral contracts, and a novel Human-AI collaboration model. None of this is visible to someone who doesn't clone the repo and dig through directories.
 
 For someone evaluating Peter's work (hiring managers, technical leads, collaborators), the barrier to understanding what this project is and why it matters is too high. A polished showcase site solves this by making the work discoverable and the sophistication self-evident.
 
@@ -44,7 +44,7 @@ This is not a documentation site for consumers. It's a technical portfolio piece
 - Cross-platform generation pipeline (Web CSS, iOS Swift, Android Kotlin)
 
 ### 3. Component Catalog
-- The 11 Stemma families with representative examples
+- The 9 Stemma families with representative examples
 - Contract-first development: behavioral contracts are a specification layer authored *before* platform code, not extracted after the fact
 - Inheritance architecture: base → variant → platform model (e.g., `Button-CTA` inherits from `Button-Base`, shared contracts, independent platform implementations)
 - Composition model: components compose other components with schema-tracked relationships and resolved tokens — signals "this is a system, not a library"
@@ -72,7 +72,7 @@ This is not a documentation site for consumers. It's a technical portfolio piece
 - Token compliance enforcement
 
 ### 7. Technical Stats / At a Glance
-- Component count (30 across 11 families), platform implementation count
+- Component count (30 across 9 families), platform implementation count
 - Token count and coverage (X tokens across Y families covering Z use cases)
 - Behavioral contract count, composition relationship count
 - Test count, test suite count
