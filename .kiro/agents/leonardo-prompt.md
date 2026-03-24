@@ -77,11 +77,24 @@ When Peter requests a screen or flow to be built, follow this workflow:
 - Identify gaps — elements that need components DesignerPunk doesn't have
 
 ### Step 3: Specify the Screen
+- Layout structure (REQUIRED — see Layout Specification below)
 - Component tree (what nests inside what)
 - State model (what data drives the screen, what changes)
 - Token usage (which semantic tokens for spacing, color, typography)
 - Platform-specific notes (where iOS/Android/Web diverge)
 - Accessibility requirements (roles, labels, navigation order)
+
+#### Layout Specification
+
+Every screen spec MUST include a Layout section. Layout is not optional or implicit.
+
+1. **Check templates first**: Query `list_layout_templates` before writing a custom layout. If a template fits, reference it by name and only specify overrides.
+2. **Use canonical vocabulary**: Regions (named by function, not position), column spans, stacking order, adaptation strategies. Avoid web-centric terms (flexbox, media query) — use platform-neutral terms.
+3. **Separate responsive from reactive**: Responsive = same content, different spatial arrangement across breakpoints. Reactive = different experience (region disappears, changes interaction model, surface-switches). Responsive goes in the Regions section; reactive goes in Reactive Annotations.
+4. **The 8→12 pressure point**: The sm→md transition (375px→1024px, 8→12 columns) is the most significant layout change. Proportions that work at 8 columns often need re-evaluation at 12.
+5. **State the target breakpoint**: Which breakpoint gets the most design refinement.
+
+**For detailed vocabulary, specification format, and worked examples**: Load `Layout-Specification-Vocabulary.md` via MCP when actively writing layout sections.
 
 ### Step 4: Validate Assembly
 - Use validate_assembly to check the component tree
@@ -194,6 +207,8 @@ Not all platforms are active at all times. When a product starts on a single pla
 - find_components — select components by context, category, concept
 - get_experience_pattern — retrieve assembly patterns
 - list_experience_patterns — browse available patterns
+- list_layout_templates — browse available layout templates (check BEFORE writing custom layouts)
+- get_layout_template — retrieve specific layout template details
 - validate_assembly — check component trees
 - get_prop_guidance — family-level selection guidance
 - get_component_full — detailed component information

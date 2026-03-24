@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} — {{ site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <link rel="stylesheet" href="{{ '/tokens.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/showcase.css' | relative_url }}">
+</head>
+<body class="showcase-page showcase-deep-dive">
+  {% include nav.html %}
+  <main class="showcase-main">
+    <a href="{{ '/' | relative_url }}" class="showcase-back-link">&larr; Back to overview</a>
+    {{ content }}
+  </main>
+  {% include footer.html %}
+</body>
+</html>

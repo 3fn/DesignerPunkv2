@@ -5,7 +5,7 @@ inclusion: always
 # Spec Feedback Protocol
 
 **Date**: 2026-03-13
-**Last Reviewed**: 2026-03-13
+**Last Reviewed**: 2026-03-24
 **Purpose**: Structured protocol for multi-agent feedback during spec formalization
 **Organization**: process-standard
 **Scope**: cross-project
@@ -42,6 +42,20 @@ Feedback is organized by spec artifact. Each artifact may have multiple rounds:
 4. **Tasks** — assignment correctness, sequencing, and scope review
 
 Multiple rounds per artifact are expected when incorporation produces substantial changes.
+
+---
+
+## Sequential Formalization Gate
+
+Spec formalization MUST pause for agent feedback between each document phase:
+
+1. Write **requirements.md** → request feedback → incorporate → proceed
+2. Write **design.md** → request feedback → incorporate → proceed
+3. Write **tasks.md** → request feedback → incorporate → finalize
+
+**Rationale**: Requirements inform design, design informs tasks. Feedback on an earlier document can invalidate assumptions in a later one. Writing all three without pausing creates rework risk.
+
+**Waiver**: Peter may waive sequential gates for lightweight specs where cascading risk is low. The waiver must be explicit (e.g., "write all three, we'll review collectively").
 
 ---
 
