@@ -1,0 +1,26 @@
+# Centered Content Page — single region with max-width constraint
+# For reading-focused pages where line length matters (articles, settings, forms).
+# Full-width at narrow viewports, constrained at wider ones.
+# Grid margins are handled automatically by the grid system at each breakpoint.
+
+name: centered-content-page
+source: system
+description: Single content region centered within the grid with a max-width constraint at wider breakpoints. Use for reading-focused pages where line length and content density matter.
+category: content-focused
+tags: [centered, single-region, reading, constrained-width]
+
+regions:
+  - name: content
+    description: Centered content area, constrained at wider breakpoints for readability
+    grid:
+      xs:
+        columns: "1-4"
+      sm:
+        columns: "1-8"
+      md:
+        columns: "2-11"
+        maxWidth: breakpointMd
+      lg:
+        columns: "3-14"
+        maxWidth: breakpointMd
+    stacking: null

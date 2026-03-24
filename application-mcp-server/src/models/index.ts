@@ -228,6 +228,7 @@ export interface IndexHealth {
   componentsIndexed: number;
   patternsIndexed: number;
   guidanceFamiliesIndexed: number;
+  layoutTemplatesIndexed: number;
   lastIndexTime: string;
   errors: string[];
   warnings: string[];
@@ -380,6 +381,53 @@ export interface PropGuidanceResponse {
 
 export interface FamilyGuidanceHealth {
   familiesIndexed: number;
+  errors: string[];
+  warnings: string[];
+}
+
+// ---------------------------------------------------------------------------
+// Layout Templates
+// ---------------------------------------------------------------------------
+
+export type Breakpoint = 'xs' | 'sm' | 'md' | 'lg';
+
+export interface GridBehavior {
+  columns: string;
+  maxWidth?: string;
+}
+
+export interface StackingRule {
+  below: string;
+  order: number;
+}
+
+export interface LayoutRegion {
+  name: string;
+  description?: string;
+  grid: Record<Breakpoint, GridBehavior>;
+  stacking: StackingRule | null;
+}
+
+export interface LayoutTemplate {
+  name: string;
+  source: 'system' | 'project';
+  description: string;
+  category: string;
+  tags: string[];
+  regions: LayoutRegion[];
+}
+
+export interface LayoutTemplateCatalogEntry {
+  name: string;
+  description: string;
+  category: string;
+  tags: string[];
+  source: 'system' | 'project';
+  regionCount: number;
+}
+
+export interface LayoutTemplateHealth {
+  templatesIndexed: number;
   errors: string[];
   warnings: string[];
 }

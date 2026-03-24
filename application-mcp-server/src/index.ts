@@ -93,6 +93,20 @@ const tools = [
     },
   },
   {
+    name: 'list_layout_templates',
+    description: 'List all layout templates with name, description, category, tags, and region count.',
+    inputSchema: { type: 'object' as const, properties: {} },
+  },
+  {
+    name: 'get_layout_template',
+    description: 'Get full layout template by name: regions with grid behavior per breakpoint, stacking rules, and token references.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: { name: { type: 'string', description: 'Template name (e.g., "centered-content-page")' } },
+      required: ['name'],
+    },
+  },
+  {
     name: 'validate_assembly',
     description: 'Validate a component tree. Checks component existence, parent-child composition rules, requires/count constraints, and assembly-level accessibility (form labels, submit actions, page headings). Returns errors, warnings, and accessibility issues with paths.',
     inputSchema: {
@@ -186,6 +200,10 @@ class ComponentMCPServer {
         return this.queryEngine.getPatternCatalog();
       case 'get_experience_pattern':
         return this.queryEngine.getPattern(params.name as string);
+      case 'list_layout_templates':
+        return this.queryEngine.getLayoutTemplateCatalog();
+      case 'get_layout_template':
+        return this.queryEngine.getLayoutTemplate(params.name as string);
       case 'validate_assembly':
         return this.assemblyValidator.validate(params.assembly as any);
       case 'get_prop_guidance':

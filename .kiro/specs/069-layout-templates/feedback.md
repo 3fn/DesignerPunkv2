@@ -1031,3 +1031,44 @@ Task 3.3 specifies three candidate templates: centered-content-page, sidebar-pag
 **Item 1 (token reference format table):** Omit from Section 8. The steering doc teaches principles — "use token references, not hardcoded values." The specific field-to-token mapping is implementation detail that belongs in the validator and your authoring notes. Putting it in the steering doc creates a third maintenance point alongside the validator code and the learning foundation. Two sources of truth are enough. If the schema adds fields later, we'd have to update the steering doc too. Keep Section 8 principle-level.
 
 **Item 2 (fourth template):** Recommend no. Full-width is the simplest possible layout — single region, all columns, no stacking, no max-width. It's almost a non-template. The three Task 3.3 candidates already exercise every schema feature: single-region with centering and max-width (centered), multi-region with stacking (sidebar), 3+ regions with distinct grid behavior (multi-zone). Full-width doesn't exercise anything new. Documenting it as a pattern in Section 9 is correct — it's a common layout approach worth naming. Building a YAML file for it adds no validation value. Peter's call if he disagrees.
+
+---
+
+## Task 3.3 — Candidate Template Review
+
+### [LEONARDO R1] — Review of candidate layout templates
+
+Lina, reviewed all four templates. Good work — they exercise the schema across the full complexity spectrum (primitive → constrained single-region → two-region → three-region). The `full-width-page` addition is a smart call that aligns with Peter's "templates compose upward from primitives" model.
+
+**What's solid:**
+
+- All four breakpoints defined on every template, no interpolation
+- Token names in camelCase throughout
+- `gridMarginSm` discrepancy noted in YAML comments everywhere it's referenced
+- Region names are functional ("content-feed," "navigation," "context" — not positional)
+- `source: system` on all four
+- Stacking order uses positive integers, no duplicates
+- Multi-zone navigation gets `order: 1` — correct per Peter's interview (control content stacks above primary)
+
+**Issues:**
+
+1. **`margins` field on every region at every breakpoint — structural concern.** The design doc schema doesn't include `margins` as a per-region field. Margins are a grid-level property — they apply to the page container, not individual regions. A sidebar and primary region on the same page share the same margins. Having `margins: gridMarginMd` on every region at every breakpoint is redundant and implies regions can have different margins, which doesn't match how grids work.
+
+    Options:
+    - (a) Move `margins` to a top-level per-breakpoint field (not per region): `breakpoints: { md: { margins: gridMarginMd, columns: 12 } }`
+    - (b) Remove `margins` from templates entirely — margins are implicit from the grid tokens at each breakpoint. The LayoutTemplateIndexer knows which margin token applies at which breakpoint.
+    - (c) Keep as-is but document that all regions at the same breakpoint must have the same margin value.
+
+    My recommendation: (b). Margins are a grid property, not a region property. Templates define region-to-grid relationships (column spans, stacking). The grid's margins are a given — they come from the tokens. Removing them simplifies the schema and eliminates a class of validation errors (what if two regions specify different margins at the same breakpoint?).
+
+    → design.md § "Layout Template YAML Schema"
+
+2. **Sidebar-page lg column allocation.** Primary gets 1-11, sidebar gets 12-16. No spacing column between them — the grid gutter handles separation. This works, but at 16 columns with a 32px gutter, confirm the visual separation is sufficient. The alternative (primary 1-10, sidebar 12-16, column 11 as spacing) gives more breathing room. Not blocking — just flagging for when we visually validate these templates.
+
+3. **`category` and `tags` fields aren't in the design doc schema.** They're useful metadata for discoverability (filtering `list_layout_templates` by category), but the LayoutTemplateIndexer needs to expect them. If the indexer validates strictly against the schema, these will either be ignored or cause errors. Confirm the indexer handles them — either as recognized optional fields or by allowing unknown fields to pass through.
+
+4. **Multi-zone navigation stacking nuance.** Navigation has `order: 1` (stacks on top at narrow viewports). Correct default for filtering/control content. But if a screen uses this template where "navigation" is a left-nav (not filters), stacking on top may not be right — the screen spec would override. The template default is fine; just noting that the description says "persistent navigation or filtering" which covers both cases, and the stacking order only fits the filtering case by default.
+
+**Overall assessment:** Well-crafted templates. The `margins` issue (#1) is the only structural concern that affects the schema design. The rest are refinements. Ready for indexing once #1 and #3 are resolved.
+
+→ layout-templates/*.yaml, design.md § "Layout Template YAML Schema"

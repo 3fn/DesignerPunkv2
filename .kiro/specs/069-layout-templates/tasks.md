@@ -171,7 +171,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     - Add TypeScript interfaces to `models/index.ts`
     - _Requirements: Req 3_
 
-  - [ ] 3.2 Register MCP tools
+  - [x] 3.2 Register MCP tools
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -181,7 +181,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     - Error handling: unknown template name returns `{ error: "TemplateNotFound", message: "..." }`
     - _Requirements: Req 4_
 
-  - [ ] 3.3 Create candidate templates
+  - [x] 3.3 Create candidate templates
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina + Leonardo
@@ -197,7 +197,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     - Verify all 3 are indexable and queryable through MCP tools
     - _Requirements: Req 3, Req 5_
 
-  - [ ] 3.4 Write LayoutTemplateIndexer tests
+  - [x] 3.4 Write LayoutTemplateIndexer tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

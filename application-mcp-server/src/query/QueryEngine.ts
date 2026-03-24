@@ -21,6 +21,8 @@ import {
   ExperiencePattern,
   PatternCatalogEntry,
   PropGuidanceResponse,
+  LayoutTemplate,
+  LayoutTemplateCatalogEntry,
 } from '../models';
 
 export class ComponentQueryEngine {
@@ -187,6 +189,22 @@ export class ComponentQueryEngine {
     return {
       data,
       error: data ? null : `Pattern "${name}" not found`,
+      warnings: [],
+      metrics: { responseTimeMs: Date.now() - start },
+    };
+  }
+
+  getLayoutTemplateCatalog(): QueryResult<LayoutTemplateCatalogEntry[]> {
+    const start = Date.now();
+    return { data: this.indexer.getLayoutTemplateCatalog(), error: null, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
+  }
+
+  getLayoutTemplate(name: string): QueryResult<LayoutTemplate> {
+    const start = Date.now();
+    const data = this.indexer.getLayoutTemplate(name);
+    return {
+      data,
+      error: data ? null : `Layout template "${name}" not found`,
       warnings: [],
       metrics: { responseTimeMs: Date.now() - start },
     };

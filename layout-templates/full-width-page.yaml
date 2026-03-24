@@ -1,0 +1,24 @@
+# Full-Width Page — primitive base template
+# The simplest valid template: single region spanning all columns at every breakpoint.
+# Starting point for building specialized templates.
+# Grid margins are handled automatically by the grid system at each breakpoint.
+
+name: full-width-page
+source: system
+description: Single region spanning full grid width at all breakpoints. The simplest valid layout — serves as the conceptual base canvas for building specialized templates.
+category: primitive
+tags: [full-width, single-region, base]
+
+regions:
+  - name: content
+    description: Primary content area spanning all available columns
+    grid:
+      xs:
+        columns: "1-4"
+      sm:
+        columns: "1-8"
+      md:
+        columns: "1-12"
+      lg:
+        columns: "1-16"
+    stacking: null

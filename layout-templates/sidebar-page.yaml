@@ -1,0 +1,41 @@
+# Sidebar Page — primary content + sidebar region
+# Sidebar sits alongside primary at wider viewports, stacks below at narrow.
+# Use for pages with supplemental content (related links, filters, metadata).
+# Grid margins are handled automatically by the grid system at each breakpoint.
+
+name: sidebar-page
+source: system
+description: Primary content region with a supplemental sidebar. Sidebar sits alongside primary at md+ breakpoints and stacks below primary at narrow viewports.
+category: multi-region
+tags: [sidebar, two-region, supplemental-content]
+
+regions:
+  - name: primary
+    description: Main content area — the page's primary purpose
+    grid:
+      xs:
+        columns: "1-4"
+      sm:
+        columns: "1-8"
+      md:
+        columns: "1-8"
+      lg:
+        columns: "1-11"
+    stacking:
+      below: breakpointMd
+      order: 1
+
+  - name: sidebar
+    description: Supplemental content — related links, metadata, contextual info
+    grid:
+      xs:
+        columns: "1-4"
+      sm:
+        columns: "1-8"
+      md:
+        columns: "9-12"
+      lg:
+        columns: "12-16"
+    stacking:
+      below: breakpointMd
+      order: 2

@@ -18,12 +18,15 @@ import {
   ExperiencePattern,
   PatternCatalogEntry,
   FamilyGuidance,
+  LayoutTemplate,
+  LayoutTemplateCatalogEntry,
 } from '../models';
 import { parseSchemaYaml, parseContractsYaml, parseComponentMetaYaml, ParsedContracts } from './parsers';
 import { resolveInheritance, validateOmits } from './InheritanceResolver';
 import { deriveContractTokenRelationships } from './ContractTokenDeriver';
 import { PatternIndexer } from './PatternIndexer';
 import { FamilyGuidanceIndexer } from './FamilyGuidanceIndexer';
+import { LayoutTemplateIndexer } from './LayoutTemplateIndexer';
 import { ModeClassifier } from './ModeClassifier';
 
 export class ComponentIndexer {
@@ -31,6 +34,7 @@ export class ComponentIndexer {
   private contractsCache = new Map<string, ParsedContracts>();
   private patternIndexer = new PatternIndexer();
   private guidanceIndexer = new FamilyGuidanceIndexer();
+  private layoutTemplateIndexer = new LayoutTemplateIndexer();
   private modeClassifier = new ModeClassifier();
   private lastIndexTime = '';
   private indexWarnings: string[] = [];
@@ -77,6 +81,10 @@ export class ComponentIndexer {
     // Index experience patterns (resolve from project root, not components dir)
     const patternsDir = path.resolve(componentsDir, '..', '..', '..', 'experience-patterns');
     await this.patternIndexer.indexPatterns(patternsDir);
+
+    // Index layout templates (resolve from project root, not components dir)
+    const layoutTemplatesDir = path.resolve(componentsDir, '..', '..', '..', 'layout-templates');
+    await this.layoutTemplateIndexer.indexTemplates(layoutTemplatesDir);
 
     // Index family guidance (must run after components and patterns for cross-reference validation)
     const guidanceDir = path.resolve(componentsDir, '..', '..', '..', 'family-guidance');
@@ -146,12 +154,14 @@ export class ComponentIndexer {
     const count = this.index.size;
     const patternHealth = this.patternIndexer.getHealth();
     const guidanceHealth = this.guidanceIndexer.getHealth();
-    const allWarnings = [...this.indexWarnings, ...patternHealth.warnings, ...guidanceHealth.warnings];
+    const layoutHealth = this.layoutTemplateIndexer.getHealth();
+    const allWarnings = [...this.indexWarnings, ...patternHealth.warnings, ...guidanceHealth.warnings, ...layoutHealth.warnings];
     return {
       status: count === 0 ? 'empty' : allWarnings.length > 0 ? 'degraded' : 'healthy',
       componentsIndexed: count,
       patternsIndexed: patternHealth.patternsIndexed,
       guidanceFamiliesIndexed: guidanceHealth.familiesIndexed,
+      layoutTemplatesIndexed: layoutHealth.templatesIndexed,
       lastIndexTime: this.lastIndexTime,
       errors: [],
       warnings: allWarnings,
@@ -176,6 +186,16 @@ export class ComponentIndexer {
   /** Get all indexed guidance family names. */
   getGuidanceFamilies(): string[] {
     return this.guidanceIndexer.getAllFamilies();
+  }
+
+  /** Get a single layout template by name. */
+  getLayoutTemplate(name: string): LayoutTemplate | null {
+    return this.layoutTemplateIndexer.getTemplate(name);
+  }
+
+  /** Get lightweight catalog of all layout templates. */
+  getLayoutTemplateCatalog(): LayoutTemplateCatalogEntry[] {
+    return this.layoutTemplateIndexer.getCatalog();
   }
 
   /** Expose index for query engine */
