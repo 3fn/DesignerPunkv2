@@ -35,7 +35,7 @@ docs/
 ├── components.md             # Deep-dive: Component catalog & Stemma
 ├── mathematics.md            # Deep-dive: Mathematical foundations & formulas
 ├── collaboration.md          # Deep-dive: Human-AI collaboration model
-├── tokens.css                # DesignerPunk CSS custom properties (copied from demos/tokens.css)
+├── tokens.css                # DesignerPunk CSS custom properties (copied from dist/browser/tokens.css)
 └── assets/
     └── showcase.css          # Site-specific styles consuming DesignerPunk tokens
 ```
@@ -64,7 +64,7 @@ docs/
 
 **Choice**: Commit `tokens.css` to `docs/` and reference it in the Jekyll layout.
 
-**Rationale**: The file is 942 lines, changes infrequently (only when tokens are regenerated), and demonstrates confidence in the system. Single source of truth: copied from `demos/tokens.css`.
+**Rationale**: The file is 942 lines, changes infrequently (only when tokens are regenerated), and demonstrates confidence in the system. Single source of truth: copied from `dist/browser/tokens.css` (the generation output; `demos/tokens.css` is a symlink to this file).
 
 **Sync strategy**: Manual copy when tokens change. Not automated — the showcase is a snapshot, not a live mirror. Tasks doc includes a refresh step.
 
@@ -79,7 +79,7 @@ docs/
 /* showcase.css references DesignerPunk tokens directly — no calc() wrappers needed */
 /* Tokens have units baked in (e.g., --space-600: 48px, colors as rgba()) */
 .showcase-hero {
-  background-color: var(--color-surface-primary);
+  background-color: var(--color-structure-surface-primary);
   padding: var(--space-600);
   font-family: var(--font-family-display);
 }
@@ -156,4 +156,4 @@ No automated tests for the showcase site. Validation is visual:
 1. All token references in `showcase.css` must resolve to values defined in `tokens.css`
 2. All anchor links on the landing page must correspond to section IDs
 3. All deep-dive links must point to existing pages
-4. `docs/tokens.css` must be byte-identical to `demos/tokens.css` at time of commit
+4. `docs/tokens.css` must be byte-identical to `dist/browser/tokens.css` at time of commit

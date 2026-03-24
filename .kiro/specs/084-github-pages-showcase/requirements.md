@@ -100,7 +100,7 @@ DesignerPunk needs a public-facing showcase site that communicates the system's 
 #### Acceptance Criteria
 
 1. The showcase site SHALL use DesignerPunk CSS custom properties from a committed `tokens.css` for all styling
-2. The `docs/tokens.css` file SHALL be copied from `demos/tokens.css` (single generation source)
+2. The `docs/tokens.css` file SHALL be copied from `dist/browser/tokens.css` (the generation output; `demos/tokens.css` is a symlink to this file)
 3. WHEN DesignerPunk tokens are regenerated THEN `docs/tokens.css` SHALL be refreshed from the same source
 
 ### Requirement 9: Deployment and Maintenance

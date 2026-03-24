@@ -48,11 +48,11 @@
     - Create `docs/_includes/footer.html`
     - _Requirements: 9.1, 9.2, 9.3_
 
-  - [ ] 1.2 Set up token dogfooding
+  - [x] 1.2 Set up token dogfooding
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada
-    - Copy `demos/tokens.css` to `docs/tokens.css`
+    - Copy `dist/browser/tokens.css` to `docs/tokens.css` (this is the generation output; `demos/tokens.css` is a symlink to this file)
     - Verify byte-identical copy
     - Reference `tokens.css` in `docs/_layouts/default.html`
     - _Requirements: 8.1, 8.2_
@@ -226,8 +226,8 @@
 
 When DesignerPunk tokens are regenerated:
 
-1. Run `npm run build:browser` (regenerates `demos/tokens.css`)
-2. Copy `demos/tokens.css` to `docs/tokens.css`
+1. Run `npm run build:browser` (regenerates `dist/browser/tokens.css`)
+2. Copy `dist/browser/tokens.css` to `docs/tokens.css`
 3. Verify showcase site renders correctly with updated tokens
 4. Commit the updated `docs/tokens.css`
 
