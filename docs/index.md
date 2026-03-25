@@ -3,7 +3,7 @@ layout: default
 title: DesignerPunk Design System
 ---
 
-<section id="hero" class="showcase-section showcase-hero">
+<section id="hero" class="showcase-section showcase-hero" markdown="1">
 
 # DesignerPunk
 
@@ -14,7 +14,7 @@ What began as an experiment in developing my AI skillset evolved into a reflecti
 Now, it's a mission to discover what's possible in the era of AI development to better enable Human-AI, and Designer-Engineer, collaboration.
 </section>
 
-<section id="architecture" class="showcase-section">
+<section id="architecture" class="showcase-section" markdown="1">
 
 ## Architecture
 
@@ -32,7 +32,7 @@ This is the **True Native** philosophy. Rather than wrapping a web view or detec
 
 </section>
 
-<section id="components" class="showcase-section">
+<section id="components" class="showcase-section" markdown="1">
 
 ## Component Catalog
 
@@ -48,7 +48,7 @@ This is the **True Native** philosophy. Rather than wrapping a web view or detec
 
 </section>
 
-<section id="mathematics" class="showcase-section">
+<section id="mathematics" class="showcase-section" markdown="1">
 
 ## Mathematical Foundation
 
@@ -62,7 +62,7 @@ This isn't academic rigor for its own sake. Mathematically derived values produc
 
 </section>
 
-<section id="collaboration" class="showcase-section">
+<section id="collaboration" class="showcase-section" markdown="1">
 
 ## Human-AI Collaboration
 
@@ -74,7 +74,7 @@ This isn't AI-assisted development. It's a governance model for Human-AI co-crea
 
 </section>
 
-<section id="quality" class="showcase-section">
+<section id="quality" class="showcase-section" markdown="1">
 
 ## Quality & Governance
 
@@ -87,7 +87,7 @@ DesignerPunk's test suite runs **7,965 tests across 306 suites** to ensure the e
 
 </section>
 
-<section id="stats" class="showcase-section">
+<section id="stats" class="showcase-section" markdown="1">
 
 ## At a Glance
 
