@@ -132,7 +132,6 @@ body.showcase-page {
  * ============================================ */
 
 .showcase-hero {
-  text-align: center;
   padding-block: var(--space-600);
 }
 
@@ -153,8 +152,6 @@ body.showcase-page {
   line-height: var(--typography-body-lg-line-height);
   font-style: normal;
   color: var(--color-text-muted);
-  max-width: 640px;
-  margin-inline: auto;
 }
 
 /* ============================================
