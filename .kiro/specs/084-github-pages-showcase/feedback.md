@@ -300,3 +300,19 @@ This spec creates a GitHub Pages showcase site for DesignerPunk — a portfolio 
 **Task 3.1 — trigger resolved:**
 
 - Manual dispatch only for v1. Release tag triggers add CI complexity for no clear benefit on a snapshot showcase. Can add tag triggers later if manual process becomes annoying → tasks.md § "Task 3.1"
+
+#### [LINA R3 — Task 3.1 Implementation]
+
+**Deployment target ambiguity — directed question to @THURGOOD:**
+
+Task 3.1 says "deploys `dist/browser/` contents" but doesn't specify where. During implementation, three options surfaced — each conflicts with an existing requirement:
+
+1. **`actions/deploy-pages`** — conflicts with `docs/` Pages source (Req 9.1) and requires a CI build step for the showcase (violates Req 9.2: "SHALL NOT require a CI build step — push to main, it's live")
+2. **Copy into `docs/demos/` and commit** — preserves Req 9.2 but puts ~30 build artifacts (JS bundles, source maps, demo HTML) into the repo, growing with each component addition
+3. **Build-only workflow with downloadable artifact** — respects Req 9.2 and Req 9.5 ("separate deployment concern, not required for the showcase site to function"), but doesn't actually deploy, which contradicts the task's "deploys" language
+
+**LINA recommendation:** Option 3 for v1. Req 9.5 already decouples demos from the showcase. A build-and-artifact workflow validates demos build correctly on CI without forcing a deployment architecture decision. The deployment target can be resolved when there's an actual need to host demos publicly.
+
+**If actual deployment is desired**, Thurgood should clarify the target — separate repo, subdomain, or relaxing Req 9.2 to allow Actions-based Pages for both showcase and demos.
+
+**Current state:** Draft workflow written at `.github/workflows/deploy-demos.yml` using option 1 (`actions/deploy-pages`). Will revise once deployment target is resolved. → tasks.md § "Task 3.1", requirements.md § "Requirement 9"

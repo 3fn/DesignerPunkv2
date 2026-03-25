@@ -177,10 +177,12 @@
     - Final approval of all content
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 7.2_
 
-- [ ] 3. Interactive Demos Deployment (Follow-Up)
+- [ ] 3. Interactive Demos Deployment (Deferred)
 
   **Type**: Parent
-  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  **Status**: Deferred — deployment options all carry tradeoffs that aren't justified for v1. Demos exist locally and can be shown live via `npx serve dist/browser`. Revisit if hosted demos become a real need.
+
+  **Original scope preserved below for future reference.**
 
   **Success Criteria:**
   - GitHub Actions workflow deploys demo pages from built browser bundle

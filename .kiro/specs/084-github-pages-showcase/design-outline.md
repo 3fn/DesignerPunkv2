@@ -4,7 +4,7 @@
 **Purpose**: Create a GitHub Pages site that showcases DesignerPunk as a portfolio piece demonstrating system maturity, architectural depth, and Human-AI collaboration
 **Organization**: spec-guide
 **Scope**: 084-github-pages-showcase
-**Status**: Draft — Pending review
+**Status**: Draft — Pending review → **Complete** (Tasks 1-2 shipped, Task 3 deferred)
 
 ---
 
