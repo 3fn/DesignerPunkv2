@@ -329,7 +329,10 @@ fun NavTabBarBase(
                             // Glow gradient — active only (contract: visual_gradient_glow)
                             .drawBehind {
                                 if (isSelected) {
-                                    drawCircle(
+                                    // Ellipse: space-700 horizontal × 56% of tab height vertical
+                                    val hRadius = NavTabBarTokens.glowHorizontalRadius * density.density
+                                    val vRadius = size.height * 0.56f
+                                    drawOval(
                                         brush = Brush.radialGradient(
                                             colorStops = arrayOf(
                                                 0f to centerColor.copy(alpha = glowAlpha),
@@ -337,8 +340,13 @@ fun NavTabBarBase(
                                                 0.8f to NavTabBarTokens.glowEdgeColor.copy(alpha = NavTabBarTokens.glowEdgeOpacity),
                                                 1f to Color.Transparent
                                             ),
-                                            radius = NavTabBarTokens.glowHorizontalRadius * density.density
-                                        )
+                                            radius = hRadius
+                                        ),
+                                        topLeft = androidx.compose.ui.geometry.Offset(
+                                            (size.width - hRadius * 2) / 2,
+                                            (size.height - vRadius * 2) / 2
+                                        ),
+                                        size = androidx.compose.ui.geometry.Size(hRadius * 2, vRadius * 2)
                                     )
                                 }
                             }

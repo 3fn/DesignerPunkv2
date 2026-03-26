@@ -116,3 +116,32 @@ After Lina completes the native porting and contract file updates, please verify
 1. Updated contract language accurately describes the web implementation
 2. Existing tests cover the updated behavior (or flag gaps)
 3. No validation criteria need adding/removing
+
+### Parity Audit (Lina, 2026-03-26)
+
+Thorough line-by-line comparison of web CSS against iOS and Android implementations.
+
+**Already matching (no changes needed):**
+- Background gradient: 4-stop translucency (80%/88%/96%/100% at 0/16/32/48%) ✅
+- Active-only glow (inactive = Color.clear) ✅
+- Glow gradient stops (0%/40%/80%/100% with correct colors/opacities) ✅
+- Tab padding: active 150/150/150, inactive 150/150/075 ✅
+- Min tab height: space-600 ✅
+- Animation timing: 8%/50% stagger ✅
+- Dot position: space-150 bottom ✅
+- Container padding: N/A — web pill has container padding, native full-width does not (intentional per visual_pill_container contract, web-only)
+
+**Fixed:**
+- Glow ellipse geometry: Both platforms were rendering a circle (uniform radius = space-700). Web uses `ellipse space-700 56%` — horizontal radius space-700, vertical radius 56% of tab height. Fixed iOS via `scaleEffect(y:)` on RadialGradient. Fixed Android via `drawOval` with elliptical size.
+
+**Acceptance criteria status after fix:**
+- [x] iOS glow matches web (active only, tighter ellipse, mid-stop)
+- [x] Android glow matches web
+- [x] iOS background gradient matches web (4-stop translucency) — already matched
+- [x] Android background gradient matches web — already matched
+- [x] iOS animation timing matches web (8%/50% stagger) — already matched
+- [x] Android animation timing matches web — already matched
+- [x] iOS tab min-height and padding values match web — already matched
+- [x] Android tab min-height and padding values match web — already matched
+- [x] No height shift during animation on either platform — min-height prevents this
+- [x] All existing tests pass (308 suites, 8041 tests, 0 failures)

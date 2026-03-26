@@ -250,6 +250,9 @@ extension NavTabBarBase {
     /// Contract: visual_gradient_glow
     private func glowGradient(isSelected: Bool, tab: TabOption, width: CGFloat, height: CGFloat) -> some View {
         let opacity = glowOpacities[tab.value, default: 1]
+        // Ellipse: space-700 horizontal × 56% of tab height vertical
+        let verticalRadius = height * 0.56
+        let yScale = verticalRadius / NavTabBarTokens.glowHorizontalRadius
 
         return Group {
             if isSelected {
@@ -264,6 +267,7 @@ extension NavTabBarBase {
                     startRadius: 0,
                     endRadius: NavTabBarTokens.glowHorizontalRadius
                 )
+                .scaleEffect(x: 1.0, y: yScale, anchor: .center)
             } else {
                 Color.clear
             }
