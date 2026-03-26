@@ -83,9 +83,9 @@ enum CardHorizontalPadding {
  * @see Requirements 3.8, 4.2
  */
 enum CardBackground {
-    case surfacePrimary    // color.surface.primary [DEFAULT]
-    case surfaceSecondary  // color.surface.secondary
-    case surfaceTertiary   // color.surface.tertiary
+    case surfacePrimary    // color.structure.surface.primary [DEFAULT]
+    case surfaceSecondary  // color.structure.surface.secondary
+    case surfaceTertiary   // color.structure.surface.tertiary
 }
 
 /**
@@ -120,7 +120,7 @@ enum CardBorder {
  * @see Requirements 3.11
  */
 enum CardBorderColor {
-    case borderDefault  // color.border.default [DEFAULT]
+    case borderDefault  // color.structure.border [DEFAULT]
     case borderSubtle   // color.structure.border.subtle
 }
 
@@ -451,9 +451,9 @@ struct ContainerCardBase<Content: View>: View {
     
     private var resolvedBackground: String? {
         switch background {
-        case .surfacePrimary: return "color.surface.primary"
-        case .surfaceSecondary: return "color.surface.secondary"
-        case .surfaceTertiary: return "color.surface.tertiary"
+        case .surfacePrimary: return "color.structure.surface.primary"
+        case .surfaceSecondary: return "color.structure.surface.secondary"
+        case .surfaceTertiary: return "color.structure.surface.tertiary"
         }
     }
     
@@ -467,7 +467,7 @@ struct ContainerCardBase<Content: View>: View {
     private var resolvedBorderColor: String? {
         guard border != .none else { return nil }
         switch borderColor {
-        case .borderDefault: return "color.border.default"
+        case .borderDefault: return "color.structure.border"
         case .borderSubtle: return "color.structure.border.subtle"
         }
     }

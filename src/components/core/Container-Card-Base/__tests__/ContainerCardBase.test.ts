@@ -115,9 +115,9 @@ describe('Container-Card-Base Component', () => {
 
     describe('cardBackgroundTokenMap', () => {
       it('should map card background values to correct tokens', () => {
-        expect(cardBackgroundTokenMap['surface.primary']).toBe('color.surface.primary');
-        expect(cardBackgroundTokenMap['surface.secondary']).toBe('color.surface.secondary');
-        expect(cardBackgroundTokenMap['surface.tertiary']).toBe('color.surface.tertiary');
+        expect(cardBackgroundTokenMap['surface.primary']).toBe('color.structure.surface.primary');
+        expect(cardBackgroundTokenMap['surface.secondary']).toBe('color.structure.surface.secondary');
+        expect(cardBackgroundTokenMap['surface.tertiary']).toBe('color.structure.surface.tertiary');
       });
 
       it('should only include surface colors (curated subset)', () => {
@@ -150,7 +150,7 @@ describe('Container-Card-Base Component', () => {
 
     describe('cardBorderColorTokenMap', () => {
       it('should map card border color values to correct tokens', () => {
-        expect(cardBorderColorTokenMap['border.default']).toBe('color.border.default');
+        expect(cardBorderColorTokenMap['border.default']).toBe('color.structure.border');
         expect(cardBorderColorTokenMap['border.subtle']).toBe('color.structure.border.subtle');
       });
     });
@@ -174,7 +174,7 @@ describe('Container-Card-Base Component', () => {
     });
 
     it('should have correct default background token', () => {
-      expect(cardDefaultTokens.background).toBe('color.surface.primary');
+      expect(cardDefaultTokens.background).toBe('color.structure.surface.primary');
     });
 
     it('should have correct default shadow token', () => {
@@ -186,7 +186,7 @@ describe('Container-Card-Base Component', () => {
     });
 
     it('should have correct default border color token', () => {
-      expect(cardDefaultTokens.borderColor).toBe('color.border.default');
+      expect(cardDefaultTokens.borderColor).toBe('color.structure.border');
     });
   });
 
@@ -228,7 +228,7 @@ describe('Container-Card-Base Component', () => {
 
     describe('getCardBackgroundToken', () => {
       it('should return correct token for background value', () => {
-        expect(getCardBackgroundToken('surface.primary')).toBe('color.surface.primary');
+        expect(getCardBackgroundToken('surface.primary')).toBe('color.structure.surface.primary');
       });
     });
 
@@ -248,7 +248,7 @@ describe('Container-Card-Base Component', () => {
 
     describe('getCardBorderColorToken', () => {
       it('should return correct token for border color value', () => {
-        expect(getCardBorderColorToken('border.default')).toBe('color.border.default');
+        expect(getCardBorderColorToken('border.default')).toBe('color.structure.border');
         expect(getCardBorderColorToken('border.subtle')).toBe('color.structure.border.subtle');
       });
     });
@@ -498,7 +498,7 @@ describe('Container-Card-Base Component', () => {
     });
 
     it('should have default background of surface.primary', () => {
-      expect(cardDefaultTokens.background).toBe('color.surface.primary');
+      expect(cardDefaultTokens.background).toBe('color.structure.surface.primary');
     });
 
     it('should have default shadow of container', () => {
@@ -552,9 +552,9 @@ describe('Container-Card-Base Component', () => {
 
       it('should have consistent background token references for Android', () => {
         // Android CardBackground enum maps to same surface color tokens
-        expect(cardBackgroundTokenMap['surface.primary']).toBe('color.surface.primary');
-        expect(cardBackgroundTokenMap['surface.secondary']).toBe('color.surface.secondary');
-        expect(cardBackgroundTokenMap['surface.tertiary']).toBe('color.surface.tertiary');
+        expect(cardBackgroundTokenMap['surface.primary']).toBe('color.structure.surface.primary');
+        expect(cardBackgroundTokenMap['surface.secondary']).toBe('color.structure.surface.secondary');
+        expect(cardBackgroundTokenMap['surface.tertiary']).toBe('color.structure.surface.tertiary');
       });
 
       it('should have consistent shadow token references for Android', () => {
@@ -570,7 +570,7 @@ describe('Container-Card-Base Component', () => {
 
       it('should have consistent border color token references for Android', () => {
         // Android CardBorderColor enum maps to same border color tokens
-        expect(cardBorderColorTokenMap['border.default']).toBe('color.border.default');
+        expect(cardBorderColorTokenMap['border.default']).toBe('color.structure.border');
         expect(cardBorderColorTokenMap['border.subtle']).toBe('color.structure.border.subtle');
       });
     });

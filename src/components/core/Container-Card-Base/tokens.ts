@@ -77,9 +77,9 @@ export const cardHorizontalPaddingTokenMap: Record<CardHorizontalPaddingValue, s
  * @see Requirements 3.8, 4.2
  */
 export const cardBackgroundTokenMap: Record<CardBackgroundValue, string> = {
-  'surface.primary': 'color.surface.primary',
-  'surface.secondary': 'color.surface.secondary',
-  'surface.tertiary': 'color.surface.tertiary'
+  'surface.primary': 'color.structure.surface.primary',
+  'surface.secondary': 'color.structure.surface.secondary',
+  'surface.tertiary': 'color.structure.surface.tertiary'
 };
 
 /**
@@ -114,7 +114,7 @@ export const cardBorderTokenMap: Record<CardBorderValue, string> = {
  * @see Requirements 3.11
  */
 export const cardBorderColorTokenMap: Record<CardBorderColorValue, string> = {
-  'border.default': 'color.border.default',
+  'border.default': 'color.structure.border',
   'border.subtle': 'color.structure.border.subtle'
 };
 
@@ -141,14 +141,14 @@ export const cardBorderRadiusTokenMap: Record<CardBorderRadiusValue, string> = {
 export const cardDefaultTokens = {
   /** Default padding: space.inset.150 (12px) */
   padding: 'space.inset.150',
-  /** Default background: color.surface.primary */
-  background: 'color.surface.primary',
+  /** Default background: color.structure.surface.primary */
+  background: 'color.structure.surface.primary',
   /** Default shadow: shadow.container */
   shadow: 'shadow.container',
   /** Default border radius: radius-100 (8px) */
   borderRadius: 'radius-100',
-  /** Default border color: color.border.default */
-  borderColor: 'color.border.default'
+  /** Default border color: color.structure.border */
+  borderColor: 'color.structure.border'
 } as const;
 
 /**

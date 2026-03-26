@@ -326,9 +326,9 @@ fun resolveColorToken(tokenName: String?): Color {
         // Structure concept tokens
         "color.structure.canvas" -> colorStructureCanvas
         "color.structure.surface" -> colorStructureSurface
-        "color.surface.primary" -> colorSurfacePrimary
-        "color.surface.secondary" -> colorSurfaceSecondary
-        "color.surface.tertiary" -> colorSurfaceTertiary
+        "color.structure.surface.primary" -> colorSurfacePrimary
+        "color.structure.surface.secondary" -> colorSurfaceSecondary
+        "color.structure.surface.tertiary" -> colorSurfaceTertiary
         "color.structure.border" -> colorStructureBorder
         
         // Feedback concept tokens

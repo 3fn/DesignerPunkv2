@@ -104,7 +104,7 @@ describe('Container-Card-Base Composition (Spec 085)', () => {
     it('should resolve background shorthand to Base token name format', () => {
       const card = createCard({ background: 'surface.primary' });
       const base = card.shadowRoot?.querySelector('container-base');
-      expect(base?.getAttribute('background')).toBe('color.surface.primary');
+      expect(base?.getAttribute('background')).toBe('color.structure.surface.primary');
     });
 
     it('should resolve shadow shorthand to Base token name format', () => {

@@ -122,9 +122,9 @@ enum class CardHorizontalPadding {
  * @see Requirements 3.8, 4.2
  */
 enum class CardBackground {
-    SurfacePrimary,    // color.surface.primary [DEFAULT]
-    SurfaceSecondary,  // color.surface.secondary
-    SurfaceTertiary    // color.surface.tertiary
+    SurfacePrimary,    // color.structure.surface.primary [DEFAULT]
+    SurfaceSecondary,  // color.structure.surface.secondary
+    SurfaceTertiary    // color.structure.surface.tertiary
 }
 
 /**
@@ -159,7 +159,7 @@ enum class CardBorder {
  * @see Requirements 3.11
  */
 enum class CardBorderColor {
-    BorderDefault,  // color.border.default [DEFAULT]
+    BorderDefault,  // color.structure.border [DEFAULT]
     BorderSubtle    // color.structure.border.subtle
 }
 
@@ -318,9 +318,9 @@ fun ContainerCardBase(
     val resolvedPaddingInlineStart = paddingInlineStart?.let { mapCardHorizontalPaddingToBase(it) }
     val resolvedPaddingInlineEnd = paddingInlineEnd?.let { mapCardHorizontalPaddingToBase(it) }
     val resolvedBackground = when (background) {
-        CardBackground.SurfacePrimary -> "color.surface.primary"
-        CardBackground.SurfaceSecondary -> "color.surface.secondary"
-        CardBackground.SurfaceTertiary -> "color.surface.tertiary"
+        CardBackground.SurfacePrimary -> "color.structure.surface.primary"
+        CardBackground.SurfaceSecondary -> "color.structure.surface.secondary"
+        CardBackground.SurfaceTertiary -> "color.structure.surface.tertiary"
     }
     val resolvedShadow = when (shadow) {
         CardShadow.None -> null
@@ -332,7 +332,7 @@ fun ContainerCardBase(
     }
     val resolvedBorderColor = if (border != CardBorder.None) {
         when (borderColor) {
-            CardBorderColor.BorderDefault -> "color.border.default"
+            CardBorderColor.BorderDefault -> "color.structure.border"
             CardBorderColor.BorderSubtle -> "color.structure.border.subtle"
         }
     } else null

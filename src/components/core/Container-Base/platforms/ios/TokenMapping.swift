@@ -182,11 +182,11 @@ func resolveColorToken(_ tokenName: String?) -> Color {
         return colorSecondary
     case "color.surface":
         return colorSurface
-    case "color.surface.primary":
+    case "color.structure.surface.primary":
         return colorSurfacePrimary
-    case "color.surface.secondary":
+    case "color.structure.surface.secondary":
         return colorSurfaceSecondary
-    case "color.surface.tertiary":
+    case "color.structure.surface.tertiary":
         return colorSurfaceTertiary
     case "color.background":
         return colorBackground
