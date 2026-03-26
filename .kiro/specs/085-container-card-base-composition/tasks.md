@@ -180,7 +180,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Cleanup and Compliance"`
   - Verify: Full test suite, MCP sanity check
 
-  - [ ] 3.1 Remove compliance test known-mismatch skips
+  - [x] 3.1 Remove compliance test known-mismatch skips
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -188,7 +188,7 @@
     - Verify all 61+ checks pass with zero skips
     - _Requirements: 1.5_
 
-  - [ ] 3.2 Correct schema description
+  - [x] 3.2 Correct schema description
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Lina

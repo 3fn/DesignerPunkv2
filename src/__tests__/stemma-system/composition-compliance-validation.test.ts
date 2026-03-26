@@ -114,10 +114,8 @@ const uniqueChecks = checks.filter((check, i, arr) =>
 );
 
 // Known architectural mismatches tracked in separate issues
-// @see .kiro/issues/2026-03-25-container-card-base-composition-mismatch.md
-const KNOWN_MISMATCHES = [
-  { parent: 'Container-Card-Base', child: 'Container-Base' },
-];
+// All resolved — list is empty
+const KNOWN_MISMATCHES: { parent: string; child: string }[] = [];
 
 function isKnownMismatch(check: CompositionCheck): boolean {
   return KNOWN_MISMATCHES.some(m => m.parent === check.parent && m.child === check.child);

@@ -210,7 +210,7 @@ properties:
       - Enables press feedback (12% darker via blend.pressedDarker)
       - Makes card focusable via keyboard navigation
       - Applies ARIA role based on role prop
-      - Internally sets hoverable: true on Container-Base
+      - Internally sets hoverable: false on Container-Base (Card handles all interaction)
   
   onPress:
     type: "() => void"
