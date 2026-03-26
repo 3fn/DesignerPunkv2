@@ -182,6 +182,12 @@ func resolveColorToken(_ tokenName: String?) -> Color {
         return colorSecondary
     case "color.surface":
         return colorSurface
+    case "color.surface.primary":
+        return colorSurfacePrimary
+    case "color.surface.secondary":
+        return colorSurfaceSecondary
+    case "color.surface.tertiary":
+        return colorSurfaceTertiary
     case "color.background":
         return colorBackground
     case "color.canvas":
@@ -196,6 +202,10 @@ func resolveColorToken(_ tokenName: String?) -> Color {
         return colorInfo
     case "color.border":
         return colorBorder
+    case "color.border.default":
+        return colorBorder
+    case "color.structure.border.subtle":
+        return colorBorderSubtle
     default:
         // Default to canvas (white100) for invalid token names
         return colorCanvas
@@ -433,6 +443,9 @@ private let zIndexTooltip: Int = 600
 private let colorPrimary: Color = Color.blue
 private let colorSecondary: Color = Color.purple
 private let colorSurface: Color = Color.white
+private let colorSurfacePrimary: Color = Color.white          // color.structure.surface.primary
+private let colorSurfaceSecondary: Color = Color(white: 0.96) // color.structure.surface.secondary
+private let colorSurfaceTertiary: Color = Color(white: 0.93)  // color.structure.surface.tertiary
 private let colorBackground: Color = Color(white: 0.98)
 private let colorCanvas: Color = Color.white  // white100 - default page background
 private let colorError: Color = Color.red

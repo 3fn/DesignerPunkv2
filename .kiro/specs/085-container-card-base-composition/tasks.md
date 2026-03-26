@@ -110,7 +110,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Native Platform Composition"`
   - Verify: Full test suite
 
-  - [ ] 2.0 Extend Base's native token mappings
+  - [x] 2.0 Extend Base's native token mappings
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina (implementation) + Ada (verification)

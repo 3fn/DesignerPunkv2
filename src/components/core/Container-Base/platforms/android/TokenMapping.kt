@@ -326,6 +326,9 @@ fun resolveColorToken(tokenName: String?): Color {
         // Structure concept tokens
         "color.structure.canvas" -> colorStructureCanvas
         "color.structure.surface" -> colorStructureSurface
+        "color.surface.primary" -> colorSurfacePrimary
+        "color.surface.secondary" -> colorSurfaceSecondary
+        "color.surface.tertiary" -> colorSurfaceTertiary
         "color.structure.border" -> colorStructureBorder
         
         // Feedback concept tokens
@@ -564,6 +567,9 @@ private val colorActionSecondary: Color = Color(DesignTokens.color_action_second
 // Structure concept tokens
 private val colorStructureCanvas: Color = Color(DesignTokens.color_structure_canvas)
 private val colorStructureSurface: Color = Color(DesignTokens.color_structure_surface)
+private val colorSurfacePrimary: Color = Color(DesignTokens.color_structure_surface_primary)
+private val colorSurfaceSecondary: Color = Color(DesignTokens.color_structure_surface_secondary)
+private val colorSurfaceTertiary: Color = Color(DesignTokens.color_structure_surface_tertiary)
 private val colorStructureBorder: Color = Color(DesignTokens.color_structure_border)
 
 // Feedback concept tokens
