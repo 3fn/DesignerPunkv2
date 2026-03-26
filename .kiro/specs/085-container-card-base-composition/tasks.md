@@ -67,7 +67,7 @@
     - Run full test suite, verify zero failures
     - _Requirements: 1.5, 1.6, 3.5, 5.1, 5.2, 5.3_
 
-  - [ ] 1.4 Demo validation
+  - [x] 1.4 Demo validation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
