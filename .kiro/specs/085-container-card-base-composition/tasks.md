@@ -56,7 +56,7 @@
     - Check `::slotted()` selectors still work or update them
     - _Requirements: 1.1, 1.4, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 3.5, 4.1, 4.2, 4.3_
 
-  - [ ] 1.3 Update broken web tests
+  - [x] 1.3 Update broken web tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

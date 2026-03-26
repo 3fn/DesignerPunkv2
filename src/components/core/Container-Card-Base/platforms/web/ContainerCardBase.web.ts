@@ -292,7 +292,7 @@ export class ContainerCardBaseWeb extends HTMLElement {
     if (border !== 'none') attrs.push(`border="${border}"`);
 
     const borderRadius = this.getAttribute('border-radius') as CardBorderRadiusValue | null ?? D.borderRadius;
-    if (borderRadius !== 'none') attrs.push(`border-radius="${borderRadius}"`);
+    attrs.push(`border-radius="${borderRadius}"`);
 
     // Semantic element: suppress to 'div' when interactive (Req 3.5 — ARIA nesting)
     const interactive = this.getAttribute('interactive') === 'true';
