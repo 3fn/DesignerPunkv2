@@ -300,98 +300,61 @@ fun ContainerCardBase(
     var isFocused by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     
-    // Calculate background color with hover and press states
+    // Calculate background color for interaction overlay
     // Uses hoverBlend() (8% darker) and pressedBlend() (12% darker) semantic extensions
-    // @see Requirements: 5.2, 5.3 - Hover and press feedback
     val baseBackgroundColor = mapCardBackgroundToColor(background)
-    val currentBackgroundColor = when {
+    val interactionOverlayColor = when {
         interactive && isPressed -> baseBackgroundColor.pressedBlend()
         interactive && isHovered -> baseBackgroundColor.hoverBlend()
-        else -> baseBackgroundColor
+        else -> Color.Transparent
     }
     
-    // Calculate directional padding with override hierarchy
-    // @see Requirements 3.1-3.7 - Curated padding values
-    val calculatedPadding = calculateCardDirectionalPadding(
-        uniform = padding,
-        vertical = paddingVertical,
-        horizontal = paddingHorizontal,
-        blockStart = paddingBlockStart,
-        blockEnd = paddingBlockEnd,
-        inlineStart = paddingInlineStart,
-        inlineEnd = paddingInlineEnd,
-        layoutDirection = layoutDirection
-    )
-    
-    // Get corner shape for border radius
-    val cornerShape = getCardRoundedCornerShape(borderRadius)
-    
-    // Build modifier chain with all styling
-    val containerModifier = modifier
+    // Two-track prop forwarding: Card enum → Base enum (direct) or String (resolve)
+    val resolvedPadding = mapCardPaddingToBase(padding)
+    val resolvedPaddingVertical = paddingVertical?.let { mapCardVerticalPaddingToBase(it) }
+    val resolvedPaddingHorizontal = paddingHorizontal?.let { mapCardHorizontalPaddingToBase(it) }
+    val resolvedPaddingBlockStart = paddingBlockStart?.let { mapCardVerticalPaddingToBase(it) }
+    val resolvedPaddingBlockEnd = paddingBlockEnd?.let { mapCardVerticalPaddingToBase(it) }
+    val resolvedPaddingInlineStart = paddingInlineStart?.let { mapCardHorizontalPaddingToBase(it) }
+    val resolvedPaddingInlineEnd = paddingInlineEnd?.let { mapCardHorizontalPaddingToBase(it) }
+    val resolvedBackground = when (background) {
+        CardBackground.SurfacePrimary -> "color.surface.primary"
+        CardBackground.SurfaceSecondary -> "color.surface.secondary"
+        CardBackground.SurfaceTertiary -> "color.surface.tertiary"
+    }
+    val resolvedShadow = when (shadow) {
+        CardShadow.None -> null
+        CardShadow.Container -> "shadow.container"
+    }
+    val resolvedBorder = when (border) {
+        CardBorder.None -> ContainerBaseBorderValue.None
+        CardBorder.Default -> ContainerBaseBorderValue.Default
+    }
+    val resolvedBorderColor = if (border != CardBorder.None) {
+        when (borderColor) {
+            CardBorderColor.BorderDefault -> "color.border.default"
+            CardBorderColor.BorderSubtle -> "color.structure.border.subtle"
+        }
+    } else null
+    val resolvedBorderRadius = when (borderRadius) {
+        CardBorderRadius.Normal -> ContainerBaseBorderRadiusValue.Normal
+        CardBorderRadius.Loose -> ContainerBaseBorderRadiusValue.Loose
+    }
+
+    // Build interaction wrapper modifier
+    val interactionModifier = modifier
+        .then(if (testTag != null) Modifier.testTag(testTag) else Modifier)
+        .then(if (interactive) Modifier.hoverable(interactionSource = interactionSource) else Modifier)
         .then(
-            // Apply test tag if provided
-            if (testTag != null) {
-                Modifier.testTag(testTag)
-            } else {
-                Modifier
-            }
-        )
-        .then(
-            // Apply hoverable modifier if interactive
-            if (interactive) {
-                Modifier.hoverable(interactionSource = interactionSource)
-            } else {
-                Modifier
-            }
-        )
-        .then(
-            // Apply clickable modifier if interactive
             if (interactive && onPress != null) {
                 Modifier.clickable(
                     interactionSource = interactionSource,
-                    indication = null, // We handle visual feedback via background color
+                    indication = null,
                     onClick = onPress
                 )
-            } else {
-                Modifier
-            }
+            } else Modifier
         )
         .then(
-            // Apply shadow/elevation
-            if (shadow != CardShadow.None) {
-                Modifier.shadow(
-                    elevation = mapCardShadowToElevation(shadow),
-                    shape = cornerShape
-                )
-            } else {
-                Modifier
-            }
-        )
-        .then(
-            // Apply background color (with hover/press state consideration)
-            Modifier.background(
-                color = currentBackgroundColor,
-                shape = cornerShape
-            )
-        )
-        .then(
-            // Apply border with configurable color
-            if (border != CardBorder.None) {
-                Modifier.border(
-                    width = mapCardBorderToWidth(border),
-                    color = mapCardBorderColorToColor(borderColor),
-                    shape = cornerShape
-                )
-            } else {
-                Modifier
-            }
-        )
-        .then(
-            // Apply directional padding
-            Modifier.padding(calculatedPadding)
-        )
-        .then(
-            // Apply accessibility semantics
             Modifier.semantics {
                 if (accessibilityLabel != null) {
                     contentDescription = accessibilityLabel
@@ -399,38 +362,25 @@ fun ContainerCardBase(
                 if (interactive) {
                     this.role = when (role) {
                         CardRole.Button -> Role.Button
-                        CardRole.Link -> Role.Button // Compose doesn't have Role.Link, use Button
+                        CardRole.Link -> Role.Button
                     }
                 }
             }
         )
         .then(
-            // Apply focusable modifier and focus state tracking if enabled
-            // @see Requirements 6.7 - Container-Card-Base focus outline uses accessibility token
-            // @see WCAG 2.4.7 Focus Visible (Level AA)
             if (focusable) {
                 Modifier
                     .focusRequester(focusRequester)
-                    .onFocusChanged { focusState ->
-                        isFocused = focusState.isFocused
-                    }
+                    .onFocusChanged { focusState -> isFocused = focusState.isFocused }
                     .focusable()
-            } else {
-                Modifier
-            }
+            } else Modifier
         )
         .then(
-            // Apply focus indicator overlay when focused
-            // Uses accessibility tokens for WCAG 2.4.7 compliance
-            // @see src/tokens/semantic/AccessibilityTokens.ts
-            // @see WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
             if (focusable && isFocused) {
                 Modifier.drawBehind {
                     val cornerRadiusPx = getCardCornerRadiusPx(borderRadius)
                     val strokeWidth = accessibilityFocusWidth.toPx()
                     val offset = accessibilityFocusOffset.toPx()
-                    
-                    // Draw focus indicator outline outside the component bounds
                     drawRoundRect(
                         color = accessibilityFocusColor,
                         topLeft = androidx.compose.ui.geometry.Offset(-offset, -offset),
@@ -445,14 +395,30 @@ fun ContainerCardBase(
                         style = Stroke(width = strokeWidth)
                     )
                 }
-            } else {
-                Modifier
-            }
+            } else Modifier
         )
-    
-    // Render Box with modifier chain and content
-    Box(modifier = containerModifier) {
-        content()
+
+    // Render: interaction wrapper → ContainerBase → content
+    // Card owns interaction; Base owns layout (Design Decision 2)
+    Box(modifier = interactionModifier.background(interactionOverlayColor)) {
+        ContainerBase(
+            padding = resolvedPadding,
+            paddingVertical = resolvedPaddingVertical,
+            paddingHorizontal = resolvedPaddingHorizontal,
+            paddingBlockStart = resolvedPaddingBlockStart,
+            paddingBlockEnd = resolvedPaddingBlockEnd,
+            paddingInlineStart = resolvedPaddingInlineStart,
+            paddingInlineEnd = resolvedPaddingInlineEnd,
+            background = resolvedBackground,
+            shadow = resolvedShadow,
+            border = resolvedBorder,
+            borderColor = resolvedBorderColor,
+            borderRadius = resolvedBorderRadius,
+            accessibilityLabel = accessibilityLabel,
+            hoverable = false  // Card handles all interaction (Design Decision 2)
+        ) {
+            content()
+        }
     }
 }
 
@@ -465,6 +431,33 @@ fun ContainerCardBase(
  * @return Dp padding value
  * 
  * @see Requirements 3.1, 4.1
+ */
+// Card → Base enum mapping functions
+
+fun mapCardPaddingToBase(padding: CardPadding): ContainerBasePaddingValue = when (padding) {
+    CardPadding.None -> ContainerBasePaddingValue.None
+    CardPadding.P100 -> ContainerBasePaddingValue.P100
+    CardPadding.P150 -> ContainerBasePaddingValue.P150
+    CardPadding.P200 -> ContainerBasePaddingValue.P200
+}
+
+fun mapCardVerticalPaddingToBase(padding: CardVerticalPadding): ContainerBasePaddingValue = when (padding) {
+    CardVerticalPadding.None -> ContainerBasePaddingValue.None
+    CardVerticalPadding.P050 -> ContainerBasePaddingValue.P050
+    CardVerticalPadding.P100 -> ContainerBasePaddingValue.P100
+    CardVerticalPadding.P150 -> ContainerBasePaddingValue.P150
+    CardVerticalPadding.P200 -> ContainerBasePaddingValue.P200
+}
+
+fun mapCardHorizontalPaddingToBase(padding: CardHorizontalPadding): ContainerBasePaddingValue = when (padding) {
+    CardHorizontalPadding.None -> ContainerBasePaddingValue.None
+    CardHorizontalPadding.P100 -> ContainerBasePaddingValue.P100
+    CardHorizontalPadding.P150 -> ContainerBasePaddingValue.P150
+    CardHorizontalPadding.P200 -> ContainerBasePaddingValue.P200
+}
+
+/**
+ * Map CardPadding to Dp (retained for tests and previews)
  */
 fun mapCardPaddingToDp(padding: CardPadding): Dp {
     return when (padding) {
