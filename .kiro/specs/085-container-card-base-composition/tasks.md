@@ -157,7 +157,7 @@
     - Verify prop forwarding pattern matches across all 3 platforms
     - _Requirements: 2.1_
 
-- [ ] 3. Cleanup and Compliance
+- [x] 3. Cleanup and Compliance
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -195,7 +195,7 @@
     - Update `Container-Card-Base.schema.yaml` interactive prop description from "sets hoverable: true" to "sets hoverable: false"
     - _Requirements: 2.1_
 
-  - [ ] 3.3 Application MCP sanity check
+  - [x] 3.3 Application MCP sanity check
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
