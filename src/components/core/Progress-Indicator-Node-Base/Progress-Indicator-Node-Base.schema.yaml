@@ -4,6 +4,12 @@ family: ProgressIndicator
 version: "1.0.0"
 readiness: development
 
+composition:
+  internal:
+    - component: Icon-Base
+      role: Checkmark and custom icon content for completed/active states
+      required: false
+
 description: |
   Primitive node component for the Progress Indicator family.
   Renders a circular indicator element with state-based visual treatment

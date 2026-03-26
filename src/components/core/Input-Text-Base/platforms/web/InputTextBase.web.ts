@@ -44,7 +44,7 @@ import {
   calculateLabelPosition,
   calculateIconVisibility
 } from '../../stateManagement';
-import { createIcon } from '../../../Icon-Base/platforms/web/IconBase.web';
+import { createIconBase } from '../../../Icon-Base/platforms/web/IconBase.web';
 import { iconSizes } from '../../../Icon-Base/types';
 
 // Import CSS as string for browser bundle compatibility
@@ -257,21 +257,21 @@ export class InputTextBase extends HTMLElement {
     const iconSize = iconSizes.size100;
     let trailingIconHTML = '';
     if (iconVisibility.showErrorIcon) {
-      trailingIconHTML = createIcon({
+      trailingIconHTML = createIconBase({
         name: 'x',
         size: iconSize,
         color: 'color-error',
         className: 'trailing-icon error-icon'
       });
     } else if (iconVisibility.showSuccessIcon) {
-      trailingIconHTML = createIcon({
+      trailingIconHTML = createIconBase({
         name: 'check',
         size: iconSize,
         color: 'color-feedback-success-text',
         className: 'trailing-icon success-icon'
       });
     } else if (iconVisibility.showInfoIcon) {
-      trailingIconHTML = createIcon({
+      trailingIconHTML = createIconBase({
         name: 'info',
         size: iconSize,
         color: 'color-text-subtle',

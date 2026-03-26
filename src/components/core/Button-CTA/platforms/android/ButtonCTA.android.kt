@@ -205,7 +205,7 @@ fun ButtonCTA(
                     // Requirement 9.1-9.2: Apply icon color with optical balance using blend utility
                     // Requirement 16.3: Mark icon as decorative (contentDescription = null)
                     // A3: Use Dp directly without conversion
-                    Icon(
+                    IconBase(
                         name = iconName,
                         size = sizeConfig.iconSize,
                         color = styleConfig.iconColor

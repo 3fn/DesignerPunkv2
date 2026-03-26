@@ -14,6 +14,12 @@ family: FormInput
 version: "1.0.0"
 readiness: production-ready
 
+composition:
+  internal:
+    - component: Icon-Base
+      role: Trailing contextual icon (error, success, info)
+      required: false
+
 # Component description
 description: |
   Foundational text input component implementing the float label pattern with

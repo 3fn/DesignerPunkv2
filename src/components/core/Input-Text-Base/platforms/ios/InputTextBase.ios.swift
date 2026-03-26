@@ -269,7 +269,7 @@ struct InputTextBase: View {
                 
                 // Trailing icon (error, success, or info)
                 if showErrorIcon {
-                    Icon(name: "x", size: DesignTokens.icon.size100, color: Color(DesignTokens.colorFeedbackErrorText))
+                    IconBase(name: "x", size: DesignTokens.icon.size100, color: Color(DesignTokens.colorFeedbackErrorText))
                         .padding(.trailing, DesignTokens.space.inset.100)
                         .transition(.opacity)
                         .animation(
@@ -277,7 +277,7 @@ struct InputTextBase: View {
                             value: showErrorIcon
                         )
                 } else if showSuccessIcon {
-                    Icon(name: "check", size: DesignTokens.icon.size100, color: Color(DesignTokens.colorFeedbackSuccessText))
+                    IconBase(name: "check", size: DesignTokens.icon.size100, color: Color(DesignTokens.colorFeedbackSuccessText))
                         .padding(.trailing, DesignTokens.space.inset.100)
                         .transition(.opacity)
                         .animation(
@@ -285,7 +285,7 @@ struct InputTextBase: View {
                             value: showSuccessIcon
                         )
                 } else if showInfoIconVisible {
-                    Icon(name: "info", size: DesignTokens.icon.size100, color: Color(DesignTokens.color.text.muted))
+                    IconBase(name: "info", size: DesignTokens.icon.size100, color: Color(DesignTokens.color.text.muted))
                         .padding(.trailing, DesignTokens.space.inset.100)
                         .transition(.opacity)
                         .animation(

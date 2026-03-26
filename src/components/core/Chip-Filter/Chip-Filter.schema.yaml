@@ -28,6 +28,12 @@ readiness: production-ready
 # Inheritance declaration
 inherits: Chip-Base
 
+composition:
+  internal:
+    - component: Icon-Base
+      role: Optional leading icon and selected-state checkmark
+      required: false
+
 # Component description
 description: |
   Toggle chip with selected state for filtering content by multiple criteria.

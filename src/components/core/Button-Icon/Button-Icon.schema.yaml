@@ -13,6 +13,12 @@ family: Button
 version: "1.0.0"
 readiness: production-ready
 
+composition:
+  internal:
+    - component: Icon-Base
+      role: Button icon display
+      required: true
+
 description: |
   Primitive icon-only button supporting three sizes (small, medium, large)
   and three visual variants (primary, secondary, tertiary).

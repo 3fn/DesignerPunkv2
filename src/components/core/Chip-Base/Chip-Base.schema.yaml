@@ -24,6 +24,12 @@ family: Chip
 version: "1.0.0"
 readiness: production-ready
 
+composition:
+  internal:
+    - component: Icon-Base
+      role: Optional leading icon
+      required: false
+
 # Component description
 description: |
   Foundational chip component providing compact, interactive elements for

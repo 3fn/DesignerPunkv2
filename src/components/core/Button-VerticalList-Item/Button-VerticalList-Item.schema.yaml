@@ -13,6 +13,12 @@ family: Button
 version: "1.0.0"
 readiness: production-ready
 
+composition:
+  internal:
+    - component: Icon-Base
+      role: Optional leading icon
+      required: false
+
 description: |
   Presentational vertical list button item supporting five visual states
   (rest, selected, notSelected, checked, unchecked) across tap, select,

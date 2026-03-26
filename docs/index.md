@@ -11,7 +11,7 @@ title: DesignerPunk Design System
 
 What began as an experiment in developing my AI skillset evolved into a reflection of my theories, principles, and practices for a sustainable, enterprise-tier design system.
 
-Now, it's a mission to discover what's possible in the era of AI development to better enable Human-AI, and Designer-Engineer, collaboration.
+Now, it's a mission to discover what's possible in the era of AI development to better enable Human-AI and Designer-Engineer collaboration.
 </section>
 
 <section id="architecture" class="showcase-section" markdown="1">

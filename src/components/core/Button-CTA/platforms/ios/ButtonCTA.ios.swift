@@ -177,7 +177,7 @@ struct ButtonCTA: View {
                 // Optional leading icon
                 // Requirements: 8.1-8.6, 9.1-9.3
                 if let iconName = icon {
-                    Icon(
+                    IconBase(
                         name: iconName,
                         size: iconSize,
                         color: iconColor

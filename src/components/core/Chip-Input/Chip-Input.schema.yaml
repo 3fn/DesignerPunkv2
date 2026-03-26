@@ -29,6 +29,12 @@ readiness: production-ready
 inherits: Chip-Base
 omits: [onPress]
 
+composition:
+  internal:
+    - component: Icon-Base
+      role: Optional leading icon and trailing dismiss (X) icon
+      required: false
+
 # Component description
 description: |
   Dismissible chip for managing user-entered values like tags or selections.

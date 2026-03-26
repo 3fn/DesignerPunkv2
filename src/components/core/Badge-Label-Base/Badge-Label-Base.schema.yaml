@@ -20,6 +20,12 @@ version: "1.0.0"
 readiness: production-ready
 platforms: [web, ios, android]
 
+composition:
+  internal:
+    - component: Icon-Base
+      role: Optional leading icon for label badge
+      required: false
+
 # Component description
 description: |
   Type primitive label badge component for displaying categorization, status,

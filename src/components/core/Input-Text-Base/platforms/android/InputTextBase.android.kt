@@ -356,17 +356,17 @@ fun InputTextBase(
                     .graphicsLayer(alpha = iconOpacity)
             ) {
                 when {
-                    showErrorIcon -> Icon(
+                    showErrorIcon -> IconBase(
                         name = "x",
                         size = iconSize100,
                         color = colorFeedbackErrorText
                     )
-                    showSuccessIcon -> Icon(
+                    showSuccessIcon -> IconBase(
                         name = "check",
                         size = iconSize100,
                         color = colorFeedbackSuccessText
                     )
-                    showInfoIconVisible -> Icon(
+                    showInfoIconVisible -> IconBase(
                         name = "info",
                         size = iconSize100,
                         color = colorTextMuted

@@ -13,6 +13,12 @@ family: Avatar
 version: "1.0.0"
 readiness: production-ready
 
+composition:
+  internal:
+    - component: Icon-Base
+      role: Fallback icon when no image or initials available
+      required: false
+
 description: |
   Primitive avatar component supporting human (circle) and agent (hexagon)
   entity types with image, fallback icon, and initials rendering.
