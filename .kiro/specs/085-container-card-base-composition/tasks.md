@@ -32,7 +32,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Web Platform Composition"`
   - Verify: Demo comparison, full test suite
 
-  - [ ] 1.1 Audit existing web tests for structural assertions
+  - [x] 1.1 Audit existing web tests for structural assertions
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -42,7 +42,7 @@
     - Document which tests will break and why
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 1.2 Refactor web implementation
+  - [x] 1.2 Refactor web implementation
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Agent**: Lina
