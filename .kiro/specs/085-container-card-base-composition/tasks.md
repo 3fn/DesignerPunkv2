@@ -87,7 +87,7 @@
     - Confirm the composition pattern is clean enough to generalize
     - _Requirements: 2.1, 3.5_
 
-- [ ] 2. Native Platform Composition
+- [x] 2. Native Platform Composition
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -148,7 +148,7 @@
     - Run existing Android tests
     - _Requirements: 1.3, 1.4, 2.1, 3.1, 3.2, 3.4, 4.1, 4.2, 4.3_
 
-  - [ ] 2.3 Leonardo cross-platform review (native)
+  - [x] 2.3 Leonardo cross-platform review (native)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Leonardo
