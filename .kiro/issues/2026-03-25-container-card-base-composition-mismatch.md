@@ -4,7 +4,7 @@
 **Discovered by**: Thurgood (composition compliance test), Lina (analysis)
 **Domain**: Lina (component implementation)
 **Severity**: Medium
-**Status**: Open
+**Status**: Resolved (2026-03-26) — via Spec 085
 **Related**: `.kiro/issues/2026-03-18-composition-compliance-iconbase.md`
 
 ---

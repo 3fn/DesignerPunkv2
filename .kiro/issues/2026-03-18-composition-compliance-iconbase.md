@@ -4,7 +4,7 @@
 **Discovered by**: Peter (review of Nav-TabBar-Base implementation)
 **Domain**: Thurgood (test governance), Lina (component implementation)
 **Severity**: Medium
-**Status**: Open
+**Status**: Resolved (2026-03-26)
 
 ---
 
