@@ -294,6 +294,3 @@ struct IconBase_Previews: PreviewProvider {
         .padding()
     }
 }
-
-// Legacy alias for backward compatibility
-typealias Icon = IconBase

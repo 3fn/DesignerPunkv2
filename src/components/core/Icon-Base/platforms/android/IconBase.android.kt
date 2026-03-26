@@ -238,13 +238,3 @@ fun IconBasePreview() {
         }
     }
 }
-
-// Legacy alias for backward compatibility
-@Composable
-fun Icon(
-    name: String,
-    size: Dp,
-    color: Color? = null,
-    opticalBalance: Boolean = false,
-    modifier: Modifier = Modifier
-) = IconBase(name, size, color, opticalBalance, modifier)

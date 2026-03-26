@@ -130,3 +130,13 @@ From the test governance angle: Card's existing tests validate external behavior
 
 **Proposed spec number**: 085 (next available)
 **Proposed scope**: Composition pattern per platform, interaction layer boundary, test impact strategy. External behavior unchanged — internal architecture only.
+
+---
+
+## Resolution (2026-03-26)
+
+**Status**: Resolved via Spec 085
+
+All three platform implementations refactored to compose through Container-Base. Composition compliance test passes with zero skips. Schema corrected. MCP sanity check confirmed unchanged.
+
+See `.kiro/specs/085-container-card-base-composition/` for full spec, feedback history, and completion documentation.

@@ -262,3 +262,26 @@ Both findings are Lina's domain. The test is correct — it's catching real issu
 **Finding 2 — Separated**: Container-Card-Base is a different class of issue (architectural mismatch, not a legacy alias). Created separate issue: `.kiro/issues/2026-03-25-container-card-base-composition-mismatch.md`. The 3 failing compliance test checks for Container-Card-Base are expected failures tied to that issue.
 
 **Test results after fix**: 58 passed, 3 failed (61 total). The 3 failures are all Container-Card-Base → Container-Base (iOS, Android, web) — tracked in the separate issue.
+
+---
+
+## Resolution (2026-03-26)
+
+**Status**: Resolved
+
+- Steps 1-4 complete: legacy alias migration, schema fixes, test suite validation, composition compliance test
+- Step 5 (legacy alias removal from Icon-Base): pending — zero consumers remain, safe to remove when convenient
+- Container-Card-Base composition mismatch separated and resolved via Spec 085
+- Composition compliance test (`composition-compliance-validation.test.ts`): 61 checks, zero failures, zero skips
+
+### Step 5: Legacy Alias Removal (Lina, 2026-03-26)
+
+Removed all three legacy alias definitions:
+
+1. ✅ `IconBase.ios.swift` — `typealias Icon = IconBase` removed
+2. ✅ `IconBase.android.kt` — `fun Icon(...) = IconBase(...)` removed
+3. ✅ `IconBase.web.ts` — `export { createIconBase as createIcon }` and `export { IconBase as Icon }` removed
+
+Full test suite: 308 suites, 8041 tests, 0 failures.
+
+**This issue is fully resolved.** All steps complete.

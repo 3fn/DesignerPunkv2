@@ -547,6 +547,3 @@ if (!customElements.get('icon-base')) {
  */
 export default IconBaseElement;
 
-// Legacy aliases for backward compatibility
-export { createIconBase as createIcon };
-export { IconBase as Icon };
