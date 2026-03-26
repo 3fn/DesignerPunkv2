@@ -115,24 +115,23 @@ contracts:
 
   animation_coordination:
     category: animation
-    description: Three-phase choreography for tab selection transitions
+    description: Staggered choreography for tab selection transitions relative to dot glide
     behavior: |
-      Selection change animates through three phases:
-      Phase 1 (depart): Glow dims on departing tab, icon begins settling
-        to inactive position. duration150, easingAccelerate.
-      Phase 2 (glide): Dot glides from departing to arriving tab center.
-        duration350, easingGlideDecelerate. Icon outline/solid swap snaps
-        when arriving glow begins (Phase 3).
-      Phase 3 (arrive): Arriving icon lifts to active position, glow
-        brightens. duration150, easingDecelerate. Overlaps Phase 2 at ~80%.
+      Selection change animates through staggered phases relative to the
+      dot glide (duration350, easingGlideDecelerate):
+      - 0ms: Dot starts gliding from departing to arriving tab center.
+      - 8% of glide (~28ms): Departing tab settles — padding transitions
+        to inactive, glow dims. duration150, easingAccelerate.
+      - 50% of glide (~175ms): Arriving tab lifts — padding transitions
+        to active, icon swaps (outline→solid snap, not crossfade),
+        glow brightens. duration150, easingDecelerate.
       All timing uses Rosetta motion tokens — no hard-coded values.
     wcag: "2.3.3 Animation from Interactions"
     platforms: [web, ios, android]
     validation:
-      - Phase 1 dims departing glow and begins icon settle
-      - Phase 2 glides dot between tab centers
-      - Phase 3 lifts arriving icon and brightens glow
-      - Phase 3 overlaps Phase 2 at approximately 80%
+      - Dot glide starts immediately on selection change
+      - Departing tab settles at ~8% of glide duration
+      - Arriving tab lifts at ~50% of glide duration
       - Icon swap is snap, not crossfade
       - All timing uses motion tokens
     test_approach: |
@@ -258,30 +257,30 @@ contracts:
 
   visual_gradient_glow:
     category: visual
-    description: Elliptical radial gradient on all tabs with mode-aware colors
+    description: Elliptical radial gradient on active tab only with mode-aware colors
     behavior: |
-      Every tab has an elliptical radial gradient background centered on
-      the icon center. Radii: 88% of tab width (horizontal) x 88% of
-      tab height (vertical). Three stops:
-      - 0%: accent center color at 100% opacity
-      - 88%: color.structure.canvas at opacity024
-      - 100%: color.structure.canvas at opacity000
+      The active tab has an elliptical radial gradient background centered
+      on the icon center. Ellipse: space-700 (56px) horizontal × 56% of
+      tab height vertical. Four stops:
+      - 0%: accent color at 100% opacity
+      - mid: accent color at 50% opacity
+      - 80%: color.structure.canvas at opacity024
+      - 100%: transparent
       Active tab center: color.background.primary.subtle (visible glow).
-      Inactive tab center: color.structure.canvas (subtle vignette).
-      Glow bleeds into adjacent tabs — no clipping. Glow opacity is
-      independently animatable during selection transitions.
+      Inactive tabs have no gradient. Glow bleeds into adjacent tabs —
+      no clipping. Glow opacity is independently animatable during
+      selection transitions.
     wcag: null
     platforms: [web, ios, android]
     validation:
-      - All tabs have radial gradient background
-      - Active gradient center is color.background.primary.subtle
-      - Inactive gradient center is color.structure.canvas
-      - Gradient radii are 88% of tab dimensions
-      - Three gradient stops at 0%, 88%, 100%
+      - Active tab has radial gradient background
+      - Inactive tabs have no gradient
+      - Gradient center is color.background.primary.subtle
+      - Gradient ellipse uses space-700 horizontal, 56% vertical
       - Gradient bleeds into adjacent tabs (no overflow clipping)
     test_approach: |
-      Render with selection, verify gradient presence on all tabs.
-      Verify center color differs between active and inactive.
+      Render with selection, verify gradient presence on active tab only.
+      Verify no gradient on inactive tabs.
     required: true
 
   # ============================================================
