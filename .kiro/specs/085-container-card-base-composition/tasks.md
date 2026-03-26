@@ -9,7 +9,7 @@
 
 ## Task List
 
-- [ ] 1. Web Platform Composition (Highest Risk)
+- [x] 1. Web Platform Composition (Highest Risk)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -78,7 +78,7 @@
     - Verify slot content renders correctly in all demo sections
     - _Requirements: 2.1, 2.4_
 
-  - [ ] 1.5 Leonardo cross-platform review (web)
+  - [x] 1.5 Leonardo cross-platform review (web)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Leonardo
