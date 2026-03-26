@@ -5,6 +5,7 @@
 **Spec**: 050
 **Priority**: High
 **Affects**: iOS, Android
+**Status**: Resolved (2026-03-26) — Pending Thurgood contract verification
 
 ---
 
