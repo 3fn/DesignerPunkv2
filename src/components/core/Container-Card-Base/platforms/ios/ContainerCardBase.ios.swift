@@ -345,127 +345,143 @@ struct ContainerCardBase<Content: View>: View {
     // MARK: - Body
     
     var body: some View {
-        content
-            .padding(paddingValue)
-            .background(currentBackgroundColor)
-            .cornerRadius(cornerRadiusValue)
-            .overlay(borderOverlay)
-            .overlay(focusIndicatorOverlay)
-            .shadow(color: shadowColor, radius: shadowRadius, x: shadowX, y: shadowY)
-            .focused($isFocused)
-            .if(interactive) { view in
-                view
-                    // Hover state for pointer devices (macOS/iPadOS)
-                    .onHover { hovering in
-                        withAnimation(motionFocusTransition) {
-                            isHovered = hovering
-                        }
+        // Interaction wrapper — Card owns all interaction; Base owns layout
+        // @see .kiro/specs/085-container-card-base-composition/design.md § "Interaction Layer Boundary"
+        ContainerBase(
+            padding: resolvedPadding,
+            paddingVertical: resolvedPaddingVertical,
+            paddingHorizontal: resolvedPaddingHorizontal,
+            paddingBlockStart: resolvedPaddingBlockStart,
+            paddingBlockEnd: resolvedPaddingBlockEnd,
+            paddingInlineStart: resolvedPaddingInlineStart,
+            paddingInlineEnd: resolvedPaddingInlineEnd,
+            background: resolvedBackground,
+            shadow: resolvedShadow,
+            border: resolvedBorder,
+            borderColor: resolvedBorderColor,
+            borderRadius: resolvedBorderRadius,
+            accessibilityLabel: accessibilityLabel,
+            hoverable: false  // Card handles all interaction (Design Decision 2)
+        ) {
+            content
+        }
+        .overlay(focusIndicatorOverlay)
+        .if(interactive) { view in
+            view
+                .background(interactionOverlayColor)
+                .onHover { hovering in
+                    withAnimation(motionFocusTransition) {
+                        isHovered = hovering
                     }
-                    // Press/tap gesture
-                    .simultaneousGesture(
-                        DragGesture(minimumDistance: 0)
-                            .onChanged { _ in
-                                if !isPressed {
-                                    isPressed = true
-                                }
+                }
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { _ in
+                            if !isPressed {
+                                isPressed = true
                             }
-                            .onEnded { _ in
-                                isPressed = false
-                                onPress?()
-                            }
-                    )
-            }
-            .if(accessibilityLabel != nil) { view in
-                view.accessibilityLabel(accessibilityLabel!)
-            }
-            .if(interactive) { view in
-                view.accessibilityAddTraits(accessibilityTraits)
-            }
-            .if(testID != nil) { view in
-                view.accessibilityIdentifier(testID!)
-            }
+                        }
+                        .onEnded { _ in
+                            isPressed = false
+                            onPress?()
+                        }
+                )
+        }
+        .if(interactive) { view in
+            view.accessibilityAddTraits(accessibilityTraits)
+        }
+        .if(testID != nil) { view in
+            view.accessibilityIdentifier(testID!)
+        }
     }
     
-    // MARK: - Computed Properties
+    // MARK: - Prop Forwarding (Two-Track)
     
-    /**
-     * Padding value from token with override hierarchy
-     * 
-     * Calculates EdgeInsets using the override hierarchy:
-     * 1. Individual edges (paddingBlockStart, etc.) - highest priority
-     * 2. Axis props (paddingVertical, paddingHorizontal) - medium priority
-     * 3. Uniform padding (padding prop) - lowest priority
-     * 
-     * @see Requirements 3.1-3.7
-     */
-    private var paddingValue: EdgeInsets {
-        return calculateCardPadding(
-            uniform: padding,
-            vertical: paddingVertical,
-            horizontal: paddingHorizontal,
-            blockStart: paddingBlockStart,
-            blockEnd: paddingBlockEnd,
-            inlineStart: paddingInlineStart,
-            inlineEnd: paddingInlineEnd
-        )
+    // Direct pass-through: Card enum → Base enum (same vocabulary)
+    
+    private var resolvedPadding: ContainerBasePaddingValue {
+        mapCardPaddingToBase(padding)
     }
     
-    /**
-     * Background color from token
-     * 
-     * Resolves background prop to SwiftUI Color using semantic color tokens.
-     * 
-     * @see Requirements 3.8, 4.2
-     */
-    private var backgroundValue: Color {
-        return mapCardBackgroundToColor(background)
+    private var resolvedPaddingVertical: ContainerBasePaddingValue? {
+        guard let v = paddingVertical else { return nil }
+        return mapCardVerticalPaddingToBase(v)
     }
     
-    /**
-     * Current background color considering hover and press states
-     * 
-     * Returns darkened color when interactive and hovered/pressed,
-     * otherwise returns the base background color.
-     * 
-     * Uses hoverBlend() (8% darker) and pressedBlend() (12% darker)
-     * semantic extensions from ThemeAwareBlendUtilities.ios.swift
-     * 
-     * @see Requirements 5.1-5.10
-     */
-    private var currentBackgroundColor: Color {
+    private var resolvedPaddingHorizontal: ContainerBasePaddingValue? {
+        guard let h = paddingHorizontal else { return nil }
+        return mapCardHorizontalPaddingToBase(h)
+    }
+    
+    private var resolvedPaddingBlockStart: ContainerBasePaddingValue? {
+        guard let v = paddingBlockStart else { return nil }
+        return mapCardVerticalPaddingToBase(v)
+    }
+    
+    private var resolvedPaddingBlockEnd: ContainerBasePaddingValue? {
+        guard let v = paddingBlockEnd else { return nil }
+        return mapCardVerticalPaddingToBase(v)
+    }
+    
+    private var resolvedPaddingInlineStart: ContainerBasePaddingValue? {
+        guard let h = paddingInlineStart else { return nil }
+        return mapCardHorizontalPaddingToBase(h)
+    }
+    
+    private var resolvedPaddingInlineEnd: ContainerBasePaddingValue? {
+        guard let h = paddingInlineEnd else { return nil }
+        return mapCardHorizontalPaddingToBase(h)
+    }
+    
+    private var resolvedBorder: ContainerBaseBorderValue {
+        switch border {
+        case .none: return .none
+        case .default: return .default
+        }
+    }
+    
+    private var resolvedBorderRadius: ContainerBaseBorderRadiusValue {
+        switch borderRadius {
+        case .normal: return .normal
+        case .loose: return .loose
+        }
+    }
+    
+    // Resolve then pass: Card shorthand → Base token name string
+    
+    private var resolvedBackground: String? {
+        switch background {
+        case .surfacePrimary: return "color.surface.primary"
+        case .surfaceSecondary: return "color.surface.secondary"
+        case .surfaceTertiary: return "color.surface.tertiary"
+        }
+    }
+    
+    private var resolvedShadow: String? {
+        switch shadow {
+        case .none: return nil
+        case .container: return "shadow.container"
+        }
+    }
+    
+    private var resolvedBorderColor: String? {
+        guard border != .none else { return nil }
+        switch borderColor {
+        case .borderDefault: return "color.border.default"
+        case .borderSubtle: return "color.structure.border.subtle"
+        }
+    }
+    
+    // MARK: - Interaction State
+    
+    /// Interaction overlay color — applied on top of Base's background for hover/press
+    private var interactionOverlayColor: Color {
         if interactive && isPressed {
-            return backgroundValue.pressedBlend()
+            return mapCardBackgroundToColor(background).pressedBlend()
         } else if interactive && isHovered {
-            return backgroundValue.hoverBlend()
+            return mapCardBackgroundToColor(background).hoverBlend()
         }
-        return backgroundValue
-    }
-    
-    /**
-     * Corner radius value from token
-     * 
-     * Maps borderRadius prop to CGFloat using radius tokens.
-     * 
-     * @see Requirements 3.12, 4.5
-     */
-    private var cornerRadiusValue: CGFloat {
-        return mapCardBorderRadiusToCornerRadius(borderRadius)
-    }
-    
-    /**
-     * Border overlay view
-     * 
-     * Creates border overlay using border width and border color.
-     * Returns empty view for .none border.
-     * 
-     * @see Requirements 3.10, 3.11, 4.4
-     */
-    @ViewBuilder
-    private var borderOverlay: some View {
-        if border != .none {
-            RoundedRectangle(cornerRadius: cornerRadiusValue)
-                .stroke(mapCardBorderColorToColor(borderColor), lineWidth: mapCardBorderToLineWidth(border))
-        }
+        return Color.clear
     }
     
     /**
@@ -555,10 +571,44 @@ struct CardShadowProperties {
 // MARK: - Token Mapping Functions
 
 /**
- * Map CardPadding to CGFloat
- * 
- * @param padding Card padding value
- * @returns CGFloat padding value in points
+ * Map CardPadding to ContainerBasePaddingValue
+ */
+func mapCardPaddingToBase(_ padding: CardPadding) -> ContainerBasePaddingValue {
+    switch padding {
+    case .none: return .none
+    case .p100: return .p100
+    case .p150: return .p150
+    case .p200: return .p200
+    }
+}
+
+/**
+ * Map CardVerticalPadding to ContainerBasePaddingValue
+ */
+func mapCardVerticalPaddingToBase(_ padding: CardVerticalPadding) -> ContainerBasePaddingValue {
+    switch padding {
+    case .none: return .none
+    case .p050: return .p050
+    case .p100: return .p100
+    case .p150: return .p150
+    case .p200: return .p200
+    }
+}
+
+/**
+ * Map CardHorizontalPadding to ContainerBasePaddingValue
+ */
+func mapCardHorizontalPaddingToBase(_ padding: CardHorizontalPadding) -> ContainerBasePaddingValue {
+    switch padding {
+    case .none: return .none
+    case .p100: return .p100
+    case .p150: return .p150
+    case .p200: return .p200
+    }
+}
+
+/**
+ * Map CardPadding to CGFloat (retained for tests and previews)
  */
 func mapCardPaddingToCGFloat(_ padding: CardPadding) -> CGFloat {
     switch padding {
