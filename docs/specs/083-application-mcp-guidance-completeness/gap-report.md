@@ -9,6 +9,19 @@
 
 ## Component Gaps
 
+### 0. Top Bar (Navigation Bar / App Bar)
+
+**Description**: Persistent top-of-screen bar with title, optional leading action (back, menu), and optional trailing actions (search, settings, profile). Platform-specific conventions: iOS uses centered title with navigation bar patterns, Android uses top app bar with Material conventions, web varies.
+**What was tried**: No component exists in the Stemma catalog for top-level navigation bars.
+**What happened**: Every product screen needs a top bar. The absence forces product agents to compose ad-hoc layouts from Container-Base + Icon-Base + Button-Icon, losing platform-native conventions and accessibility patterns (back navigation, safe area handling on iOS, status bar integration).
+**Classification**: missing component
+**Provisional scope**: `universal`
+**Recommended final scope**: `universal` — every product screen has a top bar. The structural pattern (leading action + title + trailing actions) is product-independent. Platform-specific conventions (iOS navigation bar, Android top app bar) make this a True Native composition challenge.
+**Final scope**: TBD — pending Peter classification
+**Downstream target**: Lina (new component spec, Navigation family)
+
+---
+
 ### 1. Content List Item (Semantic Container Variant)
 
 **Description**: Interactive container with leading visual slot, primary/secondary text, metadata, and content-consumption state (read/unread). Distinct from Button-VerticalList-Item (action semantics). Applies to notification lists, email lists, activity feeds, search results.
@@ -266,6 +279,7 @@
 
 | # | Gap | Final Scope | Downstream | Notes |
 |---|-----|-------------|------------|-------|
+| 0 | Top bar (nav bar / app bar) | TBD | Lina (component spec) | Pending Peter classification |
 | 1 | Content list item | `universal` | Lina (component spec) | |
 | 2 | Linear progress bar | `universal` | Lina (component spec) | |
 | 3 | Container-Card-Base readiness | `universal` (provisional) | Lina (readiness) | Needs semantic assessment before accelerating |
