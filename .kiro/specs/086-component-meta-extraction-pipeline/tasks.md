@@ -141,7 +141,7 @@
     - Publish in authoring guide / Component-MCP-Document-Template
     - _Requirements: 2.1, 2.2, 2.3_
 
-  - [ ] 3.2 Audit family doc coverage
+  - [x] 3.2 Audit family doc coverage
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
