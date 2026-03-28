@@ -437,9 +437,250 @@ The data flow diagram accurately represents the pipeline: family docs → extrac
 
 Property #2 ("Generated meta files match the content in their source family docs — no drift by construction") is the key one. This is the whole point of the spec — drift elimination by construction, not by discipline. The git diff mechanism (Decision 6, Req 3 AC 5-6) is the verification: if a family doc changes and the generated meta file doesn't change accordingly, the extraction script has a bug. → design.md § "Correctness Properties" -- [LINA R1]
 
-[Agent feedback rounds here]
+#### [STACY R1]
+
+**Re: @STACY — Decision 4 (Readiness Scan) — governance consumption perspective**
+
+- **Status derivation gives me what I need for spec audits.** The five-level progression (`not-applicable` → `not-started` → `scaffold` → `development` → `production-ready`) maps directly to audit findings at different severities. When I review a spec, I can now make precise assessments:
+  - Component at `not-started` on the target platform → **Critical**: speccing against something that doesn't exist
+  - Component at `scaffold` → **High**: platform file exists but no tests, not reviewed — high risk of contract changes
+  - Component at `development` → **Medium**: artifacts present but not human-verified — reasonable to spec against with a note
+  - Component at `production-ready` → no finding needed
+  - Component at `not-applicable` → I check the reason — if the spec targets a platform where the component is intentionally absent, that's a **Critical** finding (the spec can't be implemented as written)
+
+  This is exactly the granularity I asked for in the research. → design.md § "Decision 4"
+
+- **The component-level baseline gate is correctly specified.** Schema, contracts, and types are required for any platform to reach `development`. Tokens are optional ("not all components have token files"). This means a component without a `tokens.ts` can still be `production-ready` if it genuinely doesn't use tokens. That's correct — not every component has token dependencies. → design.md § "Decision 4"
+
+- **One edge case in the derivation logic I want to confirm:** What happens when a component has a platform implementation file but the component-level baseline is incomplete (e.g., schema exists but contracts are missing)? The derivation logic checks platform artifacts for per-platform status, but the baseline gate says "if missing, no platform can be `development` or higher." Does the scan enforce this? The pseudocode shows the baseline gate implicitly — if there's no schema, the component wouldn't be indexed at all. But if there's a schema and no contracts, the platform could still have a file and tests. The derivation logic would say `production-ready` (file + tests + reviewed), but the baseline gate should cap it at `scaffold` or lower because contracts are missing. The pseudocode doesn't show this cap. Recommend making the baseline gate check explicit in the derivation logic:
+
+  ```
+  if baseline artifacts incomplete (missing schema OR missing contracts OR missing types):
+    → cap all platforms at scaffold (regardless of platform artifacts)
+  ```
+
+  This prevents a component from appearing `production-ready` on a platform when its behavioral contracts don't exist. → design.md § "Decision 4"
+
+- **Build artifact exclusion is correctly explicit.** "Excluded from scan: `component-meta.yaml` (generated), `dist/` output, `final-verification/` snapshots, any file in `node_modules/`." This has been validated across three review rounds. No further concerns. → design.md § "Decision 4"
+
+**Re: @STACY — Decision 6 (Error Handling) — warnings vs errors**
+
+- **Warnings are sufficient for all current conditions.** The extraction script is an authoring tool, not a deployment gate. Hard failures would block Lina's workflow during incremental updates. Warnings surface problems without blocking progress. This is the right tradeoff for an authoring-time tool. → design.md § "Decision 6"
+
+- **One condition where I'd want escalation beyond a warning — but not a hard error.** If the extraction script generates a meta file where `purpose` is empty (not short — empty), that's not a warning-level issue. An empty purpose means the component is invisible to `find_components` purpose searches. It's functionally broken for discoverability. I wouldn't make it a hard error (that blocks generation), but I'd want it to be a distinct severity — something like "ERROR (non-blocking): ComponentX has empty purpose — component will not be discoverable via purpose search." This distinguishes "your purpose is short, consider expanding" (warning) from "your component is invisible" (error that doesn't block but demands attention). → design.md § "Decision 6"
+
+  HOWEVER — counter-argument to my own suggestion: adding severity levels to warnings adds complexity to the extraction script for a condition that should be rare (who writes a metadata block with an empty purpose?). If the warn-on-under-10-words check catches short purposes, an empty purpose would also be caught. The distinction between "short" and "empty" may not be worth the implementation cost. I'll defer to Lina and Thurgood on whether this matters in practice.
+
+**Re: Lina R1 — family-level fallback marking**
+
+- Lina's suggestion to add a YAML comment (`# Derived from family-level guidance`) is a good idea for traceability. From a governance perspective, when I review a spec's component selection against `whenToUse`, knowing whether the guidance is per-component (high confidence) or family-level fallback (lower confidence, more interpretation needed) changes how I weight the finding. A family-level `whenToUse` that doesn't quite match the spec's usage is a softer finding than a per-component `whenToUse` that explicitly says "don't use this component for that." The comment makes this distinction visible without changing the data model. → design.md § "Decision 2"
+
+**Re: Lina R1 — `alternatives` referencing non-existent components**
+
+- Good catch. From a governance perspective, phantom alternatives are actively harmful — if I'm checking whether a spec used the right component and the `alternatives` field points me to a component that doesn't exist, I'd waste time investigating before discovering it's a phantom. Catching this at extraction time is better than catching it at query time (when the Application MCP warns) or at audit time (when I discover it manually). I support adding this to the error handling table. → design.md § "Decision 6"
+
+**Re: Lina R1 — `cards` and `modals` vocabulary additions**
+
+- Both are reasonable additions. `cards` is a context Leonardo would search for — his research included `find_components({ purpose: "card" })` as a primary query. `modals` is forward-looking but low-cost to add now. I support both. → design.md § "Decision 3"
+
+**Re: Decision 1 (Benchmark Queries) — governance perspective**
+
+- The 7 queries are the right set. From my perspective, the benchmark serves two purposes: (1) measuring the immediate enrichment improvement (Req 1), and (2) establishing a regression baseline for ongoing metadata quality. After the extraction pipeline ships, if a family doc edit accidentally degrades a purpose field, the benchmark queries would catch it — but only if they're run periodically, not just once. Recommend: the benchmark queries should be documented as a repeatable check, not just a one-time before/after measurement. This could be as simple as a script that runs the 7 queries and reports results. → design.md § "Decision 1"
+
+**Re: Decision 5 (Knowledge Base Configuration) — governance utility**
+
+- The Platform Resource Map is the piece that matters most for my work. The knowledge base configs help platform agents directly; the resource map helps me indirectly by giving me paths for manual parity comparison. The table format (Resource Type × Platform) is clean and scannable. One note: the resource map should include a "last verified" date or be tied to a maintenance trigger (e.g., updated when new components are added or directory structure changes). A stale resource map is worse than no resource map — it sends me to wrong paths. → design.md § "Decision 5"
+
+**Re: Architecture (Data Flow) — governance observation**
+
+- The data flow is clean. One thing I notice: my governance activities (selection verification, metadata accuracy review, escape hatch tracking) don't appear in the data flow diagram, which is correct — they're process activities that consume the data, not part of the data pipeline. But it's worth noting that the data flow has two consumer paths: agent queries (runtime, shown in the diagram) and governance audits (periodic, not shown). Both depend on the same data quality. The correctness properties (#1-7) protect both paths. → design.md § "Architecture"
+
+**Re: Correctness Properties — all 7 are verifiable, one addition**
+
+- Property #3 ("Per-platform readiness status matches actual filesystem artifact presence") is the one I'll rely on most. If this property holds, my readiness-based audit findings are trustworthy. The compliance test (Req 5) is the enforcement mechanism. → design.md § "Correctness Properties"
+
+- **Suggested addition — Property #8**: "Escape hatch annotations in specs reference valid component names and valid `get_prop_guidance` selection rules." This is a weaker property (it depends on spec authors following the format), but it's verifiable during my selection verification review. If an escape hatch references a component that doesn't exist or a selection rule that's been updated, the escape hatch itself is stale. This connects the governance process (Position 7) to the data infrastructure (Positions 1-5). → design.md § "Correctness Properties"
+
+  Counter-argument: this property is about process compliance, not data correctness. The other 7 properties are all about the data pipeline producing correct output. Adding a process property muddies the category. I'd accept either including it or noting it separately as a "governance invariant" rather than a correctness property.
+
+**Overall assessment:**
+
+The design is solid. The 6 decisions resolve all items deferred from requirements. The data flow is clean, the data models are well-specified, and the error handling is pragmatic (warn-don't-block). The testing strategy covers the right layers: extraction correctness, readiness compliance, discoverability benchmarks, and manual workflow validation.
+
+The edge case I flagged in Decision 4 (baseline gate not enforced in the derivation pseudocode) is the only item I'd want addressed before proceeding to tasks. Everything else is refinement. -- [STACY R1]
+
+#### [LEONARDO R1]
+
+**Re: @LEONARDO — Decision 1 (Benchmark Queries)**
+
+- **These are the right 7 queries.** They came directly from my research — real queries I'd make during screen specification work. The table format with expected results and gap report references makes them reproducible and traceable. → design.md § "Decision 1"
+
+- **One missing query I'd add:** `find_components({ purpose: "toggle" })` or `find_components({ purpose: "switch" })`. This came up in my Task 5 (settings screen) research — I searched for a toggle/switch component and hit a gap. It's a useful benchmark because it tests a known gap: the query should return Input-Checkbox-Base as the closest match (with a note that a dedicated toggle component doesn't exist). If it returns nothing, the purpose field for Input-Checkbox-Base isn't capturing the toggle use case. → design.md § "Decision 1"
+
+- **Stacy's point about repeatable benchmarks is good.** The queries should be a runnable check, not just a one-time measurement. A simple script that runs the 7 (now 8) queries and reports results would serve both the immediate enrichment validation (Req 1) and ongoing regression detection. Low implementation cost, high ongoing value. → design.md § "Decision 1"
+
+**Re: Decision 3 (Controlled Vocabulary) — consumer search terms**
+
+- **The initial vocabulary is solid.** The 12 values cover the major UI regions I search for. The consumer search terms per value are the real value — they're the feedback loop fix that was missing. → design.md § "Decision 3"
+
+- **Lina's additions (`cards`, `modals`) are both correct.** `cards` is a context I'd search for — my research included `find_components({ purpose: "card" })`. `modals` is forward-looking but costs nothing to add now. → design.md § "Decision 3"
+
+- **One more addition: `empty-states`.** My research Task 3 (dashboard) and the experience patterns include empty state handling. Components that appear in empty states (Icon-Base for illustrations, Button-CTA for primary actions) should be tagged. The empty-state experience pattern already exists — the context tag makes components discoverable outside the pattern. Consumer search terms: "no data, zero state, first-time experience, placeholder content." → design.md § "Decision 3"
+
+**Re: Decision 2 (Usage Derivation Rules) — consumer perspective**
+
+- **The two-tier strategy is correct from the consumer side.** Per-component entries are what I need for screen specification. When I query `get_prop_guidance("Badges")` and get "Use Badge-Count-Base for numeric indicators on navigation elements," that's directly actionable. Family-level "Use the Badge family for status indicators" requires me to interpret which family member fits. Per-component is always better for my workflow. → design.md § "Decision 2"
+
+- **Lina's family-level fallback marking suggestion is valuable for me too.** If I see a `when_to_use` entry and know it's family-level fallback, I know to dig deeper (check the family doc, ask Lina) rather than treating it as definitive per-component guidance. The YAML comment approach is lightweight and sufficient. → design.md § "Decision 2"
+
+**Re: Decision 4 (Readiness Scan) — architect's consumption perspective**
+
+- **Stacy's edge case is real and should be addressed.** If a component has a platform implementation file and tests but is missing contracts, the derivation logic would say `production-ready` (file + tests + reviewed). But without contracts, the component's behavioral guarantees are undefined — I can't spec against it with confidence. The baseline gate should cap all platforms at `scaffold` when component-level artifacts are incomplete. Stacy's pseudocode addition is the right fix. → design.md § "Decision 4"
+
+- **The status derivation gives me what I need for screen specs.** When I'm selecting components, I check: (1) does it exist? (2) is it usable on the target platform? (3) is it reviewed? The five-level status answers all three. `not-started` = doesn't exist on this platform. `scaffold`/`development` = exists but use with caution. `production-ready` = safe to spec against. `not-applicable` = intentionally absent, find an alternative. → design.md § "Decision 4"
+
+**Re: Decision 5 (Knowledge Base Configuration)**
+
+- **The Platform Resource Map table format is clean.** Resource Type × Platform is exactly how I'd look things up during cross-platform review. When I reviewed spec 085's native implementations (Tasks 1.5 and 2.3), I had to glob for files. This table would have saved that step. → design.md § "Decision 5"
+
+- **Stacy's point about resource map staleness is valid.** A "last verified" date or maintenance trigger prevents the map from becoming misleading. Recommend: update the resource map as part of any spec that adds new components or changes directory structure. Lightweight process addition — the spec author adds a line to the map when creating new component directories. → design.md § "Decision 5"
+
+**Re: Lina R1 — `alternatives` referencing non-existent components**
+
+- **Support adding this to error handling.** From my perspective, phantom alternatives are worse than missing alternatives. If `alternatives` points me to a component that doesn't exist, I waste time investigating before discovering it's a phantom. If `alternatives` is empty, I know to look elsewhere. Catching phantoms at extraction time is the right place. → design.md § "Decision 6"
+
+**Re: Stacy R1 — baseline gate enforcement in derivation pseudocode**
+
+- **Agree this needs to be addressed.** A component at `production-ready` without contracts is misleading — I'd spec against it assuming behavioral guarantees exist when they don't. The baseline gate cap is the right fix. This is the only item I'd want resolved before proceeding to tasks. → design.md § "Decision 4"
+
+**Overall assessment:**
+
+The design is well-specified and resolves all deferred items from requirements. The data flow is clean, the derivation rules are workable, and the error handling is pragmatic. The controlled vocabulary with consumer search terms is the highest-value piece for my workflow — it's the feedback loop fix that was missing.
+
+One item to address before tasks: Stacy's baseline gate enforcement in the readiness derivation pseudocode. Everything else is refinement that can be handled during implementation. -- [LEONARDO R1]
+
+#### [ADA R1]
+
+**Re: @ADA — Decision 4 (readiness scan)**
+
+- **Component-level baseline artifacts: correct.** Schema, contracts, types required; tokens optional. I verified: 12 of 30 components have token files (8 use `tokens.ts`, 4 use `*.tokens.ts`). Marking tokens as not required for the baseline gate is the right call. → design.md § "Decision 4"
+
+- **Token file pattern (`tokens.ts` or `*.tokens.ts`): correct.** Both patterns exist in the codebase. The glob handles naming inconsistencies (`Button-CTA.tokens.ts`, `avatar.tokens.ts`, `buttonIcon.tokens.ts`). → design.md § "Decision 4"
+
+- **Status derivation edge case: all 30 components currently pass the baseline gate.** I audited every component — all have schema, types, contracts, and all three platform directories. The baseline gate has zero discriminating power today. Differentiation comes entirely from the `reviewed` flag. Fine for future-proofing, but the one-time migration task is purely about setting `reviewed` flags, not discovering baseline failures. → design.md § "Decision 4"
+
+- **Stacy/Leonardo's baseline gate enforcement fix: agree.** Cap platforms at `scaffold` when component-level artifacts are incomplete. Correct for future components even though all 30 pass today. → design.md § "Decision 4"
+
+- **Build artifact exclusion: complete.** Correctness Property #6 accurately captures the principle. → design.md § "Correctness Properties"
+
+- **Platform Resource Map (Decision 5): `src/tokens/semantic/` confirmed present.** → design.md § "Decision 5"
+
+**Re: Lina R1 — phantom alternatives warning**
+
+- Good addition. Same class of error exists for token references, but extraction doesn't parse tokens, so not relevant here. If scope ever expands to token data, same warn-don't-block pattern should apply. → design.md § "Decision 6" -- [ADA R1]
+
+#### [THURGOOD R2]
+
+Incorporated all feedback:
+
+**Blocking item (Stacy + Leonardo):**
+- Baseline gate now enforced in derivation pseudocode — incomplete component-level artifacts cap all platforms at `scaffold` → design.md § "Decision 4"
+
+**Lina R1:**
+- Added `cards`, `modals` to controlled vocabulary → design.md § "Decision 3"
+- Family-level fallback marking specified as YAML comment format → design.md § "Decision 2"
+- Added phantom alternatives warning to error handling → design.md § "Decision 6"
+
+**Leonardo R1:**
+- Added `empty-states` to controlled vocabulary → design.md § "Decision 3"
+- Added 8th benchmark query (`purpose: "toggle"` → Input-Checkbox-Base) → design.md § "Decision 1"
+- Repeatable benchmark script noted for implementation
+
+**Stacy R1:**
+- Baseline gate enforcement in pseudocode (blocking item) → design.md § "Decision 4"
+- Empty vs short purpose severity distinction deferred to implementation judgment
+- Resource map maintenance trigger noted for implementation
+- Correctness property #8 (escape hatch validity) noted as governance invariant, not added to correctness properties list
+
+**Ada R1:**
+- Confirmed token file patterns correct, baseline gate has zero discriminating power today (all 30 pass), build artifact exclusion complete. No new items — Ada's design outline feedback was already addressed, and the design doc accurately captures her positions.
+
+**Thurgood's own assessment:**
+- The design is solid. All deferred items from requirements are resolved. The baseline gate fix was the one real gap — without it, a component missing contracts could appear `production-ready`, which would mislead both Leonardo (speccing against it) and Stacy (auditing it). The fix is simple and correct.
+- The controlled vocabulary at 15 values is a good starting size — large enough to be useful, small enough to be manageable. The consumer search terms per value are the real innovation here — they close the feedback loop that the research identified as the root cause.
+- The 8 benchmark queries are concrete, reproducible, and traceable to the research. They should be a runnable script, not just a documentation artifact.
+
+Ready to proceed to tasks.
+
+---
+
+## Tasks Feedback
 
 ### Context for Reviewers
-- [Populated by spec author before requesting review]
 
-[Agent feedback rounds here]
+5 parent tasks, 17 subtasks following the phased ordering from the collective review: Task 1 (immediate enrichment), Task 2 (readiness infrastructure), Task 3 (extraction pipeline), Task 4 (agent config + governance), Task 5 (MCP split design). Dependencies are explicit. Agent assignments follow domain boundaries.
+
+**@LINA**: You own the bulk of implementation (Tasks 1.2, 2.1, 2.2, 3.1-3.5). Review scope, sequencing, and dependencies. Is the family doc audit (3.2) → metadata blocks (3.3) → extraction script (3.4) → validate (3.5) sequence workable?
+
+**@LEONARDO**: Review Task 1 (benchmarks) and Task 5 (MCP split design). Are the benchmark tasks scoped correctly? Does Task 5.1 capture what Spec 081 needs from this spec?
+
+**@STACY**: Review Task 4 (governance). Are Tasks 4.4 (prompt update) and 4.5 (escape hatch pattern) scoped correctly? Is the selection verification gate captured in the right place?
+
+**@ADA**: Light review — any concerns about Task 2 (readiness) touching the indexer? Any token-related subtasks missing?
+
+#### [ADA R1]
+
+**Re: @ADA — Task 2 (readiness infrastructure)**
+
+- **No concerns about Task 2 touching the indexer.** The readiness scan checks for file presence, not file content. It doesn't parse `tokens.ts` or validate token references — it just checks the file exists. That's the right boundary. Token content validation is a separate compliance concern (my domain + Thurgood's), not a readiness concern. → tasks.md § "Task 2"
+
+- **No token-related subtasks missing.** The extraction pipeline (Task 3) doesn't parse token data — it extracts `purpose`, `contexts`, `usage`, and `alternatives` from family docs. Token references stay in `tokens.ts` and `schema.yaml`, which are untouched by this spec. The Platform Resource Map (Task 4.2) includes `src/tokens/semantic/` as the canonical token name reference, which was my recommendation. That's the only token-adjacent deliverable, and it's already captured. → tasks.md § "Task 3" § "Task 4.2"
+
+- **One note on Task 2.1 (schema migration) for Lina.** All 30 components currently have `readiness: development` (or similar single string). The migration replaces this with per-platform `reviewed` flags. Lina should set `reviewed: true` only for platforms she has personally verified — not blanket `true` for all platforms just because the files exist. The whole point of the `reviewed` flag is that it's a human quality judgment, not an artifact presence check. If Lina hasn't verified Android rendering for a component, `reviewed: false` is the honest answer even if the Android implementation file exists. → tasks.md § "Task 2.1"
+
+#### [LINA R1]
+
+**Re: Sequencing (3.2 → 3.3 → 3.4 → 3.5) — workable, correct order**
+
+The dependency chain is right. I can't write metadata blocks (3.3) without knowing which family docs have content (3.2). I can't build the extraction script (3.4) without metadata blocks to extract from (3.3). And I can't validate (3.5) without the script (3.4). No concerns with the sequence. → tasks.md § "Task 3"
+
+**Re: Task 1.2 (Enrich high-impact purpose fields) — scope is right**
+
+The prioritized list (Chip-Filter, Container-Card-Base, Badge-Count-Base, Container-Base, Input-Checkbox-Base) matches the benchmark queries that are most likely to fail. These are manual edits to existing meta files — they'll be replaced by generated files when Task 3 completes, but they unblock product development immediately. → tasks.md § "Task 1.2"
+
+**Re: Task 2.1 (Schema migration) — Ada's note is correct and important**
+
+Ada's right that `reviewed: true` should only be set for platforms I've personally verified. Honest assessment of what I can confidently mark `reviewed: true`:
+- **Web**: Most components — I've built and tested the web implementations, verified demos.
+- **iOS/Android**: Only components where I've done recent spec work with visual verification (Nav-TabBar-Base, Container-Card-Base after Spec 085, Nav-SegmentedChoice-Base). For many components, the native implementations exist but I haven't personally verified rendering.
+
+This means most components will have `web: { reviewed: true }` and `ios/android: { reviewed: false }` after migration. That's honest. The `reviewed` flags can be updated incrementally as components are verified — either by me during future spec work or by platform agents during product development. → tasks.md § "Task 2.1"
+
+**Re: Task 2.2 (Enhance Application MCP indexer) — this is the heaviest task**
+
+This is an Architecture task (Tier 3) and it's the most complex subtask in the spec. It touches the Application MCP indexer, which is shared infrastructure. I want to flag:
+- I should coordinate with Thurgood on the indexer changes since he owns the MCP infrastructure
+- The task description says "Agent: Lina" but the indexer is arguably Thurgood's domain. I can implement the filesystem scan logic, but the integration into the indexer's pipeline should be reviewed by Thurgood. Suggest: Lina implements, Thurgood reviews.
+- The compliance test (2.3) depends on 2.2, which is correct — Thurgood can't write the test until the indexer produces the data.
+
+→ tasks.md § "Task 2.2"
+
+**Re: Task 3.1 (Define controlled vocabulary) — joint task with Leonardo**
+
+This is correctly assigned as "Lina + Leonardo." I provide the component perspective (what contexts exist today), Leonardo provides the consumer perspective (what terms he searches for). The design doc's initial 12 values plus my additions (`cards`, `modals`) give us 14 — we need to validate with Leonardo that these cover his search patterns and add any he identifies. → tasks.md § "Task 3.1"
+
+**Re: Task 3.4 (Build extraction script) — Architecture type is correct**
+
+This is the right classification. The script makes design decisions (derivation rules, fallback behavior, warning thresholds) that affect every component's metadata. It's not just implementation — it's establishing the pattern. Tier 3 validation is appropriate. → tasks.md § "Task 3.4"
+
+**Re: Task 4.6 (Reference doc migration) — sequencing note**
+
+The authoring guide update (part of 4.6) depends on Task 3 being complete — the guide needs to describe the extraction workflow, which doesn't exist until the script is built. The metadata header addition and MCP indexing can happen independently. Suggest splitting 4.6 into: (a) add metadata headers + configure indexing (independent, can happen in Phase 0), (b) update authoring guide content (depends on Task 3). → tasks.md § "Task 4.6"
+
+**Re: Overall scope — 17 subtasks across 5 phases is a lot**
+
+This is the largest spec I've worked on. The phasing helps — Tasks 1 and 4 are relatively independent and can proceed in parallel. Task 2 (readiness) and Task 3 (extraction) are the heavy phases. Task 5 is lightweight (documentation + validation).
+
+My honest concern: Tasks 2.2 (indexer enhancement) and 3.4 (extraction script) are both Architecture-type tasks that require careful implementation. Having them in the same spec means two complex pieces of infrastructure shipping together. If either one has issues, it could delay the other. The phasing mitigates this (Task 2 completes before Task 3 starts), but it's worth noting that this spec's total implementation time is significant.
+
+Not recommending scope reduction — all 9 positions are well-justified. Just flagging that this is a multi-week effort, not a multi-day one. → tasks.md § overall -- [LINA R1]

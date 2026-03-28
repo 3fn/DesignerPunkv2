@@ -63,6 +63,7 @@ Leonardo's research produced 7 benchmark queries that represent real product arc
 | `find_components({ purpose: "group" })` | Container family | #16 |
 | `find_components({ context: "dashboards" })` | ≥5 components | #18 |
 | `find_components({ context: "settings-screens" })` | Container + Button-VerticalList + Input families | #17/#18 |
+| `find_components({ purpose: "toggle" })` | Input-Checkbox-Base | Known gap test |
 
 Baseline captured before any enrichment. Post-enrichment results compared against baseline.
 
@@ -74,7 +75,7 @@ The extraction script derives `when_to_use` and `when_not_to_use` using a two-ti
 
 1. **Per-component entries preferred**: If the family doc has a "Primitive vs Semantic Selection" table (or equivalent per-component guidance), extract entries for each component individually. Example: Badge family's selection table maps "Numeric count on navigation elements" → Badge-Count-Base, "Notification count with live region" → Badge-Count-Notification.
 
-2. **Family-level fallback**: If no per-component guidance exists, use the family-level "When to Use This Family" section for all components in that family. Mark these as family-level in the generated meta file so the source is traceable.
+2. **Family-level fallback**: If no per-component guidance exists, use the family-level "When to Use This Family" section for all components in that family. Mark these in the generated YAML with a comment: `# Derived from family-level guidance (Component-Family-Badge.md)` so the source is traceable.
 
 `when_not_to_use` entries are derived from:
 - Explicit "When NOT to Use" sections in family docs
@@ -107,6 +108,9 @@ Initial vocabulary derived from existing `contexts` tags across all 28 component
 | `profile-sections` | user info, account details, avatar display |
 | `product-listings` | product cards, catalog items, shopping grid |
 | `app-bars` | top bar, header, navigation bar |
+| `cards` | card content, card layout, elevated content block |
+| `modals` | dialog, popup, overlay, sheet |
+| `empty-states` | no data, zero state, first-time experience, placeholder content |
 
 New values added via ballot measure (family docs are steering docs). The extraction script warns on non-vocabulary values but doesn't hard-fail — allows authors to proceed while flagging the gap.
 
@@ -137,6 +141,8 @@ New values added via ballot measure (family docs are steering docs). The extract
 ```
 if schema.yaml has readiness.{platform}.status == "not-applicable":
   → not-applicable (with reason from schema)
+elif baseline artifacts incomplete (missing schema OR missing contracts OR missing types):
+  → cap all platforms at scaffold (regardless of platform artifacts)
 elif no platform implementation file exists:
   → not-started
 elif platform file exists but no tests:
@@ -206,6 +212,7 @@ Plus platform-specific token files:
 | `contexts` value not in controlled vocabulary | Warn: "ComponentX uses non-vocabulary context 'foo'" |
 | Derived `when_to_use` is empty (zero entries) | Warn: "ComponentX has no derived when_to_use entries — check family doc" |
 | Family doc doesn't exist for a component's family | Warn: "No family doc found for ComponentX (expected Component-Family-Y.md)" |
+| `alternatives` references a component not in the catalog | Warn: "ComponentX alternatives reference non-existent component 'FooBar'" |
 | Extraction succeeds | Generated file committed to git; diff visible |
 
 Warnings don't block generation — they produce output alongside warnings so the author can address them. The generated file is still committed (with whatever content was derivable) so the diff shows what's missing.
