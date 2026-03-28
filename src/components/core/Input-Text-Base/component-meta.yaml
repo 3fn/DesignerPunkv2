@@ -15,6 +15,7 @@ contexts:
   - "search-bars"
   - "dialog-content"
   - "registration-flows"
+  - "settings-screens"
 
 alternatives:
   - component: Input-Text-Email

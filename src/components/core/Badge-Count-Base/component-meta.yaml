@@ -1,4 +1,4 @@
-purpose: "Display a numeric count indicator, such as unread notifications or item quantities, in a compact badge."
+purpose: "Display a numeric count indicator for unread notifications, item quantities, or stat card metrics in a compact badge."
 
 usage:
   when_to_use:
@@ -14,6 +14,7 @@ contexts:
   - "list-items"
   - "icon-overlays"
   - "app-bars"
+  - "dashboards"
 
 alternatives:
   - component: Badge-Label-Base

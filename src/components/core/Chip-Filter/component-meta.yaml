@@ -1,4 +1,4 @@
-purpose: "Toggle a content filter on or off, allowing users to narrow displayed content by multiple criteria simultaneously."
+purpose: "Toggle a content filter on or off in a filter bar, allowing users to narrow displayed content by multiple criteria simultaneously."
 
 usage:
   when_to_use:

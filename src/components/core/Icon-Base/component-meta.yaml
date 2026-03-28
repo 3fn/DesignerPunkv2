@@ -15,6 +15,7 @@ contexts:
   - "list-items"
   - "toolbars"
   - "form-fields"
+  - "dashboards"
 
 alternatives:
   - component: Avatar-Base

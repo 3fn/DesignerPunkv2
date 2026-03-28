@@ -1,4 +1,4 @@
-purpose: "Provide a foundational structural wrapper with configurable edge spacing for grouping and laying out child content."
+purpose: "Provide a foundational structural wrapper to group and lay out child content with configurable edge spacing for page sections and content areas."
 
 usage:
   when_to_use:
@@ -12,6 +12,8 @@ contexts:
   - "page-sections"
   - "content-groups"
   - "layout-wrappers"
+  - "dashboards"
+  - "settings-screens"
 
 alternatives:
   - component: Container-Card-Base

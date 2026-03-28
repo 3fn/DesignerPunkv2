@@ -31,7 +31,7 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Immediate Enrichment & Benchmarks"`
 
-  - [ ] 1.1 Capture baseline benchmarks
+  - [x] 1.1 Capture baseline benchmarks
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -39,7 +39,7 @@
     - Capture as a reproducible script or documented procedure
     - _Requirements: 1.3, 1.4_
 
-  - [ ] 1.2 Enrich high-impact purpose fields
+  - [x] 1.2 Enrich high-impact purpose fields
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

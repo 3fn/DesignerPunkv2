@@ -16,6 +16,7 @@ contexts:
   - "hero-sections"
   - "onboarding-flows"
   - "page-actions"
+  - "dashboards"
 
 alternatives:
   - component: Button-Icon

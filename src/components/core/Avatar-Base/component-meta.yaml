@@ -15,6 +15,7 @@ contexts:
   - "contact-lists"
   - "navigation-headers"
   - "chat-interfaces"
+  - "dashboards"
 
 alternatives:
   - component: Icon-Base

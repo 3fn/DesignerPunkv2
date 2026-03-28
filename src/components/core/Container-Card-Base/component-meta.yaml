@@ -1,4 +1,4 @@
-purpose: "Display content in a card with elevation, border radius, and background styling for visually distinct content grouping."
+purpose: "Display content in an elevated card for dashboards, stat cards, content previews, and visually distinct content grouping with interactive behavior."
 
 usage:
   when_to_use:
