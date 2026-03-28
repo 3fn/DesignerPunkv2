@@ -1,7 +1,7 @@
-# Component Discoverability Research & Enrichment
+# Component Discoverability & Metadata Infrastructure
 
-**Date**: 2026-03-27
-**Purpose**: Research how product agents discover and select components, then address discoverability gaps informed by findings
+**Date**: 2026-03-28
+**Purpose**: Address component discoverability gaps through research-informed metadata improvements, readiness infrastructure, agent configuration, and governance process extensions
 **Organization**: spec-guide
 **Scope**: 086-component-meta-extraction-pipeline
 **Status**: Draft — Pending review
@@ -10,112 +10,176 @@
 
 ## Problem Statement
 
-Component discoverability data is maintained in two places (Component-Family steering docs and component-meta.yaml files), and they drift apart. The Spec 083 gap report found that natural search terms don't match `purpose` text (#16), context tags don't cross-reference purpose (#17), and common UI contexts like "dashboards" are undertagged (#18).
+The Spec 083 gap report identified that component discoverability fails when product agents' search vocabulary doesn't match metadata content (#16), context tags don't cross-reference purpose (#17), and common UI contexts are undertagged (#18). Research with 6 agents and 2 independent analyses revealed deeper root causes:
 
-Before building a solution, we need to understand the problem from the consumer's perspective. Leonardo is the product architect who searches for components, evaluates alternatives, and makes selection decisions — he's the primary user of the discoverability system. Designing fixes without his input risks solving the wrong problem.
+1. **Feedback loop gap**: Metadata authors (Lina) have no data on what consumers (Leonardo, platform agents) actually search for
+2. **Dual maintenance**: `usage` and `alternatives` in meta files are reformatted copies of family doc content, causing drift
+3. **Readiness opacity**: A single "development" string doesn't tell agents what they can use, on which platform, or what it means practically
+4. **Platform access gap**: Platform agents spend 80% of implementation time in source code because the MCP doesn't surface platform-specific details
 
----
-
-## Goals
-
-1. **Understand how product agents actually discover components** — what they search for, what they find, what they miss, what frustrates them
-2. **Identify whether the gap is content, structure, or both** — is the meta file schema right but underpopulated, or is the schema itself wrong?
-3. **Address gap report items #16, #17, #18** informed by research findings, not assumptions
-4. **Determine the right long-term maintenance model** — manual enrichment, generated from family docs, or something else
+Research validated that the MCP's core value is DesignerPunk-specific knowledge (selection rules, behavioral contracts, composition constraints, design philosophy). Fixes should amplify that value, not add general knowledge agents already have.
 
 ---
 
-## Approach: Research First, Then Build
+## Resolved Positions (From Research)
 
-### Phase 1: Discovery Research (Isolated Per-Agent)
+### Position 1: Full Single Source Extraction (Option C)
 
-Each agent completes their research doc independently in `.kiro/specs/086-component-meta-extraction-pipeline/research/`. Agents must not read other agents' research docs before completing their own — this prevents anchoring bias.
+All component-meta.yaml fields authored in Component-Family steering docs as structured metadata blocks, extracted by a build-time script. Meta files become generated artifacts.
 
-**Research participants:**
+**Format in family docs:**
+```markdown
+### Badge-Count-Base — Metadata
+- **Purpose**: Display a numeric count indicator for unread notifications or item quantities in a compact badge
+- **Contexts**: navigation-tabs, list-items, icon-overlays, app-bars
+```
 
-| Agent | Perspective | Doc |
-|-------|------------|-----|
-| Leonardo | Product architect — primary component consumer | `research/leonardo.md` |
-| Sparky | Web platform engineer — web consumption | `research/sparky.md` |
-| Kenya | iOS platform engineer — iOS consumption | `research/kenya.md` |
-| Data | Android platform engineer — Android consumption | `research/data.md` |
-| Stacy | Product governance — quality/parity auditing | `research/stacy.md` |
-| Lina | Component specialist — meta file authoring | `research/lina.md` |
+`usage` and `alternatives` derived from existing family doc sections. `purpose` and `contexts` authored as structured blocks. Eliminates dual maintenance. Ballot measure governance automatically covers all meta content.
 
-Each doc contains role-specific component selection/authoring tasks and general questions. Peter conducts the sessions and captures findings.
+### Position 2: Controlled Vocabulary for `contexts`
 
-### Phase 2: Analysis (Thurgood + Lina)
+Canonical list of context values defined and published. Authors pick from the list. Validated during extraction. Informed by Leonardo's actual search terms from the research.
 
-Analyze Leonardo's findings to determine:
-- **Content gaps**: Which components need richer purpose text, more context tags, or better alternatives?
-- **Structural gaps**: Does the meta file schema need changes (new fields, different organization)?
-- **Search gaps**: Does the Application MCP search need improvements (cross-referencing, fuzzy matching)?
-- **Maintenance model**: Should meta files be hand-authored (with better guidance), generated from family docs, or hybrid?
+### Position 3: Purpose Fields Rewritten for Product Problems
 
-### Independent Workstream: Reference Doc Migration
+`purpose` answers "what product problem does this solve?" not "what visual properties does it have?" Leonardo's search terms serve as the baseline vocabulary. High-impact fixes can land incrementally before the extraction pipeline ships.
 
-Three reference docs in `docs/` are not indexed by the docs MCP, making them invisible to agents other than Lina:
+### Position 4: MCP Scope Split (P3)
 
+**Application MCP**: Components, component patterns, composition rules, token references, selection guidance, readiness data.
+
+**Product MCP**: Experience patterns, layout templates, screen-level design guidance. Consumes component data from Application MCP.
+
+The split is content organization, not access control — all agents retain read access to both MCPs. Critical dependency: readiness model must be reliable before the split ships, so the Product MCP can include accurate readiness when recommending patterns.
+
+This position aligns with and refines Spec 081 (Product MCP Design). Validation against Spec 081's current direction is a prerequisite before implementation.
+
+### Position 5: Two-Part Readiness Model (R2)
+
+Per-platform readiness derived by the Application MCP indexer at index time.
+
+**Technical readiness (automated):** Filesystem scan for artifact presence per platform:
+- Platform implementation file (`.web.ts`, `.ios.swift`, `.android.kt`)
+- Platform tests (`*.test.ts` for web, `*Tests.swift` for iOS, `*Test.kt` for Android)
+- Component-level artifacts (schema, contracts, types, tokens)
+- Web-specific: optional `.styles.css`
+- iOS-specific: `.ios.swift` is the indicator (ignore `.xcassets` directories)
+- Token generation status is system-level, not component-level — don't penalize components for missing generated token output
+
+**Human-reviewed readiness (manual flag in schema.yaml):**
+```yaml
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: false
+  android:
+    status: not-applicable
+    reason: "Uses native Material BottomNavigation"
+```
+
+The `reviewed` flag and `not-applicable` reason live in `schema.yaml` — a hand-authored file that won't conflict with the generated meta files (Position 1). The indexer combines schema readiness fields with filesystem scan results to derive status.
+
+**Status derivation:**
+- `not-applicable` (with reason) → intentional platform absence
+- `not-started` → no platform artifacts
+- `scaffold` → platform file exists, no tests, not reviewed
+- `development` → technical artifacts present, not reviewed
+- `production-ready` → technical complete + human reviewed
+
+### Position 6: Enhanced Middle Ground Knowledge Bases
+
+Platform agents get indexed knowledge bases:
+- Their platform's implementation files (`platforms/{platform}/`)
+- Shared `types.ts` and `tokens.ts` per component
+- `contracts.yaml` per component
+- Platform-specific token files (`src/tokens/platforms/{platform}/`)
+
+**Platform Resource Map**: A new steering doc mapping resource types to platform-specific paths. Universal orientation for all agents — enables Stacy's parity comparison, Thurgood's test coverage audits, and cross-domain file discovery.
+
+### Position 7: Governance Process Extensions
+
+**Stacy's Lessons Synthesis Review** gains a metadata accuracy lens — checking whether accumulated lessons reveal stale `whenToUse` and/or `whenNotToUse` entries, missing alternatives, or purpose fields that don't match consumer search terms. Requires a prompt update for Stacy.
+
+**Selection verification** via feedback protocol — Stacy reviews product specs after Leonardo finalizes the component tree, checking selection against `get_prop_guidance`. Happens before platform agent handoff.
+
+**Escape hatch documentation** — structured annotation in specs for intentional deviations:
+```markdown
+### Escape Hatch: Container-Base for profile cards
+- **Guidance says**: Use Container-Card-Base (get_prop_guidance → Container family)
+- **This spec uses**: Container-Base
+- **Reason**: Container-Card-Base is `development` readiness on iOS
+- **Migration trigger**: Container-Card-Base reaches `production-ready` on iOS
+```
+
+Tracked during Lessons Synthesis Reviews for migration opportunities.
+
+### Position 8: Experience Patterns → Product MCP
+
+Experience patterns move from Application MCP to Product MCP as part of the P3 scope split. Gives patterns a dedicated home alongside product-level concerns. Gap report items #4, #7, #13 (originally routed to Spec 069) may reroute to Product MCP pattern creation.
+
+### Position 9: Reference Doc Migration
+
+Three docs in `docs/` are not indexed by the docs MCP:
 - `docs/component-meta-authoring-guide.md`
 - `docs/component-mcp-query-guide.md`
 - `docs/component-metadata-schema-reference.md`
 
-These need metadata headers added and either migration to `.kiro/steering/` or docs MCP indexer configuration to cover `docs/`. This work is independent of the research phases and can proceed in parallel.
+Add metadata headers and configure docs for Documentation MCP formatting and indexing. Independent of other positions.
 
 ---
 
-### Phase 3: Implementation (Informed by Phases 1-2)
+## Gap Report Coverage
 
-The implementation approach depends on what the research reveals:
+| Gap | Resolution |
+|-----|-----------|
+| #16 Purpose search misses | Purpose rewrite (3) + extraction (1) |
+| #17 Context/purpose cross-ref | Controlled vocabulary (2) + extraction (1) |
+| #18 Dashboard context underserved | Controlled vocabulary (2) + context enrichment |
+| #3 Container-Card-Base readiness | Readiness model (5) + Spec 085 |
+| #4, #7, #13 (routed to 069) | Reframed → Product MCP patterns (8) |
 
-- **If the gap is content quality** → enrich existing meta files manually, update authoring guide with Leonardo's search patterns as examples
-- **If the gap is structural** → redesign the meta file schema, then populate
-- **If the gap is dual maintenance** → build the extraction pipeline from the original design outline
-- **If it's a combination** → prioritize based on impact
-
----
-
-## What This Replaces
-
-The original design outline proposed a build-time extraction pipeline as the solution. That approach may still be correct, but it assumed the problem was dual maintenance without validating with the actual user. This restructured spec validates first, then builds.
-
-The original design outline is preserved at the bottom of this document for reference if Phase 2 analysis points toward extraction.
+Full tracker: `docs/specs/083-application-mcp-guidance-completeness/gap-report-resolution-tracker.md`
 
 ---
 
 ## Agent Coordination
 
-| Phase | Agent | Role |
-|-------|-------|------|
-| Phase 1: Research | Leonardo | Research subject — component selection perspective |
-| Phase 1: Research | Sparky | Research subject — web consumption perspective |
-| Phase 1: Research | Kenya | Research subject — iOS consumption perspective |
-| Phase 1: Research | Data | Research subject — Android consumption perspective |
-| Phase 1: Research | Stacy | Research subject — governance/quality perspective |
-| Phase 1: Research | Lina | Research subject — meta file authoring perspective |
-| Phase 1: Research | Peter | Conducts sessions, captures findings |
-| Phase 2: Analysis | Thurgood | Analyzes findings from discoverability/governance perspective |
-| Phase 2: Analysis | Lina | Analyzes findings from component architecture perspective |
-| Phase 2: Analysis | Ada | Reviews if token discoverability is affected |
-| Docs MCP Migration | Thurgood | Assess indexing approach, configure |
-| Docs MCP Migration | Lina | Update doc content if needed |
-| Phase 3: Implementation | TBD | Depends on Phase 2 findings |
+| Position | Primary Agent | Supporting |
+|----------|--------------|-----------|
+| 1. Extraction pipeline | Lina (family doc authoring) | Ada (token reference verification) |
+| 2. Controlled vocabulary | Lina + Leonardo (consumer terms) | Thurgood (governance) |
+| 3. Purpose rewrite | Lina (authoring) | Leonardo (search term baseline) |
+| 4. MCP scope split | Architecture decision (Peter) | All agents (read access design) |
+| 5. Readiness model | Thurgood (compliance test) | Lina (schema updates), Ada (token scope) |
+| 6. Knowledge bases | Peter (agent config updates) | Platform agents (validation) |
+| 7. Governance extensions | Stacy (prompt update, process) | Leonardo (selection verification input) |
+| 8. Pattern migration | Dependent on Position 4 | Leonardo, Lina (pattern content) |
+| 9. Reference doc migration | Thurgood (indexing) | Lina (content updates) |
 
 ---
 
 ## Scope
 
 ### In Scope
-- Leonardo research exercise (Phase 1)
-- Analysis of findings (Phase 2)
-- Implementation of discoverability improvements (Phase 3, scope TBD by research)
-- Reference doc migration to docs MCP (independent of research — known gap)
-- Addressing gap report items #16, #17, #18
+- Structured metadata format for Component-Family docs + template update
+- Controlled vocabulary for `contexts`
+- Purpose field rewrite (incremental + pipeline)
+- Build-time extraction script
+- Per-platform readiness model in schema.yaml + indexer enhancement
+- Readiness compliance test
+- Platform agent knowledge base configuration
+- Platform Resource Map steering doc
+- Stacy prompt update for metadata accuracy lens
+- Escape hatch documentation pattern
+- Reference doc migration to docs MCP
+- Authoring guide update to reflect extraction workflow
 
 ### Out of Scope
-- Changing the Application MCP's search algorithm (may become in-scope if research reveals search gaps)
+- Changing the Application MCP's search algorithm
 - New component creation (gap report #0, #1, #2)
-- Container-Card-Base readiness (gap report #3)
+- Product MCP implementation (Position 4/8 — design decision captured here, implementation is Spec 081)
+- Platform-specific API generation (acknowledged as intentional boundary)
 
 ---
 
@@ -123,31 +187,37 @@ The original design outline is preserved at the bottom of this document for refe
 
 | Risk | Severity | Mitigation |
 |------|----------|------------|
-| Research phase delays implementation | Low | Phase 1 is lightweight (one session). Gap #16-18 can be fixed manually as interim while research informs long-term solution. |
-| Leonardo's patterns don't generalize to other product agents | Low | Sparky, Data, Kenya use the same MCP tools. Leonardo's patterns are representative. |
-| Research reveals the extraction pipeline was the right answer all along | None | That's a valid outcome. The research validates the approach rather than wasting it. |
+| Extraction script misparses family doc format | Medium | Validate output against existing hand-authored meta files before replacing |
+| Readiness scan produces misleading results for less-mature platforms | Medium | Platform-specific artifact patterns; don't penalize for missing generated token output |
+| Purpose fields drift back to implementation language over time | Low | Metadata accuracy lens in Lessons Synthesis catches drift reactively |
+| MCP split (Position 4/8) ships before readiness is reliable | High | Explicit dependency: readiness model must be validated before split |
+| Combined scope of 9 positions creates transition friction | Medium | Phased implementation with checkpoints between phases |
+
+---
+
+## Known Limitations
+
+- The feedback loop between metadata authors and consumers is narrowed, not closed. The ongoing mechanism is reactive (Stacy's Lessons Synthesis catching failures) rather than proactive (periodic collection of actual search queries). Sufficient at current scale; revisit as catalog grows.
+- Platform-specific search vocabulary (SwiftUI terms, Compose terms, Web Component terms) won't appear in cross-platform `purpose` fields. Future vocabulary refreshes should include platform agent input, not just Leonardo's cross-platform perspective.
 
 ---
 
 ## Success Criteria
 
-1. Leonardo research exercise completed with documented findings
-2. Analysis identifies whether the gap is content, structure, search, or maintenance model
-3. Implementation approach chosen based on evidence, not assumptions
-4. `find_components({ purpose: "filter bar" })` returns Chip-Filter (gap #16)
-5. `find_components({ context: "dashboards" })` returns ≥5 production components (gap #18)
-6. Three reference docs are queryable via docs MCP
+1. All components have `component-meta.yaml` generated from family docs via extraction script
+2. `find_components({ purpose: "filter bar" })` returns Chip-Filter (gap #16)
+3. `find_components({ context: "dashboards" })` returns ≥5 production components (gap #18)
+4. Per-platform readiness visible via Application MCP queries
+5. Readiness compliance test validates derived status matches filesystem state
+6. Platform agents confirm knowledge base configuration improves their workflow
+7. Three reference docs queryable via docs MCP
+8. Stacy's prompt updated with metadata accuracy lens
+9. Escape hatch documentation pattern defined and available for use in specs
 
 ---
 
 ## Next Steps
 
-1. Create feedback doc for agent review
-2. Schedule Leonardo research exercise
-3. Formalize Phase 1 tasks after feedback
-
----
-
-## Appendix: Original Extraction Pipeline Design (Preserved for Reference)
-
-The original design outline proposed a build-time extraction pipeline that generates component-meta.yaml from Component-Family steering docs. This approach may be the right Phase 3 implementation if research confirms dual maintenance is the root cause. See git history for the full original design outline.
+1. Agent feedback on this design outline via feedback protocol
+2. Formalize into requirements (sequentially, per feedback gate)
+3. Design and tasks follow requirements
