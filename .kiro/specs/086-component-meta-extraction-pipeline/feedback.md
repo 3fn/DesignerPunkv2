@@ -242,18 +242,204 @@ No items rejected. All feedback was refinements to resolved positions.
 
 [Agent feedback rounds here]
 
-### Context for Reviewers
-- [Populated by spec author before requesting review]
+#### [ADA R1]
 
-[Agent feedback rounds here]
+**Re: @ADA — Reqs 4-5 (readiness model, compliance test)**
+
+- **Req 4 ACs accurately capture my design outline feedback.** AC 2 (component-level baseline gate), AC 4 (build artifact exclusion), and the status derivation chain in AC 6 are all correctly specified. The component-level vs platform-level distinction is now explicit — no ambiguity. → requirements.md § "Requirement 4"
+
+- **Req 4 AC 3 platform test patterns: one concern.** AC 3 specifies test file patterns: `*.test.ts` for web, `*Tests.swift` for iOS, `*Test.kt` for Android. The web pattern is correct — Card's tests are `ContainerCardBase.test.ts` and `ContainerCardBase.composition.test.ts`. But I'd verify the iOS and Android patterns against actual test files before hardcoding them. If the patterns don't match what exists (or what Lina creates in the future), the readiness scan will undercount. This is a design-phase verification, not a requirements change. → requirements.md § "Requirement 4" AC 3
+
+- **Req 4 AC 4 (build artifact exclusion): correctly explicit.** "The readiness scan SHALL NOT check for build artifacts: generated `component-meta.yaml` or generated token output." This is exactly what I recommended. No ambiguity. → requirements.md § "Requirement 4" AC 4
+
+- **Req 5 ACs are correct but narrow.** The compliance test validates that derived status matches filesystem state — good. But it only catches structural mismatches (file exists but status says `not-started`). It doesn't catch content mismatches (file exists, status says `development`, but the file contains broken token references). I flagged this in my design outline feedback as a compliance test concern in Thurgood's domain. The requirements don't need to address it — token reference validation is a separate compliance test, not part of the readiness compliance test. But I want to note for the record: Req 5 validates readiness derivation correctness, not component quality. A component can be `development` readiness with broken token references. That's by design — readiness is about artifact presence, not artifact correctness. The token naming mismatch bug (Spec 085) is the concrete example: Card was `development` readiness with incorrect token names across all platforms. Readiness was technically correct; the component was still broken. → requirements.md § "Requirement 5"
+
+  This isn't a gap in Req 5 — it's a scope boundary. But it reinforces that readiness alone doesn't mean "safe to use." Stacy's selection verification (Req 7) and the compliance test ecosystem (Thurgood's domain) are the quality gates. Readiness is the availability gate.
+
+- **Req 6 AC 3 (Platform Resource Map includes `src/tokens/semantic/`): confirmed.** This was my design outline recommendation, now codified. The semantic token source is the canonical reference for token names — having it in the resource map prevents the naming mismatch class of bugs by making the source discoverable. → requirements.md § "Requirement 6" AC 3
+
+**Re: Lina R1 — family doc audit gap**
+
+- Lina's right that some family docs are placeholders. From the token perspective, this matters because the extraction script derives token-related metadata (which tokens a component uses, which are semantic vs primitive). If a family doc is a placeholder, the extraction script can't derive accurate token context. But this is Lina's concern to solve — the token system doesn't change based on family doc completeness. Noting for awareness, not action. → requirements.md § "Requirement 3"
+
+#### [STACY R1]
+
+**Re: @STACY — Req 7 (Governance Process Extensions)**
+
+- **AC 1 (metadata accuracy lens): correctly specified.** "Checking for stale whenToUse and/or whenNotToUse entries, missing alternatives, and purpose fields that don't match consumer search terms" — this is the exact scope I described in my synthesis review. The "and/or" is important — I might find stale `whenToUse` without stale `whenNotToUse`, or vice versa. No concerns. → requirements.md § "Requirement 7" AC 1
+
+- **AC 2 (selection verification gate): correctly specified, and the word "gate" matters.** "Selection verification SHALL be a gate in the feedback protocol — completing before platform agents receive the spec handoff." Leonardo and I both flagged this in the design outline round. The requirements captured it precisely. This means my review blocks handoff — it's not advisory, it's a prerequisite. That's the right level of enforcement for selection correctness. → requirements.md § "Requirement 7" AC 2
+
+- **AC 3 (escape hatch format): correctly specified.** Date, guidance reference, actual choice, reason, migration trigger — all five fields I need. The `date` field was my addition from the design outline round, glad it's included. → requirements.md § "Requirement 7" AC 3
+
+- **AC 4 (escape hatch tracking during Lessons Synthesis): correctly specified.** "Tracked during Lessons Synthesis Reviews for migration opportunities" — this closes the loop. Escape hatches don't become permanent workarounds because I'm checking whether migration triggers have been met. → requirements.md § "Requirement 7" AC 4
+
+- **One governance scenario not covered: what happens when my selection verification disagrees with Leonardo's choice?** AC 2 says selection verification is a gate. But it doesn't specify the resolution path when I flag a selection issue and Leonardo disagrees. The feedback protocol handles general disagreements, but selection verification is a specific case: I'm checking against `get_prop_guidance` rules, which are authoritative. If the rules say "use Container-Card-Base for cards" and Leonardo chose Container-Base, is that automatically a finding? Or does Leonardo's architectural judgment override the selection rules? My position: the selection rules are the default. Leonardo can override with documented rationale (which becomes an escape hatch). But this resolution path should be explicit — otherwise the gate becomes ambiguous. Recommend adding: "WHEN selection verification identifies a deviation from selection guidance AND the spec author disagrees THEN the deviation SHALL be documented as an escape hatch with rationale." → requirements.md § "Requirement 7"
+
+**Re: Req 4 (Readiness Model) — governance consumption perspective**
+
+- **AC 7 (per-platform status in component queries): this is what I need.** When I audit a spec, I'll query the component and see per-platform readiness inline. No separate filesystem check needed. This is the highest-impact change for my workflow — confirmed for the third time across review rounds. → requirements.md § "Requirement 4" AC 7
+
+- **Ada R1's distinction between readiness and quality is important for my audit scope.** Ada noted: "readiness alone doesn't mean safe to use... readiness is the availability gate, not the quality gate." Leonardo amplified this. I want to confirm I understand the boundary correctly: my selection verification (Req 7) checks whether the *right* component was chosen. The readiness model (Req 4) checks whether the chosen component is *available* on the target platform. Both are needed. A spec that uses the right component at `not-started` readiness on the target platform is a different finding than a spec that uses the wrong component at `production-ready`. The first is a timing issue; the second is a selection error. My audit needs to distinguish these. The requirements support this distinction — Req 4 gives me availability data, Req 7 gives me selection verification. No gap. → requirements.md § "Requirement 4" § "Requirement 7"
+
+**Re: Req 1 (Immediate Enrichment) — governance perspective**
+
+- **AC 3-4 (benchmarks and baseline): I support Leonardo's specific query set.** Leonardo provided 7 benchmark queries from his actual research. Those are the right queries because they're real — they came from a product architect doing real component selection work, not from hypothetical scenarios. Capturing them as the benchmark set in the design phase makes the success criteria reproducible and auditable. From a governance perspective, reproducible success criteria are always better than vague ones. → requirements.md § "Requirement 1" AC 3
+
+**Re: Req 5 (Readiness Compliance Test) — scope boundary acknowledgment**
+
+- **Ada's scope boundary is correct and I want to confirm I won't over-audit against it.** Req 5 validates readiness derivation correctness (does the status match the filesystem?), not component quality (are the files correct?). A component can be `development` readiness with broken token references — that's by design. I won't flag "this component is `development` but has broken tokens" as a readiness finding. I'll flag it as a quality finding routed to the appropriate agent (Ada for token issues, Lina for component issues). The readiness model tells me *what's available*; my selection verification and the compliance test ecosystem tell me *what's trustworthy*. → requirements.md § "Requirement 5"
+
+**Re: Req 9 (MCP Scope Split) — governance access**
+
+- **AC 2 (all agents read both MCPs): confirmed.** I need read access to both MCPs for governance. Application MCP for component selection verification. Product MCP for pattern context when reviewing specs. The "content organization, not access control" framing is correct. → requirements.md § "Requirement 9" AC 2
+
+- **Leonardo's recommendation to note inline readiness as a Spec 081 requirement is correct.** AC 4 defers the cross-MCP reference mechanism to 081. That's pragmatic. But if 081 doesn't include "Product MCP pattern responses SHALL include inline readiness data," I'll be making manual cross-queries during every spec review. That's friction I'd rather avoid. Recommend: when 081's requirements are written, this should be an explicit AC, not an assumed behavior. → requirements.md § "Requirement 9" AC 4
+
+**Re: Lina R1 — family doc audit gap**
+
+- Lina flagged that some family docs are placeholders and the extraction script can't derive `usage` from "Usage Guidelines: TBD." From a governance perspective, this is a content coverage gap that should be visible, not hidden. Req 3 AC 7 (warn on missing metadata block) catches components with no metadata block. But it doesn't catch components whose family doc has a metadata block but whose `usage` section is a placeholder. The extraction script should also warn when derived `usage` is empty or suspiciously thin (e.g., zero `when_to_use` entries). This prevents the script from generating meta files that look complete but have hollow content. → requirements.md § "Requirement 3" AC 7
+
+**Re: Lina R1 — `usage` derivation rules**
+
+- Leonardo's consumer perspective is the right framing: "the script should prefer per-component entries from selection tables when available, falling back to family-level guidance when per-component entries don't exist." From a governance perspective, per-component guidance is more auditable than family-level guidance. When I check a spec's component selection against `whenToUse`, a per-component entry gives me a direct match/mismatch. A family-level entry requires me to interpret whether the family guidance applies to this specific component. Specificity improves auditability. → requirements.md § "Requirement 3" AC 3
+
+**Overall assessment:**
+
+The requirements are well-structured, correctly capture the research positions, and address the feedback from the design outline round. The phasing is clear from the requirement numbering. The ACs are specific enough to implement against and verify.
+
+Three items need design-phase specification (all flagged by other agents, I'm confirming):
+1. Benchmark query set for Req 1 (Leonardo provided candidates)
+2. `usage` derivation rules for Req 3 AC 3 (Lina flagged, Leonardo added consumer perspective)
+3. Resolution path for selection verification disagreements in Req 7 (my addition)
+
+None are blockers for requirements approval. Ready to proceed to design. -- [STACY R1]
+
+**Re: @LEONARDO — Req 1 (Immediate Enrichment)**
+
+- **AC 1-2 (specific query benchmarks): these are the right queries.** `find_components({ purpose: "filter bar" })` returning Chip-Filter and `find_components({ purpose: "stat card" })` returning Container-Card-Base are direct tests of gap report #16 and #18. They're concrete, reproducible, and test the exact failure mode the research identified. → requirements.md § "Requirement 1" AC 1-2
+
+- **AC 3 (discoverability benchmarks): needs the specific query set defined.** Lina flagged this too — "gap report #16, #17, #18 queries" is a reference, not a list. From my research, the queries that should form the benchmark set include:
+  - `find_components({ purpose: "filter bar" })` → should return Chip-Filter
+  - `find_components({ purpose: "unread" })` or `find_components({ purpose: "count" })` → should return Badge-Count-Base/Notification
+  - `find_components({ purpose: "stat card" })` or `find_components({ purpose: "dashboard" })` → should return Container-Card-Base
+  - `find_components({ purpose: "progress" })` → should return Progress family
+  - `find_components({ purpose: "group" })` or `find_components({ purpose: "section" })` → should return Container family
+  - `find_components({ context: "dashboards" })` → should return ≥5 components
+  - `find_components({ context: "settings-screens" })` → should return Container + Button-VerticalList + Input families
+
+  These are the actual queries I'd make during screen specification. Recommend capturing them as the benchmark set in the design phase. → requirements.md § "Requirement 1" AC 3
+
+- **AC 4 (baseline before changes): critical.** Without a baseline, "measurable improvement" is unmeasurable. The benchmark should be run and documented before any meta file edits. → requirements.md § "Requirement 1" AC 4
+
+**Re: @LEONARDO — Req 9 (MCP Scope Split)**
+
+- **AC 1 (scope boundary): correctly specified.** Application MCP owns components, composition, tokens, selection guidance, readiness. Product MCP owns experience patterns, layout templates, screen-level guidance. This matches my workflow and the collective review consensus. → requirements.md § "Requirement 9" AC 1
+
+- **AC 2 (content organization, not access control): correctly specified.** "All agents retain read access to both MCPs." This resolves both my concern and Lina's about system agents losing pattern access. → requirements.md § "Requirement 9" AC 2
+
+- **AC 3 (readiness before split): correctly specified.** "The readiness model (Requirement 4) SHALL be validated as reliable before the MCP split is implemented in Spec 081." This is the critical dependency I flagged in every review round. Glad it's an explicit AC. → requirements.md § "Requirement 9" AC 3
+
+- **AC 4 (cross-MCP reference mechanism deferred to 081): acceptable.** I'd prefer the mechanism to be specified here, but deferring to 081 is pragmatic — 081 is the implementation spec for the Product MCP, and the reference mechanism is an implementation detail of that spec. As long as 081's requirements include "Product MCP pattern responses SHALL include inline readiness data from the Application MCP," the friction concern is addressed. Recommend noting this as a requirement for 081, not just a deferred decision. → requirements.md § "Requirement 9" AC 4
+
+**Re: Req 7 (Governance) — selection verification gate**
+
+- **AC 2 (gate before platform handoff): correctly specified.** "Selection verification SHALL be a gate in the feedback protocol — completing before platform agents receive the spec handoff." This is exactly what I asked for in my design outline feedback. The word "gate" is important — it means Stacy's review blocks handoff, not just informs it. → requirements.md § "Requirement 7" AC 2
+
+- **AC 3-4 (escape hatch format and tracking): well-specified.** The structured format with date, guidance reference, actual choice, reason, and migration trigger captures everything needed. Tracking during Lessons Synthesis Reviews closes the loop — escape hatches don't become permanent workarounds. → requirements.md § "Requirement 7" AC 3-4
+
+**Re: Ada R1 — readiness vs quality distinction**
+
+Ada's observation that "readiness alone doesn't mean safe to use" is important and I want to amplify it from the architect's perspective. When I query readiness to decide whether to use a component in a screen spec, `production-ready` tells me the artifacts exist and someone reviewed it. It doesn't tell me the component is bug-free or that its token references are correct. Spec 085 proved this — Container-Card-Base was `development` readiness with a composition mismatch that the readiness field couldn't surface.
+
+This isn't a gap in Req 4 or 5 — it's a scope boundary that should be understood by all agents. Readiness is the *availability* gate ("can I use this?"). Stacy's selection verification (Req 7) and the compliance test ecosystem are the *quality* gates ("should I use this?"). Both are needed. The requirements correctly separate them.
+
+**Re: Lina R1 — `usage` derivation rules gap**
+
+Lina's right that the derivation logic for `usage` needs specification. From my perspective as the consumer: the most useful `when_to_use` entries are per-component, not family-level. "Use Badge-Count-Base for numeric indicators on navigation elements" is more useful than "Use the Badge family for status indicators." If the extraction script only pulls family-level guidance, the per-component differentiation that makes selection guidance valuable is lost. Recommend: the script should prefer per-component entries from selection tables when available, falling back to family-level guidance when per-component entries don't exist. → requirements.md § "Requirement 3" AC 3
+
+**Overall assessment:**
+
+The requirements are well-structured and accurately capture the research positions. The phasing is implicit in the requirement numbering (Req 1 is immediate, Reqs 2-3 are extraction pipeline, Reqs 4-5 are readiness, etc.) which maps to the collective review's phased ordering.
+
+Two items need design-phase specification:
+1. The benchmark query set for Req 1 (I've provided candidates above)
+2. The `usage` derivation rules for Req 3 AC 3 (Lina flagged, I've added the consumer perspective)
+
+Neither is a blocker for requirements approval. Ready to proceed to design. -- [LEONARDO R1]
+
+#### [THURGOOD R2]
+
+Incorporated all feedback:
+
+- **Stacy R1**: Added Req 7 AC 5 — selection verification disagreements become documented escape hatches with rationale. This closes the ambiguity in the gate mechanism.
+- **Leonardo R1**: Benchmark query set (7 queries) noted for design-phase specification. `usage` derivation preference (per-component over family-level) noted for design-phase specification. Inline readiness recommendation for Spec 081 noted.
+- **Ada R1**: Readiness vs quality scope boundary confirmed — readiness is the availability gate, compliance tests are the quality gate. Test pattern verification (iOS/Android naming conventions) noted for design-phase verification.
+- **Lina R1**: Family doc audit gap and `usage` derivation rules noted for design-phase specification. Vocabulary update process (ballot measure?) noted for design-phase specification.
+- **Stacy R1 on Lina's gap**: Extraction script should also warn when derived `usage` is empty or suspiciously thin — noted for design-phase specification.
+
+Three items deferred to design phase (all agents agree these aren't requirements blockers):
+1. Benchmark query set for Req 1
+2. `usage` derivation rules for Req 3 AC 3
+3. Selection verification disagreement resolution path (now captured as Req 7 AC 5)
+
+No items rejected. Requirements approved by all four reviewers. Ready to proceed to design.
 
 ---
 
-## Tasks Feedback
+## Design Feedback
+
+### Context for Reviewers
+
+6 design decisions resolving the items deferred from requirements: benchmark query set, usage derivation rules, controlled vocabulary definition, readiness scan implementation, knowledge base configuration, and extraction script error handling. Plus data flow architecture, data models, and testing strategy.
+
+**@LINA**: Review Decisions 2 (usage derivation rules), 3 (controlled vocabulary), and 6 (error handling). Are the derivation rules workable for the family docs you maintain? Is the initial vocabulary complete? Are the error handling behaviors right?
+
+**@ADA**: Review Decision 4 (readiness scan). Are the component-level baseline artifacts correct? Is the token file pattern (`tokens.ts` or `*.tokens.ts`) right? Does the status derivation logic handle edge cases?
+
+**@LEONARDO**: Review Decision 1 (benchmark queries). Are these the right 7 queries? Any missing? Does the controlled vocabulary (Decision 3) include the search terms you'd actually use?
+
+**@STACY**: Review Decision 4 (readiness scan) from the governance consumption perspective. Does the status derivation give you what you need for spec audits? Review Decision 6 (error handling) — are warnings sufficient or should any conditions be errors?
+
+#### [LINA R1]
+
+**Re: Decision 2 (Usage Derivation Rules) — workable, with one refinement**
+
+- **Two-tier strategy is correct.** Per-component entries from selection tables preferred, family-level fallback when no per-component guidance exists. This matches how I actually author meta files today — I look at the selection table first, fall back to family-level guidance. The script formalizes what I do manually. → design.md § "Decision 2"
+
+- **Inverse derivation for `when_not_to_use` is clever.** "If the table says use X for scenario A, then Y gets a `when_not_to_use` for scenario A pointing to X." This is exactly the logic I apply manually. Automating it eliminates the most common source of drift — I update the selection table but forget to update the inverse entries in the meta file. → design.md § "Decision 2"
+
+- **Refinement needed: family-level fallback marking.** The design says "Mark these as family-level in the generated meta file so the source is traceable." Good — but the format isn't specified. Suggest adding a comment in the generated YAML: `# Derived from family-level guidance (Component-Family-Badge.md)`. This helps during review — if someone sees a generic `when_to_use` entry, they know it's a fallback and can decide whether to add per-component guidance to the family doc. → design.md § "Decision 2"
+
+- **Placeholder family docs (Data Display, Divider, Loading, Modal) will produce empty derivations.** The error handling (Decision 6) correctly warns on zero `when_to_use` entries. But the generated meta file will still be committed with empty `usage` sections. That's fine — the warning flags it, and the diff shows the gap. No change needed, just confirming I'm comfortable with this behavior. → design.md § "Decision 2" § "Decision 6"
+
+**Re: Decision 3 (Controlled Vocabulary) — initial list is good, two additions**
+
+- **The 12 initial values cover the major UI regions.** `navigation-tabs`, `dashboards`, `settings-screens`, `form-footers`, `content-feeds`, `list-items`, `icon-overlays`, `app-bars` — these are the contexts I've been tagging components with. Having them canonicalized with consumer search terms is exactly what I asked for. → design.md § "Decision 3"
+
+- **Missing: `cards`** — Container-Card-Base, Badge-Label-Base, and other components appear inside card layouts. "Cards" is a context Leonardo would search for when composing card content. → design.md § "Decision 3"
+
+- **Missing: `modals` / `dialogs`** — when Modal family components ship, they'll need a context. Adding it now means the vocabulary is ready. Also, some existing components (Button-CTA for modal actions, Icon-Base for close buttons) appear in modal contexts. → design.md § "Decision 3"
+
+- **Consumer search terms are the real value here.** The context tag `dashboards` is useful, but the reference terms "stat cards, summary statistics, overview page, home screen metrics" are what make authoring informed instead of guessing. This is the feedback loop fix I asked for in the research. → design.md § "Decision 3"
+
+**Re: Decision 6 (Error Handling) — behaviors are right**
+
+- **Warn-don't-block is the correct approach for all conditions.** Hard failures would make the extraction script unusable during incremental family doc updates — you'd have to fix every warning before any meta file generates. Warnings let the author see what's missing while still producing output. → design.md § "Decision 6"
+
+- **One addition: warn on `alternatives` referencing non-existent components.** The current error handling covers purpose length, vocabulary validation, and empty derivations. But if a family doc's selection table references a component that doesn't exist in the catalog (typo, renamed component, planned-but-not-built), the generated `alternatives` will point to a phantom. The Application MCP already warns on invalid component references in meta files — but catching it at extraction time is earlier and more actionable. → design.md § "Decision 6"
+
+**Re: Architecture (Data Flow) — clean and correct**
+
+The data flow diagram accurately represents the pipeline: family docs → extraction script → generated meta files → Application MCP indexer → agent queries. The readiness data flows through a parallel path (filesystem scan + schema.yaml → indexer). No concerns. → design.md § "Architecture"
+
+**Re: Correctness Properties — all 7 are verifiable**
+
+Property #2 ("Generated meta files match the content in their source family docs — no drift by construction") is the key one. This is the whole point of the spec — drift elimination by construction, not by discipline. The git diff mechanism (Decision 6, Req 3 AC 5-6) is the verification: if a family doc changes and the generated meta file doesn't change accordingly, the extraction script has a bug. → design.md § "Correctness Properties" -- [LINA R1]
+
+[Agent feedback rounds here]
 
 ### Context for Reviewers
 - [Populated by spec author before requesting review]
-
-[Agent feedback rounds here]
 
 [Agent feedback rounds here]

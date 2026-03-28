@@ -110,6 +110,7 @@ Research with 6 agents identified four root causes behind component discoverabil
 2. Selection verification SHALL be a gate in the feedback protocol — completing before platform agents receive the spec handoff
 3. Escape hatch documentation SHALL follow a structured format including: date, guidance reference, actual choice, reason, and migration trigger
 4. Escape hatches SHALL be tracked during Lessons Synthesis Reviews for migration opportunities
+5. WHEN selection verification identifies a deviation from selection guidance AND the spec author disagrees THEN the deviation SHALL be documented as an escape hatch with rationale
 
 ### Requirement 8: Reference Doc Migration
 
