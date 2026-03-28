@@ -38,7 +38,7 @@ All component-meta.yaml fields authored in Component-Family steering docs as str
 
 ### Position 2: Controlled Vocabulary for `contexts`
 
-Canonical list of context values defined and published. Authors pick from the list. Validated during extraction. Informed by Leonardo's actual search terms from the research.
+Canonical list of context values defined and published in the authoring guide (or its replacement). Each context value includes consumer search terms as reference (e.g., `dashboards` with reference terms: "stat cards, summary statistics, overview page, home screen metrics"). Embedded in the extraction script as a validation list — non-vocabulary values produce warnings during extraction. Informed by Leonardo's actual search terms from the research.
 
 ### Position 3: Purpose Fields Rewritten for Product Problems
 
@@ -59,12 +59,19 @@ This position aligns with and refines Spec 081 (Product MCP Design). Validation 
 Per-platform readiness derived by the Application MCP indexer at index time.
 
 **Technical readiness (automated):** Filesystem scan for artifact presence per platform:
+
+*Component-level artifacts (baseline gate — if missing, no platform can be `development` or higher):*
+- Schema, contracts, types, tokens
+
+*Platform-specific artifacts (determine per-platform status):*
 - Platform implementation file (`.web.ts`, `.ios.swift`, `.android.kt`)
 - Platform tests (`*.test.ts` for web, `*Tests.swift` for iOS, `*Test.kt` for Android)
-- Component-level artifacts (schema, contracts, types, tokens)
 - Web-specific: optional `.styles.css`
 - iOS-specific: `.ios.swift` is the indicator (ignore `.xcassets` directories)
-- Token generation status is system-level, not component-level — don't penalize components for missing generated token output
+
+*Excluded from scan (build artifacts, not source artifacts):*
+- Generated `component-meta.yaml` (Position 1 makes this a build artifact)
+- Generated token output (`DesignTokens.web.css`, etc.) — token generation is system-level, not component-level
 
 **Human-reviewed readiness (manual flag in schema.yaml):**
 ```yaml
@@ -95,17 +102,18 @@ Platform agents get indexed knowledge bases:
 - `contracts.yaml` per component
 - Platform-specific token files (`src/tokens/platforms/{platform}/`)
 
-**Platform Resource Map**: A new steering doc mapping resource types to platform-specific paths. Universal orientation for all agents — enables Stacy's parity comparison, Thurgood's test coverage audits, and cross-domain file discovery.
+**Platform Resource Map**: A new steering doc mapping resource types to platform-specific paths — including `src/tokens/semantic/` as the canonical reference for token names. Universal orientation for all agents — enables Stacy's parity comparison, Thurgood's test coverage audits, and cross-domain file discovery.
 
 ### Position 7: Governance Process Extensions
 
 **Stacy's Lessons Synthesis Review** gains a metadata accuracy lens — checking whether accumulated lessons reveal stale `whenToUse` and/or `whenNotToUse` entries, missing alternatives, or purpose fields that don't match consumer search terms. Requires a prompt update for Stacy.
 
-**Selection verification** via feedback protocol — Stacy reviews product specs after Leonardo finalizes the component tree, checking selection against `get_prop_guidance`. Happens before platform agent handoff.
+**Selection verification** via feedback protocol — Stacy reviews product specs after Leonardo finalizes the component tree, checking selection against `get_prop_guidance`. Selection verification is a gate before platform agent handoff — it completes before platform agents receive the spec, not concurrently with implementation.
 
 **Escape hatch documentation** — structured annotation in specs for intentional deviations:
 ```markdown
 ### Escape Hatch: Container-Base for profile cards
+- **Date**: 2026-03-28
 - **Guidance says**: Use Container-Card-Base (get_prop_guidance → Container family)
 - **This spec uses**: Container-Base
 - **Reason**: Container-Card-Base is `development` readiness on iOS
@@ -162,11 +170,13 @@ Full tracker: `docs/specs/083-application-mcp-guidance-completeness/gap-report-r
 ## Scope
 
 ### In Scope
+- Immediate purpose field enrichment for highest-impact components (gap report #16, #17, #18 — can land before pipeline)
 - Structured metadata format for Component-Family docs + template update
 - Controlled vocabulary for `contexts`
 - Purpose field rewrite (incremental + pipeline)
-- Build-time extraction script
+- Build-time extraction script (with generated meta file diffs visible in git as ongoing validation)
 - Per-platform readiness model in schema.yaml + indexer enhancement
+- One-time schema migration (existing `readiness` field → per-platform `reviewed` flags)
 - Readiness compliance test
 - Platform agent knowledge base configuration
 - Platform Resource Map steering doc
@@ -174,11 +184,12 @@ Full tracker: `docs/specs/083-application-mcp-guidance-completeness/gap-report-r
 - Escape hatch documentation pattern
 - Reference doc migration to docs MCP
 - Authoring guide update to reflect extraction workflow
+- Discoverability benchmarks: run gap report queries (#16, #17, #18) before and after to measure improvement
 
 ### Out of Scope
-- Changing the Application MCP's search algorithm
+- Changing the Application MCP's search algorithm (evaluate after Positions 1-3 ship — content fixes may make algorithm changes unnecessary)
 - New component creation (gap report #0, #1, #2)
-- Product MCP implementation (Position 4/8 — design decision captured here, implementation is Spec 081)
+- Product MCP implementation (Positions 4 and 8 — design decisions captured here, implementation is Spec 081)
 - Platform-specific API generation (acknowledged as intentional boundary)
 
 ---
@@ -187,7 +198,7 @@ Full tracker: `docs/specs/083-application-mcp-guidance-completeness/gap-report-r
 
 | Risk | Severity | Mitigation |
 |------|----------|------------|
-| Extraction script misparses family doc format | Medium | Validate output against existing hand-authored meta files before replacing |
+| Extraction script misparses family doc format | Medium | Initial: validate against existing hand-authored meta files. Ongoing: generated meta file diffs visible in git — unexpected changes caught at commit time |
 | Readiness scan produces misleading results for less-mature platforms | Medium | Platform-specific artifact patterns; don't penalize for missing generated token output |
 | Purpose fields drift back to implementation language over time | Low | Metadata accuracy lens in Lessons Synthesis catches drift reactively |
 | MCP split (Position 4/8) ships before readiness is reliable | High | Explicit dependency: readiness model must be validated before split |
@@ -199,6 +210,8 @@ Full tracker: `docs/specs/083-application-mcp-guidance-completeness/gap-report-r
 
 - The feedback loop between metadata authors and consumers is narrowed, not closed. The ongoing mechanism is reactive (Stacy's Lessons Synthesis catching failures) rather than proactive (periodic collection of actual search queries). Sufficient at current scale; revisit as catalog grows.
 - Platform-specific search vocabulary (SwiftUI terms, Compose terms, Web Component terms) won't appear in cross-platform `purpose` fields. Future vocabulary refreshes should include platform agent input, not just Leonardo's cross-platform perspective.
+- Governance scope additions (Position 7) are sustainable at current product scale. Revisit if the number of active specs or review cadence increases significantly.
+- Cross-MCP reference mechanism (how the Product MCP surfaces readiness data from the Application MCP) is a design decision deferred to Spec 081.
 
 ---
 
@@ -206,13 +219,28 @@ Full tracker: `docs/specs/083-application-mcp-guidance-completeness/gap-report-r
 
 1. All components have `component-meta.yaml` generated from family docs via extraction script
 2. `find_components({ purpose: "filter bar" })` returns Chip-Filter (gap #16)
-3. `find_components({ context: "dashboards" })` returns ≥5 production components (gap #18)
+3. `find_components({ context: "dashboards" })` returns ≥5 components (any readiness) with per-platform readiness visible in results (gap #18)
 4. Per-platform readiness visible via Application MCP queries
 5. Readiness compliance test validates derived status matches filesystem state
 6. Platform agents confirm knowledge base configuration improves their workflow
 7. Three reference docs queryable via docs MCP
 8. Stacy's prompt updated with metadata accuracy lens
 9. Escape hatch documentation pattern defined and available for use in specs
+10. Discoverability benchmarks show measurable improvement over gap report baseline queries
+
+---
+
+## Implementation Phasing (From Collective Review)
+
+The following ordering emerged from the collective agent review. It manages risk by building data quality before architecture:
+
+- **Immediate (independent, low risk):** Position 6 (knowledge bases), Position 9 (reference docs), Position 3 incremental purpose fixes, discoverability benchmarks (baseline)
+- **Phase 1 (foundation):** Position 5 (readiness model) — prerequisite for MCP split
+- **Phase 2 (data quality):** Position 2 (controlled vocabulary) → Position 3 (purpose rewrite) → Position 1 (extraction pipeline)
+- **Phase 3 (architecture — Spec 081):** Positions 4 + 8 (MCP split + pattern migration) — after data is solid
+- **Throughout:** Position 7 (governance extensions — incremental process updates that gain value as each phase lands)
+
+Phase transition checkpoints: after each phase, verify workflows changed as expected before starting the next.
 
 ---
 
