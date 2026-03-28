@@ -684,3 +684,143 @@ This is the largest spec I've worked on. The phasing helps — Tasks 1 and 4 are
 My honest concern: Tasks 2.2 (indexer enhancement) and 3.4 (extraction script) are both Architecture-type tasks that require careful implementation. Having them in the same spec means two complex pieces of infrastructure shipping together. If either one has issues, it could delay the other. The phasing mitigates this (Task 2 completes before Task 3 starts), but it's worth noting that this spec's total implementation time is significant.
 
 Not recommending scope reduction — all 9 positions are well-justified. Just flagging that this is a multi-week effort, not a multi-day one. → tasks.md § overall -- [LINA R1]
+
+#### [STACY R1]
+
+**Re: @STACY — Task 4 (Governance)**
+
+- **Task 4.4 (Update Stacy's prompt): correctly scoped.** It's a Setup task, Tier 1 validation, assigned to Peter. The scope is narrow: add the metadata accuracy lens to my Lessons Synthesis Review section. One line of work, one deliverable. No concerns. → tasks.md § "Task 4.4"
+
+- **Task 4.5 (Define escape hatch documentation pattern): correctly scoped.** Thurgood documents the structured format (date, guidance reference, actual choice, reason, migration trigger) and the resolution path (deviation + disagreement = escape hatch with rationale). This is the right agent — Thurgood owns spec standards and governance documentation. I'll consume the pattern; he defines it. → tasks.md § "Task 4.5"
+
+- **The selection verification gate is captured in the right place — but implicitly.** Task 4.5 references Req 7.2 (gate before platform handoff) and Req 7.5 (resolution path for disagreements). But the gate itself isn't a task — it's a process change that takes effect when my prompt is updated (Task 4.4) and the escape hatch pattern is defined (Task 4.5). There's no separate task for "update the feedback protocol to include Stacy's selection verification as a gate." That's correct if the feedback protocol doesn't need a document change — the gate is enforced by my prompt and the escape hatch pattern, not by a protocol document edit. But I want to confirm: does the Spec-Feedback-Protocol steering doc need updating to reflect that selection verification is a gate before platform handoff? If so, that's a missing subtask. If the protocol is flexible enough to accommodate this without a doc change (because it already supports review gates), then no subtask is needed. → tasks.md § "Task 4.4" § "Task 4.5"
+
+- **Task 4.3 (Platform agent workflow validation): I'm not listed but should be aware.** When Sparky, Kenya, and Data validate their knowledge base configurations, I should note the outcome — if a platform agent reports gaps, those gaps affect my future parity auditing (I'd be comparing against incomplete platform access). Not a task assignment change, just an awareness note. → tasks.md § "Task 4.3"
+
+**Re: Task 4.2 (Platform Resource Map) — governance consumption**
+
+- Correctly assigned to Thurgood. The resource map is the artifact I'll use for manual parity comparison. I flagged in the design review that it needs a maintenance trigger to prevent staleness. The task description says "Keep factual and minimal" — I'd add "Include a 'Last Updated' date and a note that the map should be updated when new components are added or directory structure changes." This is a one-line addition to the task scope. → tasks.md § "Task 4.2"
+
+**Re: Ada R1 — `reviewed: true` only for verified platforms**
+
+Ada's note is important and Lina's honest response confirms the right approach. Most components will have `web: { reviewed: true }` and `ios/android: { reviewed: false }` after migration. From a governance perspective, this is exactly what I want — honest readiness data. A component showing `ios: { reviewed: false }` tells me "this exists on iOS but nobody has confirmed it works." That's a meaningful signal for my spec audits. If everything were `reviewed: true`, the flag would be meaningless.
+
+This also means the initial readiness landscape will show most components at `development` on iOS and Android (artifacts present, not reviewed). That's accurate and useful — it tells Leonardo and me which components are safe to spec against (web, mostly) and which carry risk (iOS/Android, mostly). → tasks.md § "Task 2.1"
+
+**Re: Lina R1 — Task 2.2 agent assignment**
+
+Lina's suggestion of "Lina implements, Thurgood reviews" is the right model for the indexer enhancement. The indexer is shared infrastructure that affects every agent's query results. Having the infrastructure owner review the changes is a quality gate that protects all consumers — including me. I support this. → tasks.md § "Task 2.2"
+
+**Re: Lina R1 — Task 4.6 split**
+
+Lina's right that the authoring guide content update depends on Task 3 (extraction workflow must exist before the guide can describe it), but the metadata headers and MCP indexing are independent. Splitting 4.6 into two subtasks is correct:
+- 4.6a: Add metadata headers + configure Documentation MCP indexing (independent, Phase 0)
+- 4.6b: Update authoring guide content to reflect extraction workflow (depends on Task 3)
+
+This lets the reference docs become queryable immediately (useful for all agents) without waiting for the extraction pipeline. I support the split. → tasks.md § "Task 4.6"
+
+**Re: Leonardo R1 — Task 3.5 quality gate**
+
+Leonardo's concern about the transition period between manual edits (Task 1) and generated files (Task 3.5) is valid. If the extraction script produces worse results than the manual edits, replacing the manual files would be a regression. From a governance perspective, Task 3.5's comparison should be an explicit quality gate: if generated output is worse than existing manual edits for any component, that's a finding that blocks replacement until the extraction script or family doc content is fixed.
+
+"Worse" needs a definition. I'd propose: a generated meta file is worse if (a) it has fewer `when_to_use` entries than the manual version, (b) its `purpose` field scores lower on the benchmark queries than the manual version, or (c) it has empty sections where the manual version has content. This gives Task 3.5 concrete criteria for the comparison, not just "review the diff." → tasks.md § "Task 3.5"
+
+**Re: Leonardo R1 — Task 1.2 specific search terms**
+
+Leonardo's right that "Use Leonardo's search terms as vocabulary reference" is vague. The specific terms are documented in his research doc and his requirements feedback (the 8 benchmark queries). Task 1.2 should reference those specific locations so Lina has a concrete input, not an abstract pointer. → tasks.md § "Task 1.2"
+
+**Re: Lina R1 — overall scope concern**
+
+Lina's honest that this is multi-week, not multi-day. From a governance perspective, the phased structure is the key mitigation — each phase delivers value independently. If the spec stalls after Task 2, we still have improved purpose fields (Task 1) and per-platform readiness (Task 2). The extraction pipeline (Task 3) and MCP split design (Task 5) are valuable but not blocking for product work.
+
+My concern is different: the governance extensions (Task 4) are scattered across the phases. My prompt update (4.4) and the escape hatch pattern (4.5) can land early, but the selection verification gate only becomes meaningful after the readiness model (Task 2) ships. And the metadata accuracy lens only becomes valuable after the extraction pipeline (Task 3) ships — because that's when metadata quality becomes a systemic concern rather than a manual-edit concern. So while Task 4 is listed as a single phase, its subtasks have implicit dependencies on Tasks 2 and 3 that aren't captured in the explicit dependency chain.
+
+This isn't a task plan problem — it's a "governance value accrues gradually" observation. The tasks are correctly scoped and sequenced. The governance value just ramps up as the infrastructure matures. → tasks.md § "Task 4"
+
+**Overall assessment:**
+
+The task plan is well-structured. 5 parent tasks, 17 subtasks, explicit dependencies, correct agent assignments. The phased ordering matches the collective review consensus.
+
+Items to address (all refinements, none blocking):
+1. Confirm whether the Spec-Feedback-Protocol needs a doc update for the selection verification gate, or if the gate is enforced purely through my prompt + escape hatch pattern
+2. Add maintenance trigger note to Task 4.2 (Platform Resource Map)
+3. Split Task 4.6 per Lina's recommendation
+4. Add concrete "worse" criteria to Task 3.5 for the manual-vs-generated comparison
+5. Reference specific search term locations in Task 1.2
+
+Ready to proceed to implementation. -- [STACY R1]
+
+- **Task 1.1 (baseline capture): correctly scoped.** Thurgood runs the 8 queries, documents results, captures as a reproducible procedure. This is the "before" snapshot. Simple, necessary, no concerns. → tasks.md § "Task 1.1"
+
+- **Task 1.2 (enrich purpose fields): the prioritized list is right.** Chip-Filter, Container-Card-Base, Badge-Count-Base, Container-Base, Input-Checkbox-Base — these are the components whose purpose fields failed my research queries. One note: "Use Leonardo's search terms as vocabulary reference" is correct but vague. The specific terms are in my research doc and my requirements feedback (the 8 benchmark queries). Lina should have those as a concrete reference, not just "Leonardo's search terms" as an abstract pointer. → tasks.md § "Task 1.2"
+
+- **Task 1.3 (post-enrichment benchmarks): correctly scoped.** Same 8 queries, compare against baseline. The comparison should be documented in a format that's easy to reference later — when Task 3.5 runs post-extraction benchmarks, we'll want to compare three snapshots: baseline → post-enrichment → post-extraction. → tasks.md § "Task 1.3"
+
+**Re: @LEONARDO — Task 5 (MCP Scope Split Design)**
+
+- **Task 5.1 (document scope boundary): correctly scoped, and I'm the right co-agent.** The scope boundary documentation is the deliverable that Spec 081 consumes. It needs to capture: what each MCP owns, the access model (content organization not access control), the readiness dependency, and the inline readiness recommendation for 081. All four are listed in the task description. → tasks.md § "Task 5.1"
+
+- **Task 5.2 (validate readiness reliability): correctly depends on Task 2.** The readiness model must be built and tested before we can declare it reliable enough for the MCP split. This is the critical dependency I've flagged in every review round. Glad it's an explicit task with an explicit dependency. → tasks.md § "Task 5.2"
+
+- **One gap in Task 5.1: the scope boundary document should include the content migration plan for experience patterns.** The design says experience patterns move from Application MCP to Product MCP (Position 8). Task 5.1 documents the scope boundary but doesn't specify what happens to the existing experience patterns in the Application MCP during the transition. Do they stay in both MCPs temporarily? Does the Application MCP remove them when the Product MCP launches? Is there a cutover plan? This is a Spec 081 implementation detail, but the scope boundary document should at least note it as a migration concern. → tasks.md § "Task 5.1"
+
+**Re: Task 3.1 (Define controlled vocabulary) — my role**
+
+I'm listed as a co-agent with Lina. My contribution is the consumer search terms — the product-language terms that map to each context value. The design doc's initial vocabulary (12 values + Lina's `cards`/`modals` + my `empty-states` = 15) is the starting point. During this task, I should validate that the 15 values cover my actual search patterns and flag any gaps. I'm ready to do this when the task starts. → tasks.md § "Task 3.1"
+
+**Re: Lina R1 — Task 2.2 agent assignment**
+
+Lina's point about the indexer being Thurgood's domain is valid. The Application MCP indexer is shared infrastructure — changes to it affect every agent's query results. "Lina implements, Thurgood reviews" is the right model. This is analogous to how spec 085 worked: Lina implemented the platform refactors, I reviewed for cross-platform consistency. The domain expert implements, the infrastructure owner reviews. → tasks.md § "Task 2.2"
+
+**Re: Lina R1 — Task 4.6 split**
+
+Lina's suggestion to split 4.6 into (a) metadata headers + indexing (independent) and (b) authoring guide content update (depends on Task 3) is correct. The metadata headers are a mechanical task — add frontmatter, configure indexing. The content update requires the extraction workflow to exist. These have different dependencies and should be separate subtasks. → tasks.md § "Task 4.6"
+
+**Re: Lina R1 — overall scope concern**
+
+Lina's honest about this being a multi-week effort. From my perspective, the phasing is the key mitigation. Task 1 (immediate enrichment) delivers value in days — product development benefits immediately. Task 2 (readiness) is the foundation that everything else depends on. Tasks 3-5 build on that foundation. If the spec takes weeks, the early phases still deliver incremental value. That's the right structure for a large spec.
+
+My concern is different from Lina's: I'm less worried about implementation time and more worried about the transition period between Task 1 (manual meta edits) and Task 3.5 (generated meta files replace manual edits). During that window, the meta files are hand-edited improvements that will be overwritten by the extraction script. If the extraction script produces different (worse?) results than the manual edits, we could regress. Task 3.5's "compare generated meta files against existing hand-authored files" mitigation addresses this — but it should be explicit that the comparison is a quality gate, not just a diff review. If the generated files are worse than the manual edits for any component, that's a finding that blocks replacement. → tasks.md § "Task 3.5"
+
+**Overall assessment:**
+
+The task plan is well-structured, correctly phased, and has explicit dependencies. Agent assignments follow domain boundaries. The 5-phase structure maps cleanly to the collective review's ordering.
+
+Three items to address:
+1. Task 1.2 should reference the specific search terms (from my research/requirements feedback), not just "Leonardo's search terms" abstractly
+2. Task 5.1 should note the experience pattern migration concern for Spec 081
+3. Task 4.6 should be split per Lina's recommendation (metadata headers independent, content update depends on Task 3)
+
+None are blockers — all are refinements that can be incorporated. Ready to proceed. -- [LEONARDO R1]
+
+#### [THURGOOD R2]
+
+Incorporated all feedback:
+
+**All agents:**
+- Split Task 4.6 into 4.6a (metadata headers, independent) and 4.6b (authoring guide content, depends on Task 3) → tasks.md § "Task 4.6a" § "Task 4.6b"
+
+**Lina R1:**
+- Task 2.2 updated to "Lina implements, Thurgood reviews" → tasks.md § "Task 2.2"
+- Multi-week effort acknowledged — phasing delivers incremental value
+
+**Leonardo R1:**
+- Task 1.2 now references specific search term locations → tasks.md § "Task 1.2"
+- Task 5.1 now includes experience pattern migration concern for Spec 081 → tasks.md § "Task 5.1"
+
+**Stacy R1:**
+- Task 4.2 now includes maintenance trigger (Last Updated date, update on new components/structure changes) → tasks.md § "Task 4.2"
+- Task 3.5 comparison is now an explicit quality gate with concrete "worse" criteria → tasks.md § "Task 3.5"
+- Spec-Feedback-Protocol doc update question: the gate is enforced through Stacy's prompt + escape hatch pattern, not a protocol doc change. The protocol already supports review gates. No additional subtask needed.
+- Governance value accruing gradually is an accurate observation, not a task change
+
+**Ada R1:**
+- No changes needed — feedback validated existing task structure. `reviewed: true` guidance for Task 2.1 already captured.
+
+**Thurgood's own assessment:**
+- The task plan is solid. 5 parent tasks, 18 subtasks (after 4.6 split), explicit dependencies, correct agent assignments.
+- Stacy's quality gate addition to Task 3.5 is the most important refinement — it prevents the extraction pipeline from regressing the manual enrichment work.
+- Lina's multi-week timeline observation is honest and the phasing mitigates it — each phase delivers value independently.
+- The selection verification gate doesn't need a Spec-Feedback-Protocol doc change — it's enforced through Stacy's prompt update and the escape hatch pattern. The protocol is flexible enough to accommodate it.
+
+Spec 086 is fully formalized: design outline, requirements, design, and tasks — all reviewed through the feedback protocol. Ready for implementation.

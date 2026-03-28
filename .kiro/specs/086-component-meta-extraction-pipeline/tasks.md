@@ -44,7 +44,7 @@
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
     - Manually update purpose fields for components that fail benchmark queries
-    - Use Leonardo's search terms as vocabulary reference
+    - Reference specific search terms from Leonardo's research doc (`research/leonardo.md` Tasks 1-5) and benchmark query set (design.md Decision 1)
     - Prioritize: Chip-Filter, Container-Card-Base, Badge-Count-Base, Container-Base, Input-Checkbox-Base
     - _Requirements: 1.1, 1.2_
 
@@ -91,7 +91,7 @@
   - [ ] 2.2 Enhance Application MCP indexer
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
-    **Agent**: Lina
+    **Agent**: Lina (implements) + Thurgood (reviews)
     - Implement filesystem scan for platform artifact presence
     - Implement baseline gate (component-level artifacts as prerequisite)
     - Implement status derivation logic per design Decision 4
@@ -182,11 +182,11 @@
     **Agent**: Lina + Thurgood (MCP verification)
     **Depends on**: Task 3.4
     - Run extraction script against all family docs
-    - Compare generated meta files against existing hand-authored files
+    - Compare generated meta files against existing hand-authored files — this is a quality gate: if generated output is worse (fewer when_to_use entries, lower benchmark scores, empty sections where manual had content), block replacement until fixed
     - Resolve warnings
     - Commit generated files to git
     - Verify Application MCP health check passes
-    - Run post-extraction benchmarks (same 8 queries) to measure improvement
+    - Run post-extraction benchmarks (same 8 queries), compare against baseline and post-enrichment snapshots
     - _Requirements: 3.4, 3.5_
 
 - [ ] 4. Agent Configuration & Governance
@@ -228,6 +228,7 @@
     **Agent**: Thurgood
     - Create `.kiro/steering/Platform-Resource-Map.md` with resource type × platform table
     - Include `src/tokens/semantic/` as canonical token name reference
+    - Include "Last Updated" date and maintenance note: update when new components are added or directory structure changes
     - Keep factual and minimal
     - _Requirements: 6.2, 6.3_
 
@@ -255,14 +256,21 @@
     - Document resolution path: deviation + disagreement = escape hatch with rationale
     - _Requirements: 7.2, 7.3, 7.4, 7.5_
 
-  - [ ] 4.6 Migrate reference docs to Documentation MCP
+  - [ ] 4.6a Migrate reference docs to Documentation MCP
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Thurgood + Lina
+    **Agent**: Thurgood
     - Add metadata headers to 3 reference docs for Documentation MCP formatting and indexing
-    - Update authoring guide content to reflect extraction workflow
     - Verify all 3 docs queryable via `get_section()`
-    - _Requirements: 8.1, 8.2, 8.3_
+    - _Requirements: 8.1, 8.2_
+
+  - [ ] 4.6b Update authoring guide content
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Lina
+    **Depends on**: Task 3 (extraction workflow must exist before guide can describe it)
+    - Update authoring guide content to reflect extraction workflow (authoring in family docs, not meta files)
+    - _Requirements: 8.3_
 
 - [ ] 5. MCP Scope Split Design
 
@@ -292,6 +300,7 @@
     - Document "content organization, not access control" principle
     - Document readiness dependency (readiness must be reliable before split)
     - Note inline readiness as a requirement for Spec 081
+    - Note experience pattern migration concern: what happens to existing patterns in Application MCP during transition (cutover plan for Spec 081)
     - _Requirements: 9.1, 9.2, 9.3, 9.4_
 
   - [ ] 5.2 Validate readiness model reliability
