@@ -1,0 +1,88 @@
+# Family Guidance: Navigation
+# Companion to: .kiro/steering/Component-Family-Navigation.md
+# Read-both protocol: Read the family doc before modifying this file.
+
+family: Navigation
+displayName: "Navigation"
+companion: ".kiro/steering/Component-Family-Navigation.md"
+
+whenToUse:
+  - "Switching between mutually exclusive content views within a single screen (Nav-SegmentedChoice-Base)"
+  - "Persistent bottom navigation between 3-5 top-level app destinations (Nav-TabBar-Base)"
+  - "Icon-based or text-based view switching where exactly one option is active at all times"
+
+whenNotToUse:
+  - "Filtering content by multiple simultaneous criteria — use Chip-Filter instead"
+  - "Binary on/off toggle — use a switch or toggle component instead"
+  - "Actions that don't switch views — use Button family instead"
+  - "More than 5 navigation destinations — consider a different navigation pattern"
+  - "Hierarchical path navigation — Nav-Breadcrumb is planned but not yet implemented"
+
+selectionRules:
+  - scenario: "Switching between related content views within a single screen (e.g., Daily/Weekly/Monthly)"
+    recommend: Nav-SegmentedChoice-Base
+    rationale: "Segmented control with sliding indicator for mutually exclusive in-context view switching"
+  - scenario: "Toggling between a small set of view modes (e.g., List/Grid/Map)"
+    recommend: Nav-SegmentedChoice-Base
+    rationale: "Supports both text and icon segments for compact view-mode switching"
+  - scenario: "Icon-based view switching where labels are unnecessary"
+    recommend: Nav-SegmentedChoice-Base
+    props:
+      size: standard
+    rationale: "Icon segments with required accessibilityLabel provide compact, accessible switching"
+  - scenario: "Compact in-context view switching in tight spaces"
+    recommend: Nav-SegmentedChoice-Base
+    props:
+      size: condensed
+    rationale: "Condensed size uses smaller padding and typography for space-constrained layouts"
+  - scenario: "Primary app navigation between 3-5 top-level sections (e.g., Home, Search, Profile)"
+    recommend: Nav-TabBar-Base
+    rationale: "Persistent bottom tab bar with icon-only tabs, dot indicator, and glow animation for top-level destinations"
+  - scenario: "Persistent bottom navigation on mobile apps"
+    recommend: Nav-TabBar-Base
+    rationale: "Platform-adaptive: floating pill on web, full-width on native. Always visible for primary wayfinding"
+
+discouragedPatterns:
+  - pattern: "Using Nav-TabBar-Base for in-context content switching within a single screen"
+    rationale: "Tab bar is for top-level app navigation, not view switching. Use Nav-SegmentedChoice-Base for in-context switching."
+    override: "Human confirmation required"
+  - pattern: "Using Nav-SegmentedChoice-Base for primary app navigation"
+    rationale: "Segmented controls are for switching views within a screen, not navigating between app sections. Use Nav-TabBar-Base for primary navigation."
+    override: "Human confirmation required"
+  - pattern: "Including disabled or unavailable options in segments or tabs"
+    rationale: "DesignerPunk does not support disabled states. Remove unavailable options from the array instead of disabling them."
+    override: "Human confirmation required"
+  - pattern: "Mixing text and icon segments within a single Nav-SegmentedChoice-Base"
+    rationale: "Segments are a union type — text OR icon per segment, never both. All segments in a control should be the same type for visual consistency."
+    override: "Human confirmation required"
+
+composesWithFamilies:
+  - family: "Icons"
+    relationship: "Nav-TabBar-Base composes Icon-Base internally for tab icons. Nav-SegmentedChoice-Base renders icons via Icon-Base for icon segments."
+    companion: ".kiro/steering/Component-Family-Icon.md"
+  - family: "Badges"
+    relationship: "Nav-TabBar-Base has a badge composition slot (empty in v1) for future notification count overlays on tabs"
+    companion: ".kiro/steering/Component-Family-Badge.md"
+
+accessibilityNotes:
+  - "Both components use role='tablist' with role='tab' on each item and aria-selected for selection state"
+  - "Nav-SegmentedChoice-Base: icon segments require accessibilityLabel (enforced by TypeScript union type)"
+  - "Nav-TabBar-Base: all tabs require accessibilityLabel (icon-only v1, no visible text)"
+  - "Keyboard: arrow keys navigate between items with wrapping, Enter/Space activates, roving tabindex on web"
+  - "All items meet tapAreaMinimum — do not constrain segment or tab width below this threshold"
+  - "Both components respect prefers-reduced-motion — all animation collapses to immediate state change"
+
+patterns:
+  - name: "Content View Switcher"
+    description: "Segmented control above a content area for switching between related views"
+    components:
+      - component: Nav-SegmentedChoice-Base
+        role: switcher
+    relatedPatterns: []
+
+  - name: "App Shell Navigation"
+    description: "Persistent bottom tab bar for primary app navigation between top-level destinations"
+    components:
+      - component: Nav-TabBar-Base
+        role: navigation
+    relatedPatterns: []

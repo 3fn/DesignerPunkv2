@@ -85,7 +85,7 @@ Nav-Header-Base (Primitive) [PLANNED]
 
 ### Nav-SegmentedChoice-Base Contracts
 
-24 behavioral contracts across 10 categories, plus 2 exclusions. Full contract definitions in `src/components/core/Nav-SegmentedChoice-Base/contracts.yaml`.
+23 behavioral contracts across 10 categories, plus 2 exclusions. Full contract definitions in `src/components/core/Nav-SegmentedChoice-Base/contracts.yaml`.
 
 | Contract | Category | WCAG | Platforms |
 |----------|----------|------|-----------|
@@ -117,14 +117,17 @@ Nav-Header-Base (Primitive) [PLANNED]
 
 ### Nav-TabBar-Base Contracts
 
-20 behavioral contracts across 7 categories, plus 2 exclusions. Full contract definitions in `src/components/core/Nav-TabBar-Base/contracts.yaml`.
+20 behavioral contracts across 9 categories, plus 2 exclusions. Full contract definitions in `src/components/core/Nav-TabBar-Base/contracts.yaml`.
 
 | Contract | Category | WCAG | Platforms |
 |----------|----------|------|-----------|
 | `visual_background` | visual | — | web, ios, android |
 | `visual_state_colors` | visual | — | web, ios, android |
 | `visual_gradient_glow` | visual | — | web, ios, android |
-| `layout_flexible_length` | layout | 2.5.5 | web, ios, android |
+| `visual_pill_container` | visual | — | web |
+| `state_selected` | state | — | web, ios, android |
+| `state_mode_driven` | state | — | web, ios, android |
+| `layout_flexible_length` | layout | — | web, ios, android |
 | `interaction_pressable` | interaction | — | web, ios, android |
 | `interaction_noop_active` | interaction | — | web, ios, android |
 | `interaction_roving_tabindex` | interaction | 2.1.1 | web |
