@@ -225,7 +225,8 @@ class ComponentMCPServer {
 }
 
 // Start server
-const server = new ComponentMCPServer();
+const componentsDir = process.env.COMPONENTS_DIR || DEFAULT_COMPONENTS_DIR;
+const server = new ComponentMCPServer(componentsDir);
 server.start().catch((err) => {
   console.error(`[${SERVER_NAME}] Fatal error:`, err);
   process.exit(1);
