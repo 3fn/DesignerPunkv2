@@ -73,7 +73,7 @@ usage:
 
 ### contexts (required, list of strings)
 
-UI contexts where this component is typically used. Agents use this to validate that a component fits the layout they're building.
+UI contexts where this component is typically used. Agents use this to validate that a component fits the layout they're building. Values MUST come from the controlled vocabulary (see below).
 
 ```yaml
 contexts:
@@ -83,9 +83,10 @@ contexts:
 ```
 
 **Guidance**:
-- Use lowercase kebab-case
-- Name the UI region or pattern, not the page
+- MUST use values from the Controlled Vocabulary section below
 - 2–6 entries is typical
+- The extraction script warns on non-vocabulary values
+- To add a new context value, use the ballot measure process (propose in conversation, Peter approves)
 
 ### alternatives (required, list of objects)
 
@@ -146,12 +147,39 @@ usage:
     - "Decorative spacing without semantic separation — use layout spacing tokens"
 
 contexts:
-  - "lists"
-  - "cards"
+  - "list-items"
+  - "modals"
   - "settings-screens"
 
 alternatives: []
 ```
+
+---
+
+## Controlled Vocabulary
+
+Context values are a closed set. Using canonical values ensures `find_components({ context: "..." })` queries return predictable results. Consumer search terms show what product architects actually search for — use them to decide which context fits your component.
+
+To propose a new value, use the ballot measure process: propose in conversation, Peter approves, then add to this list and the extraction script's validation array.
+
+| Context Value | Consumer Search Terms |
+|--------------|----------------------|
+| `forms` | form fields, data collection, input groups, registration, login, checkout |
+| `dashboards` | stat cards, summary statistics, overview page, home screen metrics |
+| `settings-screens` | preferences, options, configuration, account settings |
+| `navigation-tabs` | tab bar, bottom navigation, primary navigation, navigation bar |
+| `content-feeds` | news feed, activity stream, scrollable list, content list |
+| `onboarding-flows` | welcome screens, setup wizard, first-run experience, tutorial |
+| `filter-bars` | filter chips, content filtering, search refinement |
+| `list-items` | row items, cell content, list entries, menu items |
+| `icon-overlays` | badge on icon, notification dot, status indicator, notification bell |
+| `profile-sections` | user info, account details, avatar display, user profiles |
+| `product-cards` | product card, catalog items, shopping grid, content preview |
+| `app-bars` | top bar, header, navigation bar, app shell |
+| `modals` | dialog, popup, overlay, sheet, bottom sheet |
+| `empty-states` | no data, zero state, first-time experience, placeholder content |
+
+**Selection guidance**: Pick the context that matches the UI region where the component appears, not the page it's on. A Button-CTA in a dialog footer is `modals`, not `forms` (unless it's also used in forms — then list both).
 
 ---
 
