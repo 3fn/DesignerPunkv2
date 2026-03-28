@@ -189,6 +189,18 @@ Nav-Header-Base (Primitive) [PLANNED]
 
 ---
 
+## Component Metadata
+
+### Nav-SegmentedChoice-Base — Metadata
+- **Purpose**: Switch between mutually exclusive content views using connected segments with a sliding indicator.
+- **Contexts**: settings-screens, dashboards
+
+### Nav-TabBar-Base — Metadata
+- **Purpose**: Navigate between top-level app destinations via a persistent bottom tab bar with icon-only tabs and animated dot indicator.
+- **Contexts**: navigation-tabs, app-bars
+
+---
+
 ## Usage Guidelines
 
 ### When to Use

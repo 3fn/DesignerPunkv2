@@ -151,7 +151,7 @@
     - Document findings — informs extraction script derivation rules
     - _Requirements: 3.3_
 
-  - [ ] 3.3 Add structured metadata blocks to family docs
+  - [x] 3.3 Add structured metadata blocks to family docs
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

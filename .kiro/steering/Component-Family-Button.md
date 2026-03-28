@@ -520,6 +520,26 @@ Button components resolve tokens through the Rosetta System's semantic-to-primit
 
 ---
 
+## Component Metadata
+
+### Button-CTA — Metadata
+- **Purpose**: Provide a prominent call-to-action button for primary user actions like submitting forms, confirming dialogs, or starting flows.
+- **Contexts**: forms, modals, onboarding-flows, dashboards
+
+### Button-Icon — Metadata
+- **Purpose**: Provide a compact icon-only button for toolbar actions, close buttons, or secondary actions where space is limited.
+- **Contexts**: app-bars, modals, list-items
+
+### Button-VerticalList-Item — Metadata
+- **Purpose**: Represent a single action item within a vertical list menu, supporting tap, select, and multi-select modes.
+- **Contexts**: settings-screens, modals, list-items
+
+### Button-VerticalList-Set — Metadata
+- **Purpose**: Group Button-VerticalList-Item components into a vertical action menu with mode-driven selection behavior (tap, select, multi-select).
+- **Contexts**: settings-screens, modals, list-items
+
+---
+
 ## Usage Guidelines
 
 ### When to Use Buttons

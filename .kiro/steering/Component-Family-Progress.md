@@ -331,6 +331,34 @@ All values align to the 4px baseline grid.
 
 ---
 
+## Component Metadata
+
+### Progress-Indicator-Node-Base — Metadata
+- **Purpose**: Render a single step indicator node showing completion state (incomplete, active, complete) within a progress sequence.
+- **Contexts**: onboarding-flows, forms
+
+### Progress-Indicator-Connector-Base — Metadata
+- **Purpose**: Draw a visual connector line between progress indicator nodes to show step sequence and completion flow.
+- **Contexts**: onboarding-flows, forms
+
+### Progress-Indicator-Label-Base — Metadata
+- **Purpose**: Display a text label beneath or beside a progress indicator node to describe the step's name or status.
+- **Contexts**: onboarding-flows, forms
+
+### Progress-Pagination-Base — Metadata
+- **Purpose**: Show simple dot-based pagination indicating the current position within a sequence of pages or steps.
+- **Contexts**: onboarding-flows, content-feeds
+
+### Progress-Stepper-Base — Metadata
+- **Purpose**: Guide users through a multi-step workflow with labeled nodes showing step names and completion state.
+- **Contexts**: onboarding-flows, forms
+
+### Progress-Stepper-Detailed — Metadata
+- **Purpose**: Guide users through a multi-step workflow with labeled nodes, step descriptions, and connector lines showing full progress detail.
+- **Contexts**: onboarding-flows, forms
+
+---
+
 ## Usage Guidelines
 
 ### When to Use Progress Indicators

@@ -226,6 +226,28 @@ All components in this family inherit these foundational contracts:
 
 ---
 
+### Section 4b: Component Metadata
+
+**Purpose**: Structured metadata blocks for extraction script consumption
+**Target Size**: ~50 tokens per component
+**MCP Query**: `get_section({ heading: "Component Metadata" })`
+
+```markdown
+## Component Metadata
+
+### [Component-Name] — Metadata
+- **Purpose**: [agent-optimized, verb-first, ~30 words]
+- **Contexts**: [comma-separated controlled vocabulary values]
+```
+
+**Guidance**:
+- One block per implemented component in the family
+- Purpose should match the component-meta.yaml purpose field (single source)
+- Contexts MUST use values from the controlled vocabulary in `docs/component-meta-authoring-guide.md`
+- The extraction script reads these blocks to generate `component-meta.yaml` files
+
+---
+
 ### Section 5: Token Dependencies
 
 **Purpose**: Document design tokens consumed by family components
@@ -401,6 +423,8 @@ For reliable `get_section` queries, use consistent heading patterns:
 ## Behavioral Contracts      # Top-level section
 ## Component Schemas         # Top-level section
 ### [Component-Name]         # Individual component (queryable)
+## Component Metadata        # Top-level section
+### [Component-Name] — Metadata  # Per-component (queryable)
 ## Token Dependencies        # Top-level section
 ## Usage Guidelines          # Top-level section
 ## Cross-Platform Notes      # Top-level section
@@ -469,6 +493,12 @@ inclusion: manual
 ## Component Schemas
 
 [Full schema documentation for each component]
+
+---
+
+## Component Metadata
+
+[Structured metadata blocks per component — see Section 4b]
 
 ---
 

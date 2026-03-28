@@ -161,6 +161,14 @@ Component tokens follow the pattern: `color.{component}.{variant}.{property}`
 
 ---
 
+## Component Metadata
+
+### Avatar-Base — Metadata
+- **Purpose**: Display a user or entity avatar with image, initials fallback, and shape differentiation between human and AI agent entities.
+- **Contexts**: profile-sections, content-feeds, list-items, dashboards
+
+---
+
 ## Usage Guidelines
 
 ### Basic Usage

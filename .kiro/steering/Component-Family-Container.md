@@ -483,6 +483,18 @@ Container components resolve tokens through the Rosetta System's semantic-to-pri
 
 ---
 
+## Component Metadata
+
+### Container-Base — Metadata
+- **Purpose**: Provide a foundational structural wrapper to group and lay out child content with configurable edge spacing for page sections and content areas.
+- **Contexts**: dashboards, settings-screens, forms
+
+### Container-Card-Base — Metadata
+- **Purpose**: Display content in an elevated card for dashboards, stat cards, content previews, and visually distinct content grouping with interactive behavior.
+- **Contexts**: dashboards, content-feeds, product-cards, profile-sections, settings-screens
+
+---
+
 ## Usage Guidelines
 
 ### When to Use Containers

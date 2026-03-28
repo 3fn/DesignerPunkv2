@@ -247,6 +247,14 @@ Icon components resolve tokens through the Rosetta System's semantic-to-primitiv
 
 ---
 
+## Component Metadata
+
+### Icon-Base — Metadata
+- **Purpose**: Render an inline SVG icon that inherits the parent's text color, used for visual affordances alongside text or in icon-only buttons.
+- **Contexts**: list-items, app-bars, forms, dashboards
+
+---
+
 ## Usage Guidelines
 
 ### When to Use Icons

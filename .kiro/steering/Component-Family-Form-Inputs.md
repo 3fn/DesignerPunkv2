@@ -987,6 +987,42 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 
 ---
 
+## Component Metadata
+
+### Input-Text-Base — Metadata
+- **Purpose**: Collect general text input from the user with a float label pattern, validation states, and helper text.
+- **Contexts**: forms, settings-screens
+
+### Input-Text-Email — Metadata
+- **Purpose**: Collect an email address with built-in format validation, email keyboard type, and autocomplete support.
+- **Contexts**: forms, onboarding-flows
+
+### Input-Text-Password — Metadata
+- **Purpose**: Collect a password with masked input, visibility toggle, and strength validation feedback.
+- **Contexts**: forms, onboarding-flows, settings-screens
+
+### Input-Text-PhoneNumber — Metadata
+- **Purpose**: Collect a phone number with automatic formatting, phone keyboard type, and country code support.
+- **Contexts**: forms, onboarding-flows, profile-sections
+
+### Input-Checkbox-Base — Metadata
+- **Purpose**: Collect a single boolean toggle choice from the user with a checkbox control and associated label for forms and settings.
+- **Contexts**: forms, settings-screens, modals
+
+### Input-Checkbox-Legal — Metadata
+- **Purpose**: Collect explicit legal consent with a checkbox that enforces GDPR compliance by preventing pre-checked state.
+- **Contexts**: forms, onboarding-flows, settings-screens
+
+### Input-Radio-Base — Metadata
+- **Purpose**: Represent a single option within a radio group for mutually exclusive choices.
+- **Contexts**: forms, settings-screens
+
+### Input-Radio-Set — Metadata
+- **Purpose**: Group radio buttons into a mutually exclusive selection set where only one option can be active at a time.
+- **Contexts**: forms, settings-screens, onboarding-flows
+
+---
+
 ## Usage Guidelines
 
 ### When to Use Form Inputs

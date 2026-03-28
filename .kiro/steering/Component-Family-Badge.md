@@ -352,6 +352,22 @@ Badge components resolve tokens at render time using platform-appropriate mechan
 
 ---
 
+## Component Metadata
+
+### Badge-Count-Base — Metadata
+- **Purpose**: Display a numeric count indicator for unread notifications, item quantities, or stat card metrics in a compact badge.
+- **Contexts**: navigation-tabs, list-items, icon-overlays, app-bars, dashboards
+
+### Badge-Count-Notification — Metadata
+- **Purpose**: Display a notification-specific count badge with semantic color and live region announcements for screen readers.
+- **Contexts**: icon-overlays, app-bars, navigation-tabs
+
+### Badge-Label-Base — Metadata
+- **Purpose**: Display a text label badge for categorization, status, or tagging content with short descriptive words.
+- **Contexts**: product-cards, list-items, dashboards
+
+---
+
 ## Usage Guidelines
 
 ### When to Use This Family

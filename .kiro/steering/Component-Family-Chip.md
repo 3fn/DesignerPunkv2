@@ -299,6 +299,22 @@ Chip components resolve tokens at render time using platform-appropriate mechani
 
 ---
 
+## Component Metadata
+
+### Chip-Base — Metadata
+- **Purpose**: Provide a compact interactive element for selections, filters, or actions in horizontal groups.
+- **Contexts**: filter-bars, forms
+
+### Chip-Filter — Metadata
+- **Purpose**: Toggle a content filter on or off in a filter bar, allowing users to narrow displayed content by multiple criteria simultaneously.
+- **Contexts**: filter-bars, content-feeds, product-cards
+
+### Chip-Input — Metadata
+- **Purpose**: Represent a user-entered value like a tag or selection that can be dismissed with a remove action.
+- **Contexts**: forms, filter-bars
+
+---
+
 ## Usage Guidelines
 
 ### When to Use This Family
