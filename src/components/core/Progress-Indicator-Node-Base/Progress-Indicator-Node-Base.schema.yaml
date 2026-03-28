@@ -2,7 +2,13 @@ name: Progress-Indicator-Node-Base
 type: primitive
 family: ProgressIndicator
 version: "1.0.0"
-readiness: development
+readiness:
+  web:
+    reviewed: false
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 
 composition:
   internal:

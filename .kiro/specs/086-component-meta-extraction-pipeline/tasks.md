@@ -79,7 +79,7 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Readiness Infrastructure"`
 
-  - [ ] 2.1 Migrate schemas to per-platform readiness
+  - [x] 2.1 Migrate schemas to per-platform readiness
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

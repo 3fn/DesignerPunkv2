@@ -2,7 +2,13 @@ name: Progress-Indicator-Label-Base
 type: primitive
 family: ProgressIndicator
 version: "1.0.0"
-readiness: development
+readiness:
+  web:
+    reviewed: false
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 
 description: |
   Primitive label component for the Progress Indicator family.

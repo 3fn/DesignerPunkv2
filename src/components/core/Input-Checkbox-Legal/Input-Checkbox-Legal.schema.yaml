@@ -11,7 +11,13 @@ name: Input-Checkbox-Legal
 type: semantic
 family: FormInput
 version: "1.0.0"
-readiness: production-ready
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 inherits: Input-Checkbox-Base
 omits: [size, indeterminate, labelAlign]
 

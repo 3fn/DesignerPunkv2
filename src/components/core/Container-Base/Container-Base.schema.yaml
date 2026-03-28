@@ -17,7 +17,13 @@ name: Container-Base
 type: primitive
 family: Container
 version: "1.0.0"
-readiness: production-ready
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 
 # Component description
 description: |

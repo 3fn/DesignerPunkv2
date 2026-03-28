@@ -17,7 +17,13 @@ name: Container-Card-Base
 type: type-primitive
 family: Container
 version: "1.0.0"
-readiness: development
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: true
+  android:
+    reviewed: true
 
 composition:
   internal:

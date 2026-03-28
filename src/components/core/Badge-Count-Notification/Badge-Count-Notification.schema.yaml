@@ -18,7 +18,13 @@ type: semantic
 family: Badge
 inherits: Badge-Count-Base
 version: "1.0.0"
-readiness: production-ready
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 platforms: [web, ios, android]
 
 # Component description

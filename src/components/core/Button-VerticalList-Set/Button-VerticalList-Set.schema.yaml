@@ -11,7 +11,13 @@ name: Button-VerticalList-Set
 type: pattern
 family: Button
 version: "1.0.0"
-readiness: production-ready
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 
 description: |
   Pattern orchestrator for vertical list button groups. Manages selection

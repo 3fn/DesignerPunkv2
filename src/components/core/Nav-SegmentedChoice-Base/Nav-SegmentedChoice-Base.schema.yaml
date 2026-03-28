@@ -15,7 +15,13 @@ name: Nav-SegmentedChoice-Base
 type: primitive
 family: Navigation
 version: "1.0.0"
-readiness: development
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: true
+  android:
+    reviewed: true
 
 description: |
   Navigation control for switching between mutually exclusive content surfaces.

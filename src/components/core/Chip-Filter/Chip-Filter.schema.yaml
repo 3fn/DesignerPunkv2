@@ -23,7 +23,13 @@ name: Chip-Filter
 type: semantic
 family: Chip
 version: "1.0.0"
-readiness: production-ready
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 
 # Inheritance declaration
 inherits: Chip-Base

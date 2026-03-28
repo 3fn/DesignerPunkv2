@@ -12,7 +12,13 @@ name: Input-Radio-Set
 type: pattern
 family: FormInput
 version: "1.0.0"
-readiness: production-ready
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 
 description: |
   Orchestrator component managing a group of Input-Radio-Base children.

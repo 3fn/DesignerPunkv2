@@ -12,7 +12,13 @@ name: Input-Radio-Base
 type: primitive
 family: FormInput
 version: "1.0.0"
-readiness: production-ready
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 
 description: |
   Primitive radio button component supporting selected/unselected states

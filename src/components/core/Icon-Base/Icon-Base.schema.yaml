@@ -17,7 +17,13 @@ name: Icon-Base
 type: primitive
 family: Icon
 version: "1.0.0"
-readiness: production-ready
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 
 # Component description
 description: |

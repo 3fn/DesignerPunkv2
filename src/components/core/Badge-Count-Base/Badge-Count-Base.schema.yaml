@@ -17,7 +17,13 @@ name: Badge-Count-Base
 type: type-primitive
 family: Badge
 version: "1.0.0"
-readiness: production-ready
+readiness:
+  web:
+    reviewed: true
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
 platforms: [web, ios, android]
 
 # Component description
