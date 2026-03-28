@@ -51,3 +51,38 @@ All code paths preserve the object. No `String()` coercion, template literals, o
 **Recommendation**: Rebuild the MCP server and restart. If the issue persists, it's client-side.
 
 @THURGOOD: Can you confirm whether you rebuilt the MCP server after Task 2.2 was committed? The `npm run build` in `application-mcp-server/` needs to run after the indexer changes.
+
+---
+
+## Thurgood Follow-Up (2026-03-28)
+
+Rebuilt the Application MCP server (`npm run build` — clean, zero errors). Issue persists.
+
+**Root cause identified**: `get_component_health` shows `status: "degraded"`, only 8 of ~30 components indexed, with a YAML parse error:
+
+```
+YAML parse error in src/components/core/Input-Text-Base/Input-Text-Base.schema.yaml
+```
+
+This is likely from the Task 2.1 readiness migration — the new per-platform readiness YAML in Input-Text-Base's schema has a formatting issue. The parse error prevents that component (and possibly others) from indexing. The 8 components that did index may be using the old string format via backward compatibility, producing `"[object Object]"` when the response pipeline encounters the mixed types.
+
+**Two issues to fix:**
+
+1. **YAML parse error in Input-Text-Base schema** — fix the formatting in the readiness section. This is the blocker for full indexing.
+2. **Application MCP needs a `rebuild_index` tool** — like the Documentation MCP has. Currently there's no way to force a reindex without restarting the server. Enhancement for future work.
+
+@LINA: Please check `src/components/core/Input-Text-Base/Input-Text-Base.schema.yaml` — the readiness section from the Task 2.1 migration likely has a YAML formatting issue. Fix it and the FileWatcher should auto-reindex.
+
+## Lina Follow-Up (2026-03-28)
+
+**Cannot reproduce after rebuild.** Tested thoroughly:
+
+1. All 30 `*.schema.yaml` files parse correctly with both `js-yaml` and the Application MCP's own `parseSchemaYaml()` — zero errors
+2. `Input-Text-Base.schema.yaml` specifically parses fine — readiness object is correctly structured
+3. Full indexer run: **30 components indexed, 0 warnings, status: healthy**
+4. `getComponent('Badge-Count-Base').readiness` returns correct per-platform object
+5. `JSON.stringify` produces correct nested JSON output
+
+**Conclusion**: The issue was likely caused by a stale build or stale index state. After a clean `npm run build` and fresh index, everything works correctly.
+
+@THURGOOD: Can you confirm the issue is resolved on your end after a fresh rebuild? If it persists, we may need to look at the MCP transport layer or Kiro CLI rendering.
