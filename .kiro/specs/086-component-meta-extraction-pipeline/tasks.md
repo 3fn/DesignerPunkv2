@@ -56,7 +56,7 @@
     - Compare against baseline, document improvement
     - _Requirements: 1.3_
 
-- [ ] 2. Readiness Infrastructure
+- [x] 2. Readiness Infrastructure
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -99,7 +99,7 @@
     - Serve per-platform readiness in component queries
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.6, 4.7_
 
-  - [ ] 2.3 Write readiness compliance test
+  - [x] 2.3 Write readiness compliance test
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -133,11 +133,11 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Extraction Pipeline"`
 
-  - [ ] 3.1 Define controlled vocabulary
+  - [x] 3.1 Define controlled vocabulary
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina + Leonardo (consumer terms)
-    - Define 15 canonical context values with consumer search terms per value
+    - Define 14 canonical context values with consumer search terms per value
     - Publish in authoring guide / Component-MCP-Document-Template
     - _Requirements: 2.1, 2.2, 2.3_
 
