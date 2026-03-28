@@ -135,13 +135,27 @@ export interface ContractTokenRelationships {
 // Assembled Component Metadata (full response)
 // ---------------------------------------------------------------------------
 
+export interface PlatformReadinessStatus {
+  status: 'not-applicable' | 'not-started' | 'scaffold' | 'development' | 'production-ready';
+  reason?: string;  // Only for not-applicable
+  reviewed: boolean;
+  hasImplementation: boolean;
+  hasTests: boolean;
+}
+
+export interface PlatformReadiness {
+  web: PlatformReadinessStatus;
+  ios: PlatformReadinessStatus;
+  android: PlatformReadinessStatus;
+}
+
 export interface ComponentMetadata {
   /** Component identity (from schema.yaml) */
   name: string;
   type: string;
   family: string;
   version: string;
-  readiness: string;
+  readiness: PlatformReadiness;
   description: string;
 
   /** Structural data (from schema.yaml) */
@@ -186,7 +200,7 @@ export interface ComponentCatalogEntry {
   type: string;
   family: string;
   purpose: string | null;
-  readiness: string;
+  readiness: PlatformReadiness;
   platforms: string[];
   contractCount: number;
 }
@@ -196,7 +210,7 @@ export interface ComponentSummary {
   name: string;
   type: string;
   family: string;
-  readiness: string;
+  readiness: PlatformReadiness;
   description: string;
   platforms: string[];
   contractCategories: string[];

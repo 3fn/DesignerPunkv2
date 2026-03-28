@@ -22,12 +22,18 @@ import {
 // Parsed file types (raw YAML structure before assembly)
 // ---------------------------------------------------------------------------
 
+export interface ParsedSchemaReadiness {
+  web?: { reviewed?: boolean; status?: string; reason?: string };
+  ios?: { reviewed?: boolean; status?: string; reason?: string };
+  android?: { reviewed?: boolean; status?: string; reason?: string };
+}
+
 export interface ParsedSchema {
   name: string;
   type: string;
   family: string;
   version: string;
-  readiness: string;
+  readiness: ParsedSchemaReadiness | string;
   description: string;
   platforms: string[];
   properties: Record<string, PropertyDefinition>;
@@ -108,7 +114,7 @@ export function parseSchemaYaml(filePath: string): ParseResult<ParsedSchema> {
       type: String(doc.type ?? ''),
       family: String(doc.family ?? ''),
       version: String(doc.version ?? ''),
-      readiness: String(doc.readiness ?? ''),
+      readiness: doc.readiness != null && typeof doc.readiness === 'object' ? doc.readiness as ParsedSchemaReadiness : String(doc.readiness ?? ''),
       description: String(doc.description ?? '').trim(),
       platforms,
       properties,

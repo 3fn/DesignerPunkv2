@@ -20,8 +20,10 @@ import {
   FamilyGuidance,
   LayoutTemplate,
   LayoutTemplateCatalogEntry,
+  PlatformReadiness,
+  PlatformReadinessStatus,
 } from '../models';
-import { parseSchemaYaml, parseContractsYaml, parseComponentMetaYaml, ParsedContracts } from './parsers';
+import { parseSchemaYaml, parseContractsYaml, parseComponentMetaYaml, ParsedContracts, ParsedSchemaReadiness } from './parsers';
 import { resolveInheritance, validateOmits } from './InheritanceResolver';
 import { deriveContractTokenRelationships } from './ContractTokenDeriver';
 import { PatternIndexer } from './PatternIndexer';
@@ -268,7 +270,7 @@ export class ComponentIndexer {
       type: schema.type,
       family: schema.family,
       version: schema.version,
-      readiness: schema.readiness,
+      readiness: this.derivePlatformReadiness(dirPath, schema.readiness),
       description: schema.description,
       platforms: schema.platforms,
       properties: schema.properties,
@@ -290,6 +292,75 @@ export class ComponentIndexer {
     };
 
     this.index.set(schema.name, metadata);
+  }
+
+  /**
+   * Derive per-platform readiness from filesystem scan + schema reviewed flags.
+   * Design Decision 4 (Spec 086).
+   */
+  private derivePlatformReadiness(
+    componentDir: string,
+    schemaReadiness: ParsedSchemaReadiness | string,
+  ): PlatformReadiness {
+    // Check component-level baseline artifacts
+    const hasSchema = fs.readdirSync(componentDir).some(f => f.endsWith('.schema.yaml'));
+    const hasContracts = fs.existsSync(path.join(componentDir, 'contracts.yaml'));
+    const hasTypes = fs.existsSync(path.join(componentDir, 'types.ts'));
+    const baselineComplete = hasSchema && hasContracts && hasTypes;
+
+    const platforms: Array<{ key: 'web' | 'ios' | 'android'; implPattern: RegExp; testPatterns: RegExp[] }> = [
+      { key: 'web', implPattern: /\.web\.ts$/, testPatterns: [/\.test\.ts$/] },
+      { key: 'ios', implPattern: /\.ios\.swift$/, testPatterns: [/Tests\.swift$/] },
+      { key: 'android', implPattern: /\.android\.kt$/, testPatterns: [/Test\.kt$/] },
+    ];
+
+    const result: Record<string, PlatformReadinessStatus> = {};
+
+    for (const p of platforms) {
+      // Parse reviewed flag from schema
+      const reviewed = typeof schemaReadiness === 'object'
+        ? schemaReadiness[p.key]?.reviewed === true
+        : false;
+      const notApplicable = typeof schemaReadiness === 'object'
+        ? schemaReadiness[p.key]?.status === 'not-applicable'
+        : false;
+      const naReason = typeof schemaReadiness === 'object'
+        ? schemaReadiness[p.key]?.reason
+        : undefined;
+
+      if (notApplicable) {
+        result[p.key] = { status: 'not-applicable', reason: naReason, reviewed: false, hasImplementation: false, hasTests: false };
+        continue;
+      }
+
+      // Scan platform directory
+      const platformDir = path.join(componentDir, 'platforms', p.key);
+      const hasImpl = fs.existsSync(platformDir) &&
+        fs.readdirSync(platformDir).some(f => p.implPattern.test(f));
+
+      // Scan for tests — check platform dir and component __tests__ dir
+      const testsDir = path.join(componentDir, '__tests__');
+      const hasTests = (
+        (fs.existsSync(platformDir) && fs.readdirSync(platformDir).some(f => p.testPatterns.some(tp => tp.test(f)))) ||
+        (fs.existsSync(testsDir) && fs.readdirSync(testsDir).some(f => p.testPatterns.some(tp => tp.test(f))))
+      );
+
+      // Status derivation
+      let status: PlatformReadinessStatus['status'];
+      if (!hasImpl) {
+        status = 'not-started';
+      } else if (!baselineComplete || !hasTests) {
+        status = 'scaffold';
+      } else if (!reviewed) {
+        status = 'development';
+      } else {
+        status = 'production-ready';
+      }
+
+      result[p.key] = { status, reviewed, hasImplementation: hasImpl, hasTests };
+    }
+
+    return result as unknown as PlatformReadiness;
   }
 
   /**

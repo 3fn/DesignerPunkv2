@@ -7,7 +7,11 @@ import { ComponentMetadata, CompositionDefinition } from '../../models';
 
 function makeMeta(name: string, composition: CompositionDefinition | null, type = 'type-primitive'): ComponentMetadata {
   return {
-    name, type, family: 'Test', version: '1.0.0', readiness: 'production-ready',
+    name, type, family: 'Test', version: '1.0.0', readiness: {
+      web: { status: 'production-ready', reviewed: true, hasImplementation: true, hasTests: true },
+      ios: { status: 'production-ready', reviewed: true, hasImplementation: true, hasTests: true },
+      android: { status: 'production-ready', reviewed: true, hasImplementation: true, hasTests: true },
+    },
     description: '', platforms: ['web'], properties: {}, tokens: [],
     composition, omits: [],
     contracts: { inheritsFrom: null, active: {}, excluded: {}, own: [], inherited: [] },

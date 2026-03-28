@@ -88,7 +88,7 @@
     - Add `not-applicable` with reason where platforms are intentionally unsupported
     - _Requirements: 4.5, 4.8_
 
-  - [ ] 2.2 Enhance Application MCP indexer
+  - [x] 2.2 Enhance Application MCP indexer
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Agent**: Lina (implements) + Thurgood (reviews)

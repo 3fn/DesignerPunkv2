@@ -29,7 +29,7 @@ describe('CoverageDrift', () => {
     const productionFamilies = new Set<string>();
 
     for (const c of catalog) {
-      if (c.readiness === 'production-ready' && c.family) {
+      if (c.readiness.web.status === 'production-ready' && c.family) {
         productionFamilies.add(c.family);
       }
     }

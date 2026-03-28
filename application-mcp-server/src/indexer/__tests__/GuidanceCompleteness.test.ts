@@ -27,7 +27,7 @@ describe('GuidanceCompleteness', () => {
     const unreachable: string[] = [];
 
     for (const c of catalog) {
-      if (c.readiness !== 'production-ready' || !c.family) continue;
+      if (c.readiness.web.status !== 'production-ready' || !c.family) continue;
       if (!indexer.getGuidance(c.name)) {
         unreachable.push(
           `${c.name} — not reachable via getGuidance(). See Component Development Guide § "Family Guidance Standards"`
