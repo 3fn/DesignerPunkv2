@@ -1,8 +1,18 @@
+---
+inclusion: manual
+name: component-mcp-query-guide
+description: Application MCP tool reference — all tools, parameters, response shapes, and usage patterns. Load when querying the Application MCP or building MCP integrations.
+---
+
 # Application MCP Query Guide
 
 **Date**: 2026-02-28
-**Spec**: 064 — Component Metadata Schema
 **Purpose**: Documents all MCP tools, parameters, and usage patterns for the Application MCP server
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: mcp-documentation, component-development
+**Spec**: 064 — Component Metadata Schema
 
 ---
 
@@ -106,7 +116,7 @@ Get complete assembled metadata including all contracts, properties, composition
 
 **Returns**: `QueryResult<ComponentMetadata>`
 
-See `docs/component-metadata-schema-reference.md` for the full field reference.
+See `.kiro/steering/component-metadata-schema-reference.md` for the full field reference.
 
 ---
 
@@ -261,5 +271,5 @@ All tools return a `QueryResult<T>`:
 
 ## Related Documentation
 
-- `docs/component-metadata-schema-reference.md` — Full field reference for all response types
-- `docs/component-meta-authoring-guide.md` — How to write component-meta.yaml files
+- `.kiro/steering/component-metadata-schema-reference.md` — Full field reference for all response types
+- `.kiro/steering/component-meta-authoring-guide.md` — How to write component-meta.yaml files

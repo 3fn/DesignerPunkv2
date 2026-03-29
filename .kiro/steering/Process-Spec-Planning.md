@@ -2522,6 +2522,34 @@ When creating cross-references, calculate relative paths based on the source doc
 
 ---
 
+## Escape Hatch Documentation
+
+When a spec intentionally deviates from component selection guidance (e.g., `get_prop_guidance` recommends Component A but the spec uses Component B), the deviation must be documented as an escape hatch.
+
+### Format
+
+```markdown
+### Escape Hatch: [Component used] for [use case]
+- **Date**: [YYYY-MM-DD]
+- **Guidance says**: [What get_prop_guidance or selection rules recommend, with source]
+- **This spec uses**: [What the spec actually chose]
+- **Reason**: [Why the deviation is justified]
+- **Migration trigger**: [Condition under which this should be revisited]
+```
+
+### Resolution Path
+
+When selection verification identifies a deviation from selection guidance and the spec author disagrees:
+1. The deviation is documented as an escape hatch with rationale
+2. Escape hatches are tracked during Stacy's Lessons Synthesis Reviews for migration opportunities
+3. When the migration trigger is met, the escape hatch is flagged for resolution
+
+### Placement
+
+Escape hatches are placed in the spec's design document or a dedicated section of the spec. They are living annotations — they should be findable during governance reviews.
+
+---
+
 ## Anti-Patterns to Avoid
 
 **Note**: This section intentionally uses the same heading as other steering documents because each document addresses anti-patterns specific to its domain. Spec Planning Standards focuses on spec creation anti-patterns (requirements, design, tasks), while other documents cover their respective domains.

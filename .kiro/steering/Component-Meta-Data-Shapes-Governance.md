@@ -29,7 +29,7 @@ description: Governance criteria for adding data_shapes to component-meta.yaml. 
 2. ✅ **Escalation Process** — follow the ballot measure process if criteria are met
 
 **WHEN authoring component-meta.yaml THEN read:**
-- `docs/component-meta-authoring-guide.md` for field descriptions, examples, and the new component checklist
+- `.kiro/steering/component-meta-authoring-guide.md` for field descriptions, examples, and the new component checklist
 
 ---
 
@@ -112,7 +112,7 @@ This format mirrors the existing `properties:` structure in schema.yaml for cons
 
 ## Related Documentation
 
-- `docs/component-meta-authoring-guide.md` — Field descriptions, examples, and new component checklist for authoring component-meta.yaml files
+- `.kiro/steering/component-meta-authoring-guide.md` — Field descriptions, examples, and new component checklist for authoring component-meta.yaml files
 - `.kiro/specs/064-component-metadata-schema/design-outline.md` — Design decision Q9 (data contracts deferral)
 - `.kiro/specs/064-component-metadata-schema/findings/a2ui-mapping-exercise.md` — A2UI mapping exercise findings including data contracts pause point evaluation
 

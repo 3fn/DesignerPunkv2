@@ -1,8 +1,18 @@
+---
+inclusion: manual
+name: component-metadata-schema-reference
+description: Complete field reference for assembled ComponentMetadata JSON — all fields, types, and response shapes. Load when understanding MCP response data or debugging metadata issues.
+---
+
 # Component Metadata Schema Reference
 
 **Date**: 2026-02-28
-**Spec**: 064 — Component Metadata Schema
 **Purpose**: Documents all fields in the assembled component metadata JSON
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: mcp-documentation, component-development
+**Spec**: 064 — Component Metadata Schema
 
 ---
 
@@ -210,6 +220,6 @@ Returned by `get_component_full`. Complete assembled metadata.
 
 ## Related Documentation
 
-- `docs/component-meta-authoring-guide.md` — How to write component-meta.yaml files
-- `docs/component-mcp-query-guide.md` — MCP query interface and tool documentation
+- `.kiro/steering/component-meta-authoring-guide.md` — How to write component-meta.yaml files
+- `.kiro/steering/component-mcp-query-guide.md` — MCP query interface and tool documentation
 - `.kiro/steering/Contract-System-Reference.md` — Contract taxonomy and naming conventions

@@ -12,6 +12,3 @@ exclude:
   - releases
   - examples
   - token-system-overview.md
-  - component-mcp-query-guide.md
-  - component-metadata-schema-reference.md
-  - component-meta-authoring-guide.md

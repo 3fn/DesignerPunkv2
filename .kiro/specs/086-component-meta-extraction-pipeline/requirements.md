@@ -39,6 +39,8 @@ Research with 6 agents identified four root causes behind component discoverabil
 
 ### Requirement 3: Full Single Source Extraction
 
+> **Implementation Note (2026-03-28)**: "Full" single source was achieved for `purpose` and `contexts` only. `usage` and `alternatives` use a hybrid approach — derived when possible, hand-authored content preserved when richer. See AC 3 implementation note for rationale and future path.
+
 **User Story**: As a design system maintainer, I want component-meta.yaml files generated from Component-Family steering docs, so that metadata is maintained in one place and drift is eliminated.
 
 #### Acceptance Criteria
@@ -51,6 +53,13 @@ Research with 6 agents identified four root causes behind component discoverabil
    - **Contexts**: [comma-separated controlled vocabulary values]
    ```
 3. The extraction script SHALL derive `usage` (when_to_use / when_not_to_use) and `alternatives` from existing family doc sections (Usage Guidelines, selection tables)
+
+   > **Implementation Note (2026-03-28)**: Full derivation of usage and alternatives was attempted and failed the Task 3.5 quality gate. Derived usage was worse than hand-authored for 15+ components because: (a) selection table scenarios are terse labels, not actionable sentences; (b) family-level fallback produces identical usage for all components in a family; (c) cross-family alternatives are not derivable from within-family selection tables. The information architecture of family docs supports human reading, not machine extraction of per-component usage specificity.
+   >
+   > **Implemented as**: Purpose + contexts are always extracted from family docs (true single source). Usage + alternatives use a three-tier strategy: per-component derivation → family-level fallback → preserve existing hand-authored content when richer (measured by entry count). This means usage and alternatives remain partially dual-maintained. The authoritative single source for selection guidance is `family-guidance/*.yaml` served via `get_prop_guidance()`; the component-meta.yaml `usage` field is a secondary consumer.
+   >
+   > **Future path**: Full single-source extraction for usage/alternatives would require either restructuring family docs to contain machine-extractable per-component usage sentences, or enriching `family-guidance/*.yaml` to serve as the extraction source for all fields. Neither was justified given that the current hybrid approach passes all 8 benchmark queries and the quality gate.
+
 4. The extraction script SHALL generate `component-meta.yaml` files that pass Application MCP health check with zero warnings
 5. Generated meta files SHALL be committed to git — changes visible in diffs as ongoing validation
 6. WHEN a family doc edit changes a generated meta file THEN the diff SHALL be visible at commit time

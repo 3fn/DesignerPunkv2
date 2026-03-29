@@ -16,7 +16,7 @@
         ".kiro/specs/**",
         "docs/specs/**",
         "application-mcp-server/**",
-        "docs/component-meta-authoring-guide.md"
+        ".kiro/steering/component-meta-authoring-guide.md"
       ]
     }
   },
@@ -53,7 +53,7 @@
     "skill://.kiro/steering/Component-Family-Navigation.md",
     "skill://.kiro/steering/Component-Family-Progress.md",
     "skill://.kiro/steering/Component-Schema-Format.md",
-    "skill://docs/component-meta-authoring-guide.md",
+    "skill://.kiro/steering/component-meta-authoring-guide.md",
     {
       "type": "knowledgeBase",
       "source": "file://./src/components",

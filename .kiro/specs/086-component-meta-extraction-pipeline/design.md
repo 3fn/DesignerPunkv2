@@ -71,6 +71,8 @@ Baseline captured before any enrichment. Post-enrichment results compared agains
 
 **Requirement**: Req 3 AC 3
 
+> **Implementation Note (2026-03-28)**: The two-tier strategy below was implemented and tested. The Task 3.5 quality gate revealed it produces worse results than hand-authored content for 15 of 30 components. Root causes: selection table scenarios are labels not sentences, family-level fallback erases per-component differentiation, and cross-family alternatives aren't derivable. A third tier was added: preserve existing hand-authored usage/alternatives when richer (measured by `when_to_use` entry count). 15 components use derived content; 15 preserve hand-authored. All 8 benchmark queries pass under the hybrid approach.
+
 The extraction script derives `when_to_use` and `when_not_to_use` using a two-tier strategy:
 
 1. **Per-component entries preferred**: If the family doc has a "Primitive vs Semantic Selection" table (or equivalent per-component guidance), extract entries for each component individually. Example: Badge family's selection table maps "Numeric count on navigation elements" → Badge-Count-Base, "Notification count with live region" → Badge-Count-Notification.
@@ -158,6 +160,14 @@ elif platform file + tests exist and reviewed == true:
 ### Decision 5: Knowledge Base Configuration
 
 **Requirement**: Req 6
+
+> **Implementation Note (2026-03-28)**: The `includePatterns` field in the component knowledge base template below is not supported by Kiro's agent configuration schema. The supported knowledge base fields are: `type`, `source`, `name`, `description`, `indexType`, `autoUpdate`. The `source` field points at an entire directory with no filtering capability.
+>
+> **Implemented as**: Each platform agent gets (1) the Platform Resource Map as a `file://` resource for directory navigation, and (2) a platform-scoped token knowledge base (`src/tokens/platforms/{platform}`) which is naturally filtered by directory structure. The broad component knowledge base (`src/components/core`) was not added because it would index all 3 platforms for every agent — the opposite of the platform-scoped access the research recommended.
+>
+> **Alternatives evaluated**: `agentSpawn` hooks to output filtered file listings (adds per-conversation token cost for what the resource map already provides); custom MCP tool for platform-filtered source access (scope creep — defer unless Task 4.3 validation reveals agents still struggle with navigation).
+>
+> **Future path**: If Kiro adds `includePatterns` or equivalent filtering to knowledge base resources, the original template below becomes viable. Alternatively, if scale demands it, a `get_platform_files` MCP tool could serve platform-filtered source content.
 
 Per-platform agent configuration in their `.json` files:
 

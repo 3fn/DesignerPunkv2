@@ -107,6 +107,12 @@ When Peter requests a process quality check, or at natural checkpoints (screen c
    - Are systemic learnings routed back to the appropriate system agent?
    - Are recurring patterns being identified and flagged for systematization?
 
+8. **Metadata Accuracy**
+   - Do accumulated lessons reveal stale `whenToUse` or `whenNotToUse` entries in component metadata?
+   - Are there missing `alternatives` that lessons or spec deviations have exposed?
+   - Do `purpose` fields match the terms product agents actually search for? (Reference: controlled vocabulary consumer search terms in the authoring guide)
+   - Are escape hatches being tracked — have any migration triggers been met?
+
 ### Incremental Capture Rule
 When you identify a lesson or discovery during an audit, document it immediately — don't batch for the end of the session. Append to a running `lessons-in-progress.md` in the spec's completion directory. If the session ends prematurely, the partial capture survives. This applies to your own discoveries as well as gaps you find in other agents' capture.
 
