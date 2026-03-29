@@ -2,22 +2,12 @@ purpose: "Represent a single option within a radio group for mutually exclusive 
 
 usage:
   when_to_use:
-    - "Standalone radio (rare)"
+    - "Individual radio options inside an Input-Radio-Set"
+    - "Mutually exclusive choices where only one can be selected"
   when_not_to_use:
-    - "Email address collection — use Input-Text-Email"
-    - "Password entry — use Input-Text-Password"
-    - "Phone number collection — use Input-Text-PhoneNumber"
-    - "Generic text input — use Input-Text-Base"
-    - "Custom validation needs — use Input-Text-Base"
-    - "Terms of service acceptance — use Input-Checkbox-Legal"
-    - "Privacy policy consent — use Input-Checkbox-Legal"
-    - "Marketing opt-in — use Input-Checkbox-Legal"
-    - "Generic binary selection — use Input-Checkbox-Base"
-    - "Parent checkbox (select all) — use Input-Checkbox-Base"
-    - "Settings toggle — use Input-Checkbox-Base"
-    - "Displaying read-only text (use Data Displays instead)"
-    - "Need multi-line text input (use Textarea component when available)"
-    - "Building search interfaces (use Search component when available)"
+    - "Standalone boolean choices — use Input-Checkbox-Base"
+    - "Multi-select choices — use Input-Checkbox-Base (multiple instances)"
+    - "Using outside an Input-Radio-Set container"
 
 contexts:
   - "forms"

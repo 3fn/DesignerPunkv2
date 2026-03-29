@@ -2,16 +2,12 @@ purpose: "Display a numeric count indicator for unread notifications, item quant
 
 usage:
   when_to_use:
-    - "Unread count"
-    - "Custom-colored count"
+    - "Showing unread message or notification counts"
+    - "Displaying item quantities in a cart or list"
+    - "Numeric indicators overlaid on icons or avatars"
   when_not_to_use:
-    - "Category label — use Badge-Label-Base"
-    - "Status indicator — use Badge-Label-Base"
-    - "Notification count — use Badge-Count-Notification"
-    - "User interaction is needed (use Tag or Chip components instead)"
-    - "Content is dismissible (use Tag with dismiss action)"
-    - "Selection is required (use Chip or Toggle)"
-    - "The indicator needs to be focusable for accessibility"
+    - "Displaying text labels or status words — use Badge-Label-Base"
+    - "Notification-specific counts needing semantic color — use Badge-Count-Notification"
 
 contexts:
   - "navigation-tabs"

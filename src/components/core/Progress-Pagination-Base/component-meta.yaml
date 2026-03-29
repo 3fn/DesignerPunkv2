@@ -15,4 +15,8 @@ contexts:
   - "onboarding-flows"
   - "content-feeds"
 
-alternatives: []
+alternatives:
+  - component: Progress-Stepper-Base
+    reason: "When steps need labels and the user navigates a defined workflow"
+  - component: Progress-Stepper-Detailed
+    reason: "When steps need labels, descriptions, and connector lines"

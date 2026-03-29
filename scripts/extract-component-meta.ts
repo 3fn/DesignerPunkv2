@@ -137,7 +137,7 @@ function deriveUsage(
   familyWhenNotTo: string[],
   allComponents: string[],
   familyDocName: string,
-): { usage: UsageData; derived: 'per-component' | 'family-level' } {
+): { usage: UsageData; derived: 'per-component' | 'family-level' | 'preserved' } {
   const when_to_use: string[] = [];
   const when_not_to_use: string[] = [];
 
@@ -194,6 +194,29 @@ function loadGuidanceUsage(familyName: string): UsageData | null {
     if (when_to_use.length > 0) return { when_to_use, when_not_to_use };
   }
   return null;
+}
+
+// --- Preservation ---
+
+function loadExistingMeta(componentDir: string): GeneratedMeta | null {
+  const metaPath = path.join(componentDir, 'component-meta.yaml');
+  if (!fs.existsSync(metaPath)) return null;
+  try {
+    const content = yaml.load(fs.readFileSync(metaPath, 'utf-8')) as any;
+    if (!content) return null;
+    return {
+      purpose: content.purpose || '',
+      usage: {
+        when_to_use: content.usage?.when_to_use || [],
+        when_not_to_use: content.usage?.when_not_to_use || [],
+      },
+      contexts: content.contexts || [],
+      alternatives: (content.alternatives || []).map((a: any) => ({
+        component: a.component,
+        reason: a.reason,
+      })),
+    };
+  } catch { return null; }
 }
 
 // --- Generation ---
@@ -301,16 +324,28 @@ function main(): void {
       }
     }
 
+    // Load existing hand-authored meta for preservation comparison
+    const existing = loadExistingMeta(path.join(COMPONENTS_DIR, comp));
+
+    // Purpose + contexts: always from family doc metadata block (single source)
+    // Usage + alternatives: preserve hand-authored when richer than derived
+
     // Derive usage
-    const { usage, derived } = deriveUsage(
+    const { usage: derivedUsage, derived } = deriveUsage(
       comp, parsed.selectionTable, parsed.usage.familyWhenTo, parsed.usage.familyWhenNotTo,
       allComponents, docName,
     );
 
-    let finalUsage = usage;
+    let finalUsage = derivedUsage;
     let finalDerived = derived;
 
-    // Guidance YAML fallback if family doc yielded empty usage
+    // Preserve hand-authored usage when it's richer
+    if (existing && existing.usage.when_to_use.length > finalUsage.when_to_use.length) {
+      finalUsage = existing.usage;
+      finalDerived = 'preserved';
+    }
+
+    // Guidance YAML fallback if still empty
     if (finalUsage.when_to_use.length === 0) {
       const schemaPath = path.join(COMPONENTS_DIR, comp, `${comp}.schema.yaml`);
       if (fs.existsSync(schemaPath)) {
@@ -321,7 +356,6 @@ function main(): void {
           if (guidanceUsage) {
             finalUsage = guidanceUsage;
             finalDerived = 'family-level';
-            console.log(`  ℹ ${comp}: usage derived from family-guidance YAML (fallback)`);
           }
         }
       }
@@ -332,7 +366,12 @@ function main(): void {
     }
 
     // Derive alternatives
-    const alternatives = deriveAlternatives(comp, parsed.selectionTable, allComponents);
+    let alternatives = deriveAlternatives(comp, parsed.selectionTable, allComponents);
+
+    // Preserve hand-authored alternatives when richer
+    if (existing && existing.alternatives.length > alternatives.length) {
+      alternatives = existing.alternatives;
+    }
 
     // Validate alternative references
     for (const alt of alternatives) {
@@ -353,8 +392,10 @@ function main(): void {
     fs.writeFileSync(outPath, yamlContent, 'utf-8');
     generated++;
 
-    if (derived === 'family-level') {
+    if (finalDerived === 'family-level') {
       console.log(`  ℹ ${comp}: usage derived from family-level guidance`);
+    } else if (finalDerived === 'preserved') {
+      console.log(`  ℹ ${comp}: usage preserved from hand-authored meta (richer)`);
     }
   }
 

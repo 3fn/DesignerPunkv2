@@ -17,4 +17,8 @@ contexts:
   - "modals"
   - "list-items"
 
-alternatives: []
+alternatives:
+  - component: Button-CTA
+    reason: "When the action needs a visible text label for clarity"
+  - component: Button-VerticalList-Item
+    reason: "When the action appears in a vertical menu-style list"

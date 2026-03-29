@@ -2,16 +2,11 @@ purpose: "Display a notification-specific count badge with semantic color and li
 
 usage:
   when_to_use:
-    - "Notification count"
+    - "Notification counts that need urgent visual treatment (semantic color)"
+    - "Counts that must announce updates to assistive technology via live regions"
   when_not_to_use:
-    - "Category label — use Badge-Label-Base"
-    - "Status indicator — use Badge-Label-Base"
-    - "Unread count — use Badge-Count-Base"
-    - "Custom-colored count — use Badge-Count-Base"
-    - "User interaction is needed (use Tag or Chip components instead)"
-    - "Content is dismissible (use Tag with dismiss action)"
-    - "Selection is required (use Chip or Toggle)"
-    - "The indicator needs to be focusable for accessibility"
+    - "Generic numeric counts without notification semantics — use Badge-Count-Base"
+    - "Text-based status indicators — use Badge-Label-Base"
 
 contexts:
   - "icon-overlays"

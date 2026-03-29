@@ -17,4 +17,6 @@ contexts:
   - "modals"
   - "list-items"
 
-alternatives: []
+alternatives:
+  - component: Input-Radio-Set
+    reason: "When the selection is form data (radio-style) rather than action-driven"

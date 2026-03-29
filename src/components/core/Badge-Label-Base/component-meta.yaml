@@ -2,16 +2,12 @@ purpose: "Display a text label badge for categorization, status, or tagging cont
 
 usage:
   when_to_use:
-    - "Category label"
-    - "Status indicator"
+    - "Showing status labels like 'New', 'Sale', or 'Beta'"
+    - "Categorizing content with short text tags"
+    - "Indicating feature flags or content types"
   when_not_to_use:
-    - "Unread count — use Badge-Count-Base"
-    - "Notification count — use Badge-Count-Notification"
-    - "Custom-colored count — use Badge-Count-Base"
-    - "User interaction is needed (use Tag or Chip components instead)"
-    - "Content is dismissible (use Tag with dismiss action)"
-    - "Selection is required (use Chip or Toggle)"
-    - "The indicator needs to be focusable for accessibility"
+    - "Displaying numeric counts — use Badge-Count-Base"
+    - "Interactive tags that can be dismissed — use Chip-Input"
 
 contexts:
   - "product-cards"

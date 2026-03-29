@@ -2,22 +2,11 @@ purpose: "Collect a phone number with automatic formatting, phone keyboard type,
 
 usage:
   when_to_use:
-    - "Phone number collection"
+    - "Phone number fields in registration, contact, or profile forms"
+    - "Any input that needs phone number formatting and validation"
   when_not_to_use:
-    - "Email address collection — use Input-Text-Email"
-    - "Password entry — use Input-Text-Password"
-    - "Generic text input — use Input-Text-Base"
-    - "Custom validation needs — use Input-Text-Base"
-    - "Terms of service acceptance — use Input-Checkbox-Legal"
-    - "Privacy policy consent — use Input-Checkbox-Legal"
-    - "Marketing opt-in — use Input-Checkbox-Legal"
-    - "Generic binary selection — use Input-Checkbox-Base"
-    - "Parent checkbox (select all) — use Input-Checkbox-Base"
-    - "Settings toggle — use Input-Checkbox-Base"
-    - "Standalone radio (rare) — use Input-Radio-Base"
-    - "Displaying read-only text (use Data Displays instead)"
-    - "Need multi-line text input (use Textarea component when available)"
-    - "Building search interfaces (use Search component when available)"
+    - "General numeric input without phone semantics — use Input-Text-Base"
+    - "Short numeric codes (OTP, PIN)"
 
 contexts:
   - "forms"

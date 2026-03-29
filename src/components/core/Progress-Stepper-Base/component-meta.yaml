@@ -15,4 +15,8 @@ contexts:
   - "onboarding-flows"
   - "forms"
 
-alternatives: []
+alternatives:
+  - component: Progress-Pagination-Base
+    reason: "When simple dot indicators are sufficient without step labels"
+  - component: Progress-Stepper-Detailed
+    reason: "When steps need descriptions, connector lines, and richer visual detail"

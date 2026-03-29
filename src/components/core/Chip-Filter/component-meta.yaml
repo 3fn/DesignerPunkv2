@@ -2,14 +2,11 @@ purpose: "Toggle a content filter on or off in a filter bar, allowing users to n
 
 usage:
   when_to_use:
-    - "Multi-select filter"
+    - "Filter bars where users toggle criteria to narrow results"
+    - "Multi-select filtering (multiple chips can be active at once)"
   when_not_to_use:
-    - "General interactive chip — use Chip-Base"
-    - "Tag input field — use Chip-Input"
-    - "Display-only indicators are needed (use Badge instead)"
-    - "Primary actions are needed (use Button instead)"
-    - "Navigation is needed (use Tab or Link instead)"
-    - "The element should not be interactive"
+    - "Representing removable user input like tags — use Chip-Input"
+    - "Single-select choices — use Input-Radio-Set"
 
 contexts:
   - "filter-bars"

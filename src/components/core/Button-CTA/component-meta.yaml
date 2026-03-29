@@ -18,4 +18,8 @@ contexts:
   - "onboarding-flows"
   - "dashboards"
 
-alternatives: []
+alternatives:
+  - component: Button-Icon
+    reason: "When the action is icon-only without a text label"
+  - component: Button-VerticalList-Item
+    reason: "When the action appears in a vertical menu-style list"

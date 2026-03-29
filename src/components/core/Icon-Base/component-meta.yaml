@@ -17,4 +17,6 @@ contexts:
   - "forms"
   - "dashboards"
 
-alternatives: []
+alternatives:
+  - component: Avatar-Base
+    reason: "When the image represents a user or entity identity rather than a generic icon"

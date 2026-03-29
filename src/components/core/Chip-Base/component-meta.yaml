@@ -18,6 +18,8 @@ contexts:
 
 alternatives:
   - component: Chip-Filter
-    reason: "When multi-select filter"
+    reason: "When the chip toggles a content filter on/off"
   - component: Chip-Input
-    reason: "When tag input field"
+    reason: "When the chip represents a dismissible user-entered value"
+  - component: Badge-Label-Base
+    reason: "When the element is non-interactive and display-only"

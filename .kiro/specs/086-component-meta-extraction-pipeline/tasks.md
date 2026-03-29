@@ -176,7 +176,7 @@
     - Entry point: `npm run extract:meta`
     - _Requirements: 2.4, 3.3, 3.4, 3.5, 3.6, 3.7_
 
-  - [ ] 3.5 Run extraction and validate
+  - [x] 3.5 Run extraction and validate
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina + Thurgood (MCP verification)

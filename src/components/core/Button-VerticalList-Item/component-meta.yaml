@@ -17,4 +17,8 @@ contexts:
   - "modals"
   - "list-items"
 
-alternatives: []
+alternatives:
+  - component: Button-CTA
+    reason: "When the action is standalone, not part of a vertical list"
+  - component: Button-Icon
+    reason: "When only an icon-only compact action is needed"
