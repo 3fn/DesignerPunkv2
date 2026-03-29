@@ -53,12 +53,33 @@ The motion token bug was fixed in the same session this issue was captured:
 **Status**: ✅ Resolved
 **Date**: 2026-03-29
 **Resolved by**: Ada
+**Commits**: `2a9483e6` (immediate fix), `2f9e15bb` (consolidation)
+
+### Decision: Full Consolidation Over Minimal Filter Extraction
+
+The issue doc originally recommended extracting `getFilteredPrimitives()` and `getFilteredSemantics()` helpers — the minimum change to eliminate filter drift. During discussion, Peter and Ada evaluated three options:
+
+1. **Filter helpers only** — centralizes the filtering, leaves three ~120-line methods with identical structure
+2. **Full consolidation** — single `generatePlatformTokens()` method, three public methods become one-line wrappers
+3. **Do nothing beyond the immediate fix** — filters are now correct, accept the duplication risk
+
+We went with option 2. The reasoning:
+
+- **The duplication wasn't limited to filtering.** The primitive loop, semantic section call, motion section call, layering section call, WCAG block, and return structure were all identical across the three methods. Centralizing only the filters would leave the larger copy-paste structure intact — the same class of drift risk for any future change to the generation flow.
+- **The actual per-platform differences are small and data-shaped.** File names, section comment strings, and WCAG placement (before vs after footer) are the only real differences. These map cleanly to a config object, not code branches.
+- **Bottleneck concern was evaluated and dismissed.** Peter raised whether centralization could become a bottleneck if platforms diverge. Analysis showed the generation flow has been stable since inception — the only divergence was accidental (the missing filter). Platform-specific formatting is already properly delegated to the builder classes. The orchestration flow has no reason to diverge per-platform. If it ever does, a single method with a platform parameter is still easier to extend than three copies.
+- **Test coverage is strong.** 8041 tests provide a safety net for the refactor. The risk of breaking something is low; the risk of future drift from duplication is higher.
 
 ### Changes
 
-Consolidated three duplicate platform generation methods (`generateWebTokens`, `generateiOSTokens`, `generateAndroidTokens`) into a single parameterized `generatePlatformTokens()` method. The three public methods are now thin wrappers.
+**Commit `2a9483e6` — Immediate fix (2026-03-28):**
+- Added `MOTION_CATEGORIES` filter to `generateiOSTokens()` and `generateAndroidTokens()` (matching existing web filter)
+- Added `!s.name.startsWith('motion.')` to semantic filters in all three methods
+- Updated `SemanticTokenGeneration.test.ts` to exclude motion tokens from generic semantic checks
 
-**`src/generators/TokenFileGenerator.ts`:**
+**Commit `2f9e15bb` — Consolidation (2026-03-29):**
+
+`src/generators/TokenFileGenerator.ts`:
 - Added `PLATFORM_CONFIG` static config mapping platform-specific strings (file names, section comments, WCAG placement)
 - Added `DEDICATED_PRIMITIVE_CATEGORIES` and `DEDICATED_SEMANTIC_PREFIXES` as single-source filter definitions
 - Added `getGenerationPrimitives()` and `filterGenerationSemantics()` helper methods
@@ -66,8 +87,9 @@ Consolidated three duplicate platform generation methods (`generateWebTokens`, `
 - Added `generatePlatformTokens()` — the consolidated generation flow
 - Added `maybeGenerateWcagBlock()` — extracted WCAG override logic
 - Reduced `generateWebTokens()`, `generateiOSTokens()`, `generateAndroidTokens()` to one-line wrappers
+- Net: 199 additions, 323 deletions (−124 lines)
 
-**`src/__tests__/integration/SemanticTokenGeneration.test.ts`:**
+`src/__tests__/integration/SemanticTokenGeneration.test.ts`:
 - Added `DEDICATED_SEMANTIC_PREFIXES`, `DEDICATED_PRIMITIVE_CATEGORIES`, `getGenericSemantics()`, `getGenericPrimitives()` helpers
 - Replaced three inline filter instances with helper calls
 
