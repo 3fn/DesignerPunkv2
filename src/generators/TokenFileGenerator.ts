@@ -1119,10 +1119,95 @@ export class TokenFileGenerator {
     return lines;
   }
 
+  // ---------------------------------------------------------------------------
+  // Platform token generation
+  //
+  // All three platforms follow the same generation flow. Platform-specific
+  // formatting is handled by the generator instances (WebFormatGenerator,
+  // iOSFormatGenerator, AndroidFormatGenerator). This consolidated method
+  // ensures filtering logic, section ordering, and structural decisions
+  // stay in sync across platforms.
+  // ---------------------------------------------------------------------------
+
+  /** Platform-specific configuration for the consolidated generation flow. */
+  private static readonly PLATFORM_CONFIG: Record<'web' | 'ios' | 'android', {
+    fileName: string;
+    motionComment: string;
+    layeringComment: string;
+    /** Web closes :root before WCAG overrides; iOS/Android put WCAG inside the struct. */
+    wcagAfterFooter: boolean;
+  }> = {
+    web: {
+      fileName: 'DesignTokens.web.css',
+      motionComment: '  /* Motion Tokens */',
+      layeringComment: '  /* Layering Tokens (Z-Index) */',
+      wcagAfterFooter: true,
+    },
+    ios: {
+      fileName: 'DesignTokens.ios.swift',
+      motionComment: '    // MARK: - Motion Tokens',
+      layeringComment: '    // MARK: - Layering Tokens (Z-Index)',
+      wcagAfterFooter: false,
+    },
+    android: {
+      fileName: 'DesignTokens.android.kt',
+      motionComment: '    // Motion Tokens',
+      layeringComment: '    // Layering Tokens (Elevation)',
+      wcagAfterFooter: false,
+    },
+  };
+
   /**
-   * Generate web token file (JavaScript)
+   * Categories handled by dedicated sections (generateMotionSection),
+   * excluded from the generic primitive pass to prevent duplicates.
    */
-  generateWebTokens(options: GenerationOptions): GenerationResult {
+  private static readonly DEDICATED_PRIMITIVE_CATEGORIES = new Set([
+    TokenCategory.EASING, TokenCategory.DURATION, TokenCategory.SCALE,
+  ]);
+
+  /**
+   * Semantic name prefixes handled by dedicated sections
+   * (generateMotionSection, generateLayeringSection),
+   * excluded from the generic semantic pass.
+   */
+  private static readonly DEDICATED_SEMANTIC_PREFIXES = ['zIndex.', 'elevation.', 'motion.'];
+
+  /** Get primitive tokens for the generic pass (excludes dedicated-section categories). */
+  private getGenerationPrimitives(): PrimitiveToken[] {
+    return getAllPrimitiveTokens().filter(
+      t => !TokenFileGenerator.DEDICATED_PRIMITIVE_CATEGORIES.has(t.category)
+    );
+  }
+
+  /** Filter semantics for the generic pass (excludes dedicated-section prefixes). */
+  private filterGenerationSemantics(
+    tokens: Array<Omit<SemanticToken, 'primitiveTokens'>>
+  ): Array<Omit<SemanticToken, 'primitiveTokens'>> {
+    return tokens.filter(s =>
+      TokenFileGenerator.DEDICATED_SEMANTIC_PREFIXES.every(p => !s.name.startsWith(p))
+    );
+  }
+
+  /** Get the format generator instance for a platform. */
+  private getGenerator(platform: 'web' | 'ios' | 'android'): WebFormatGenerator | iOSFormatGenerator | AndroidFormatGenerator {
+    switch (platform) {
+      case 'web': return this.webGenerator;
+      case 'ios': return this.iosGenerator;
+      case 'android': return this.androidGenerator;
+    }
+  }
+
+  /**
+   * Generate token file for a specific platform.
+   *
+   * Shared flow: header → primitives → semantics → motion → layering → WCAG → footer.
+   * Web places footer before WCAG (overrides live outside :root);
+   * iOS/Android place WCAG before footer (overrides live inside the struct).
+   */
+  private generatePlatformTokens(
+    platform: 'web' | 'ios' | 'android',
+    options: GenerationOptions
+  ): GenerationResult {
     const {
       outputDir = 'output',
       version = '1.0.0',
@@ -1130,379 +1215,132 @@ export class TokenFileGenerator {
       groupByCategory = true,
       semanticTokens,
       darkSemanticTokens,
-      wcagSemanticTokens,
-      darkWcagSemanticTokens
     } = options;
 
-    const metadata: FileMetadata = {
-      version,
-      generatedAt: new Date()
-    };
+    const config = TokenFileGenerator.PLATFORM_CONFIG[platform];
+    const generator = this.getGenerator(platform);
+    const metadata: FileMetadata = { version, generatedAt: new Date() };
 
-    // Motion tokens (easing, duration, scale) are handled by generateMotionSection(),
-    // so exclude them from the primitive pass to prevent duplicate declarations
-    const MOTION_CATEGORIES = new Set([TokenCategory.EASING, TokenCategory.DURATION, TokenCategory.SCALE]);
-    const tokens = getAllPrimitiveTokens().filter(t => !MOTION_CATEGORIES.has(t.category));
-    const allSemantics = semanticTokens;
-    
-    // Filter out layering and motion tokens (handled by dedicated sections)
-    const semantics = allSemantics.filter(s => 
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
-    );
-
-    // Filter dark tokens the same way
-    const darkSemantics = darkSemanticTokens.filter(s =>
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
-    );
+    const tokens = this.getGenerationPrimitives();
+    const semantics = this.filterGenerationSemantics(semanticTokens);
+    const darkSemantics = this.filterGenerationSemantics(darkSemanticTokens);
 
     const lines: string[] = [];
     let semanticTokenCount = 0;
 
-    // Add header
-    lines.push(this.webGenerator.generateHeader(metadata));
+    // --- Header ---
+    lines.push(generator.generateHeader(metadata));
+    if (platform === 'web') {
+      lines.push('  color-scheme: light dark;');
+    }
 
-    // Mode-aware: always declare color-scheme support
-    lines.push('  color-scheme: light dark;');
-
-    // Add primitive tokens section comment
+    // --- Primitive tokens ---
     if (includeComments) {
-      lines.push(this.webGenerator.generateSectionComment('primitive'));
+      lines.push(generator.generateSectionComment('primitive'));
     }
 
     if (groupByCategory) {
-      // Group tokens by category
       const categories = this.getUniqueCategories(tokens);
-
       for (const category of categories) {
         const categoryTokens = tokens.filter(t => t.category === category);
-
         if (includeComments) {
-          lines.push(this.webGenerator['generateCategoryComment'](category));
+          lines.push((generator as any).generateCategoryComment(category));
         }
-
         for (const token of categoryTokens) {
           if (includeComments && 'mathematicalRelationship' in token) {
-            lines.push(this.webGenerator['generateMathematicalComment'](token as PrimitiveToken));
+            lines.push((generator as any).generateMathematicalComment(token as PrimitiveToken));
           }
-          lines.push(this.webGenerator.formatToken(token));
+          lines.push(generator.formatToken(token));
         }
       }
     } else {
-      // Flat list of tokens
       for (const token of tokens) {
-        lines.push(this.webGenerator.formatToken(token));
+        lines.push(generator.formatToken(token));
       }
     }
 
-    // Add semantic tokens section comment
+    // --- Semantic tokens ---
     if (includeComments) {
-      lines.push(this.webGenerator.generateSectionComment('semantic'));
+      lines.push(generator.generateSectionComment('semantic'));
     }
-
-    // Add semantic tokens section
-    const semanticLines = this.generateSemanticSection(semantics, 'web', darkSemantics);
+    const semanticLines = this.generateSemanticSection(semantics, platform, darkSemantics);
     lines.push(...semanticLines);
     semanticTokenCount = semantics.length;
 
-    // Add motion tokens section
+    // --- Motion tokens (dedicated section) ---
     if (includeComments) {
       lines.push('');
-      lines.push('  /* Motion Tokens */');
+      lines.push(config.motionComment);
     }
-    const motionLines = this.generateMotionSection('web');
+    const motionLines = this.generateMotionSection(platform);
     lines.push(...motionLines);
     semanticTokenCount += motionLines.length;
 
-    // Add layering tokens section (z-index for web)
+    // --- Layering tokens (dedicated section) ---
     if (includeComments) {
       lines.push('');
-      lines.push('  /* Layering Tokens (Z-Index) */');
+      lines.push(config.layeringComment);
     }
-    const layeringLines = this.generateLayeringSection('web');
+    const layeringLines = this.generateLayeringSection(platform);
     lines.push(...layeringLines);
     semanticTokenCount += layeringLines.length;
 
-    // Add footer (closes :root)
-    lines.push(this.webGenerator.generateFooter());
+    // --- WCAG overrides + Footer ---
+    // Web: footer first (closes :root), then WCAG outside it.
+    // iOS/Android: WCAG inside the struct, then footer closes it.
+    const wcagLines = this.maybeGenerateWcagBlock(platform, options);
 
-    // Append WCAG theme semantic overrides after :root (Spec 080 Phase 2)
-    if (wcagSemanticTokens && darkWcagSemanticTokens) {
-      const wcagLines = this.generateWcagOverrideBlock(
-        semanticTokens, darkSemanticTokens,
-        wcagSemanticTokens, darkWcagSemanticTokens,
-        'web', options.wcagOverrideKeys
-      );
-      if (wcagLines.length > 0) {
-        lines.push(...wcagLines);
-      }
+    if (config.wcagAfterFooter) {
+      lines.push(generator.generateFooter());
+      lines.push(...wcagLines);
+    } else {
+      lines.push(...wcagLines);
+      lines.push(generator.generateFooter());
     }
 
     const content = lines.join('\n');
-    const validation = this.webGenerator.validateSyntax(content);
+    const validation = generator.validateSyntax(content);
 
     return {
-      platform: 'web',
-      filePath: `${outputDir}/DesignTokens.web.css`,
+      platform,
+      filePath: `${outputDir}/${config.fileName}`,
       content,
       tokenCount: getAllPrimitiveTokens().length,
       semanticTokenCount,
       valid: validation.valid,
-      errors: validation.errors
+      errors: validation.errors,
     };
   }
 
-  /**
-   * Generate iOS token file (Swift)
-   */
+  /** Generate WCAG override block if WCAG tokens are provided. */
+  private maybeGenerateWcagBlock(
+    platform: 'web' | 'ios' | 'android',
+    options: GenerationOptions
+  ): string[] {
+    if (options.wcagSemanticTokens && options.darkWcagSemanticTokens) {
+      const wcagLines = this.generateWcagOverrideBlock(
+        options.semanticTokens, options.darkSemanticTokens,
+        options.wcagSemanticTokens, options.darkWcagSemanticTokens,
+        platform, options.wcagOverrideKeys
+      );
+      if (wcagLines.length > 0) return wcagLines;
+    }
+    return [];
+  }
+
+  /** Generate web token file (CSS). */
+  generateWebTokens(options: GenerationOptions): GenerationResult {
+    return this.generatePlatformTokens('web', options);
+  }
+
+  /** Generate iOS token file (Swift). */
   generateiOSTokens(options: GenerationOptions): GenerationResult {
-    const {
-      outputDir = 'output',
-      version = '1.0.0',
-      includeComments = true,
-      groupByCategory = true,
-      semanticTokens,
-      darkSemanticTokens
-    } = options;
-
-    const metadata: FileMetadata = {
-      version,
-      generatedAt: new Date()
-    };
-
-    // Motion tokens (easing, duration, scale) are handled by generateMotionSection(),
-    // so exclude them from the primitive pass to prevent duplicate declarations
-    const MOTION_CATEGORIES = new Set([TokenCategory.EASING, TokenCategory.DURATION, TokenCategory.SCALE]);
-    const tokens = getAllPrimitiveTokens().filter(t => !MOTION_CATEGORIES.has(t.category));
-    const allSemantics = semanticTokens;
-    
-    // Filter out layering and motion tokens (handled by dedicated sections)
-    const semantics = allSemantics.filter(s => 
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
-    );
-
-    // Filter dark tokens the same way
-    const darkSemantics = darkSemanticTokens.filter(s =>
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
-    );
-
-    const lines: string[] = [];
-    let semanticTokenCount = 0;
-
-    // Add header
-    lines.push(this.iosGenerator.generateHeader(metadata));
-
-    // Add primitive tokens section comment
-    if (includeComments) {
-      lines.push(this.iosGenerator.generateSectionComment('primitive'));
-    }
-
-    if (groupByCategory) {
-      // Group tokens by category
-      const categories = this.getUniqueCategories(tokens);
-
-      for (const category of categories) {
-        const categoryTokens = tokens.filter(t => t.category === category);
-
-        if (includeComments) {
-          lines.push(this.iosGenerator['generateCategoryComment'](category));
-        }
-
-        for (const token of categoryTokens) {
-          if (includeComments && 'mathematicalRelationship' in token) {
-            lines.push(this.iosGenerator['generateMathematicalComment'](token as PrimitiveToken));
-          }
-          lines.push(this.iosGenerator.formatToken(token));
-        }
-      }
-    } else {
-      // Flat list of tokens
-      for (const token of tokens) {
-        lines.push(this.iosGenerator.formatToken(token));
-      }
-    }
-
-    // Add semantic tokens section comment
-    if (includeComments) {
-      lines.push(this.iosGenerator.generateSectionComment('semantic'));
-    }
-
-    // Add semantic tokens section
-    const semanticLines = this.generateSemanticSection(semantics, 'ios', darkSemantics);
-    lines.push(...semanticLines);
-    semanticTokenCount = semantics.length;
-
-    // Add motion tokens section
-    if (includeComments) {
-      lines.push('');
-      lines.push('    // MARK: - Motion Tokens');
-    }
-    const motionLines = this.generateMotionSection('ios');
-    lines.push(...motionLines);
-    semanticTokenCount += motionLines.length;
-
-    // Add layering tokens section (z-index for iOS)
-    if (includeComments) {
-      lines.push('');
-      lines.push('    // MARK: - Layering Tokens (Z-Index)');
-    }
-    const layeringLines = this.generateLayeringSection('ios');
-    lines.push(...layeringLines);
-    semanticTokenCount += layeringLines.length;
-
-    // Add WCAG theme semantic overrides (Spec 080 Phase 2)
-    if (options.wcagSemanticTokens && options.darkWcagSemanticTokens) {
-      const wcagLines = this.generateWcagOverrideBlock(
-        options.semanticTokens, options.darkSemanticTokens,
-        options.wcagSemanticTokens, options.darkWcagSemanticTokens,
-        'ios', options.wcagOverrideKeys
-      );
-      if (wcagLines.length > 0) {
-        lines.push(...wcagLines);
-      }
-    }
-
-    // Add footer
-    lines.push(this.iosGenerator.generateFooter());
-
-    const content = lines.join('\n');
-    const validation = this.iosGenerator.validateSyntax(content);
-
-    return {
-      platform: 'ios',
-      filePath: `${outputDir}/DesignTokens.ios.swift`,
-      content,
-      tokenCount: getAllPrimitiveTokens().length,
-      semanticTokenCount,
-      valid: validation.valid,
-      errors: validation.errors
-    };
+    return this.generatePlatformTokens('ios', options);
   }
 
-  /**
-   * Generate Android token file (Kotlin)
-   */
+  /** Generate Android token file (Kotlin). */
   generateAndroidTokens(options: GenerationOptions): GenerationResult {
-    const {
-      outputDir = 'output',
-      version = '1.0.0',
-      includeComments = true,
-      groupByCategory = true,
-      semanticTokens,
-      darkSemanticTokens
-    } = options;
-
-    const metadata: FileMetadata = {
-      version,
-      generatedAt: new Date()
-    };
-
-    // Motion tokens (easing, duration, scale) are handled by generateMotionSection(),
-    // so exclude them from the primitive pass to prevent duplicate declarations
-    const MOTION_CATEGORIES = new Set([TokenCategory.EASING, TokenCategory.DURATION, TokenCategory.SCALE]);
-    const tokens = getAllPrimitiveTokens().filter(t => !MOTION_CATEGORIES.has(t.category));
-    const allSemantics = semanticTokens;
-    
-    // Filter out layering and motion tokens (handled by dedicated sections)
-    const semantics = allSemantics.filter(s => 
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
-    );
-
-    // Filter dark tokens the same way
-    const darkSemantics = darkSemanticTokens.filter(s =>
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
-    );
-
-    const lines: string[] = [];
-    let semanticTokenCount = 0;
-
-    // Add header
-    lines.push(this.androidGenerator.generateHeader(metadata));
-
-    // Add primitive tokens section comment
-    if (includeComments) {
-      lines.push(this.androidGenerator.generateSectionComment('primitive'));
-    }
-
-    if (groupByCategory) {
-      // Group tokens by category
-      const categories = this.getUniqueCategories(tokens);
-
-      for (const category of categories) {
-        const categoryTokens = tokens.filter(t => t.category === category);
-
-        if (includeComments) {
-          lines.push(this.androidGenerator['generateCategoryComment'](category));
-        }
-
-        for (const token of categoryTokens) {
-          if (includeComments && 'mathematicalRelationship' in token) {
-            lines.push(this.androidGenerator['generateMathematicalComment'](token as PrimitiveToken));
-          }
-          lines.push(this.androidGenerator.formatToken(token));
-        }
-      }
-    } else {
-      // Flat list of tokens
-      for (const token of tokens) {
-        lines.push(this.androidGenerator.formatToken(token));
-      }
-    }
-
-    // Add semantic tokens section comment
-    if (includeComments) {
-      lines.push(this.androidGenerator.generateSectionComment('semantic'));
-    }
-
-    // Add semantic tokens section
-    const semanticLines = this.generateSemanticSection(semantics, 'android', darkSemantics);
-    lines.push(...semanticLines);
-    semanticTokenCount = semantics.length;
-
-    // Add motion tokens section
-    if (includeComments) {
-      lines.push('');
-      lines.push('    // Motion Tokens');
-    }
-    const motionLines = this.generateMotionSection('android');
-    lines.push(...motionLines);
-    semanticTokenCount += motionLines.length;
-
-    // Add layering tokens section (elevation for Android)
-    if (includeComments) {
-      lines.push('');
-      lines.push('    // Layering Tokens (Elevation)');
-    }
-    const layeringLines = this.generateLayeringSection('android');
-    lines.push(...layeringLines);
-    semanticTokenCount += layeringLines.length;
-
-    // Add WCAG theme semantic overrides (Spec 080 Phase 2)
-    if (options.wcagSemanticTokens && options.darkWcagSemanticTokens) {
-      const wcagLines = this.generateWcagOverrideBlock(
-        options.semanticTokens, options.darkSemanticTokens,
-        options.wcagSemanticTokens, options.darkWcagSemanticTokens,
-        'android', options.wcagOverrideKeys
-      );
-      if (wcagLines.length > 0) {
-        lines.push(...wcagLines);
-      }
-    }
-
-    // Add footer
-    lines.push(this.androidGenerator.generateFooter());
-
-    const content = lines.join('\n');
-    const validation = this.androidGenerator.validateSyntax(content);
-
-    return {
-      platform: 'android',
-      filePath: `${outputDir}/DesignTokens.android.kt`,
-      content,
-      tokenCount: getAllPrimitiveTokens().length,
-      semanticTokenCount,
-      valid: validation.valid,
-      errors: validation.errors
-    };
+    return this.generatePlatformTokens('android', options);
   }
 
   /**

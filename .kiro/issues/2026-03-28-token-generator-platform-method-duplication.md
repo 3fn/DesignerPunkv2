@@ -47,3 +47,38 @@ The motion token bug was fixed in the same session this issue was captured:
 - Added `!s.name.startsWith('motion.')` to semantic filters in all three methods
 - Updated `SemanticTokenGeneration.test.ts` to exclude motion tokens from generic semantic checks
 - All 8041 tests passing
+
+## Resolution
+
+**Status**: ✅ Resolved
+**Date**: 2026-03-29
+**Resolved by**: Ada
+
+### Changes
+
+Consolidated three duplicate platform generation methods (`generateWebTokens`, `generateiOSTokens`, `generateAndroidTokens`) into a single parameterized `generatePlatformTokens()` method. The three public methods are now thin wrappers.
+
+**`src/generators/TokenFileGenerator.ts`:**
+- Added `PLATFORM_CONFIG` static config mapping platform-specific strings (file names, section comments, WCAG placement)
+- Added `DEDICATED_PRIMITIVE_CATEGORIES` and `DEDICATED_SEMANTIC_PREFIXES` as single-source filter definitions
+- Added `getGenerationPrimitives()` and `filterGenerationSemantics()` helper methods
+- Added `getGenerator()` to resolve platform → generator instance
+- Added `generatePlatformTokens()` — the consolidated generation flow
+- Added `maybeGenerateWcagBlock()` — extracted WCAG override logic
+- Reduced `generateWebTokens()`, `generateiOSTokens()`, `generateAndroidTokens()` to one-line wrappers
+
+**`src/__tests__/integration/SemanticTokenGeneration.test.ts`:**
+- Added `DEDICATED_SEMANTIC_PREFIXES`, `DEDICATED_PRIMITIVE_CATEGORIES`, `getGenericSemantics()`, `getGenericPrimitives()` helpers
+- Replaced three inline filter instances with helper calls
+
+### What This Prevents
+
+- Adding a new dedicated section (like motion) now requires updating `DEDICATED_PRIMITIVE_CATEGORIES` and/or `DEDICATED_SEMANTIC_PREFIXES` in one place — not three methods
+- Platform-specific config (file names, comment formats, WCAG placement) is declared once in `PLATFORM_CONFIG`
+- The generation flow (header → primitives → semantics → motion → layering → WCAG → footer) is defined once
+
+### Verification
+
+- All 8041 tests passing
+- Generated output identical (web valid, iOS valid, Android valid; token counts match across platforms)
+- No broken easing/motion patterns in generated output
