@@ -1145,14 +1145,14 @@ export class TokenFileGenerator {
     const tokens = getAllPrimitiveTokens().filter(t => !MOTION_CATEGORIES.has(t.category));
     const allSemantics = semanticTokens;
     
-    // Filter out layering tokens (they don't have primitiveReferences)
+    // Filter out layering and motion tokens (handled by dedicated sections)
     const semantics = allSemantics.filter(s => 
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
     );
 
     // Filter dark tokens the same way
     const darkSemantics = darkSemanticTokens.filter(s =>
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
     );
 
     const lines: string[] = [];
@@ -1269,17 +1269,20 @@ export class TokenFileGenerator {
       generatedAt: new Date()
     };
 
-    const tokens = getAllPrimitiveTokens();
+    // Motion tokens (easing, duration, scale) are handled by generateMotionSection(),
+    // so exclude them from the primitive pass to prevent duplicate declarations
+    const MOTION_CATEGORIES = new Set([TokenCategory.EASING, TokenCategory.DURATION, TokenCategory.SCALE]);
+    const tokens = getAllPrimitiveTokens().filter(t => !MOTION_CATEGORIES.has(t.category));
     const allSemantics = semanticTokens;
     
-    // Filter out layering tokens (they don't have primitiveReferences)
+    // Filter out layering and motion tokens (handled by dedicated sections)
     const semantics = allSemantics.filter(s => 
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
     );
 
     // Filter dark tokens the same way
     const darkSemantics = darkSemanticTokens.filter(s =>
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
     );
 
     const lines: string[] = [];
@@ -1368,7 +1371,7 @@ export class TokenFileGenerator {
       platform: 'ios',
       filePath: `${outputDir}/DesignTokens.ios.swift`,
       content,
-      tokenCount: tokens.length,
+      tokenCount: getAllPrimitiveTokens().length,
       semanticTokenCount,
       valid: validation.valid,
       errors: validation.errors
@@ -1393,17 +1396,20 @@ export class TokenFileGenerator {
       generatedAt: new Date()
     };
 
-    const tokens = getAllPrimitiveTokens();
+    // Motion tokens (easing, duration, scale) are handled by generateMotionSection(),
+    // so exclude them from the primitive pass to prevent duplicate declarations
+    const MOTION_CATEGORIES = new Set([TokenCategory.EASING, TokenCategory.DURATION, TokenCategory.SCALE]);
+    const tokens = getAllPrimitiveTokens().filter(t => !MOTION_CATEGORIES.has(t.category));
     const allSemantics = semanticTokens;
     
-    // Filter out layering tokens (they don't have primitiveReferences)
+    // Filter out layering and motion tokens (handled by dedicated sections)
     const semantics = allSemantics.filter(s => 
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
     );
 
     // Filter dark tokens the same way
     const darkSemantics = darkSemanticTokens.filter(s =>
-      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.') && !s.name.startsWith('motion.')
     );
 
     const lines: string[] = [];
@@ -1492,7 +1498,7 @@ export class TokenFileGenerator {
       platform: 'android',
       filePath: `${outputDir}/DesignTokens.android.kt`,
       content,
-      tokenCount: tokens.length,
+      tokenCount: getAllPrimitiveTokens().length,
       semanticTokenCount,
       valid: validation.valid,
       errors: validation.errors
