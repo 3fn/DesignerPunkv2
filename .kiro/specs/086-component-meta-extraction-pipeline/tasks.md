@@ -108,7 +108,7 @@
     - Run as part of `npm test`
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 3. Extraction Pipeline
+- [x] 3. Extraction Pipeline
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -195,7 +195,7 @@
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
 
   **Success Criteria:**
-  - Platform agents confirm knowledge base improves workflow
+  - Platform agents confirm token resources and resource map improve workflow (filtered component source indexing deferred to Spec 087)
   - Platform Resource Map steering doc created
   - Stacy's prompt updated with metadata accuracy lens
   - Escape hatch documentation pattern available
@@ -214,15 +214,16 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Agent Configuration & Governance"`
 
-  - [ ] 4.1 Configure platform agent knowledge bases
+  - [x] 4.1 Configure platform agent knowledge bases
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Peter
-    - Add knowledge base entries to Sparky, Kenya, Data agent configs per design Decision 5
-    - Include platform files, types, tokens, contracts, platform-specific token files
+    - Add platform-scoped token knowledge base to Sparky, Kenya, Data agent configs (`src/tokens/platforms/{platform}`)
+    - Add Platform Resource Map as `file://` resource to each platform agent (depends on Task 4.2)
+    - Note: `includePatterns` not supported by Kiro — broad component knowledge base deferred (see Design Decision 5 implementation note)
     - _Requirements: 6.1_
 
-  - [ ] 4.2 Create Platform Resource Map
+  - [x] 4.2 Create Platform Resource Map
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -232,22 +233,23 @@
     - Keep factual and minimal
     - _Requirements: 6.2, 6.3_
 
-  - [ ] 4.3 Platform agent workflow validation
+  - [x] 4.3 Platform agent workflow validation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Sparky + Kenya + Data
-    - Each platform agent confirms knowledge base configuration improves their workflow
-    - Document any gaps or adjustments needed
+    - Each platform agent confirms `file://` token resources and Platform Resource Map improve their workflow
+    - Document any gaps — particularly whether searchable component source access (deferred to Spec 087) is needed
+    - Findings inform Spec 087 priority
     - _Requirements: 6.4_
 
-  - [ ] 4.4 Update Stacy's prompt
+  - [x] 4.4 Update Stacy's prompt
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Peter
     - Add metadata accuracy lens to Lessons Synthesis Review section
     - _Requirements: 7.1_
 
-  - [ ] 4.5 Define escape hatch documentation pattern
+  - [x] 4.5 Define escape hatch documentation pattern
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -256,7 +258,7 @@
     - Document resolution path: deviation + disagreement = escape hatch with rationale
     - _Requirements: 7.2, 7.3, 7.4, 7.5_
 
-  - [ ] 4.6a Migrate reference docs to Documentation MCP
+  - [x] 4.6a Migrate reference docs to Documentation MCP
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -264,12 +266,13 @@
     - Verify all 3 docs queryable via `get_section()`
     - _Requirements: 8.1, 8.2_
 
-  - [ ] 4.6b Update authoring guide content
+  - [x] 4.6b Update authoring guide content
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
     **Depends on**: Task 3 (extraction workflow must exist before guide can describe it)
-    - Update authoring guide content to reflect extraction workflow (authoring in family docs, not meta files)
+    - Update authoring guide content to reflect extraction workflow
+    - Document hybrid model: purpose + contexts authored in family docs (extracted by script), usage + alternatives may be hand-edited in component-meta.yaml when derived content is insufficient (see Req 3 AC 3 implementation note)
     - _Requirements: 8.3_
 
 - [ ] 5. MCP Scope Split Design
