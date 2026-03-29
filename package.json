@@ -28,6 +28,7 @@
   "scripts": {
     "generate:types": "ts-node scripts/generate-token-types.ts",
     "generate:platform-tokens": "ts-node scripts/generate-platform-tokens.ts",
+    "extract:meta": "ts-node scripts/extract-component-meta.ts",
     "prebuild": "npm run generate:types && npm run generate:platform-tokens",
     "build": "tsc --skipLibCheck && npm run build:validate && npm run build:browser",
     "build:browser": "node scripts/build-browser-bundles.js",

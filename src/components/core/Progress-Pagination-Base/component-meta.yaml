@@ -1,22 +1,18 @@
 purpose: "Show simple dot-based pagination indicating the current position within a sequence of pages or steps."
 
+# Derived from family-level guidance (Component-Family-Progress.md)
 usage:
   when_to_use:
-    - "Carousel or swipeable page indicators"
-    - "Onboarding flow position indicators"
-    - "Simple step progress without labels"
+    - "Showing position in a carousel or swipeable content (Pagination-Base)"
+    - "Displaying progress through a linear multi-step flow (Stepper-Base)"
+    - "Showing labeled steps with descriptions in complex workflows (Stepper-Detailed)"
   when_not_to_use:
-    - "Labeled multi-step flows — use Progress-Stepper-Base or Progress-Stepper-Detailed"
-    - "Numbered page navigation"
+    - "Navigation is the primary purpose (use navigation components instead)"
+    - "Progress is continuous/percentage-based (use a progress bar)"
+    - "Steps are non-linear or can be completed in any order"
 
 contexts:
-  - "carousels"
   - "onboarding-flows"
-  - "image-galleries"
-  - "tutorial-walkthroughs"
+  - "content-feeds"
 
-alternatives:
-  - component: Progress-Stepper-Base
-    reason: "When steps need labels and the user navigates a defined workflow"
-  - component: Progress-Stepper-Detailed
-    reason: "When steps need labels, descriptions, and connector lines"
+alternatives: []

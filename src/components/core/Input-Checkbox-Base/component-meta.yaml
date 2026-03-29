@@ -2,21 +2,38 @@ purpose: "Collect a single boolean toggle choice from the user with a checkbox c
 
 usage:
   when_to_use:
-    - "Binary yes/no choices in forms (e.g., 'Remember me')"
-    - "Opt-in toggles for preferences or settings"
-    - "Individual standalone checkboxes (not part of a multi-select group)"
+    - "Generic binary selection"
+    - "Parent checkbox (select all)"
+    - "Settings toggle"
   when_not_to_use:
-    - "Legal consent checkboxes requiring GDPR compliance — use Input-Checkbox-Legal"
-    - "Mutually exclusive choices — use Input-Radio-Base or Input-Radio-Set"
+    - "Email address collection — use Input-Text-Email"
+    - "Password entry — use Input-Text-Password"
+    - "Phone number collection — use Input-Text-PhoneNumber"
+    - "Generic text input — use Input-Text-Base"
+    - "Custom validation needs — use Input-Text-Base"
+    - "Terms of service acceptance — use Input-Checkbox-Legal"
+    - "Privacy policy consent — use Input-Checkbox-Legal"
+    - "Marketing opt-in — use Input-Checkbox-Legal"
+    - "Standalone radio (rare) — use Input-Radio-Base"
+    - "Displaying read-only text (use Data Displays instead)"
+    - "Need multi-line text input (use Textarea component when available)"
+    - "Building search interfaces (use Search component when available)"
 
 contexts:
   - "forms"
   - "settings-screens"
-  - "preference-panels"
-  - "dialog-content"
+  - "modals"
 
 alternatives:
+  - component: Input-Text-Email
+    reason: "When email address collection"
+  - component: Input-Text-Password
+    reason: "When password entry"
+  - component: Input-Text-PhoneNumber
+    reason: "When phone number collection"
+  - component: Input-Text-Base
+    reason: "When generic text input"
   - component: Input-Checkbox-Legal
-    reason: "When the checkbox is for legal consent and must prevent pre-checking"
+    reason: "When terms of service acceptance"
   - component: Input-Radio-Base
-    reason: "When the choice is one of several mutually exclusive options"
+    reason: "When standalone radio (rare)"

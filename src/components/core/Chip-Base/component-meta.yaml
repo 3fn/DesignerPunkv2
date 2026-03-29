@@ -2,22 +2,22 @@ purpose: "Provide a compact interactive element for selections, filters, or acti
 
 usage:
   when_to_use:
-    - "Base chip behavior shared across filter and input chip variants"
-    - "Simple interactive chip without specialized filter or input semantics"
+    - "General interactive chip"
+    - "Single-select choice"
   when_not_to_use:
-    - "Filtering content by toggling criteria — use Chip-Filter"
-    - "Representing user-entered values that can be dismissed — use Chip-Input"
-    - "Non-interactive labels — use Badge-Label-Base"
+    - "Multi-select filter — use Chip-Filter"
+    - "Tag input field — use Chip-Input"
+    - "Display-only indicators are needed (use Badge instead)"
+    - "Primary actions are needed (use Button instead)"
+    - "Navigation is needed (use Tab or Link instead)"
+    - "The element should not be interactive"
 
 contexts:
   - "filter-bars"
-  - "selection-groups"
-  - "content-tags"
+  - "forms"
 
 alternatives:
   - component: Chip-Filter
-    reason: "When the chip toggles a content filter on/off"
+    reason: "When multi-select filter"
   - component: Chip-Input
-    reason: "When the chip represents a dismissible user-entered value"
-  - component: Badge-Label-Base
-    reason: "When the element is non-interactive and display-only"
+    reason: "When tag input field"

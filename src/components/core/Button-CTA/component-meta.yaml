@@ -1,25 +1,21 @@
 purpose: "Provide a prominent call-to-action button for primary user actions like submitting forms, confirming dialogs, or starting flows."
 
+# Derived from family-level guidance (Component-Family-Button.md)
 usage:
   when_to_use:
-    - "Primary actions on a page or dialog (submit, confirm, continue)"
-    - "High-emphasis actions that need visual prominence"
-    - "Actions with text labels (with or without icons)"
+    - "Triggering user actions (submit, save, cancel)"
+    - "Navigating to new views or pages"
+    - "Opening modals or dialogs"
+    - "Confirming or dismissing operations"
   when_not_to_use:
-    - "Icon-only actions without text labels — use Button-Icon"
-    - "Vertical menu-style action lists — use Button-VerticalList-Set"
-    - "Low-emphasis or inline actions"
+    - "Displaying read-only status (use Badges instead)"
+    - "Creating inline text links (use Link component when available)"
+    - "Building toggle controls (use Toggle component when available)"
 
 contexts:
-  - "form-footers"
-  - "dialog-actions"
-  - "hero-sections"
+  - "forms"
+  - "modals"
   - "onboarding-flows"
-  - "page-actions"
   - "dashboards"
 
-alternatives:
-  - component: Button-Icon
-    reason: "When the action is icon-only without a text label"
-  - component: Button-VerticalList-Item
-    reason: "When the action appears in a vertical menu-style list"
+alternatives: []

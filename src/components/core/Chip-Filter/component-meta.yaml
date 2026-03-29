@@ -2,20 +2,22 @@ purpose: "Toggle a content filter on or off in a filter bar, allowing users to n
 
 usage:
   when_to_use:
-    - "Filter bars where users toggle criteria to narrow results"
-    - "Multi-select filtering (multiple chips can be active at once)"
+    - "Multi-select filter"
   when_not_to_use:
-    - "Representing removable user input like tags — use Chip-Input"
-    - "Single-select choices — use Input-Radio-Set"
+    - "General interactive chip — use Chip-Base"
+    - "Tag input field — use Chip-Input"
+    - "Display-only indicators are needed (use Badge instead)"
+    - "Primary actions are needed (use Button instead)"
+    - "Navigation is needed (use Tab or Link instead)"
+    - "The element should not be interactive"
 
 contexts:
   - "filter-bars"
-  - "search-results"
-  - "product-listings"
   - "content-feeds"
+  - "product-cards"
 
 alternatives:
-  - component: Chip-Input
-    reason: "When the chip represents a user-entered value that can be dismissed"
   - component: Chip-Base
-    reason: "When generic chip behavior is needed without filter semantics"
+    reason: "When general interactive chip"
+  - component: Chip-Input
+    reason: "When tag input field"

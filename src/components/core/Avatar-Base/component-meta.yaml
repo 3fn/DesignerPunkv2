@@ -1,22 +1,20 @@
 purpose: "Display a user or entity avatar with image, initials fallback, and shape differentiation between human and AI agent entities."
 
+# Derived from family-level guidance (Component-Family-Avatar.md)
 usage:
   when_to_use:
-    - "Showing a user profile image in headers, comments, or contact lists"
-    - "Displaying an AI agent identity with distinct hexagonal shape"
-    - "Showing initials when no profile image is available"
+    - "Representing user identity with optional profile image (type='human')"
+    - "Representing AI agent identity with shape-based differentiation (type='agent')"
+    - "Identity indicators in list items, cards, headers, or conversation threads"
   when_not_to_use:
-    - "Decorative icons without identity meaning — use Icon-Base"
-    - "Logos or brand marks that aren't user/entity avatars"
+    - "Logos or brand marks — use dedicated image assets"
+    - "Decorative images unrelated to identity — use standard image elements"
+    - "Icon-only indicators without identity context — use Icon-Base instead"
 
 contexts:
-  - "user-profiles"
-  - "comment-threads"
-  - "contact-lists"
-  - "navigation-headers"
-  - "chat-interfaces"
+  - "profile-sections"
+  - "content-feeds"
+  - "list-items"
   - "dashboards"
 
-alternatives:
-  - component: Icon-Base
-    reason: "When displaying a generic icon rather than a user or entity identity"
+alternatives: []

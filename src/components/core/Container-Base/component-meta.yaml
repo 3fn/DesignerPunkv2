@@ -2,19 +2,21 @@ purpose: "Provide a foundational structural wrapper to group and lay out child c
 
 usage:
   when_to_use:
-    - "Wrapping content sections that need consistent padding"
-    - "Base container behavior for specialized container variants"
+    - "Generic content wrapper"
+    - "Page section"
+    - "Navigation wrapper"
+    - "Custom container needs"
   when_not_to_use:
-    - "Card-style containers with elevation and borders — use Container-Card-Base"
-    - "Semantic sectioning (header, footer, nav) — use native HTML elements"
+    - "Card with elevation — use Container-Card-Base"
+    - "Creating interactive buttons (use Buttons instead)"
+    - "Building form inputs (use Form Inputs instead)"
+    - "Creating modals (use Modals when available)"
 
 contexts:
-  - "page-sections"
-  - "content-groups"
-  - "layout-wrappers"
   - "dashboards"
   - "settings-screens"
+  - "forms"
 
 alternatives:
   - component: Container-Card-Base
-    reason: "When the container needs card styling (elevation, border radius, background)"
+    reason: "When card with elevation"

@@ -1,23 +1,20 @@
 purpose: "Provide a compact icon-only button for toolbar actions, close buttons, or secondary actions where space is limited."
 
+# Derived from family-level guidance (Component-Family-Button.md)
 usage:
   when_to_use:
-    - "Toolbar or app bar actions (search, settings, close)"
-    - "Compact actions where a text label would take too much space"
-    - "Dismiss or close actions on dialogs and panels"
+    - "Triggering user actions (submit, save, cancel)"
+    - "Navigating to new views or pages"
+    - "Opening modals or dialogs"
+    - "Confirming or dismissing operations"
   when_not_to_use:
-    - "Primary actions that need a text label — use Button-CTA"
-    - "Actions in a vertical list layout — use Button-VerticalList-Item"
+    - "Displaying read-only status (use Badges instead)"
+    - "Creating inline text links (use Link component when available)"
+    - "Building toggle controls (use Toggle component when available)"
 
 contexts:
-  - "toolbars"
   - "app-bars"
-  - "dialog-headers"
-  - "card-actions"
-  - "inline-actions"
+  - "modals"
+  - "list-items"
 
-alternatives:
-  - component: Button-CTA
-    reason: "When the action needs a visible text label for clarity"
-  - component: Button-VerticalList-Item
-    reason: "When the action appears in a vertical menu-style list"
+alternatives: []

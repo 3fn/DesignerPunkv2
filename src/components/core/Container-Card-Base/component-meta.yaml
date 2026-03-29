@@ -2,20 +2,22 @@ purpose: "Display content in an elevated card for dashboards, stat cards, conten
 
 usage:
   when_to_use:
-    - "Product cards, profile cards, or content preview cards"
-    - "Elevated content sections that need visual separation from the background"
-    - "Interactive cards that respond to tap or click"
+    - "Card with elevation"
+    - "Interactive card"
   when_not_to_use:
-    - "Simple content wrapping without card styling — use Container-Base"
-    - "Full-width page sections without elevation"
+    - "Generic content wrapper — use Container-Base"
+    - "Custom container needs — use Container-Base"
+    - "Creating interactive buttons (use Buttons instead)"
+    - "Building form inputs (use Form Inputs instead)"
+    - "Creating modals (use Modals when available)"
 
 contexts:
-  - "content-feeds"
-  - "product-listings"
   - "dashboards"
+  - "content-feeds"
+  - "product-cards"
   - "profile-sections"
   - "settings-screens"
 
 alternatives:
   - component: Container-Base
-    reason: "When content grouping is needed without card-specific styling (no elevation, no border radius)"
+    reason: "When generic content wrapper"

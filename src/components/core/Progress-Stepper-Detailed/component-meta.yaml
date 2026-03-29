@@ -1,22 +1,18 @@
 purpose: "Guide users through a multi-step workflow with labeled nodes, step descriptions, and connector lines showing full progress detail."
 
+# Derived from family-level guidance (Component-Family-Progress.md)
 usage:
   when_to_use:
-    - "Complex multi-step flows where each step needs a description"
-    - "Workflows where visual connectors between steps aid comprehension"
-    - "When users need to understand what each step involves before reaching it"
+    - "Showing position in a carousel or swipeable content (Pagination-Base)"
+    - "Displaying progress through a linear multi-step flow (Stepper-Base)"
+    - "Showing labeled steps with descriptions in complex workflows (Stepper-Detailed)"
   when_not_to_use:
-    - "Simple step indicators with labels only — use Progress-Stepper-Base"
-    - "Dot-based pagination — use Progress-Pagination-Base"
+    - "Navigation is the primary purpose (use navigation components instead)"
+    - "Progress is continuous/percentage-based (use a progress bar)"
+    - "Steps are non-linear or can be completed in any order"
 
 contexts:
-  - "checkout-flows"
-  - "application-forms"
   - "onboarding-flows"
-  - "setup-wizards"
+  - "forms"
 
-alternatives:
-  - component: Progress-Stepper-Base
-    reason: "When step labels are sufficient without descriptions or connector lines"
-  - component: Progress-Pagination-Base
-    reason: "When simple dot indicators are sufficient"
+alternatives: []

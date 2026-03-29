@@ -2,21 +2,21 @@ purpose: "Represent a user-entered value like a tag or selection that can be dis
 
 usage:
   when_to_use:
-    - "Displaying tags or selections the user has entered or chosen"
-    - "Email recipient chips in compose fields"
-    - "Removable filter selections in search interfaces"
+    - "Tag input field"
   when_not_to_use:
-    - "Toggling content filters — use Chip-Filter"
-    - "Non-interactive labels — use Badge-Label-Base"
+    - "General interactive chip — use Chip-Base"
+    - "Multi-select filter — use Chip-Filter"
+    - "Display-only indicators are needed (use Badge instead)"
+    - "Primary actions are needed (use Button instead)"
+    - "Navigation is needed (use Tab or Link instead)"
+    - "The element should not be interactive"
 
 contexts:
-  - "tag-inputs"
-  - "email-compose"
-  - "multi-select-fields"
-  - "search-refinements"
+  - "forms"
+  - "filter-bars"
 
 alternatives:
-  - component: Chip-Filter
-    reason: "When the chip toggles a filter rather than representing a removable value"
   - component: Chip-Base
-    reason: "When generic chip behavior is needed without dismiss semantics"
+    reason: "When general interactive chip"
+  - component: Chip-Filter
+    reason: "When multi-select filter"

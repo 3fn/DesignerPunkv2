@@ -2,18 +2,38 @@ purpose: "Collect a password with masked input, visibility toggle, and strength 
 
 usage:
   when_to_use:
-    - "Password fields in login or registration forms"
-    - "Any secret input that needs masking and optional reveal"
+    - "Password entry"
   when_not_to_use:
-    - "Non-secret text inputs — use Input-Text-Base"
-    - "PIN or numeric code inputs"
+    - "Email address collection — use Input-Text-Email"
+    - "Phone number collection — use Input-Text-PhoneNumber"
+    - "Generic text input — use Input-Text-Base"
+    - "Custom validation needs — use Input-Text-Base"
+    - "Terms of service acceptance — use Input-Checkbox-Legal"
+    - "Privacy policy consent — use Input-Checkbox-Legal"
+    - "Marketing opt-in — use Input-Checkbox-Legal"
+    - "Generic binary selection — use Input-Checkbox-Base"
+    - "Parent checkbox (select all) — use Input-Checkbox-Base"
+    - "Settings toggle — use Input-Checkbox-Base"
+    - "Standalone radio (rare) — use Input-Radio-Base"
+    - "Displaying read-only text (use Data Displays instead)"
+    - "Need multi-line text input (use Textarea component when available)"
+    - "Building search interfaces (use Search component when available)"
 
 contexts:
-  - "login-forms"
-  - "registration-forms"
-  - "account-settings"
-  - "password-reset-flows"
+  - "forms"
+  - "onboarding-flows"
+  - "settings-screens"
 
 alternatives:
+  - component: Input-Text-Email
+    reason: "When email address collection"
+  - component: Input-Text-PhoneNumber
+    reason: "When phone number collection"
   - component: Input-Text-Base
-    reason: "When the field collects non-secret text without masking"
+    reason: "When generic text input"
+  - component: Input-Checkbox-Legal
+    reason: "When terms of service acceptance"
+  - component: Input-Checkbox-Base
+    reason: "When generic binary selection"
+  - component: Input-Radio-Base
+    reason: "When standalone radio (rare)"

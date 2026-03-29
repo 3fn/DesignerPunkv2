@@ -2,21 +2,19 @@ purpose: "Render an inline SVG icon that inherits the parent's text color, used 
 
 usage:
   when_to_use:
-    - "Icons alongside text labels in buttons, list items, or navigation"
-    - "Decorative icons that inherit color from surrounding context"
-    - "Icon content inside Button-Icon or other interactive components"
+    - "Generic icon display"
+    - "Status indicator"
+    - "Action button icon"
+    - "Navigation arrow"
   when_not_to_use:
-    - "User or entity identity images — use Avatar-Base"
-    - "Complex illustrations or multi-color graphics"
+    - "Icon is the only way to convey information (add text label)"
+    - "Creating complex illustrations (use images instead)"
+    - "Building logos or brand marks (use dedicated assets)"
 
 contexts:
-  - "buttons"
-  - "navigation-items"
   - "list-items"
-  - "toolbars"
-  - "form-fields"
+  - "app-bars"
+  - "forms"
   - "dashboards"
 
-alternatives:
-  - component: Avatar-Base
-    reason: "When the image represents a user or entity identity rather than a generic icon"
+alternatives: []

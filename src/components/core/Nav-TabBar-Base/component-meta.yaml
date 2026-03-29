@@ -1,22 +1,18 @@
 purpose: "Navigate between top-level app destinations via a persistent bottom tab bar with icon-only tabs and animated dot indicator."
 
+# Derived from family-level guidance (Component-Family-Navigation.md)
 usage:
   when_to_use:
-    - "Primary app navigation between 3-5 top-level sections (e.g., Home, Search, Profile)"
-    - "Persistent bottom navigation on mobile apps (iOS, Android, mobile web)"
-    - "Icon-only navigation where labels are unnecessary or deferred"
+    - "Switching between 2–5 mutually exclusive content views within a single screen"
+    - "Persistent bottom navigation between 3–5 top-level app destinations"
   when_not_to_use:
-    - "Web-first header navigation with labels and flexible item count — use Nav-Header-Base (future)"
-    - "In-context content switching within a single screen — use Nav-SegmentedChoice-Base"
-    - "More than 5 navigation destinations — consider a different navigation pattern"
-    - "Navigation that requires disabled/unavailable tab states — remove unavailable tabs instead"
+    - "More than 5 options — consider Nav-Tabs (planned) or a dropdown"
+    - "Hierarchical navigation — consider Nav-Breadcrumb (planned)"
+    - "Actions that don't switch views — consider Chip-Filter or Button"
+    - "In-page content switching — use Nav-SegmentedChoice-Base, not Nav-TabBar-Base"
 
 contexts:
-  - "primary-navigation"
-  - "mobile-navigation"
-  - "bottom-navigation"
-  - "app-shell"
+  - "navigation-tabs"
+  - "app-bars"
 
-alternatives:
-  - component: Nav-SegmentedChoice-Base
-    reason: "When switching between content views within a single screen rather than navigating between app sections"
+alternatives: []

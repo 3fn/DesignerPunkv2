@@ -1,15 +1,18 @@
 purpose: "Draw a visual connector line between progress indicator nodes to show step sequence and completion flow."
 
+# Derived from family-level guidance (Component-Family-Progress.md)
 usage:
   when_to_use:
-    - "Connecting nodes in stepper or progress indicator layouts"
-    - "Showing visual continuity between sequential steps"
+    - "Showing position in a carousel or swipeable content (Pagination-Base)"
+    - "Displaying progress through a linear multi-step flow (Stepper-Base)"
+    - "Showing labeled steps with descriptions in complex workflows (Stepper-Detailed)"
   when_not_to_use:
-    - "Separating content sections — use Divider-Base or spacing tokens"
-    - "Standalone decorative lines"
+    - "Navigation is the primary purpose (use navigation components instead)"
+    - "Progress is continuous/percentage-based (use a progress bar)"
+    - "Steps are non-linear or can be completed in any order"
 
 contexts:
-  - "stepper-layouts"
-  - "progress-indicators"
+  - "onboarding-flows"
+  - "forms"
 
 alternatives: []
