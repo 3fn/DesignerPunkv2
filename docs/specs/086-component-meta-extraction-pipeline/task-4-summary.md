@@ -1,24 +1,26 @@
 # Task 4 Summary: Agent Configuration & Governance
 
 **Date**: 2026-03-28
-**Purpose**: Concise summary of Task 4 parent completion
-**Organization**: spec-summary
-**Scope**: 086-component-meta-extraction-pipeline
+**Spec**: 086 - Component Discoverability & Metadata Infrastructure
+**Task**: 4. Agent Configuration & Governance
 
-## What Was Done
+---
 
-Configured platform agents (Sparky, Kenya, Data) with design system resource access, created a Platform Resource Map, updated Stacy's governance prompt with a metadata accuracy lens, defined an escape hatch documentation pattern, migrated 3 reference docs to the Documentation MCP, and updated the authoring guide to reflect the hybrid extraction workflow.
+## What Changed
 
-## Key Changes
+Platform agents gained token resources and a navigation reference. Governance processes gained a metadata accuracy lens, escape hatch pattern, and MCP-queryable reference docs.
 
-- Platform agents now reference generated platform tokens (not unitless) via knowledge base configs
-- Platform Resource Map provides a single lookup table for resource type × platform file paths
-- Escape hatch pattern enables governed deviation from component guidance with documented rationale
-- Authoring guide documents the hybrid model: purpose + contexts extracted from family docs, usage + alternatives preserved or hand-edited
+## Key Deliverables
 
-## Impact
+1. **Platform agent configs** — Token output files + Platform Resource Map added to Sparky, Kenya, Data
+2. **Platform Resource Map** — `.kiro/steering/Platform-Resource-Map.md` mapping resource types to platform-specific paths
+3. **Metadata accuracy lens** — Added to Stacy's audit checklist for ongoing metadata quality monitoring
+4. **Escape hatch pattern** — Structured format for documenting intentional deviations from selection guidance, added to Process-Spec-Planning.md
+5. **Reference doc migration** — 3 docs moved to `.kiro/steering/` and made queryable via Documentation MCP
+6. **Authoring guide update** — Reflects hybrid extraction model (purpose/contexts from family docs, usage/alternatives may be hand-edited)
 
-- Product agents can discover platform-specific token files and component resources without guessing paths
-- Stacy's metadata accuracy lens catches drift during lessons-learned reviews
-- Escape hatches provide a governed path for product agents to deviate from guidance when needed
-- All 3 reference docs queryable via `get_section()` for any agent
+## Notable Findings
+
+- Kiro agent config `knowledgeBase` resources don't support `includePatterns` — Spec 087 created to explore `/knowledge` CLI as alternative
+- All three platform agents identified searchable component source as the primary remaining gap
+- Easing token type mismatch in generated iOS/Android files discovered during validation

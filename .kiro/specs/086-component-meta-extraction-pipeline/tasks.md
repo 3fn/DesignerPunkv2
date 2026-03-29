@@ -275,7 +275,7 @@
     - Document hybrid model: purpose + contexts authored in family docs (extracted by script), usage + alternatives may be hand-edited in component-meta.yaml when derived content is insufficient (see Req 3 AC 3 implementation note)
     - _Requirements: 8.3_
 
-- [ ] 5. MCP Scope Split Design
+- [x] 5. MCP Scope Split Design
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -295,7 +295,7 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: MCP Scope Split Design"`
 
-  - [ ] 5.1 Document scope boundary
+  - [x] 5.1 Document scope boundary
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Agent**: Thurgood + Leonardo
@@ -306,7 +306,7 @@
     - Note experience pattern migration concern: what happens to existing patterns in Application MCP during transition (cutover plan for Spec 081)
     - _Requirements: 9.1, 9.2, 9.3, 9.4_
 
-  - [ ] 5.2 Validate readiness model reliability
+  - [x] 5.2 Validate readiness model reliability
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
