@@ -68,7 +68,52 @@ No feedback doc was created for agent review. For a migration spec:
 - Confirm glow blur primitives have zero consumers (Ada found none — no semantic composites, no component references)
 - Any concerns about the unified naming (`blur050` instead of `shadowBlurHard`) affecting component token readability?
 
-[Round 1 feedback here]
+### Kenya — iOS Platform Validation
+
+**iOS material enum mapping: Conceptually sound, but the mapping needs scrutiny.**
+
+The proposed mapping is:
+- `blur050` (8px) → `.systemUltraThinMaterial`
+- `blur100` (16px) → `.systemThinMaterial`
+- `blur150` (24px) → `.systemMaterial`
+
+This is a reasonable starting point, but there's a fundamental tension here that the design outline acknowledges without fully resolving: **Apple's material system isn't a blur intensity scale.** The `.system*Material` variants control both blur amount *and* tint/saturation, and they adapt to light/dark mode, elevated contexts, and vibrancy settings. Mapping a numeric blur token to a material enum is a lossy translation — you're collapsing a multi-dimensional system into a single axis.
+
+That said, for DesignerPunk's purposes this is probably fine. The design outline correctly identifies this as a builder concern, not a token definition concern. The blur primitive carries the design intent (how much visual separation), and the iOS builder translates to the closest native equivalent. The mapping order feels right — `.systemUltraThinMaterial` is the most transparent, `.systemMaterial` is the most opaque, which tracks with increasing blur values.
+
+**Counter-argument to my own position:** One could argue we should skip the material enum mapping entirely and use `UIVisualEffectView` with `UIBlurEffect(style:)` for more precise control, or even SwiftUI's `.blur(radius:)` modifier on a background layer. This would give us exact numeric blur values matching web's `backdrop-filter: blur(Xpx)`. However, that fights the platform — Apple's materials are optimized for performance and visual consistency across system contexts. Using them is the right call for True Native Architecture. The numeric precision loss is an acceptable trade-off.
+
+**One gap: What happens at blur values outside the mapped range?**
+
+The mapping covers `blur050`, `blur100`, `blur150`. But the unified family has 9 tokens (`blur000` through `blur250`). If a component or future screen spec references `blur200` in a surface blur context on iOS, what does the builder emit? The design outline doesn't address this. Options:
+1. Clamp to `.systemMaterial` (the heaviest) for anything above `blur150`
+2. Fall back to `.ultraThickMaterial` or `.thickMaterial` for higher values
+3. Emit a build warning for unmapped values
+
+I'd recommend option 2 with a complete mapping:
+- `blur000` → no material (transparent)
+- `blur025` → `.ultraThinMaterial` (lightest system material)
+- `blur050` → `.systemUltraThinMaterial`
+- `blur075` → `.thinMaterial`
+- `blur100` → `.systemThinMaterial`
+- `blur125` → `.material`
+- `blur150` → `.systemMaterial`
+- `blur200` → `.thickMaterial`
+- `blur250` → `.ultraThickMaterial`
+
+This maps the full 9-token scale to Apple's full material hierarchy. Whether all 9 are *used* is a different question — but the builder should handle any valid blur token without surprises.
+
+**HOWEVER** — and this is the counter-argument — mapping all 9 creates a false precision. Apple's material variants don't correspond to linear blur intensity increases. The visual difference between `.thinMaterial` and `.systemThinMaterial` is subtle and context-dependent. A simpler 3-tier mapping (light/medium/heavy → the three surface blur tokens the design outline actually scopes) might be more honest about what the platform offers. The requirements doc should make a conscious decision here.
+
+**Other iOS blur contexts beyond surface blur: Yes, one.**
+
+SwiftUI's `.blur(radius:)` modifier is used for content blur (e.g., blurring sensitive content, progressive disclosure). This is different from surface/backdrop blur — it blurs the view itself, not what's behind it. Currently no DesignerPunk component uses this, but it's a plausible future need (think: blurred preview behind a paywall, or blurred content during loading). The unified blur primitives would work perfectly for this since `.blur(radius:)` takes a numeric `CGFloat` — no enum mapping needed.
+
+No action required now, but worth noting in the Token-Family-Blur.md doc that iOS has two blur consumption patterns: material enums for surface blur, numeric values for content blur.
+
+**Process: Agree with Ada on missing requirements doc and task 1.4 split.**
+
+The iOS material mapping is the novel work in this spec. It deserves its own subtask with explicit validation criteria — specifically, visual verification that the chosen material variants produce the intended effect across light and dark mode.
 
 ### Lina — Component Validation
 
@@ -96,7 +141,23 @@ The iOS material enum mapping is a novel pattern that deserves Kenya's review as
 
 ## Requirements Feedback
 
-[Populated after requirements doc is created]
+### Context for Reviewers
+
+Thurgood created the requirements doc after Ada's process feedback. Six requirements covering: unified primitives, shadow migration, glow migration, generation pipeline, zero visual change verification, and documentation.
+
+### Ada — Token Review
+
+**Overall: Strong requirements doc.** The zero visual change constraint is properly formalized (Req 5), Lina's R1 confirmations are cited (Req 2 AC 3, Req 3 AC 2), the 088/089 boundary is respected, and Kenya's content blur observation is captured (Req 6 AC 5).
+
+**One correction needed: Req 4 AC 1 — `DEDICATED_PRIMITIVE_CATEGORIES` is the wrong pattern.**
+
+The requirement says blur should use the `DEDICATED_PRIMITIVE_CATEGORIES` pattern. That pattern *excludes* categories from the generic primitive pass because they have dedicated generation sections (like motion has `generateMotionSection()`). Blur tokens don't need a dedicated section — they're standard numeric primitives that should flow through the generic primitive pass like spacing, color, radius, etc.
+
+Adding `BLUR` to `DEDICATED_PRIMITIVE_CATEGORIES` would actually *prevent* blur tokens from appearing in the primitive section of the generated output — the opposite of what we want.
+
+The pipeline work is just: register `TokenCategory.BLUR` so the generation path recognizes it. No special handling, no dedicated section, no filter exclusion.
+
+**Action**: Revise Req 4 AC 1 to: "The `TokenFileGenerator` SHALL handle `TokenCategory.BLUR` as a standard primitive category in the generic generation pass (no dedicated section, no `DEDICATED_PRIMITIVE_CATEGORIES` exclusion)."
 
 ---
 
