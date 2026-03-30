@@ -86,6 +86,22 @@ The bottom separator references `color.structure.border.subtle` for color (corre
 
 **Action**: Lina to add border width token reference to the separator specification.
 
+### Ada — Cross-Spec Note (from Spec 089 feedback)
+
+**iOS material enum mapping for surface blur belongs in this spec, not Spec 089.**
+
+During Spec 089 (Unified Blur Token Family) review, Kenya provided detailed feedback on mapping blur primitives to iOS system material enums (`.systemUltraThinMaterial`, `.systemThinMaterial`, `.systemMaterial`). Key points:
+
+- Apple's material system isn't a blur intensity scale — materials control blur *and* tint/saturation, and adapt to light/dark mode and vibrancy contexts
+- The 3-tier mapping (blur050/blur100/blur150 → the three `.system*Material` variants) is the right approach for app chrome (nav bars, tab bars)
+- Full 9-token mapping creates false precision — the non-system material variants (`.ultraThinMaterial`, `.thickMaterial`, etc.) are designed for different contexts
+- Kenya recommends using system materials over raw `.blur(radius:)` for True Native Architecture
+- Visual verification across light and dark mode should be an acceptance criterion
+
+This is component-level platform implementation, not token generation. Spec 089 generates blur tokens as numeric values on all platforms. This spec (088) owns how Nav-Header-Base translates those values to native APIs per platform.
+
+**Action**: Address iOS material mapping in Spec 088 design. Kenya's full feedback is in `.kiro/specs/089-unified-blur-token-family/feedback.md` under "Kenya — iOS Platform Validation."
+
 ---
 
 ### Round 2 — Governance + Product
