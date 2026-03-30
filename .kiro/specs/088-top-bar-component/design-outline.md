@@ -322,15 +322,17 @@ Nav-Header-Page supports two scroll behaviors. Large title collapse deferred.
 | Category | Expected Tokens | Notes |
 |----------|----------------|-------|
 | Color | `color.structure.canvas`, `color.structure.border.subtle` | Background and bottom stroke (similar to TabBar top stroke) |
+| Typography | `typography.labelMd` | Title typography — fontFamilyBody, fontSize100, lineHeight100, fontWeight500, letterSpacing100. Existing token, no creation needed (Ada R1). |
 | Color | `color.action.navigation` | Title and icon color |
 | Spacing | `space.inset.*` | Internal padding |
 | Spacing | `space.grouped.*` | Gap between trailing actions |
-| Typography | `fontSize*`, `fontWeight*`, `lineHeight*` | Title typography (standard and large) |
+| Typography | `fontSize*`, `fontWeight*`, `lineHeight*` | Covered by `typography.labelMd` composite token |
 | Touch | `tapAreaMinimum`, `tapAreaRecommended` | Action button touch targets |
 | Accessibility | `accessibility.focus.*` | Focus ring tokens |
 | Motion | `duration*`, `easing*` | Large title collapse animation |
-| Blur | TBD | Translucent background — new semantic token needed. Ada to define structure before formal spec. Two consumers: Nav-Header-Base (translucent appearance) and Nav-TabBar-Base (floating pill). Currently hard-coded in TabBar — formalization will unify both. |
-| Spacing | `space.inset.000` (TBD) | Explicit zero padding for iOS/web bar height. May need a new token if the system doesn't support explicit zero. Flag for Ada. |
+| Border | `borderDefault` | Bottom separator width (1px, references borderWidth100) |
+| Blur | Dependency: Spec 089 (Ada) | Translucent background — blur token family. Two consumers: Nav-Header-Base and Nav-TabBar-Base. Spec 088 and 089 can run in parallel; opaque appearance does not depend on blur tokens. |
+| Spacing | ~~`space.inset.000`~~ | Not needed. Zero padding = absence of inset token reference, not an explicit zero token. Confirmed: schema does not require explicit inset reference when padding is zero. |
 
 **Token gap**: Translucent/blur background may need a new semantic token. The TabBar uses `backdrop-filter` on web but doesn't have a dedicated blur token — it's hard-coded in the web implementation. If the header also needs blur, we should formalize this as a token. Recommend coordinating with Ada (`ctrl+shift+a`).
 
