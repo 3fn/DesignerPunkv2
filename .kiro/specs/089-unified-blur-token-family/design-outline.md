@@ -146,13 +146,16 @@ Consumers to update: **None.** Glow blur primitives have no semantic composite c
 
 ---
 
-## Open Questions
+## Confirmed Decisions (Ada + Peter, 2026-03-30)
 
-1. **Token-Family doc**: Single `Token-Family-Blur.md` covering the unified primitive family, with sections noting how shadow, glow, and surface contexts consume different ranges of the scale?
+### Q1: Token-Family Doc — Single Unified Doc
+Single `Token-Family-Blur.md` covering the unified primitive family, with sections noting how shadow, glow, and surface contexts consume different ranges of the scale. Shadow and Glow family docs (`Token-Family-Shadow.md`, `Token-Family-Glow.md`) updated with cross-references to the new Blur family doc.
 
-2. **DTCG export**: Include all 9 blur primitives? Current shadow and glow blur tokens are included.
+### Q2: Export — All Formats, All Platforms
+All 9 blur primitives included in DTCG output, Figma export, and all three platform token files (web CSS, iOS Swift, Android Kotlin). Verification at completion: tokens present and correct in all generated output formats.
 
-3. **Android surface blur generation**: Generate constants even though Android convention is solid backgrounds? Lean yes — costs nothing, keeps the door open.
+### Q3: Android Surface Blur — Generate Constants
+Android blur constants generated even though Android convention is solid backgrounds. Keeps the door open for future consumption.
 
 ---
 
