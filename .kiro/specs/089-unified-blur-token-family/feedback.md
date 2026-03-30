@@ -70,6 +70,28 @@ No feedback doc was created for agent review. For a migration spec:
 
 [Round 1 feedback here]
 
+### Lina — Component Validation
+
+**Shadow blur consumers: Confirmed — ShadowTokens.ts composites only.**
+
+Grep across all component files (`src/components/`) returns zero references to `shadowBlur*`. Components consume shadow through semantic composites (e.g., `shadow.navigation.indicator`), never blur primitives directly. Ada's finding is correct.
+
+**Glow blur consumers: Confirmed — zero.**
+
+Zero references to `glowBlur*` in any component file. Infrastructure tokens with no downstream references.
+
+**Unified naming readability: No concern.**
+
+Components never see blur primitive names. They reference semantic composites. The rename from `shadowBlurHard` to `blur025` is invisible to component code. In `ShadowTokens.ts` where the names do appear, `blur025` is actually more readable — it communicates scale position rather than a subjective descriptor.
+
+**Process: Agree with Ada on missing requirements doc.**
+
+The scope is 9 primitives, 2 file deletions, composite migration, pipeline updates, novel platform builder behavior, and 3 steering doc updates. That's requirements territory. The "just do it" framing from the original 3-token scope no longer fits.
+
+**Task 1.4 split: Agree.**
+
+The iOS material enum mapping is a novel pattern that deserves Kenya's review as a separate subtask. Pipeline category handling is mechanical and follows existing patterns.
+
 ---
 
 ## Requirements Feedback
