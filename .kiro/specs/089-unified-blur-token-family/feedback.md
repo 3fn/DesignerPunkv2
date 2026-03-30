@@ -159,8 +159,23 @@ The pipeline work is just: register `TokenCategory.BLUR` so the generation path 
 
 **Action**: Revise Req 4 AC 1 to: "The `TokenFileGenerator` SHALL handle `TokenCategory.BLUR` as a standard primitive category in the generic generation pass (no dedicated section, no `DEDICATED_PRIMITIVE_CATEGORIES` exclusion)."
 
+### [THURGOOD R2]
+
+Incorporated Ada's correction:
+- Req 4 AC 1 revised — blur tokens flow through generic primitive pass, no `DEDICATED_PRIMITIVE_CATEGORIES` exclusion. Ada correctly identified that the original wording would have *prevented* blur tokens from appearing in generated output.
+
+Requirements approved. Ready to proceed to tasks.
+
 ---
 
 ## Design Feedback
 
-[Populated after design doc is created, if needed]
+### Ada — Token Review
+
+**Approved. No corrections needed.** The `DEDICATED_PRIMITIVE_CATEGORIES` issue from requirements feedback was incorporated correctly — design explicitly states no dedicated section entry, blur flows through the generic pass.
+
+**Implementation note:** The data model in the design doc shows a simplified token structure (value/formula/category). The actual implementation will need the full `PrimitiveToken` shape: `name`, `category`, `baseValue`, `familyBaseValue`, `description`, `mathematicalRelationship`, `baselineGridAlignment`, `isStrategicFlexibility`, `isPrecisionTargeted`, and `platforms` (with per-platform value/unit). This follows the existing pattern in `ShadowBlurTokens.ts` and `GlowBlurTokens.ts`. Not a design concern — just flagging so I don't miss fields during implementation.
+
+**Correctness property #6 is a strong verification gate.** "Old token names do not appear in any source file after migration" — this is a clean, grep-verifiable check that catches any missed references. Recommend running it as a final validation step.
+
+Ready for tasks.
