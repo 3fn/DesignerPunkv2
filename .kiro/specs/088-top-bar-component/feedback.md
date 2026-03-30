@@ -47,7 +47,44 @@ The design outline proposes Nav-Header-Base (primitive, internal only) with two 
 - space.inset.000: Do we need an explicit zero inset token, or is this handled differently?
 - Any token gaps in the preliminary token requirements table?
 
-[Round 1 feedback here]
+### Ada — Token Review
+
+**Typography token: Recommend `typography.labelMd` instead of a new token.**
+
+Lina's request identified fontWeight600 (semi-bold) as needed. However, `typography.labelMd` (fontWeight500, medium) is worth trying first:
+
+- `labelMd` is semantically accurate — a nav bar title is a UI label. Its context is literally "labels for form fields and UI elements."
+- fontWeight500 is already heavier than body text (400). It reads as distinct from content without competing with display headings.
+- Material 3 TopAppBar and iOS UINavigationBar inline titles both use medium weight — semi-bold is reserved for large titles.
+- Zero new tokens means no creation governance, documentation, or MCP updates.
+
+If fontWeight500 proves too light during implementation, creating a new token at that point is a small, well-understood task. Recommend trying `labelMd` first and evaluating visually before committing to a new token.
+
+**Action**: Lina to confirm whether fontWeight500 is acceptable or if there's a visual rationale requiring fontWeight600.
+
+**Blur/backdrop token: Separate spec, not folded into 088.**
+
+Two consumers (Nav-Header-Base translucent appearance, Nav-TabBar-Base floating pill) warrant a proper token family. Proposed structure:
+
+- Three primitive tokens following base-8 progression: `blur.subtle = 8`, `blur.standard = 16`, `blur.heavy = 24`
+- Platform mapping via Option A (design intent, not literal values): web maps to `backdrop-filter: blur(Xpx)`, iOS maps to system material enums (subtle → `.systemUltraThinMaterial`, standard → `.systemThinMaterial`, heavy → `.systemMaterial`), Android uses solid backgrounds by convention (token available but not consumed)
+- TabBar's existing hard-coded blur migrates to `blur.standard`
+
+Full scope for a new token family includes: primitive definitions, Token-Family doc, mathematical foundation, platform builder updates, generation pipeline changes, dist/ rebuild, formula/compliance tests, MCP updates, and existing consumer migration. This is a proper spec (089), not a subtask of 088.
+
+**Action**: Ada to own blur token family spec (089). Spec 088 lists it as a dependency. The two specs can run in parallel.
+
+**space.inset.000: Likely unnecessary, pending Lina confirmation.**
+
+Zero padding is the absence of padding — expressed by not referencing an inset token, not by referencing a zero-valued one. The only case where `space.inset.000` would matter is if the component token schema requires every component to declare an explicit inset reference.
+
+**Action**: Lina to confirm whether the schema requires an explicit inset reference when padding is zero. If not, no token needed.
+
+**Token table gap: Separator border width.**
+
+The bottom separator references `color.structure.border.subtle` for color (correct), but the separator *width* should reference a border width token (`border.hairline` or `border.thin`) rather than being hard-coded.
+
+**Action**: Lina to add border width token reference to the separator specification.
 
 ---
 
