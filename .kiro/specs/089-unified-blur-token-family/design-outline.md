@@ -104,11 +104,16 @@ Consumers to update: **None.** Glow blur primitives have no semantic composite c
 
 - **Delete**: `src/tokens/ShadowBlurTokens.ts`, `src/tokens/GlowBlurTokens.ts`
 - **Create**: `src/tokens/BlurTokens.ts` (unified family)
+- **Create**: `.kiro/steering/Token-Family-Blur.md`
 - **Update**: `src/tokens/index.ts` (re-export), `src/tokens/semantic/ShadowTokens.ts` (reference names)
-- **Update**: All tests referencing old token names
-- **Update**: Token-Family docs (new Token-Family-Blur.md replaces blur sections in Shadow and Glow family docs)
+- **Update**: `src/types/PrimitiveToken.ts` (add `TokenCategory.BLUR`)
+- **Update**: Platform builders — surface blur formatting (web: backdrop-filter, iOS: material enum, Android: numeric constant)
+- **Update**: `TokenFileGenerator` — generation pipeline handling for `BLUR` category
+- **Update**: `.kiro/steering/Token-Family-Shadow.md` (replace blur primitive section with cross-reference)
+- **Update**: `.kiro/steering/Token-Family-Glow.md` (replace blur primitive section with cross-reference)
+- **Update**: DTCG generator (blur token export)
+- **Update**: All tests referencing old token names (shadow blur tests, glow blur tests, integration tests)
 - **Regenerate**: `dist/` platform token files
-- **Update**: DTCG generator (if blur tokens are exported)
 
 **Note**: Glow blur migration has zero consumer updates — no semantic composites or components reference glow blur tokens. Shadow blur migration is limited to `ShadowTokens.ts` composite references.
 
@@ -120,14 +125,16 @@ Consumers to update: **None.** Glow blur primitives have no semantic composite c
 - Unified blur primitive definitions (9 tokens in `BlurTokens.ts`)
 - `TokenCategory.BLUR` (new category, replaces blur-specific handling in SHADOW and GLOW)
 - Migration of shadow composite tokens to reference new blur primitives
-- Migration of glow tokens to reference new blur primitives
+- Migration of glow token definitions to new blur primitives
 - Removal of `ShadowBlurTokens.ts` and `GlowBlurTokens.ts`
-- Platform builder updates for surface blur generation (web backdrop-filter, iOS material mapping)
-- Token-Family-Blur.md steering doc
-- Test updates (formula validation, mathematical relationships, cross-platform consistency)
-- Generation pipeline updates
+- Platform builder updates for surface blur generation (web backdrop-filter, iOS material enum mapping, Android numeric constant)
+- Generation pipeline updates (`TokenFileGenerator` BLUR category handling)
+- DTCG export for blur tokens
+- Token-Family-Blur.md steering doc (new)
+- Token-Family-Shadow.md and Token-Family-Glow.md updates (cross-references)
+- Test migration and new test coverage (formula validation, mathematical relationships, cross-platform consistency)
 - Regenerate `dist/` platform token files
-- MCP updates
+- MCP updates (Application MCP indexes new tokens, Documentation MCP serves family doc)
 
 ### Out of Scope
 - Component consumption of surface blur (Nav-Header-Base, Nav-TabBar-Base) — Lina's domain
@@ -147,8 +154,6 @@ Consumers to update: **None.** Glow blur primitives have no semantic composite c
 
 3. **Android surface blur generation**: Generate constants even though Android convention is solid backgrounds? Lean yes — costs nothing, keeps the door open.
 
-4. **Spec scope**: This is larger than the original "3 surface blur tokens" proposal. It's still a single-file-family token change with mechanical migration, but the test surface is broader. Confirm this is still "just do it" territory or if it warrants requirements/design docs.
-
 ---
 
 ## Dependencies
@@ -160,9 +165,12 @@ Consumers to update: **None.** Glow blur primitives have no semantic composite c
 
 ## Risk Assessment
 
-**Low-medium risk.** The migration is mechanical (rename references, same values), but the surface area is broader than a new-family-only spec:
-- Shadow composite tokens are consumed by components — reference chain must be verified
-- Two existing test files for shadow blur and glow blur need migration
-- Generation pipeline needs to handle the new `BLUR` category
+This spec touches two established token families, their consumers, the generation pipeline, platform builders, and documentation:
 
-Mitigated by: zero visual change (same values), strong existing test coverage, and clear 1:1 mapping between old and new token names.
+- Shadow composite tokens are consumed by components — the reference chain from blur primitives through shadow composites to component tokens must be verified end-to-end
+- Two existing test files for shadow blur and glow blur need full migration
+- Generation pipeline needs to handle the new `BLUR` category
+- Platform builders need new surface blur formatting logic — including a novel iOS material enum mapping pattern
+- Three steering docs need updates (new Blur family doc, Shadow and Glow cross-references)
+
+Mitigated by: zero visual change (same numeric values), strong existing test coverage (8041 tests), clear 1:1 mapping between old and new token names, and the glow side having zero consumers to update.
