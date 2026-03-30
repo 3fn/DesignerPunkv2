@@ -98,17 +98,19 @@ Consumers to update: `ShadowTokens.ts` (semantic shadow composites reference blu
 | `glowBlur400` | `blur200` | 32 |
 | `glowBlur500` | `blur250` | 40 |
 
-Consumers to update: Glow semantic tokens (if they exist as composites), any direct references.
+Consumers to update: **None.** Glow blur primitives have no semantic composite consumers and no component consumers. They are infrastructure tokens with no current references — migration is limited to the token definitions themselves.
 
 ### Files Affected
 
 - **Delete**: `src/tokens/ShadowBlurTokens.ts`, `src/tokens/GlowBlurTokens.ts`
 - **Create**: `src/tokens/BlurTokens.ts` (unified family)
-- **Update**: `src/tokens/index.ts` (re-export), `src/tokens/semantic/ShadowTokens.ts` (reference names), glow semantic tokens (reference names)
+- **Update**: `src/tokens/index.ts` (re-export), `src/tokens/semantic/ShadowTokens.ts` (reference names)
 - **Update**: All tests referencing old token names
 - **Update**: Token-Family docs (new Token-Family-Blur.md replaces blur sections in Shadow and Glow family docs)
 - **Regenerate**: `dist/` platform token files
 - **Update**: DTCG generator (if blur tokens are exported)
+
+**Note**: Glow blur migration has zero consumer updates — no semantic composites or components reference glow blur tokens. Shadow blur migration is limited to `ShadowTokens.ts` composite references.
 
 ---
 

@@ -72,7 +72,7 @@ Two consumers (Nav-Header-Base translucent appearance, Nav-TabBar-Base floating 
 
 Full scope for a new token family includes: primitive definitions, Token-Family doc, mathematical foundation, platform builder updates, generation pipeline changes, dist/ rebuild, formula/compliance tests, MCP updates, and existing consumer migration. This is a proper spec (089), not a subtask of 088.
 
-**Action**: Ada to own blur token family spec (089). Spec 088 lists it as a dependency. The two specs can run in parallel.
+**Action**: Ada to own unified blur token family spec (089). Spec 088 lists it as a dependency. The two specs can run in parallel.
 
 **space.inset.000: Likely unnecessary, pending Lina confirmation.**
 
