@@ -1,159 +1,166 @@
-# Surface Blur Token Family — Design Outline
+# Unified Blur Token Family — Design Outline
 
 **Date**: 2026-03-30
 **Author**: Ada
-**Purpose**: Define a new primitive token family for surface/backdrop blur effects
+**Purpose**: Unify shadow blur, glow blur, and surface blur into a single primitive token family
 **Status**: Design Outline — Draft
-**Origin**: Spec 088 (Nav-Header-Base) token dependency; existing hard-coded blur in Nav-TabBar-Base
+**Origin**: Spec 088 (Nav-Header-Base) token dependency; architectural alignment opportunity
 
 ---
 
 ## Overview
 
-Surface blur tokens define the blur radius for translucent surface treatments — frosted glass backgrounds, translucent navigation bars, and similar depth-separation effects where content behind a surface is intentionally obscured.
+DesignerPunk currently has two separate blur primitive families with different base values and naming conventions:
 
-This is distinct from existing blur families:
-- **Shadow blur** — edge softness of drop shadows (quality-based: hard/moderate/soft)
-- **Glow blur** — radial spread of glow effects (scale-based: 100–500)
-- **Surface blur** — backdrop obscuring for translucent surfaces (intensity-based: subtle/standard/heavy)
+- **Shadow blur** (base 4): `shadowBlurNone`=0, `shadowBlurHard`=4, `shadowBlurModerate`=12, `shadowBlurSoft`=20, `shadowBlurDepth200`=16, `shadowBlurDepth300`=24
+- **Glow blur** (base 8): `glowBlur100`=8, `glowBlur200`=16, `glowBlur300`=24, `glowBlur400`=32, `glowBlur500`=40
 
-**Consumers**:
-- Nav-Header-Base (`appearance: 'translucent'`) — Spec 088
-- Nav-TabBar-Base (floating pill treatment) — future migration from hard-coded values
+Spec 088 (Nav-Header-Base) needs a third blur context: surface/backdrop blur for translucent surfaces. Rather than adding a third disconnected family, this spec unifies all blur values into a single primitive scale — same philosophy as spacing, fontSize, and other foundational token families.
+
+**Timing**: Before product development begins. Unifying later, after product screens reference these tokens, would be significantly harder.
 
 ---
 
 ## Mathematical Foundation
 
-Base value: **8 units** (aligns with baseline grid and glow blur base value)
+**Base value**: 16 (same philosophy as `fontSize100 = 16`)
 
-| Token | Formula | Value | Use Case |
-|-------|---------|-------|----------|
-| `surfaceBlurSubtle` | base × 1 | 8 | Light frosted glass, gentle depth separation |
-| `surfaceBlurStandard` | base × 2 | 16 | Default translucent surface — nav bars, tab bars |
-| `surfaceBlurHeavy` | base × 3 | 24 | Strong obscuring — overlays, modal backdrops |
+| Token | Formula | Value | Current Consumers |
+|-------|---------|-------|-------------------|
+| `blur000` | 0 | 0 | `shadowBlurNone` |
+| `blur025` | base × 0.25 | 4 | `shadowBlurHard` |
+| `blur050` | base × 0.5 | 8 | `glowBlur100`, surface subtle |
+| `blur075` | base × 0.75 | 12 | `shadowBlurModerate` |
+| `blur100` | base × 1 | 16 | `shadowBlurDepth200`, `glowBlur200`, surface standard |
+| `blur125` | base × 1.25 | 20 | `shadowBlurSoft` |
+| `blur150` | base × 1.5 | 24 | `shadowBlurDepth300`, `glowBlur300`, surface heavy |
+| `blur200` | base × 2 | 32 | `glowBlur400` |
+| `blur250` | base × 2.5 | 40 | `glowBlur500` |
 
-Linear base-8 progression. Same mathematical foundation as glow blur (which also starts at 8 and increments by 8). Three tokens covers the known use cases without over-provisioning.
-
----
-
-## Platform Behavior
-
-This is the key design decision. Surface blur maps to fundamentally different platform APIs.
-
-### Decision: Design Intent Token (Option A)
-
-The token carries a numeric blur radius as design intent. Platform builders translate to native APIs. The token value is not a literal instruction on every platform.
-
-| Platform | Mapping | Notes |
-|----------|---------|-------|
-| **Web** | `backdrop-filter: blur({value}px)` | Direct numeric mapping. Widely supported (96%+ on caniuse). |
-| **iOS** | System material enum | `subtle` → `.systemUltraThinMaterial`, `standard` → `.systemThinMaterial`, `heavy` → `.systemMaterial`. iOS controls the exact blur, saturation, and tint. The token selects the intensity tier. |
-| **Android** | Solid background (conventional) | Android convention is opaque surfaces, not translucent. Token is available but not consumed by default. `RenderEffect.createBlurEffect()` exists for apps that want it. |
-
-**Precedent**: Easing tokens follow this pattern — cubic-bezier values that map to `Animation.timingCurve` on iOS and `CubicBezierEasing` on Android. The token carries design intent; the platform builder translates.
-
-**New ground**: Easing values are mathematically equivalent across platforms. Blur values aren't — iOS `.systemThinMaterial` doesn't produce exactly 16px of Gaussian blur. The mapping is approximate, matching visual intensity rather than exact pixel values. This is an acceptable trade-off for a design intent token.
-
-### iOS Material Mapping Rationale
-
-| Token | iOS Material | Visual Character |
-|-------|-------------|-----------------|
-| `surfaceBlurSubtle` (8) | `.systemUltraThinMaterial` | Lightest system blur, content mostly visible |
-| `surfaceBlurStandard` (16) | `.systemThinMaterial` | Standard translucency, content softly visible |
-| `surfaceBlurHeavy` (24) | `.systemMaterial` | Heavier blur, content largely obscured |
-
-These mappings are based on visual intensity matching, not pixel equivalence. Kenya should validate during implementation that the visual weight feels right.
+Every existing blur value across both families maps cleanly to this scale. All values are multiples of 4 (baseline grid aligned).
 
 ---
 
-## Token Architecture
+## Architecture
 
-### Primitive Tokens
+No semantic blur layer. The primitives are consumed directly by the higher-level tokens that already provide semantic meaning:
 
 ```
-surfaceBlurSubtle    = 8    (base × 1)
-surfaceBlurStandard  = 16   (base × 2)
-surfaceBlurHeavy     = 24   (base × 3)
+Primitives:    blur000  blur025  blur050  blur075  blur100  blur125  blur150  blur200  blur250
+                  ↓       ↓                 ↓        ↓        ↓        ↓
+Composites:   shadow.sm  shadow.md       shadow.lg  glow.*   surface consumers   component tokens
 ```
 
-Category: `SURFACE_BLUR` (new TokenCategory)
-
-Platform values follow the standard pattern:
-- Web: `{ value: N, unit: 'px' }`
-- iOS: `{ value: N, unit: 'pt' }`
-- Android: `{ value: N, unit: 'dp' }`
-
-### Semantic Tokens
-
-No semantic tokens in v1. The primitives are directly consumed by component tokens. If a pattern emerges (e.g., "navigation surface blur" vs "overlay surface blur" both mapping to `surfaceBlurStandard`), semantic tokens can be added later.
-
-**Counter-argument**: Starting without semantics means components reference primitives directly, which is lower in the token governance hierarchy. However, with only three values and two consumers, a semantic layer would be premature abstraction — it would just be 1:1 aliases.
+- **Shadow composites** (`shadow.sm`, `shadow.md`, etc.) already encode intent — they reference blur primitives as one property among several (offset, opacity, color). No intermediate `shadow.blur.X` semantic needed.
+- **Glow composites** — same pattern. The glow semantic tokens compose blur with color and spread.
+- **Surface blur** — consumed directly by component tokens (Nav-Header-Base, Nav-TabBar-Base). Only two consumers; a semantic layer would be premature 1:1 aliasing.
 
 ---
 
-## Naming
+## Platform Behavior for Surface Blur
 
-`surfaceBlur` prefix rather than `backdropBlur` because:
-- "Surface" aligns with DesignerPunk's surface/canvas vocabulary (`color.structure.canvas`, `color.structure.surface`)
-- "Backdrop" is CSS-specific terminology (`backdrop-filter`)
-- The token describes the surface's visual treatment, not the CSS property that implements it
+Shadow and glow blur map to numeric values on all platforms (px/pt/dp). Surface blur is different — it maps to fundamentally different platform APIs:
 
-Intensity suffixes (subtle/standard/heavy) rather than numeric scale (100/200/300) because:
-- Matches shadow blur's quality-based naming (hard/moderate/soft)
-- Three tokens don't need a numeric scale — the names communicate intent directly
-- If we expand beyond three, we can add intermediates (`surfaceBlurLight`, `surfaceBlurDense`) without renumbering
+| Platform | Surface Blur Mapping | Notes |
+|----------|---------------------|-------|
+| **Web** | `backdrop-filter: blur({value}px)` | Direct numeric mapping |
+| **iOS** | System material enum | `blur050` → `.systemUltraThinMaterial`, `blur100` → `.systemThinMaterial`, `blur150` → `.systemMaterial` |
+| **Android** | Solid background (conventional) | Token available but not consumed by default |
+
+The blur primitive carries the numeric value. The platform builder for surface blur contexts translates to native APIs. This is a builder concern, not a token definition concern — similar to how easing tokens carry cubic-bezier values that iOS maps to `Animation.timingCurve`.
+
+**Note**: Only surface blur has this platform divergence. Shadow and glow blur use the numeric value directly on all platforms.
+
+---
+
+## Migration
+
+### Shadow Blur → Unified Primitives
+
+| Old Token | New Reference | Value |
+|-----------|--------------|-------|
+| `shadowBlurNone` | `blur000` | 0 |
+| `shadowBlurHard` | `blur025` | 4 |
+| `shadowBlurModerate` | `blur075` | 12 |
+| `shadowBlurSoft` | `blur125` | 20 |
+| `shadowBlurDepth200` | `blur100` | 16 |
+| `shadowBlurDepth300` | `blur150` | 24 |
+
+Consumers to update: `ShadowTokens.ts` (semantic shadow composites reference blur primitives by name).
+
+### Glow Blur → Unified Primitives
+
+| Old Token | New Reference | Value |
+|-----------|--------------|-------|
+| `glowBlur100` | `blur050` | 8 |
+| `glowBlur200` | `blur100` | 16 |
+| `glowBlur300` | `blur150` | 24 |
+| `glowBlur400` | `blur200` | 32 |
+| `glowBlur500` | `blur250` | 40 |
+
+Consumers to update: Glow semantic tokens (if they exist as composites), any direct references.
+
+### Files Affected
+
+- **Delete**: `src/tokens/ShadowBlurTokens.ts`, `src/tokens/GlowBlurTokens.ts`
+- **Create**: `src/tokens/BlurTokens.ts` (unified family)
+- **Update**: `src/tokens/index.ts` (re-export), `src/tokens/semantic/ShadowTokens.ts` (reference names), glow semantic tokens (reference names)
+- **Update**: All tests referencing old token names
+- **Update**: Token-Family docs (new Token-Family-Blur.md replaces blur sections in Shadow and Glow family docs)
+- **Regenerate**: `dist/` platform token files
+- **Update**: DTCG generator (if blur tokens are exported)
 
 ---
 
 ## Scope
 
 ### In Scope
-- Primitive token definitions (3 tokens)
-- Token source file (`src/tokens/SurfaceBlurTokens.ts`)
-- Token tests (formula validation, mathematical relationships, cross-platform consistency)
-- Token registration in `src/tokens/index.ts`
-- TokenCategory addition (`SURFACE_BLUR`)
-- Platform builder updates (web, iOS, Android) for surface blur generation
-- Generation pipeline — `TokenFileGenerator` handles new category in generated output
+- Unified blur primitive definitions (9 tokens in `BlurTokens.ts`)
+- `TokenCategory.BLUR` (new category, replaces blur-specific handling in SHADOW and GLOW)
+- Migration of shadow composite tokens to reference new blur primitives
+- Migration of glow tokens to reference new blur primitives
+- Removal of `ShadowBlurTokens.ts` and `GlowBlurTokens.ts`
+- Platform builder updates for surface blur generation (web backdrop-filter, iOS material mapping)
+- Token-Family-Blur.md steering doc
+- Test updates (formula validation, mathematical relationships, cross-platform consistency)
+- Generation pipeline updates
 - Regenerate `dist/` platform token files
-- Token-Family-Blur.md steering doc (or Token-Family-Surface-Blur.md)
-- Application MCP indexes new tokens
-- Documentation MCP serves family doc
+- MCP updates
 
 ### Out of Scope
-- Component consumption (Nav-Header-Base, Nav-TabBar-Base) — that's Lina's domain in Specs 088 and future TabBar work
-- Semantic tokens — deferred until a pattern emerges
-- DTCG export — can be added later if needed
+- Component consumption of surface blur (Nav-Header-Base, Nav-TabBar-Base) — Lina's domain
+- Semantic blur layer — not needed; composites provide the semantic meaning
+- Changes to shadow or glow composite token values — only the primitive references change, not the resolved values
 
-### Migration
-- Nav-TabBar-Base's hard-coded blur values (if any exist) should migrate to `surfaceBlurStandard` — but this is component work owned by Lina, not token work
+### Key Constraint
+**Zero visual change.** Every existing shadow and glow effect resolves to the same numeric value after migration. This is a naming/architecture change, not a design change.
 
 ---
 
 ## Open Questions
 
-1. **Family doc naming**: `Token-Family-Surface-Blur.md` (specific) or `Token-Family-Blur.md` (umbrella covering shadow blur, glow blur, and surface blur)? An umbrella doc would consolidate blur documentation but might be unwieldy given the three families have different mathematical foundations and naming conventions.
+1. **Token-Family doc**: Single `Token-Family-Blur.md` covering the unified primitive family, with sections noting how shadow, glow, and surface contexts consume different ranges of the scale?
 
-2. **DTCG export**: Should surface blur tokens appear in the DTCG output? Current blur tokens (shadow, glow) are included. Likely yes for consistency, but confirming.
+2. **DTCG export**: Include all 9 blur primitives? Current shadow and glow blur tokens are included.
 
-3. **Android consumption**: Should the Android builder generate surface blur constants even though Android convention is solid backgrounds? Generating them costs nothing and keeps the option open. Omitting them is cleaner but means Android components can't reference them without builder changes later.
+3. **Android surface blur generation**: Generate constants even though Android convention is solid backgrounds? Lean yes — costs nothing, keeps the door open.
+
+4. **Spec scope**: This is larger than the original "3 surface blur tokens" proposal. It's still a single-file-family token change with mechanical migration, but the test surface is broader. Confirm this is still "just do it" territory or if it warrants requirements/design docs.
 
 ---
 
 ## Dependencies
 
-- **Spec 088** depends on this spec (Nav-Header-Base `appearance: 'translucent'` needs `surfaceBlurStandard`)
-- No upstream dependencies — this is a new token family with no prerequisites
+- **Spec 088** depends on this spec (Nav-Header-Base `appearance: 'translucent'` needs surface blur tokens)
+- No upstream dependencies
 
 ---
 
 ## Risk Assessment
 
-**Low risk**. This is a well-understood pattern:
-- Token definition follows established conventions (ShadowBlurTokens, GlowBlurTokens)
-- Platform builder extension is mechanical
-- Three tokens, linear progression, no complex derivation
-- Strong test coverage pattern to follow
+**Low-medium risk.** The migration is mechanical (rename references, same values), but the surface area is broader than a new-family-only spec:
+- Shadow composite tokens are consumed by components — reference chain must be verified
+- Two existing test files for shadow blur and glow blur need migration
+- Generation pipeline needs to handle the new `BLUR` category
 
-The only novel aspect is the iOS material enum mapping — a design intent mapping rather than a literal value translation. This should be validated visually by Kenya during Spec 088 implementation.
+Mitigated by: zero visual change (same values), strong existing test coverage, and clear 1:1 mapping between old and new token names.
