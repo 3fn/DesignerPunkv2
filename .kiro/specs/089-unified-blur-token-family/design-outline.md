@@ -29,15 +29,15 @@ Spec 088 (Nav-Header-Base) needs a third blur context: surface/backdrop blur for
 |-------|---------|-------|-------------------|
 | `blur000` | 0 | 0 | `shadowBlurNone` |
 | `blur025` | base × 0.25 | 4 | `shadowBlurHard` |
-| `blur050` | base × 0.5 | 8 | `glowBlur100`, surface subtle |
+| `blur050` | base × 0.5 | 8 | `glowBlur100` |
 | `blur075` | base × 0.75 | 12 | `shadowBlurModerate` |
-| `blur100` | base × 1 | 16 | `shadowBlurDepth200`, `glowBlur200`, surface standard |
+| `blur100` | base × 1 | 16 | `shadowBlurDepth200`, `glowBlur200` |
 | `blur125` | base × 1.25 | 20 | `shadowBlurSoft` |
-| `blur150` | base × 1.5 | 24 | `shadowBlurDepth300`, `glowBlur300`, surface heavy |
+| `blur150` | base × 1.5 | 24 | `shadowBlurDepth300`, `glowBlur300` |
 | `blur200` | base × 2 | 32 | `glowBlur400` |
 | `blur250` | base × 2.5 | 40 | `glowBlur500` |
 
-Every existing blur value across both families maps cleanly to this scale. All values are multiples of 4 (baseline grid aligned).
+Every existing blur value across both families maps cleanly to this scale. All values are multiples of 4 (baseline grid aligned). Surface blur consumers (Nav-Header-Base, Nav-TabBar-Base) will reference tokens in the `blur050`–`blur150` range — specific token selection is a component-level decision in Spec 088.
 
 ---
 
