@@ -59,17 +59,28 @@ Composites:   shadow.sm  shadow.md       shadow.lg  glow.*   surface consumers  
 
 ## Platform Behavior for Surface Blur
 
-Shadow and glow blur map to numeric values on all platforms (px/pt/dp). Surface blur is different — it maps to fundamentally different platform APIs:
+Shadow and glow blur map to numeric values on all platforms (px/pt/dp). Surface blur is consumed the same way — **all blur primitives are unitless numeric values on all platforms.** The token definition and generation pipeline treat blur identically to any other primitive family.
 
-| Platform | Surface Blur Mapping | Notes |
-|----------|---------------------|-------|
-| **Web** | `backdrop-filter: blur({value}px)` | Direct numeric mapping |
-| **iOS** | System material enum | `blur050` → `.systemUltraThinMaterial`, `blur100` → `.systemThinMaterial`, `blur150` → `.systemMaterial` |
-| **Android** | Solid background (conventional) | Token available but not consumed by default |
+The iOS material enum mapping (`.systemThinMaterial`, etc.) is a **component-level concern, not a token or generation concern.** When Nav-Header-Base implements `appearance: 'translucent'` on iOS, the component code reads the blur token value and selects the appropriate system material. This is the same pattern as easing tokens — the generated file includes the raw value, and platform-specific component code provides the native translation.
 
-The blur primitive carries the numeric value. The platform builder for surface blur contexts translates to native APIs. This is a builder concern, not a token definition concern — similar to how easing tokens carry cubic-bezier values that iOS maps to `Animation.timingCurve`.
+This means:
+- `DesignTokens.web.css` generates `--blur-100: 16;` (numeric)
+- `DesignTokens.ios.swift` generates `blur100: CGFloat = 16` (numeric)
+- `DesignTokens.android.kt` generates `blur_100: Float = 16` (numeric)
+- The iOS material mapping lives in component implementation (Spec 088), not token generation (this spec)
 
-**Note**: Only surface blur has this platform divergence. Shadow and glow blur use the numeric value directly on all platforms.
+### What This Spec Owns vs What Spec 088 Owns
+
+| Concern | Owner |
+|---------|-------|
+| Blur primitive definitions (9 tokens, numeric values) | **Spec 089** (this spec) |
+| Generation pipeline — BLUR category in platform output | **Spec 089** (this spec) |
+| DTCG + Figma export of blur tokens | **Spec 089** (this spec) |
+| iOS material enum mapping for surface blur | **Spec 088** (Nav-Header-Base component) |
+| Web `backdrop-filter` usage for surface blur | **Spec 088** (Nav-Header-Base component) |
+| Android surface blur consumption (if any) | **Spec 088** (Nav-Header-Base component) |
+
+Kenya's feedback on the iOS material mapping (3-tier vs full 9-token mapping, `.system*` variants vs non-system variants) is valuable and should be addressed in Spec 088's design, not here.
 
 ---
 
@@ -105,13 +116,13 @@ Consumers to update: **None.** Glow blur primitives have no semantic composite c
 - **Delete**: `src/tokens/ShadowBlurTokens.ts`, `src/tokens/GlowBlurTokens.ts`
 - **Create**: `src/tokens/BlurTokens.ts` (unified family)
 - **Create**: `.kiro/steering/Token-Family-Blur.md`
-- **Update**: `src/tokens/index.ts` (re-export), `src/tokens/semantic/ShadowTokens.ts` (reference names)
 - **Update**: `src/types/PrimitiveToken.ts` (add `TokenCategory.BLUR`)
-- **Update**: Platform builders — surface blur formatting (web: backdrop-filter, iOS: material enum, Android: numeric constant)
-- **Update**: `TokenFileGenerator` — generation pipeline handling for `BLUR` category
+- **Update**: `src/tokens/index.ts` (re-export)
+- **Update**: `src/tokens/semantic/ShadowTokens.ts` (reference names)
+- **Update**: `TokenFileGenerator` — generation pipeline handling for `BLUR` category (numeric values, same pattern as other primitives)
+- **Update**: DTCG generator (blur token export)
 - **Update**: `.kiro/steering/Token-Family-Shadow.md` (replace blur primitive section with cross-reference)
 - **Update**: `.kiro/steering/Token-Family-Glow.md` (replace blur primitive section with cross-reference)
-- **Update**: DTCG generator (blur token export)
 - **Update**: All tests referencing old token names (shadow blur tests, glow blur tests, integration tests)
 - **Regenerate**: `dist/` platform token files
 
@@ -127,9 +138,8 @@ Consumers to update: **None.** Glow blur primitives have no semantic composite c
 - Migration of shadow composite tokens to reference new blur primitives
 - Migration of glow token definitions to new blur primitives
 - Removal of `ShadowBlurTokens.ts` and `GlowBlurTokens.ts`
-- Platform builder updates for surface blur generation (web backdrop-filter, iOS material enum mapping, Android numeric constant)
-- Generation pipeline updates (`TokenFileGenerator` BLUR category handling)
-- DTCG export for blur tokens
+- Generation pipeline updates (`TokenFileGenerator` BLUR category handling — numeric values, same as any primitive)
+- DTCG and Figma export for blur tokens
 - Token-Family-Blur.md steering doc (new)
 - Token-Family-Shadow.md and Token-Family-Glow.md updates (cross-references)
 - Test migration and new test coverage (formula validation, mathematical relationships, cross-platform consistency)
@@ -137,7 +147,10 @@ Consumers to update: **None.** Glow blur primitives have no semantic composite c
 - MCP updates (Application MCP indexes new tokens, Documentation MCP serves family doc)
 
 ### Out of Scope
-- Component consumption of surface blur (Nav-Header-Base, Nav-TabBar-Base) — Lina's domain
+- Component consumption of surface blur (Nav-Header-Base, Nav-TabBar-Base) — Lina's domain in Spec 088
+- iOS material enum mapping for surface blur — component-level implementation in Spec 088
+- Web `backdrop-filter` usage — component-level implementation in Spec 088
+- Platform builder changes for surface blur formatting — not needed; blur tokens are numeric values like any other primitive
 - Semantic blur layer — not needed; composites provide the semantic meaning
 - Changes to shadow or glow composite token values — only the primitive references change, not the resolved values
 
@@ -168,12 +181,12 @@ Android blur constants generated even though Android convention is solid backgro
 
 ## Risk Assessment
 
-This spec touches two established token families, their consumers, the generation pipeline, platform builders, and documentation:
+This spec touches two established token families, their consumers, the generation pipeline, and documentation:
 
 - Shadow composite tokens are consumed by components — the reference chain from blur primitives through shadow composites to component tokens must be verified end-to-end
 - Two existing test files for shadow blur and glow blur need full migration
-- Generation pipeline needs to handle the new `BLUR` category
-- Platform builders need new surface blur formatting logic — including a novel iOS material enum mapping pattern
+- Generation pipeline needs to handle the new `BLUR` category (numeric values — follows existing patterns)
 - Three steering docs need updates (new Blur family doc, Shadow and Glow cross-references)
+- DTCG and Figma export must include the new tokens
 
 Mitigated by: zero visual change (same numeric values), strong existing test coverage (8041 tests), clear 1:1 mapping between old and new token names, and the glow side having zero consumers to update.
