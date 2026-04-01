@@ -13,8 +13,9 @@
 /// <reference lib="dom" />
 
 import type { NavHeaderPageProps } from '../../types';
-import '../../../Nav-Header-Base/platforms/web/NavHeaderBase.web'; // composes: nav-header-base
-// Composition: icon-base (via slot), button-icon (via slot)
+// NavHeaderBase must be registered before this component is used.
+// In production: imported by the bundle. In tests: imported by the test file.
+// Composition: nav-header-base, icon-base (via slot), button-icon (via slot)
 import styles from './NavHeaderPage.styles.css';
 
 const SCROLL_THRESHOLD = 8;

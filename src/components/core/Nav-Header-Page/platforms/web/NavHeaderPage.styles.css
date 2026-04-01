@@ -54,12 +54,12 @@
 .nav-header-page__trailing {
   display: flex;
   align-items: center;
-  gap: var(--space-grouped-minimal, 4px);
+  gap: var(--space-grouped-minimal);
   flex-shrink: 0;
 }
 
 .nav-header-page__close-gap {
-  inline-size: var(--space-grouped-tight, 8px);
+  inline-size: var(--space-grouped-tight);
 }
 
 /* ==========================================================================
@@ -67,7 +67,7 @@
    ========================================================================== */
 
 :host {
-  transition: transform var(--duration-150, 150ms) var(--easing-standard, ease);
+  transition: transform var(--duration-150) var(--easing-standard);
 }
 
 :host(.nav-header-page--hidden) {
@@ -86,5 +86,5 @@
    ========================================================================== */
 
 :host(.nav-header-page--android-padding) .nav-header__content {
-  padding-block: var(--space-inset-100, 8px);
+  padding-block: var(--space-inset-100);
 }

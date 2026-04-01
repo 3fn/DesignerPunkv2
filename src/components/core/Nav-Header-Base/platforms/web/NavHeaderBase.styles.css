@@ -29,14 +29,14 @@
 .nav-header {
   display: flex;
   align-items: center;
-  min-block-size: var(--tap-area-recommended, 48px);
+  min-block-size: var(--tap-area-recommended);
   background-color: var(--color-structure-canvas);
 }
 
 .nav-header--translucent {
   background-color: transparent;
-  backdrop-filter: blur(var(--blur-100, 16px));
-  -webkit-backdrop-filter: blur(var(--blur-100, 16px));
+  backdrop-filter: blur(var(--blur-100));
+  -webkit-backdrop-filter: blur(var(--blur-100));
 }
 
 /* ==========================================================================
@@ -47,7 +47,7 @@
   position: absolute;
   inset-block-end: 0;
   inset-inline: 0;
-  block-size: var(--border-width-100, 1px);
+  block-size: var(--border-width-100);
   background-color: var(--color-structure-border-subtle);
 }
 
