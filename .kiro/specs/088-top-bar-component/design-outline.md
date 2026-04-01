@@ -331,10 +331,10 @@ Nav-Header-Page supports two scroll behaviors. Large title collapse deferred.
 | Accessibility | `accessibility.focus.*` | Focus ring tokens |
 | Motion | `duration*`, `easing*` | Large title collapse animation |
 | Border | `borderDefault` | Bottom separator width (1px, references borderWidth100) |
-| Blur | Dependency: Spec 089 (Ada) | Translucent background — blur token family. Two consumers: Nav-Header-Base and Nav-TabBar-Base. Spec 088 and 089 can run in parallel; opaque appearance does not depend on blur tokens. |
+| Blur | Resolved: Spec 089 (complete) | Translucent background uses unified blur primitives (`blur050`, `blur100`, `blur150`). Platform mapping is component-level: web `backdrop-filter`, iOS system materials, Android solid background. No semantic blur layer — primitives consumed directly by component tokens. |
 | Spacing | ~~`space.inset.000`~~ | Not needed. Zero padding = absence of inset token reference, not an explicit zero token. Confirmed: schema does not require explicit inset reference when padding is zero. |
 
-**Token gap**: Translucent/blur background may need a new semantic token. The TabBar uses `backdrop-filter` on web but doesn't have a dedicated blur token — it's hard-coded in the web implementation. If the header also needs blur, we should formalize this as a token. Recommend coordinating with Ada (`ctrl+shift+a`).
+**Token gap resolved**: Spec 089 (Unified Blur Token Family) created 9 blur primitives (`blur000`–`blur250`). Nav-Header-Base's translucent appearance consumes these directly as component tokens. Platform mapping (web `backdrop-filter`, iOS system materials, Android solid background) is a component-level implementation concern handled in this spec's platform tasks. Kenya's R1 feedback on iOS material enum mapping (from 089 feedback) applies here.
 
 ---
 

@@ -45,6 +45,20 @@ Multiple rounds per artifact are expected when incorporation produces substantia
 
 ---
 
+## Stakeholder Identification
+
+Before requesting the first feedback round (design outline), the spec author SHALL identify reviewers and document them in the feedback doc's "Context for Reviewers" section.
+
+**Selection criteria** — tag agents who:
+- Own the domain being changed (e.g., Lina for components, Ada for tokens)
+- Consume the output (e.g., Leonardo for components he'll spec against, platform agents for implementations they'll use)
+- Have governance stake (e.g., Thurgood for test coverage, Stacy for process quality)
+- Have platform-specific expertise relevant to the spec (e.g., Kenya for iOS, Data for Android, Sparky for web)
+
+Not every agent needs to review every spec. But the selection should be a conscious decision, not an assumption that only system agents matter.
+
+---
+
 ## Sequential Formalization Gate
 
 Spec formalization MUST pause for agent feedback between each document phase:

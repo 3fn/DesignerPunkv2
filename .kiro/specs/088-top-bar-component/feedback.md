@@ -269,7 +269,99 @@ Tasks 1.3 (iOS) and 1.4 (Android) are complete — Lina authored both implementa
 3. Separator: using Material `Divider` composable — should it be a custom `Box` with token-driven height for consistency with other DesignerPunk components?
 4. Slot lambdas (`@Composable () -> Unit`) — idiomatic Compose pattern for this use case?
 
-[Kenya and Data feedback here]
+### Kenya — iOS Implementation Review
+
+**Overall verdict: Solid foundation, three issues — one is a bug, two are structural.**
+
+#### Issue 1 (Bug): Wrong material variant for translucent appearance
+
+The implementation uses `.thinMaterial`:
+```swift
+Color.clear.background(.thinMaterial)
+```
+
+The spec, requirements (Req 4 AC 8), and contracts all specify `.systemThinMaterial` for the `blur100` mapping. These are different things in SwiftUI:
+
+- `.thinMaterial` — designed for in-app content overlays (popovers, sidebars). Lighter tint, less vibrancy adaptation.
+- `.systemThinMaterial` — designed for system chrome (navigation bars, tab bars, toolbars). Adapts to elevation context and system appearance more aggressively.
+
+For a navigation bar, `.systemThinMaterial` is correct. This is exactly the kind of component Apple designed the `.system*` material variants for. The completion doc even flags this as a question ("should it be `.systemThinMaterial`?") — yes, it should.
+
+**Fix**: `Color.clear.background(.thinMaterial)` → `Color.clear.background(.systemThinMaterial)`
+
+Lina's instinct to flag this was right. The non-system variants exist for a reason, and using the wrong one will produce subtly different visual behavior in dark mode and elevated contexts.
+
+#### Issue 2 (Structural): Safe area handling is incomplete
+
+The implementation relies on SwiftUI's automatic safe area handling:
+```swift
+// SwiftUI handles status bar inset automatically via view hierarchy
+```
+
+This works *if* the NavHeaderBase view is placed at the top of a NavigationStack or as a direct child of the scene. But the schema notes say "Safe area integration via `.safeAreaInset`" and the contract (`layout_safe_area`) specifies "background extends into safe area, content positioned below."
+
+The current implementation doesn't explicitly extend the background into the safe area. If this view is placed inside a `ScrollView` or a `VStack` that already respects safe area, the background won't extend behind the status bar — it'll just sit below it.
+
+For a navigation bar primitive, the implementation should explicitly handle this:
+
+```swift
+.ignoresSafeArea(.container, edges: .top)
+```
+
+Or more idiomatically, the background should extend into the safe area while the content stays below it. The web implementation handles this with `position: sticky; inset-block-start: 0` — the iOS equivalent needs to be equally explicit.
+
+**Counter-argument**: The semantic variants (Nav-Header-Page, Nav-Header-App) will compose this primitive and may handle safe area at their level. If the primitive is truly never used directly, the safe area could be the variant's responsibility. But the contract says the *primitive* provides safe area integration, and the schema says the same. If the contract lives here, the implementation should too.
+
+**Recommendation**: Add `.ignoresSafeArea(.container, edges: .top)` to the outer VStack so the background extends behind the status bar. The HStack content stays in the safe area naturally because SwiftUI's layout system positions it below the status bar inset.
+
+#### Issue 3 (Structural): `if` conditional modifier is duplicated
+
+The `View.if` extension is already defined in `ContainerBase.ios.swift`. Having it in two files will cause a compile error if both are in the same module:
+
+```swift
+private extension View {
+    @ViewBuilder
+    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition { transform(self) } else { self }
+    }
+}
+```
+
+This needs to either:
+1. Be extracted to a shared utility (e.g., `ViewExtensions.swift` in a shared iOS directory)
+2. Use a different name to avoid collision
+3. Be removed and the `testID` logic inlined with a simple `if let`
+
+Option 3 is simplest and avoids the architectural question:
+
+```swift
+var body: some View {
+    VStack(spacing: 0) {
+        // ... existing layout ...
+    }
+    .accessibilityElement(children: .contain)
+    .accessibilityAddTraits(.isHeader)
+    .accessibilityIdentifier(testID ?? "")
+}
+```
+
+SwiftUI's `accessibilityIdentifier` with an empty string is a no-op for testing purposes — no need for conditional application.
+
+#### What's Good
+
+- **Token usage is correct.** `NavHeaderTokens` enum with static lets referencing `DesignTokens` — clean, follows the pattern from Nav-TabBar-Base.
+- **Generic View with type parameters** is idiomatic SwiftUI for a slot-based primitive. The feedback doc asks whether `@ViewBuilder` closures would be better — for a primitive that's only composed by other components (not called directly by product code), generic type parameters are fine. `@ViewBuilder` closures would be better if product agents called this directly, but they won't.
+- **VoiceOver focus order** via `accessibilitySortPriority(3, 2, 1)` is correct. Higher values get focus first in VoiceOver, so leading (3) → title (2) → trailing (1) is right.
+- **Separator** implementation is clean — conditional Rectangle with correct tokens, `accessibilityHidden(true)`.
+- **Min height 48pt** matches the spec's content-driven floor.
+
+#### Summary
+
+| # | Severity | Issue | Fix |
+|---|----------|-------|-----|
+| 1 | Bug | `.thinMaterial` should be `.systemThinMaterial` | One-line change |
+| 2 | Structural | Safe area not explicitly handled — background doesn't extend behind status bar | Add `.ignoresSafeArea(.container, edges: .top)` |
+| 3 | Structural | `View.if` extension duplicated from ContainerBase | Inline the conditional or extract to shared utility |
 
 ---
 
@@ -346,3 +438,56 @@ Two, both deferrable:
 The task plan has Lina doing all 6 platform implementations (web + iOS + Android for both primitive and Page). The design outline itself calls this "the most platform-divergent component in the catalog." Lina's iOS/Android verification depth is honest (from 086 feedback — confident on web, less so on native). For a component where platform conventions diverge structurally, I'd want Kenya and Data to at least review the iOS and Android implementations.
 
 **Counter-argument**: D1 chose custom implementations over platform-native wrappers, so platform-specific API expertise is less critical. Behavioral contracts catch cross-platform consistency. Platform agent review can happen during product work when Kenya/Data first consume the component. May be fine as-is — flagging it for Peter's judgment. -- [LEONARDO R2]
+
+### Data — Android Implementation Review (Task 1.4)
+
+**File reviewed**: `src/components/core/Nav-Header-Base/platforms/android/NavHeaderBase.android.kt`
+**Date**: 2026-03-31
+
+**Overall**: Clean, concise, idiomatic slot pattern. Two blocking issues, three non-blocking.
+
+#### Blocking
+
+**F1: No TalkBack landmark semantics — contract violation.**
+Contract `accessibility_aria_roles` requires "Container is announced as navigation bar by TalkBack." The implementation has zero `semantics` modifiers — the `heading` import is present but unused. Compose's natural semantics for Column + Row won't announce anything as a navigation bar. Needs at minimum:
+```kotlin
+.semantics { contentDescription = "Navigation bar" }
+```
+on the outer Column. (`heading()` is for semantic variants with h1, not the primitive.)
+
+**F2: Hard-coded `48.dp` min height — token-first violation.**
+```kotlin
+.heightIn(min = 48.dp)
+```
+Should reference `DesignTokens.tap_area_recommended` (which resolves to 48.dp). The token exists for this exact purpose.
+
+#### Non-Blocking
+
+**F3: Safe area modifier order needs a comment.**
+The `.background()` before `.windowInsetsPadding()` is correct for edge-to-edge (background extends behind status bar, padding pushes content below it). But modifier order in Compose is a common source of confusion — a comment explaining the intent would prevent future misreading.
+
+**F4: Material `Divider` vs token-driven `Box`.**
+Existing DesignerPunk components use token-driven custom drawing, not Material components. `Divider` works but introduces Material theme dependency. A `Box` with `.height(separatorWidth).background(separatorColor)` would be more consistent with the codebase.
+
+**F5: Empty regions don't explicitly collapse.**
+Contract says "Empty regions do not reserve space." Empty `Box {}` with empty lambda technically occupies 0×0 layout space, which works in practice with the current Row (no arrangement modifier). Not enforced explicitly, but not broken. Noting for awareness.
+
+#### What Works Well
+
+- Slot lambda pattern (`@Composable () -> Unit`) is idiomatic Compose for a primitive with composable regions
+- Column (vertical) containing Row (horizontal) is the correct structural decomposition
+- `weight(1f)` on title Box correctly fills remaining space
+- `NavHeaderAppearance` enum honestly documents Android convention (both modes → solid background)
+- File is concise — no over-engineering
+
+#### Summary
+
+| Issue | Severity | Blocking? |
+|-------|----------|-----------|
+| F1: No TalkBack landmark semantics | Contract violation | Yes |
+| F2: Hard-coded 48.dp | Token-first violation | Yes |
+| F3: Safe area modifier order comment | Documentation gap | No |
+| F4: Material Divider | Convention inconsistency | No |
+| F5: Empty region collapse | Contract nuance | No |
+
+Both blocking issues are straightforward fixes. Solid foundation overall.
