@@ -43,12 +43,11 @@ import { scaleTokens, SCALE_BASE_VALUE } from '../tokens/ScaleTokens';
 import { blendTokens, BLEND_BASE_VALUE } from '../tokens/BlendTokens';
 
 // Shadow primitive token imports
-import { blur, BLUR_BASE_VALUE } from '../tokens/BlurTokens';
+import { blur as blurTokens, BLUR_BASE_VALUE } from '../tokens/BlurTokens';
 import { shadowOffsetX, shadowOffsetY, SHADOW_OFFSET_BASE_VALUE } from '../tokens/ShadowOffsetTokens';
 import { shadowOpacityTokens, SHADOW_OPACITY_BASE_VALUE } from '../tokens/ShadowOpacityTokens';
 
 // Glow primitive token imports
-import { glowBlur, GLOW_BLUR_BASE_VALUE } from '../tokens/GlowBlurTokens';
 import { glowOpacity, GLOW_OPACITY_BASE_VALUE } from '../tokens/GlowOpacityTokens';
 
 // Semantic token imports
@@ -917,7 +916,7 @@ export class DTCGFormatGenerator {
       // Resolve primitive values
       const offsetXToken = this.resolveShadowPrimitive(refs.offsetX, shadowOffsetX);
       const offsetYToken = this.resolveShadowPrimitive(refs.offsetY, shadowOffsetY);
-      const blurToken = this.resolveShadowPrimitive(refs.blur, blur);
+      const blurToken = this.resolveShadowPrimitive(refs.blur, blurTokens);
       const opacityToken = this.resolveShadowPrimitive(refs.opacity, shadowOpacityTokens);
       const colorToken = (colorTokens as Record<string, PrimitiveToken>)[refs.color];
 
@@ -1018,10 +1017,13 @@ export class DTCGFormatGenerator {
         $description: 'Glow effect primitives. Composed glows not yet implemented — glows share offset primitives with shadows (shadowOffsetX, shadowOffsetY).',
       };
 
-      // Glow blur tokens → DTCG dimension type
+      // Glow blur tokens → DTCG dimension type (blur050–blur250 from unified blur family)
       const blur: DTCGGroup = { $type: 'dimension' };
-      for (const [key, token] of Object.entries(glowBlur)) {
-        const extensions = this.buildPrimitiveExtensions(token, 'glow', GLOW_BLUR_BASE_VALUE);
+      const glowBlurRange = ['blur050', 'blur100', 'blur150', 'blur200', 'blur250'];
+      for (const key of glowBlurRange) {
+        const token = blurTokens[key];
+        if (!token) continue;
+        const extensions = this.buildPrimitiveExtensions(token, 'glow', BLUR_BASE_VALUE);
         extensions.glowType = 'emission';
         extensions.status = 'partial';
         blur[key] = this.toDTCGToken(`${token.baseValue}px`, 'dimension', token.description, extensions);

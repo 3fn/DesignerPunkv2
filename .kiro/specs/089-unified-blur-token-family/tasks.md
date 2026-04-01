@@ -50,7 +50,7 @@
     - Verify: shadow-related tests pass, resolved blur values unchanged
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 1.3 Migrate glow token definitions
+  - [x] 1.3 Migrate glow token definitions
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada

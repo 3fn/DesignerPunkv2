@@ -152,14 +152,6 @@ export {
 } from './ShadowOpacityTokens';
 
 // Glow tokens
-export {
-  GLOW_BLUR_BASE_VALUE,
-  glowBlur,
-  glowBlurNames,
-  getGlowBlurToken,
-  getAllGlowBlurTokens
-} from './GlowBlurTokens';
-
 // Unified blur tokens
 export {
   BLUR_BASE_VALUE,
@@ -245,7 +237,6 @@ import { colorTokens } from './ColorTokens';
 import { borderWidthTokens } from './BorderWidthTokens';
 import { shadowOffsetX, shadowOffsetY } from './ShadowOffsetTokens';
 import { shadowOpacityTokens } from './ShadowOpacityTokens';
-import { glowBlur } from './GlowBlurTokens';
 import { glowOpacity } from './GlowOpacityTokens';
 import { opacityTokens } from './OpacityTokens';
 import { blendTokens } from './BlendTokens';
@@ -272,7 +263,7 @@ export const allTokens = {
   [TokenCategory.COLOR]: colorTokens,
   [TokenCategory.BORDER_WIDTH]: borderWidthTokens,
   [TokenCategory.SHADOW]: { ...shadowOffsetX, ...shadowOffsetY, ...shadowOpacityTokens },
-  [TokenCategory.GLOW]: { ...glowBlur, ...glowOpacity },
+  [TokenCategory.GLOW]: { ...glowOpacity },
   [TokenCategory.OPACITY]: opacityTokens,
   [TokenCategory.BLEND]: blendTokens,
   [TokenCategory.BREAKPOINT]: breakpointTokens,
@@ -304,7 +295,6 @@ export function getAllPrimitiveTokens(): PrimitiveToken[] {
     ...Object.values(shadowOffsetX),
     ...Object.values(shadowOffsetY),
     ...Object.values(shadowOpacityTokens),
-    ...Object.values(glowBlur),
     ...Object.values(glowOpacity),
     ...Object.values(opacityTokens),
     ...Object.values(blendTokens),
