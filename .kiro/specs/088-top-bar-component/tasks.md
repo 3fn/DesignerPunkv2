@@ -126,19 +126,19 @@
     - Verify: all interaction states, heading semantics, focus order
     - _Requirements: 2.2–2.13, 4.7, 5.1, 5.2_
 
-  - [ ] 2.3 iOS implementation
+  - [x] 2.3 iOS implementation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Kenya reviews after completion)
+    **Agent**: Lina (pending Kenya review) (Kenya reviews after completion)
     - Create `platforms/ios/NavHeaderPage.ios.swift`
     - Implement: composes Nav-Header-Base, h1 heading trait, leading action, trailing actions, close action, title alignment (default center), collapsible scroll via preference keys, reduced motion → fixed, safe area protection when hidden, Android-style padding not applied
     - Verify: VoiceOver announces heading, back button, safe area correct
     - _Requirements: 2.2–2.13, 4.2, 4.3, 4.4, 4.5, 5.1, 5.2_
 
-  - [ ] 2.4 Android implementation
+  - [x] 2.4 Android implementation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Data reviews after completion)
+    **Agent**: Lina (pending Data review) (Data reviews after completion)
     - Create `platforms/android/NavHeaderPage.android.kt`
     - Implement: composes Nav-Header-Base, heading semantics, leading action, trailing actions, close action, title alignment (default leading), collapsible scroll via NestedScrollConnection, reduced motion → fixed, safe area protection when hidden, space.inset.100 vertical padding
     - Verify: TalkBack announces heading, navigate up, safe area correct
