@@ -1,0 +1,27 @@
+version: "1.0.0"
+component: Nav-Header-App
+family: Navigation
+inherits: Nav-Header-Base
+
+contracts:
+  accessibility_no_heading:
+    category: accessibility
+    description: App-level header renders no heading element
+    behavior: |
+      Nav-Header-App does not render a heading element. App-level bars
+      may contain logos, search inputs, or other non-heading content.
+      Heading semantics are the responsibility of Nav-Header-Page (h1)
+      and future variants (Nav-Header-Modal: h2).
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - No h1/h2/h3 element rendered
+      - No heading accessibility trait/semantics applied
+    test_approach: |
+      Render Nav-Header-App, verify no heading elements in DOM/tree.
+    required: true
+
+excluded:
+  state_disabled:
+    reason: "DesignerPunk does not support disabled states."
+    category: state

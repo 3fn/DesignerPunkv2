@@ -152,7 +152,7 @@
     - Write contract tests covering: h1 heading, focus order, close action positioning, back navigation, scroll hide/reveal, reduced motion degradation, title truncation, badge threshold (> 0 only), safe area protection during collapsible
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-- [ ] 3. Nav-Header-App Semantic Variant
+- [x] 3. Nav-Header-App Semantic Variant
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard (scaffold component)
@@ -170,7 +170,7 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Nav-Header-App Semantic Variant"`
 
-  - [ ] 3.1 Scaffold and implement all platforms
+  - [x] 3.1 Scaffold and implement all platforms
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

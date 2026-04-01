@@ -1,0 +1,83 @@
+# Nav-Header-App Component Schema
+#
+# Stemma System: Navigation Family
+# Component Type: Semantic (inherits Nav-Header-Base)
+#
+# Permissive app-level header scaffold. Product-defined content.
+# Architectural foundation — safe area, landmark, tokens inherited.
+# Readiness: scaffold (architecture in place, product content TBD).
+
+name: Nav-Header-App
+type: semantic
+family: Navigation
+version: "1.0.0"
+inherits: Nav-Header-Base
+readiness:
+  web:
+    reviewed: false
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
+
+description: |
+  Permissive app-level header scaffold for root destination screens.
+  Inherits safe area, background, layout, and landmark semantics from
+  Nav-Header-Base. Exposes raw slots for product-defined content.
+
+  Intent: It orients, it doesn't navigate. No back button. Content is
+  product-defined because the design system can't predict what a product's
+  top-level chrome needs. The value is in what it inherits, not in
+  opinionated props.
+
+  Readiness: scaffold — architectural foundation, not production-ready.
+
+properties:
+  leadingContent:
+    type: "React.ReactNode"
+    required: false
+    description: Product-defined leading content (logo, menu, etc.)
+
+  centerContent:
+    type: "React.ReactNode"
+    required: false
+    description: Product-defined center content (title, logo, search, etc.)
+
+  trailingContent:
+    type: "React.ReactNode"
+    required: false
+    description: Product-defined trailing content (actions, profile, etc.)
+
+  appearance:
+    type: "'opaque' | 'translucent'"
+    required: false
+    default: "'opaque'"
+    description: Inherited from Nav-Header-Base.
+
+  showSeparator:
+    type: boolean
+    required: false
+    default: "true"
+    description: Inherited from Nav-Header-Base.
+
+  testID:
+    type: string
+    required: false
+
+tokens: {}
+
+composition:
+  internal:
+    - component: Nav-Header-Base
+      role: Structural primitive
+      required: true
+
+platforms:
+  - web
+  - ios
+  - android
+
+accessibility:
+  landmark: true
+  landmark_role: banner
+  heading: false
