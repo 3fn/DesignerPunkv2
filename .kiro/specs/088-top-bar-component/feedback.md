@@ -150,14 +150,44 @@ Header says "Spec 089 — complete." If 089 isn't actually complete, the translu
 **F6: Req 3 — Thin but appropriate.**
 Nav-Header-App has 5 ACs, two of which are documentation notes rather than testable criteria (AC 4 readiness status, AC 5 "value is in what it inherits"). This is fine — the component is intentionally thin. The thinness of the requirements reflects the thinness of the scaffold.
 
+### [THURGOOD R2]
+
+Incorporated all Lina feedback:
+
+- **F1**: Scroll threshold fixed to 8px (base-8 grid aligned) → Req 2 AC 9
+- **F2**: iOS material mapping stated explicitly (blur050→.systemUltraThinMaterial, blur100→.systemThinMaterial, blur150→.systemMaterial) → Req 4 AC 8
+- **F3**: Added safe area protection AC during collapsible scroll → Req 2 AC 11
+- **F4**: Clarified reduced motion means header remains visible, collapsible disabled → Req 2 AC 10
+- **F5**: Confirmed — Spec 089 is complete. No dependency issue.
+- **F6**: Acknowledged, no change needed.
+
+Requirements approved. Ready to proceed to design.
+
 ---
 
 ## Design Feedback
 
 ### Context for Reviewers
-- [Populated by spec author before requesting review]
+Design doc translates the design outline (9 decisions) and requirements (7 requirements) into architecture, interfaces, and testing strategy. Props interfaces, token dependencies, and correctness properties are well-defined.
 
-[Agent feedback rounds here]
+### Lina — Component Review
+
+**Overall**: Clean and well-organized. All design outline decisions traceable. Requirements feedback (F1–F4) incorporated correctly. Correctness properties are a strong contract testing foundation. Five refinements below.
+
+**F1: Title centering with leading action — truncation behavior needed.**
+When `titleAlignment: 'center'` and `leadingAction` is present, the title should be centered in the full bar width, not the remaining space. Long titles will approach the leading/trailing regions. Specify: title truncates with ellipsis before overlapping leading or trailing regions. This matches iOS native behavior.
+
+**F2: Trailing actions + closeAction layout order.**
+Decision 3 says close is at the absolute inline-end edge, separate from trailing actions. But the spatial relationship isn't specified. Recommend: `[trailingActions] [spacing gap] [closeAction]` — with a spacing token (e.g., `space.grouped.minimal` or similar) separating close from trailing actions to visually distinguish dismissal from operations. Alternatively, no gap if close is just the last icon in the row. Needs a decision.
+
+**F3: `showSeparator` not exposed on semantic variants.**
+The primitive has `showSeparator`. Neither Nav-Header-Page nor Nav-Header-App props include it. Should both variants expose it? Recommend: Nav-Header-Page defaults to `showSeparator: true`, Nav-Header-App defaults to `showSeparator: true`, both allow override. Or: the primitive default is `true` and variants inherit without re-exposing.
+
+**F4: `scrollContainerRef` missing from Nav-Header-Page props.**
+Decision 5 mentions the web-specific `scrollContainerRef` for nested scrollable containers, but it's not in the Nav-Header-Page TypeScript interface. Should be added: `scrollContainerRef?: React.RefObject<HTMLElement>` (web-only). Platform-specific props are acceptable in types.ts when they're clearly documented as platform-specific.
+
+**F5: Badge rendering threshold on trailing actions.**
+`TrailingAction.badge?: number` — what happens when `badge` is `0`? Recommend: badge only renders when present and > 0. No `showZero` behavior on header actions — that's a notification-specific concern handled by Badge-Count-Notification, not by the header's action interface.
 
 ---
 
