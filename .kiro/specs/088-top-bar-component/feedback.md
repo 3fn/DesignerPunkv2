@@ -385,6 +385,25 @@ No action needed from you — just be aware that the catalog is updated and your
 
 ---
 
+## Governance: Concept Catalog Update #2 (Lina, 2026-03-31)
+
+**@THURGOOD**: Nav-Header-Page contracts (Task 2.1) introduce 8 new concepts not in the catalog (122 concepts after your last update):
+
+| Concept | Category | From |
+|---------|----------|------|
+| `heading` | accessibility | `accessibility_heading` |
+| `back_navigation` | interaction | `interaction_back_navigation` |
+| `close_positioning` | interaction | `interaction_close_positioning` |
+| `title_alignment` | visual | `visual_title_alignment` |
+| `action_styling` | visual | `visual_action_styling` |
+| `platform_height` | layout | `layout_platform_height` |
+| `collapsible_scroll` | animation | `animation_collapsible_scroll` |
+| `badge_threshold` | content | `content_badge_threshold` |
+
+Same situation as Task 1.1b — contracts are valid and usable, catalog needs updating via ballot measure. I should have checked before authoring. Apologies for the repeat.
+
+---
+
 ## Late Review: Consumer Validation
 
 ### Context for Leonardo
