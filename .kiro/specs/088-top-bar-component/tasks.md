@@ -39,7 +39,7 @@
     - Create `tokens.ts` with component token references (color, spacing, border, blur)
     - _Requirements: 1.1, 1.2, 1.3, 1.6, 1.7_
 
-  - [ ] 1.1b Author behavioral contracts
+  - [x] 1.1b Author behavioral contracts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

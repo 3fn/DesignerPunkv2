@@ -1,0 +1,178 @@
+version: "1.0.0"
+component: Nav-Header-Base
+family: Navigation
+
+contracts:
+  # ============================================================
+  # ACCESSIBILITY CONTRACTS (2)
+  # ============================================================
+
+  accessibility_aria_roles:
+    category: accessibility
+    description: Header renders as landmark with banner role
+    behavior: |
+      Container has role="banner" (web) or equivalent navigation bar
+      semantics (iOS/Android). Provides a landmark for screen reader
+      users to navigate to the top bar.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Container has role="banner" (web)
+      - Container is announced as navigation bar by VoiceOver (iOS)
+      - Container is announced as navigation bar by TalkBack (Android)
+    test_approach: |
+      Verify role attribute on web. Verify VoiceOver/TalkBack
+      announcement on native platforms.
+    required: true
+
+  accessibility_touch_target:
+    category: accessibility
+    description: All interactive elements meet minimum touch target
+    behavior: |
+      Every interactive element within the header (actions, buttons)
+      has a minimum touch target of tapAreaMinimum. Semantic variants
+      enforce this through Button-Icon composition (medium size = 48px).
+    wcag: "2.5.5 Target Size"
+    platforms: [web, ios, android]
+    validation:
+      - All interactive elements have minimum tapAreaMinimum touch target
+    test_approach: |
+      Measure touch target dimensions of all interactive elements.
+    required: true
+
+  # ============================================================
+  # VISUAL CONTRACTS (3)
+  # ============================================================
+
+  visual_background:
+    category: visual
+    description: Opaque appearance uses solid canvas background
+    behavior: |
+      When appearance is 'opaque' (default), the header renders with
+      color.structure.canvas as a solid background.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Opaque appearance has color.structure.canvas background
+      - Default appearance is opaque
+    test_approach: |
+      Render with default props, verify background color.
+      Render with appearance='opaque', verify same.
+    required: true
+
+  visual_translucent:
+    category: visual
+    description: Translucent appearance uses backdrop blur
+    behavior: |
+      When appearance is 'translucent', the header uses backdrop blur.
+      Platform-specific implementation:
+      - Web: backdrop-filter with blur primitive value
+      - iOS: system material enum (blur050→.systemUltraThinMaterial,
+        blur100→.systemThinMaterial, blur150→.systemMaterial)
+      - Android: solid background fallback (blur tokens available,
+        not consumed by convention)
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Web uses backdrop-filter with blur value
+      - iOS uses system material
+      - Android uses solid background
+    test_approach: |
+      Render with appearance='translucent', verify platform-specific
+      blur implementation.
+    required: true
+
+  visual_separator:
+    category: visual
+    description: Optional bottom separator with border tokens
+    behavior: |
+      When showSeparator is true (default), a 1px bottom border renders
+      using color.structure.border.subtle color and borderWidth100 width.
+      When false, no separator renders.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Default renders bottom separator
+      - Separator uses color.structure.border.subtle
+      - Separator uses borderWidth100
+      - showSeparator=false hides separator
+    test_approach: |
+      Render with default props, verify separator present.
+      Render with showSeparator=false, verify separator absent.
+    required: true
+
+  # ============================================================
+  # LAYOUT CONTRACTS (2)
+  # ============================================================
+
+  layout_three_regions:
+    category: layout
+    description: Three layout regions — leading, title, trailing
+    behavior: |
+      The header provides three horizontal regions:
+      - Leading (inline-start): for navigation actions
+      - Title (center or after leading): for heading/content
+      - Trailing (inline-end): for contextual actions
+      Regions use CSS logical properties (web) or equivalent
+      layout direction awareness (iOS/Android) for RTL support.
+      Empty regions collapse — they do not reserve space.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Three regions render in correct order
+      - Empty regions do not reserve space
+      - Layout respects RTL direction
+    test_approach: |
+      Render with content in all three slots, verify order.
+      Render with empty slots, verify collapsed.
+      Render in RTL mode, verify mirrored layout.
+    required: true
+
+  layout_safe_area:
+    category: layout
+    description: Header extends into platform safe area
+    behavior: |
+      The header integrates with the platform safe area:
+      - iOS: extends behind status bar with safe area inset
+      - Android: extends behind system bar with WindowInsets
+      - Web: no system chrome overlap (safe area not applicable)
+      Content is positioned below the safe area inset. The background
+      and blur extend into the safe area.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - iOS content below status bar, background extends behind it
+      - Android content below system bar, background extends behind it
+      - Web content at top of viewport
+    test_approach: |
+      Render on each platform, verify content positioning relative
+      to safe area. Verify background extends into safe area.
+    required: true
+
+  # ============================================================
+  # INTERACTION CONTRACTS (1)
+  # ============================================================
+
+  interaction_focus_order:
+    category: interaction
+    description: Focus order follows leading → title → trailing
+    behavior: |
+      Keyboard focus (Tab key on web, external keyboard on native)
+      moves through interactive elements in order: leading region
+      first, then title region (if focusable), then trailing region.
+      This order is maintained regardless of visual layout direction.
+    wcag: "2.4.3 Focus Order"
+    platforms: [web, ios, android]
+    validation:
+      - Tab moves focus from leading to title to trailing
+      - Focus order consistent across platforms
+    test_approach: |
+      Render with interactive elements in all regions. Tab through
+      and verify focus order matches specification.
+    required: true
+
+excluded:
+  state_disabled:
+    reason: "DesignerPunk does not support disabled states. If an action is unavailable, do not render it."
+    category: state
+    reference: "design-outline.md § DesignerPunk Philosophy Alignment"
