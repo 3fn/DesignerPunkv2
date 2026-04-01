@@ -144,7 +144,7 @@
     - Verify: TalkBack announces heading, navigate up, safe area correct
     - _Requirements: 2.2–2.13, 4.2, 4.3, 4.4, 4.6, 5.1, 5.2_
 
-  - [ ] 2.5 Behavioral contract tests
+  - [x] 2.5 Behavioral contract tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
