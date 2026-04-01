@@ -1,0 +1,150 @@
+# Nav-Header-Base Component Schema
+#
+# Stemma System: Navigation Family
+# Component Type: Primitive (Base)
+# Naming Convention: [Family]-[Type]-[Variant] = Nav-Header-Base
+#
+# Structural primitive for top-of-screen navigation bars.
+# Handles safe area, background, layout, and landmark semantics.
+# INTERNAL ONLY — never used directly by product agents.
+# Semantic variants (Nav-Header-Page, Nav-Header-App) inherit this.
+#
+# DesignerPunk Philosophy: NO DISABLED STATES
+
+name: Nav-Header-Base
+type: primitive
+family: Navigation
+version: "1.0.0"
+readiness:
+  web:
+    reviewed: false
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
+
+description: |
+  Structural primitive for top-of-screen navigation bars. Provides three
+  layout regions (leading, title, trailing), safe area integration,
+  background treatment, bottom separator, and accessibility landmark
+  semantics. Never used directly — semantic variants inherit this.
+
+  Key Characteristics:
+  - Three-region layout: leading (inline-start), title, trailing (inline-end)
+  - Safe area integration: iOS status bar, Android system bar, web viewport
+  - Appearance modes: opaque (solid background) and translucent (backdrop blur)
+  - Bottom separator with border token
+  - Accessibility landmark: header/banner role
+  - Focus order: leading → title → trailing
+  - Internal only — composition rules flag direct use as warning
+
+  DesignerPunk Philosophy: NO DISABLED STATES
+
+behaviors:
+  - renderable
+  - accessible
+
+properties:
+  leadingSlot:
+    type: "React.ReactNode"
+    required: false
+    description: |
+      Content for the leading region (inline-start). Populated by
+      semantic variants — not set directly by product agents.
+
+  titleSlot:
+    type: "React.ReactNode"
+    required: false
+    description: |
+      Content for the title region. Populated by semantic variants.
+
+  trailingSlot:
+    type: "React.ReactNode"
+    required: false
+    description: |
+      Content for the trailing region (inline-end). Populated by
+      semantic variants.
+
+  appearance:
+    type: "'opaque' | 'translucent'"
+    required: false
+    default: "'opaque'"
+    description: |
+      Visual style. Opaque uses solid color.structure.canvas background.
+      Translucent uses backdrop blur (web: backdrop-filter, iOS: system
+      materials, Android: solid background fallback).
+
+  showSeparator:
+    type: boolean
+    required: false
+    default: "true"
+    description: |
+      Whether to render the bottom separator line using
+      color.structure.border.subtle and borderWidth100.
+
+  testID:
+    type: string
+    required: false
+    description: |
+      Test identifier for automated testing. Platform-specific:
+      - Web: data-testid attribute
+      - iOS: accessibilityIdentifier
+      - Android: testTag
+
+tokens:
+  color:
+    - color.structure.canvas
+    - color.structure.border.subtle
+    - color.action.navigation
+  border:
+    - borderWidth100
+  blur:
+    - blur050
+    - blur100
+    - blur150
+  accessibility:
+    - tapAreaMinimum
+    - tapAreaRecommended
+    - accessibility.focus.width
+    - accessibility.focus.offset
+    - accessibility.focus.color
+
+composition:
+  internal: []
+  slots: []
+
+platforms:
+  - web
+  - ios
+  - android
+
+platform_notes:
+  web:
+    element: "<nav-header>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/NavHeaderBase.web.ts
+    notes: |
+      - <header role="banner"> landmark
+      - CSS logical properties for RTL support
+      - backdrop-filter for translucent appearance
+      - Safe area via viewport units
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/NavHeaderBase.ios.swift
+    notes: |
+      - Custom SwiftUI View (not UINavigationBar)
+      - Safe area integration via .safeAreaInset
+      - System materials for translucent appearance
+  android:
+    implementation: Jetpack Compose
+    file: platforms/android/NavHeaderBase.android.kt
+    notes: |
+      - Custom Composable (not Material TopAppBar)
+      - Safe area via WindowInsets.systemBars
+      - Solid background for translucent (blur tokens available, not consumed)
+
+accessibility:
+  landmark: true
+  landmark_role: banner
+  heading: false
+  focus_order: "leading → title → trailing"
