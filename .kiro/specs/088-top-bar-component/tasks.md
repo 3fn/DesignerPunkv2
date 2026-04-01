@@ -48,7 +48,7 @@
     - Reference Contract System Reference for concept catalog and naming conventions
     - _Requirements: 6.1, 6.2_
 
-  - [ ] 1.2 Web implementation
+  - [x] 1.2 Web implementation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

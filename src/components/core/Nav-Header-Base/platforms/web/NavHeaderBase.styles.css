@@ -1,0 +1,75 @@
+/**
+ * Nav-Header-Base Styles for Web Platform
+ *
+ * Token-based styling using CSS custom properties. All values reference
+ * semantic or primitive tokens.
+ *
+ * Stemma System: Navigation Family, Primitive (Base)
+ *
+ * @see .kiro/specs/088-top-bar-component/design.md
+ * @see contracts: visual_background, visual_translucent, visual_separator,
+ *      layout_three_regions, accessibility_aria_roles
+ */
+
+/* ==========================================================================
+   Host — Fixed top bar
+   ========================================================================== */
+
+:host {
+  display: block;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1000;
+}
+
+/* ==========================================================================
+   Container (header landmark)
+   ========================================================================== */
+
+.nav-header {
+  display: flex;
+  align-items: center;
+  min-block-size: 48px;
+  background-color: var(--color-structure-canvas);
+}
+
+.nav-header--translucent {
+  background-color: transparent;
+  backdrop-filter: blur(var(--blur-100, 16px));
+  -webkit-backdrop-filter: blur(var(--blur-100, 16px));
+}
+
+/* ==========================================================================
+   Separator
+   ========================================================================== */
+
+.nav-header__separator {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  block-size: var(--border-width-100, 1px);
+  background-color: var(--color-structure-border-subtle);
+}
+
+/* ==========================================================================
+   Layout Regions
+   ========================================================================== */
+
+.nav-header__leading {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nav-header__title {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.nav-header__trailing {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
