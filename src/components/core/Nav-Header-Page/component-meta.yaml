@@ -1,0 +1,23 @@
+purpose: "Provide an opinionated page-level navigation bar with back/close actions, h1 title, trailing actions, and collapsible scroll behavior for pushed or presented screens."
+
+usage:
+  when_to_use:
+    - "Pushed screens with back navigation (e.g., detail views, settings sub-pages)"
+    - "Presented/modal screens with close action"
+    - "Any screen that needs a title, contextual actions, and navigation back"
+  when_not_to_use:
+    - "Root destination screens without back navigation — use Nav-Header-App"
+    - "In-context content switching — use Nav-SegmentedChoice-Base"
+    - "Bottom navigation between destinations — use Nav-TabBar-Base"
+
+contexts:
+  - "app-bars"
+  - "forms"
+  - "settings-screens"
+  - "onboarding-flows"
+
+alternatives:
+  - component: Nav-Header-App
+    reason: "When the screen is a root destination with product-defined chrome, not a pushed/presented page"
+  - component: Nav-SegmentedChoice-Base
+    reason: "When switching between content views within a single screen"

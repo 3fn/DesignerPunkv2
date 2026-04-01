@@ -9,6 +9,8 @@ companion: ".kiro/steering/Component-Family-Navigation.md"
 whenToUse:
   - "Switching between mutually exclusive content views within a single screen (Nav-SegmentedChoice-Base)"
   - "Persistent bottom navigation between 3-5 top-level app destinations (Nav-TabBar-Base)"
+  - "Page-level navigation bar with back/close, title, and contextual actions (Nav-Header-Page)"
+  - "App-level header scaffold for product-defined root destination chrome (Nav-Header-App)"
   - "Icon-based or text-based view switching where exactly one option is active at all times"
 
 whenNotToUse:
@@ -41,6 +43,12 @@ selectionRules:
   - scenario: "Persistent bottom navigation on mobile apps"
     recommend: Nav-TabBar-Base
     rationale: "Platform-adaptive: floating pill on web, full-width on native. Always visible for primary wayfinding"
+  - scenario: "Page-level navigation bar on a pushed or presented screen"
+    recommend: Nav-Header-Page
+    rationale: "Opinionated header with back/close, h1 title, trailing actions, collapsible scroll. Platform-native title alignment defaults."
+  - scenario: "App-level header on a root destination screen"
+    recommend: Nav-Header-App
+    rationale: "Permissive scaffold inheriting safe area and landmark semantics. Product defines the content."
 
 discouragedPatterns:
   - pattern: "Using Nav-TabBar-Base for in-context content switching within a single screen"

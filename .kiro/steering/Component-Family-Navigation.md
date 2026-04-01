@@ -203,6 +203,14 @@ Nav-Header-Base (Primitive) [PLANNED]
 - **Purpose**: Structural primitive for top-of-screen navigation bars providing safe area, background, layout regions, and landmark semantics. Internal only — use Nav-Header-Page or Nav-Header-App.
 - **Contexts**: app-bars
 
+### Nav-Header-Page — Metadata
+- **Purpose**: Provide an opinionated page-level navigation bar with back/close actions, h1 title, trailing actions, and collapsible scroll behavior for pushed or presented screens.
+- **Contexts**: app-bars, forms, settings-screens, onboarding-flows
+
+### Nav-Header-App — Metadata
+- **Purpose**: Provide a permissive app-level header scaffold with safe area and landmark semantics for product-defined root destination chrome.
+- **Contexts**: app-bars, dashboards, content-feeds
+
 ---
 
 ## Usage Guidelines

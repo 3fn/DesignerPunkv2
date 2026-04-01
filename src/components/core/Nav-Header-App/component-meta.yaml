@@ -1,0 +1,19 @@
+purpose: "Provide a permissive app-level header scaffold with safe area and landmark semantics for product-defined root destination chrome."
+
+usage:
+  when_to_use:
+    - "Root destination screens (home, inbox, dashboard) needing a top bar"
+    - "Web site headers with logo, navigation, and profile actions"
+    - "Any app-level chrome where the product defines the content"
+  when_not_to_use:
+    - "Pushed or presented screens with back/close navigation — use Nav-Header-Page"
+    - "Direct use of Nav-Header-Base primitive — use this or Nav-Header-Page instead"
+
+contexts:
+  - "app-bars"
+  - "dashboards"
+  - "content-feeds"
+
+alternatives:
+  - component: Nav-Header-Page
+    reason: "When the screen is a pushed/presented page needing back/close navigation"
