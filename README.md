@@ -21,6 +21,7 @@
 - **Nav-Header Components** (Spec 088): True Native top bar across Web, iOS, and Android. Nav-Header-Base (primitive: safe area, landmark, three-region layout, translucent blur), Nav-Header-Page (semantic: h1 title, back/close/trailing actions, collapsible scroll, platform-native title alignment), Nav-Header-App (semantic: permissive scaffold for product-defined app-level chrome). 24 behavioral contracts, 13 new contract concepts.
 - **Unified Blur Token Family** (Spec 089): 9 blur primitives (base 16) replacing shadow blur and glow blur families. Zero visual change — same values, unified scale. All platform token files regenerated.
 - **Agent Knowledge Bases** (Spec 087): `/knowledge` CLI integration for platform-filtered, searchable source access. All 7 agents configured with domain-scoped knowledge bases.
+- **Product Agent Team** (Spec 070): Five new AI agents — Leonardo (product architect), Sparky (web), Kenya (iOS), Data (Android), Stacy (governance). Kenya and Data validated native implementations via platform review, catching 5 issues in Spec 088.
 - 309 test suites, 8,090 tests passing, 33 production components, 131 behavioral contract concepts.
 
 [Full Release Notes →](docs/releases/RELEASE-NOTES-10.0.0.md)

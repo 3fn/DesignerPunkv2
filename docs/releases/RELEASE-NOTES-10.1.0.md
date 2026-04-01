@@ -29,10 +29,28 @@
 - Zero visual change — same numeric values, unified naming scale
 - All platform token files regenerated (CSS, Swift, Kotlin, DTCG)
 
+### Product Agent Team (Spec 070)
+Five new AI agents join the DesignerPunk collaboration:
+- **Leonardo** — Product architect. Cross-platform technical direction, component selection, screen specification, and design context translation. The bridge between the design system and product development.
+- **Sparky** — Web platform engineer. Web Components implementation, DesignerPunk token and component consumption, web accessibility.
+- **Kenya** — iOS platform engineer. SwiftUI implementation, DesignerPunk token and component consumption, iOS accessibility.
+- **Data** — Android platform engineer. Jetpack Compose implementation, DesignerPunk token and component consumption, Android accessibility.
+- **Stacy** — Product governance & QA. Process quality, cross-platform parity auditing, spec structure governance, lessons-learned capture, metadata accuracy lens.
+
+Kenya and Data provided platform-specific implementation reviews for Spec 088, catching 5 issues across iOS and Android that Lina's implementations missed — validating the multi-agent review model.
+
 ### Agent Knowledge Bases (Spec 087)
-- `/knowledge` CLI integration for platform-filtered, searchable source access
-- 7 agents configured with domain-scoped knowledge bases
-- Discoverability addressed via Platform Resource Map and agent prompt updates
+- `/knowledge` CLI integration for platform-filtered, searchable source access across all agents
+- Include/exclude patterns enable platform-scoped indexing (e.g., Sparky indexes only `**/platforms/web/**`)
+- 7 agents configured with domain-scoped knowledge bases: platform agents (component source + tokens), Thurgood (test infrastructure), Leonardo (spec history + patterns), Stacy (completion docs), Lina (MCP server source)
+- Discoverability addressed via Platform Resource Map (`file://` resource) and per-agent prompt sections listing available knowledge bases
+- Knowledge base maintenance integrated into task completion workflow (final parent task evaluation)
+
+### Governance Process Extensions (Spec 086)
+- **Stakeholder Identification**: New step in Spec Feedback Protocol — spec authors identify reviewers before first feedback round, ensuring platform agents and consumers aren't overlooked
+- **Metadata Accuracy Lens**: Added to Stacy's audit checklist — checks for stale whenToUse/whenNotToUse, missing alternatives, purpose drift, escape hatch tracking
+- **Selection Verification Gate**: Stacy's selection review completes before platform agent handoff
+- **Escape Hatch Pattern**: Structured format for documenting intentional deviations from component selection guidance, tracked during Lessons Synthesis Reviews
 
 ### Test Infrastructure
 - Web Component test utility (`cleanupDOM`, `ensureRegistered`) — fixes jsdom custom element registry fragility
