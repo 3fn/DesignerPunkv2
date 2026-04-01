@@ -1,0 +1,14 @@
+{
+  "version": "10.1.0",
+  "previousVersion": "10.1.0",
+  "date": "2026-04-01",
+  "changes": [],
+  "recommendation": {
+    "currentVersion": "10.1.0",
+    "recommendedVersion": "10.1.0",
+    "bumpType": "none",
+    "rationale": "No new summary docs found since last tag",
+    "confidence": 1,
+    "changes": []
+  }
+}

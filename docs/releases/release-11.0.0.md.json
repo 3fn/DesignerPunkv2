@@ -1,0 +1,1098 @@
+{
+  "version": "11.0.0",
+  "previousVersion": "10.0.1",
+  "date": "2026-04-01",
+  "changes": [
+    {
+      "change": {
+        "specName": "088-top-bar-component",
+        "taskTitle": "Nav-Header-App Semantic Variant",
+        "taskType": "Unknown",
+        "whatWasDone": "Built Nav-Header-App — the permissive app-level header scaffold. Thin wrappers on all three platforms composing Nav-Header-Base with slot passthrough. Documentation as code — the architecture is the deliverable.",
+        "whyItMatters": "",
+        "keyChanges": [
+          "New component: `src/components/core/Nav-Header-App/` with scaffold implementations",
+          "1 own contract (no heading) + 8 inherited from primitive",
+          "Readiness: scaffold on all platforms"
+        ],
+        "impact": [
+          "Products can build app-level headers inheriting safe area, landmark, and tokens",
+          "Web site headers, native root destination bars — all use this scaffold",
+          "Gap report #0 fully addressed (page-level + app-level)"
+        ]
+      },
+      "priority": "breaking",
+      "deliverableType": "Component"
+    },
+    {
+      "change": {
+        "specName": "088-top-bar-component",
+        "taskTitle": "Nav-Header-Page Semantic Variant",
+        "taskType": "Unknown",
+        "whatWasDone": "Built Nav-Header-Page — the production page-level navigation bar. Inherits Nav-Header-Base primitive. h1 title, back/close/trailing actions via Button-Icon medium tertiary, configurable title alignment with platform defaults, fixed/collapsible scroll, reduced motion support.",
+        "whyItMatters": "",
+        "keyChanges": [
+          "New component: `src/components/core/Nav-Header-Page/` with full cross-platform implementation",
+          "8 own behavioral contracts + 8 inherited (16 total)",
+          "13 contract tests covering heading, alignment, scroll, close positioning, badge threshold",
+          "Platform reviews: Kenya (iOS) and Data (Android) validated and issues resolved"
+        ],
+        "impact": [
+          "Product agents can now spec page-level headers for pushed/presented screens",
+          "Gap report #0 partially resolved (page-level bar available, app-level scaffold next)"
+        ]
+      },
+      "priority": "breaking",
+      "deliverableType": "Component"
+    },
+    {
+      "change": {
+        "specName": "088-top-bar-component",
+        "taskTitle": "Nav-Header-Base Primitive",
+        "taskType": "Unknown",
+        "whatWasDone": "Built the Nav-Header-Base structural primitive — the foundation for all top bar variants in the Navigation family. Three-region layout (leading, title, trailing), safe area integration, opaque/translucent appearance, bottom separator, and accessibility landmark semantics across web, iOS, and Android.",
+        "whyItMatters": "",
+        "keyChanges": [
+          "New component: `src/components/core/Nav-Header-Base/` with full cross-platform implementation",
+          "8 behavioral contracts across 4 categories (accessibility, visual, layout, interaction)",
+          "5 new concepts added to Contract System Reference (focus_order, safe_area, three_regions, separator, translucent)",
+          "Internal-only primitive — composition rules flag direct use as warning"
+        ],
+        "impact": [
+          "Nav-Header-Page and Nav-Header-App can now inherit safe area, background, landmark, and layout without re-implementation",
+          "Navigation family grows from 2 to 3 components (SegmentedChoice, TabBar, Header)",
+          "Platform agents validated: Kenya reviewed iOS, Data reviewed Android"
+        ]
+      },
+      "priority": "breaking",
+      "deliverableType": "Component"
+    },
+    {
+      "change": {
+        "specName": "089-unified-blur-token-family",
+        "taskTitle": "Unified Blur Token Family",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": [
+          "Spec 088 (Nav-Header-Base) unblocked — blur primitives available for translucent surface support",
+          "Shadow and glow effects unchanged — migration is naming only",
+          "Single mathematical foundation for all blur contexts going forward"
+        ]
+      },
+      "priority": "breaking",
+      "deliverableType": "Token"
+    },
+    {
+      "change": {
+        "specName": "086-component-meta-extraction-pipeline",
+        "taskTitle": "Immediate Enrichment & Benchmarks",
+        "taskType": "Unknown",
+        "whatWasDone": "Captured baseline discoverability benchmarks (8 queries), enriched high-impact component purpose fields, and measured improvement.",
+        "whyItMatters": "Component discoverability improved from 12.5% to 87.5% pass rate on benchmark queries. Product agents can now find components using natural search terms like \"filter bar,\" \"stat card,\" and \"unread\" — terms that previously returned empty results.",
+        "keyChanges": [
+          "Baseline: 1/8 benchmark queries passing (only \"progress\" worked)",
+          "Post-enrichment: 7/8 benchmark queries passing",
+          "Gap report #16 (purpose search misses) and #18 (dashboard context underserved) resolved",
+          "5 high-impact components enriched: Chip-Filter, Container-Card-Base, Badge-Count-Base, Container-Base, Input-Checkbox-Base"
+        ],
+        "impact": [
+          "Product architects can discover components using product-language search terms",
+          "Dashboard context returns 6 components (up from 1)",
+          "Immediate value delivered before the extraction pipeline ships"
+        ]
+      },
+      "priority": "breaking",
+      "deliverableType": "Component"
+    },
+    {
+      "change": {
+        "specName": "085-container-card-base-composition",
+        "taskTitle": "Cleanup and Compliance",
+        "taskType": "Unknown",
+        "whatWasDone": "Removed composition compliance test known-mismatch skips, corrected the schema description for the interactive prop, and verified the Application MCP reports unchanged composed token resolution.",
+        "whyItMatters": "The composition compliance test now runs all checks with zero skips — Container-Card-Base's composition is mechanically verified alongside all other components. The schema accurately documents the interaction boundary (Card sets `hoverable: false` on Base).",
+        "keyChanges": [
+          "Composition compliance test: 61 active checks, zero known-mismatch skips",
+          "Schema `interactive` prop: corrected from \"sets hoverable: true\" to \"sets hoverable: false\"",
+          "MCP sanity check: `resolvedTokens.composed` unchanged, composition relationship recognized"
+        ],
+        "impact": [
+          "Spec 085 is complete across all 3 parent tasks",
+          "Container-Card-Base now genuinely composes Container-Base on all 3 platforms",
+          "The composition pattern is established for future type-primitives"
+        ]
+      },
+      "priority": "breaking",
+      "deliverableType": "Token"
+    },
+    {
+      "change": {
+        "specName": "084-github-pages-showcase",
+        "taskTitle": "Showcase Content Creation",
+        "taskType": "Unknown",
+        "whatWasDone": "Populated all showcase site content — 7 landing page sections and 4 deep-dive pages — with curated content drafted by three specialized agents and assembled by Peter.",
+        "whyItMatters": "The showcase site now communicates DesignerPunk's architectural depth, mathematical foundations, component system, Human-AI collaboration model, and quality governance to technical evaluators within a 2-minute visit, with deep-dive pages for those who want more.",
+        "keyChanges": [
+          "Landing page: Hero (Peter's voice), Architecture, Component Catalog, Mathematical Foundation, Human-AI Collaboration, Quality & Governance, At a Glance stats grid",
+          "Deep-dive pages: Architecture (token derivation, pipeline output), Components (Stemma families, contracts, inheritance), Mathematics (formulas, modular scale, baseline grid), Collaboration (agent model, governance, philosophy)",
+          "Stats grid: 30 components, 9 families, 614 tokens, 7,965 tests, 3 platforms, 454 behavioral contracts"
+        ],
+        "impact": [
+          "Site is content-complete and ready for public viewing at https://3fn.github.io/DesignerPunk/",
+          "All three agents contributed domain content independently and in parallel",
+          "Peter authored the hero section and approved all content"
+        ]
+      },
+      "priority": "breaking",
+      "deliverableType": "Token"
+    },
+    {
+      "change": {
+        "specName": "084-github-pages-showcase",
+        "taskTitle": "Showcase Site Infrastructure",
+        "taskType": "Unknown",
+        "whatWasDone": "Established the Jekyll-based GitHub Pages infrastructure for the DesignerPunk showcase site, including site configuration, layouts, navigation, token dogfooding, a fully tokenized stylesheet, and the landing page scaffold.",
+        "whyItMatters": "The showcase site makes DesignerPunk's architectural depth visible to technical evaluators without requiring them to clone the repo. This infrastructure task provides the foundation for content creation (Task 2) and interactive demos (Task 3).",
+        "keyChanges": [
+          "Jekyll site structure in `docs/` with layouts, includes, and configuration",
+          "DesignerPunk CSS custom properties (`tokens.css`) committed for dogfooding",
+          "Showcase stylesheet consuming tokens for all design values (colors, spacing, typography, radii, shadows, breakpoints)",
+          "Landing page with 7 section anchors, stats grid, and deep-dive page links",
+          "GitHub Pages enabled and live at https://3fn.github.io/DesignerPunk/"
+        ],
+        "impact": [
+          "Site is live and rendering with correct token-based styling",
+          "All content sections scaffolded and ready for agent drafting",
+          "Three agents contributed (Thurgood: structure/scaffold, Ada: tokens, Lina: stylesheet)"
+        ]
+      },
+      "priority": "breaking",
+      "deliverableType": "Token"
+    },
+    {
+      "change": {
+        "specName": "083-application-mcp-guidance-completeness",
+        "taskTitle": "Experience Pattern Seeding",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [
+          "**New**: 6 experience pattern YAMLs — multi-section-form, empty-state, content-preview, view-edit-screen, notification-list, dashboard",
+          "**Renamed**: settings-screen → settings, account-onboarding → onboarding",
+          "**Modified**: 6 cross-reference files (pattern alternatives + family guidance relatedPatterns)",
+          "**Identified**: content list item component gap (working name, pending full spec)"
+        ],
+        "impact": []
+      },
+      "priority": "breaking",
+      "deliverableType": "Component"
+    },
+    {
+      "change": {
+        "specName": "083-application-mcp-guidance-completeness",
+        "taskTitle": "Guidance Quality Governance",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [
+          "**New**: `GuidanceCompleteness.test.ts` — 2 tests (reachability + quality fields)",
+          "**Modified**: `CoverageDrift.test.ts` — reduced from 3 to 2 tests (reachability migrated out)",
+          "**Modified**: Component Development Guide — new \"Family Guidance Standards\" section"
+        ],
+        "impact": []
+      },
+      "priority": "breaking",
+      "deliverableType": "Component"
+    },
+    {
+      "change": {
+        "specName": "082-application-mcp-consistency",
+        "taskTitle": "Documentation Sweep",
+        "taskType": "Unknown",
+        "whatWasDone": "Updated all active documentation to use consistent naming: \"Application MCP\" (not \"Component MCP\"), `application-mcp-server/` (not `component-mcp-server/`), and canonical PascalCase family names in schema examples.",
+        "whyItMatters": "Documentation is teaching material. Steering docs with `family: FormInputs` in examples would teach agents the wrong convention. Agent prompts referencing \"Component MCP Server\" would contradict the MCP Relationship Model. This sweep ensures every active document reinforces the canonical conventions.",
+        "keyChanges": [
+          "5 steering docs — schema examples normalized (`FormInputs` → `FormInput`)",
+          "2 agent prompts (Ada, Lina) — MCP identity + directory path updated",
+          "1 steering doc — \"component MCP parser\" → \"Application MCP parser\"",
+          "README — 6 MCP identity references updated",
+          "3 docs guides — MCP identity + directory references updated"
+        ],
+        "impact": [
+          "All active documentation now uses consistent naming",
+          "Historical docs (completion docs, release notes) preserved as records of state at time of writing",
+          "306 suites, 7,965 tests passing"
+        ]
+      },
+      "priority": "breaking",
+      "deliverableType": "Component"
+    },
+    {
+      "change": {
+        "specName": "082-application-mcp-consistency",
+        "taskTitle": "Governance Infrastructure",
+        "taskType": "Unknown",
+        "whatWasDone": "Added governance infrastructure to prevent family name drift: a `FamilyNameValidation.test.ts` that enforces canonical names against the family registry, and a \"Family Naming Convention\" section in the Component Development Guide documenting the convention, registry, legacy prefix mapping, and forward-looking rule.",
+        "whyItMatters": "Without enforcement, the family name inconsistency that prompted this spec would recur with every new family. The validation test catches drift at the point of introduction — before it reaches agents or MCP queries.",
+        "keyChanges": [
+          "`FamilyNameValidation.test.ts` — 3 tests validating schema family names, format, and displayName consistency",
+          "Component Development Guide — \"Family Naming Convention\" section with canonical table, legacy mapping, and new-family rule"
+        ],
+        "impact": [
+          "New families must register in `family-registry.yaml` before any schema can reference them",
+          "Agents have a single authoritative reference for family identity in the Component Development Guide",
+          "306 suites, 7,965 tests passing"
+        ]
+      },
+      "priority": "breaking",
+      "deliverableType": "Component"
+    },
+    {
+      "change": {
+        "specName": "086-component-meta-extraction-pipeline",
+        "taskTitle": "MCP Scope Split Design",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": [
+          "Spec 081 has a clear boundary definition to implement against",
+          "Inline readiness in Product MCP responses is an explicit requirement for 081",
+          "Experience pattern migration has a suggested cutover plan (dual availability → deprecation → removal)",
+          "Decision criteria established for routing future content types",
+          "MCP-Relationship-Model refinement documented for ballot measure when 081 ships"
+        ]
+      },
+      "priority": "prominent",
+      "deliverableType": "MCP"
+    },
+    {
+      "change": {
+        "specName": "086-component-meta-extraction-pipeline",
+        "taskTitle": "Agent Configuration & Governance",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "prominent",
+      "deliverableType": "Agent"
+    },
+    {
+      "change": {
+        "specName": "083-application-mcp-guidance-completeness",
+        "taskTitle": "Application MCP Gap Report",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": [
+          "**11 gaps proceed** to downstream system work (Lina, Spec 069, Task 2.3)",
+          "**8 gaps documented** as product-specific — no system action, inform Spec 081",
+          "**Spec 069 scope clarified**: 3 layout-related gaps (#4 multi-section form, #7 chip layout, #13 empty state)",
+          "**Spec 081 informed**: dashboard layout (#11) flagged as product primitive candidate"
+        ]
+      },
+      "priority": "prominent",
+      "deliverableType": "MCP"
+    },
+    {
+      "change": {
+        "specName": "070-agent-architecture",
+        "taskTitle": "MCP Relationship Model",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "prominent",
+      "deliverableType": "MCP"
+    },
+    {
+      "change": {
+        "specName": "070-agent-architecture",
+        "taskTitle": "Stacy Agent Definition",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "prominent",
+      "deliverableType": "Agent"
+    },
+    {
+      "change": {
+        "specName": "070-agent-architecture",
+        "taskTitle": "Platform Agent Definitions (Kenya, Data, Sparky)",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "prominent",
+      "deliverableType": "Agent"
+    },
+    {
+      "change": {
+        "specName": "070-agent-architecture",
+        "taskTitle": "Leonardo Agent Definition",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "prominent",
+      "deliverableType": "Agent"
+    },
+    {
+      "change": {
+        "specName": "088-top-bar-component",
+        "taskTitle": "Documentation and Integration",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": [
+          "Leonardo can now query `find_components({ context: \"app-bars\" })` and get header components with selection guidance",
+          "The Navigation family grows from 2 to 5 components (SegmentedChoice, TabBar, Header-Base, Header-Page, Header-App)",
+          "Contract concept catalog expanded by 13 concepts (117 → 130) to support header behavioral contracts"
+        ]
+      },
+      "priority": "context",
+      "deliverableType": "Documentation"
+    },
+    {
+      "change": {
+        "specName": "086-component-meta-extraction-pipeline",
+        "taskTitle": "Readiness Infrastructure",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": [
+          "All Application MCP query tiers (catalog, summary, full, find_components) now include per-platform readiness",
+          "Product agents can assess platform availability without reading source code",
+          "Governance agents can make precise readiness-based audit findings",
+          "Prerequisite for MCP scope split (Task 5 / Spec 081)"
+        ]
+      },
+      "priority": "context",
+      "deliverableType": "Infrastructure"
+    },
+    {
+      "change": {
+        "specName": "086-component-meta-extraction-pipeline",
+        "taskTitle": "Extraction Pipeline",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": [
+          "`find_components({ purpose: ... })` queries now return accurate results for all 8 benchmark scenarios",
+          "`find_components({ context: \"dashboards\" })` returns 7 components (up from baseline gap)",
+          "Purpose and contexts can no longer drift from family docs — changes to family docs propagate via extraction",
+          "Controlled vocabulary prevents ad-hoc context tagging"
+        ]
+      },
+      "priority": "context",
+      "deliverableType": "Other"
+    },
+    {
+      "change": {
+        "specName": "085-container-card-base-composition",
+        "taskTitle": "Native Platform Composition",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "context",
+      "deliverableType": "Other"
+    },
+    {
+      "change": {
+        "specName": "085-container-card-base-composition",
+        "taskTitle": "Web Platform Composition",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "context",
+      "deliverableType": "Other"
+    },
+    {
+      "change": {
+        "specName": "069-layout-templates",
+        "taskTitle": "Layout Template Infrastructure",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "context",
+      "deliverableType": "Infrastructure"
+    },
+    {
+      "change": {
+        "specName": "069-layout-templates",
+        "taskTitle": "Responsive Layout Steering Documentation",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "context",
+      "deliverableType": "Documentation"
+    },
+    {
+      "change": {
+        "specName": "069-layout-templates",
+        "taskTitle": "Responsive Layout Learning Foundation",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "context",
+      "deliverableType": "Other"
+    },
+    {
+      "change": {
+        "specName": "082-application-mcp-consistency",
+        "taskTitle": "Family Name Normalization",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": [
+          "306 test suites, 7,965 tests passing",
+          "`getGuidance(\"Button\")`, `getGuidance(\"FormInput\")`, etc. now resolve directly",
+          "Foundation in place for Task 3 (governance enforcement) and Task 4 (documentation sweep)"
+        ]
+      },
+      "priority": "context",
+      "deliverableType": "Other"
+    },
+    {
+      "change": {
+        "specName": "082-application-mcp-consistency",
+        "taskTitle": "Foundation — Registry & Directory Rename",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": [
+          "306 test suites, 7,965 tests passing",
+          "Foundation in place for Task 2 (family name normalization) and Task 3 (governance enforcement)"
+        ]
+      },
+      "priority": "context",
+      "deliverableType": "Other"
+    },
+    {
+      "change": {
+        "specName": "075-mcp-coverage-enforcement",
+        "taskTitle": "Coverage Drift Test",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": [
+          "306 test suites, 7,965 tests passing",
+          "Any future production component or family automatically enters enforcement scope via schema `readiness` field"
+        ]
+      },
+      "priority": "context",
+      "deliverableType": "Other"
+    },
+    {
+      "change": {
+        "specName": "070-agent-architecture",
+        "taskTitle": "Steering Doc Updates and Cross-Reference Integrity",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "context",
+      "deliverableType": "Other"
+    },
+    {
+      "change": {
+        "specName": "070-agent-architecture",
+        "taskTitle": "Product Handoff Protocol",
+        "taskType": "Unknown",
+        "whatWasDone": "",
+        "whyItMatters": "",
+        "keyChanges": [],
+        "impact": []
+      },
+      "priority": "context",
+      "deliverableType": "Other"
+    }
+  ],
+  "recommendation": {
+    "currentVersion": "10.0.1",
+    "recommendedVersion": "11.0.0",
+    "bumpType": "major",
+    "rationale": "32 changes: 12 breaking, 7 prominent, 13 context",
+    "confidence": 0.7,
+    "changes": [
+      {
+        "change": {
+          "specName": "088-top-bar-component",
+          "taskTitle": "Nav-Header-App Semantic Variant",
+          "taskType": "Unknown",
+          "whatWasDone": "Built Nav-Header-App — the permissive app-level header scaffold. Thin wrappers on all three platforms composing Nav-Header-Base with slot passthrough. Documentation as code — the architecture is the deliverable.",
+          "whyItMatters": "",
+          "keyChanges": [
+            "New component: `src/components/core/Nav-Header-App/` with scaffold implementations",
+            "1 own contract (no heading) + 8 inherited from primitive",
+            "Readiness: scaffold on all platforms"
+          ],
+          "impact": [
+            "Products can build app-level headers inheriting safe area, landmark, and tokens",
+            "Web site headers, native root destination bars — all use this scaffold",
+            "Gap report #0 fully addressed (page-level + app-level)"
+          ]
+        },
+        "priority": "breaking",
+        "deliverableType": "Component"
+      },
+      {
+        "change": {
+          "specName": "088-top-bar-component",
+          "taskTitle": "Nav-Header-Page Semantic Variant",
+          "taskType": "Unknown",
+          "whatWasDone": "Built Nav-Header-Page — the production page-level navigation bar. Inherits Nav-Header-Base primitive. h1 title, back/close/trailing actions via Button-Icon medium tertiary, configurable title alignment with platform defaults, fixed/collapsible scroll, reduced motion support.",
+          "whyItMatters": "",
+          "keyChanges": [
+            "New component: `src/components/core/Nav-Header-Page/` with full cross-platform implementation",
+            "8 own behavioral contracts + 8 inherited (16 total)",
+            "13 contract tests covering heading, alignment, scroll, close positioning, badge threshold",
+            "Platform reviews: Kenya (iOS) and Data (Android) validated and issues resolved"
+          ],
+          "impact": [
+            "Product agents can now spec page-level headers for pushed/presented screens",
+            "Gap report #0 partially resolved (page-level bar available, app-level scaffold next)"
+          ]
+        },
+        "priority": "breaking",
+        "deliverableType": "Component"
+      },
+      {
+        "change": {
+          "specName": "088-top-bar-component",
+          "taskTitle": "Nav-Header-Base Primitive",
+          "taskType": "Unknown",
+          "whatWasDone": "Built the Nav-Header-Base structural primitive — the foundation for all top bar variants in the Navigation family. Three-region layout (leading, title, trailing), safe area integration, opaque/translucent appearance, bottom separator, and accessibility landmark semantics across web, iOS, and Android.",
+          "whyItMatters": "",
+          "keyChanges": [
+            "New component: `src/components/core/Nav-Header-Base/` with full cross-platform implementation",
+            "8 behavioral contracts across 4 categories (accessibility, visual, layout, interaction)",
+            "5 new concepts added to Contract System Reference (focus_order, safe_area, three_regions, separator, translucent)",
+            "Internal-only primitive — composition rules flag direct use as warning"
+          ],
+          "impact": [
+            "Nav-Header-Page and Nav-Header-App can now inherit safe area, background, landmark, and layout without re-implementation",
+            "Navigation family grows from 2 to 3 components (SegmentedChoice, TabBar, Header)",
+            "Platform agents validated: Kenya reviewed iOS, Data reviewed Android"
+          ]
+        },
+        "priority": "breaking",
+        "deliverableType": "Component"
+      },
+      {
+        "change": {
+          "specName": "089-unified-blur-token-family",
+          "taskTitle": "Unified Blur Token Family",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": [
+            "Spec 088 (Nav-Header-Base) unblocked — blur primitives available for translucent surface support",
+            "Shadow and glow effects unchanged — migration is naming only",
+            "Single mathematical foundation for all blur contexts going forward"
+          ]
+        },
+        "priority": "breaking",
+        "deliverableType": "Token"
+      },
+      {
+        "change": {
+          "specName": "086-component-meta-extraction-pipeline",
+          "taskTitle": "Immediate Enrichment & Benchmarks",
+          "taskType": "Unknown",
+          "whatWasDone": "Captured baseline discoverability benchmarks (8 queries), enriched high-impact component purpose fields, and measured improvement.",
+          "whyItMatters": "Component discoverability improved from 12.5% to 87.5% pass rate on benchmark queries. Product agents can now find components using natural search terms like \"filter bar,\" \"stat card,\" and \"unread\" — terms that previously returned empty results.",
+          "keyChanges": [
+            "Baseline: 1/8 benchmark queries passing (only \"progress\" worked)",
+            "Post-enrichment: 7/8 benchmark queries passing",
+            "Gap report #16 (purpose search misses) and #18 (dashboard context underserved) resolved",
+            "5 high-impact components enriched: Chip-Filter, Container-Card-Base, Badge-Count-Base, Container-Base, Input-Checkbox-Base"
+          ],
+          "impact": [
+            "Product architects can discover components using product-language search terms",
+            "Dashboard context returns 6 components (up from 1)",
+            "Immediate value delivered before the extraction pipeline ships"
+          ]
+        },
+        "priority": "breaking",
+        "deliverableType": "Component"
+      },
+      {
+        "change": {
+          "specName": "085-container-card-base-composition",
+          "taskTitle": "Cleanup and Compliance",
+          "taskType": "Unknown",
+          "whatWasDone": "Removed composition compliance test known-mismatch skips, corrected the schema description for the interactive prop, and verified the Application MCP reports unchanged composed token resolution.",
+          "whyItMatters": "The composition compliance test now runs all checks with zero skips — Container-Card-Base's composition is mechanically verified alongside all other components. The schema accurately documents the interaction boundary (Card sets `hoverable: false` on Base).",
+          "keyChanges": [
+            "Composition compliance test: 61 active checks, zero known-mismatch skips",
+            "Schema `interactive` prop: corrected from \"sets hoverable: true\" to \"sets hoverable: false\"",
+            "MCP sanity check: `resolvedTokens.composed` unchanged, composition relationship recognized"
+          ],
+          "impact": [
+            "Spec 085 is complete across all 3 parent tasks",
+            "Container-Card-Base now genuinely composes Container-Base on all 3 platforms",
+            "The composition pattern is established for future type-primitives"
+          ]
+        },
+        "priority": "breaking",
+        "deliverableType": "Token"
+      },
+      {
+        "change": {
+          "specName": "084-github-pages-showcase",
+          "taskTitle": "Showcase Content Creation",
+          "taskType": "Unknown",
+          "whatWasDone": "Populated all showcase site content — 7 landing page sections and 4 deep-dive pages — with curated content drafted by three specialized agents and assembled by Peter.",
+          "whyItMatters": "The showcase site now communicates DesignerPunk's architectural depth, mathematical foundations, component system, Human-AI collaboration model, and quality governance to technical evaluators within a 2-minute visit, with deep-dive pages for those who want more.",
+          "keyChanges": [
+            "Landing page: Hero (Peter's voice), Architecture, Component Catalog, Mathematical Foundation, Human-AI Collaboration, Quality & Governance, At a Glance stats grid",
+            "Deep-dive pages: Architecture (token derivation, pipeline output), Components (Stemma families, contracts, inheritance), Mathematics (formulas, modular scale, baseline grid), Collaboration (agent model, governance, philosophy)",
+            "Stats grid: 30 components, 9 families, 614 tokens, 7,965 tests, 3 platforms, 454 behavioral contracts"
+          ],
+          "impact": [
+            "Site is content-complete and ready for public viewing at https://3fn.github.io/DesignerPunk/",
+            "All three agents contributed domain content independently and in parallel",
+            "Peter authored the hero section and approved all content"
+          ]
+        },
+        "priority": "breaking",
+        "deliverableType": "Token"
+      },
+      {
+        "change": {
+          "specName": "084-github-pages-showcase",
+          "taskTitle": "Showcase Site Infrastructure",
+          "taskType": "Unknown",
+          "whatWasDone": "Established the Jekyll-based GitHub Pages infrastructure for the DesignerPunk showcase site, including site configuration, layouts, navigation, token dogfooding, a fully tokenized stylesheet, and the landing page scaffold.",
+          "whyItMatters": "The showcase site makes DesignerPunk's architectural depth visible to technical evaluators without requiring them to clone the repo. This infrastructure task provides the foundation for content creation (Task 2) and interactive demos (Task 3).",
+          "keyChanges": [
+            "Jekyll site structure in `docs/` with layouts, includes, and configuration",
+            "DesignerPunk CSS custom properties (`tokens.css`) committed for dogfooding",
+            "Showcase stylesheet consuming tokens for all design values (colors, spacing, typography, radii, shadows, breakpoints)",
+            "Landing page with 7 section anchors, stats grid, and deep-dive page links",
+            "GitHub Pages enabled and live at https://3fn.github.io/DesignerPunk/"
+          ],
+          "impact": [
+            "Site is live and rendering with correct token-based styling",
+            "All content sections scaffolded and ready for agent drafting",
+            "Three agents contributed (Thurgood: structure/scaffold, Ada: tokens, Lina: stylesheet)"
+          ]
+        },
+        "priority": "breaking",
+        "deliverableType": "Token"
+      },
+      {
+        "change": {
+          "specName": "083-application-mcp-guidance-completeness",
+          "taskTitle": "Experience Pattern Seeding",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [
+            "**New**: 6 experience pattern YAMLs — multi-section-form, empty-state, content-preview, view-edit-screen, notification-list, dashboard",
+            "**Renamed**: settings-screen → settings, account-onboarding → onboarding",
+            "**Modified**: 6 cross-reference files (pattern alternatives + family guidance relatedPatterns)",
+            "**Identified**: content list item component gap (working name, pending full spec)"
+          ],
+          "impact": []
+        },
+        "priority": "breaking",
+        "deliverableType": "Component"
+      },
+      {
+        "change": {
+          "specName": "083-application-mcp-guidance-completeness",
+          "taskTitle": "Guidance Quality Governance",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [
+            "**New**: `GuidanceCompleteness.test.ts` — 2 tests (reachability + quality fields)",
+            "**Modified**: `CoverageDrift.test.ts` — reduced from 3 to 2 tests (reachability migrated out)",
+            "**Modified**: Component Development Guide — new \"Family Guidance Standards\" section"
+          ],
+          "impact": []
+        },
+        "priority": "breaking",
+        "deliverableType": "Component"
+      },
+      {
+        "change": {
+          "specName": "082-application-mcp-consistency",
+          "taskTitle": "Documentation Sweep",
+          "taskType": "Unknown",
+          "whatWasDone": "Updated all active documentation to use consistent naming: \"Application MCP\" (not \"Component MCP\"), `application-mcp-server/` (not `component-mcp-server/`), and canonical PascalCase family names in schema examples.",
+          "whyItMatters": "Documentation is teaching material. Steering docs with `family: FormInputs` in examples would teach agents the wrong convention. Agent prompts referencing \"Component MCP Server\" would contradict the MCP Relationship Model. This sweep ensures every active document reinforces the canonical conventions.",
+          "keyChanges": [
+            "5 steering docs — schema examples normalized (`FormInputs` → `FormInput`)",
+            "2 agent prompts (Ada, Lina) — MCP identity + directory path updated",
+            "1 steering doc — \"component MCP parser\" → \"Application MCP parser\"",
+            "README — 6 MCP identity references updated",
+            "3 docs guides — MCP identity + directory references updated"
+          ],
+          "impact": [
+            "All active documentation now uses consistent naming",
+            "Historical docs (completion docs, release notes) preserved as records of state at time of writing",
+            "306 suites, 7,965 tests passing"
+          ]
+        },
+        "priority": "breaking",
+        "deliverableType": "Component"
+      },
+      {
+        "change": {
+          "specName": "082-application-mcp-consistency",
+          "taskTitle": "Governance Infrastructure",
+          "taskType": "Unknown",
+          "whatWasDone": "Added governance infrastructure to prevent family name drift: a `FamilyNameValidation.test.ts` that enforces canonical names against the family registry, and a \"Family Naming Convention\" section in the Component Development Guide documenting the convention, registry, legacy prefix mapping, and forward-looking rule.",
+          "whyItMatters": "Without enforcement, the family name inconsistency that prompted this spec would recur with every new family. The validation test catches drift at the point of introduction — before it reaches agents or MCP queries.",
+          "keyChanges": [
+            "`FamilyNameValidation.test.ts` — 3 tests validating schema family names, format, and displayName consistency",
+            "Component Development Guide — \"Family Naming Convention\" section with canonical table, legacy mapping, and new-family rule"
+          ],
+          "impact": [
+            "New families must register in `family-registry.yaml` before any schema can reference them",
+            "Agents have a single authoritative reference for family identity in the Component Development Guide",
+            "306 suites, 7,965 tests passing"
+          ]
+        },
+        "priority": "breaking",
+        "deliverableType": "Component"
+      },
+      {
+        "change": {
+          "specName": "086-component-meta-extraction-pipeline",
+          "taskTitle": "MCP Scope Split Design",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": [
+            "Spec 081 has a clear boundary definition to implement against",
+            "Inline readiness in Product MCP responses is an explicit requirement for 081",
+            "Experience pattern migration has a suggested cutover plan (dual availability → deprecation → removal)",
+            "Decision criteria established for routing future content types",
+            "MCP-Relationship-Model refinement documented for ballot measure when 081 ships"
+          ]
+        },
+        "priority": "prominent",
+        "deliverableType": "MCP"
+      },
+      {
+        "change": {
+          "specName": "086-component-meta-extraction-pipeline",
+          "taskTitle": "Agent Configuration & Governance",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "prominent",
+        "deliverableType": "Agent"
+      },
+      {
+        "change": {
+          "specName": "083-application-mcp-guidance-completeness",
+          "taskTitle": "Application MCP Gap Report",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": [
+            "**11 gaps proceed** to downstream system work (Lina, Spec 069, Task 2.3)",
+            "**8 gaps documented** as product-specific — no system action, inform Spec 081",
+            "**Spec 069 scope clarified**: 3 layout-related gaps (#4 multi-section form, #7 chip layout, #13 empty state)",
+            "**Spec 081 informed**: dashboard layout (#11) flagged as product primitive candidate"
+          ]
+        },
+        "priority": "prominent",
+        "deliverableType": "MCP"
+      },
+      {
+        "change": {
+          "specName": "070-agent-architecture",
+          "taskTitle": "MCP Relationship Model",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "prominent",
+        "deliverableType": "MCP"
+      },
+      {
+        "change": {
+          "specName": "070-agent-architecture",
+          "taskTitle": "Stacy Agent Definition",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "prominent",
+        "deliverableType": "Agent"
+      },
+      {
+        "change": {
+          "specName": "070-agent-architecture",
+          "taskTitle": "Platform Agent Definitions (Kenya, Data, Sparky)",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "prominent",
+        "deliverableType": "Agent"
+      },
+      {
+        "change": {
+          "specName": "070-agent-architecture",
+          "taskTitle": "Leonardo Agent Definition",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "prominent",
+        "deliverableType": "Agent"
+      },
+      {
+        "change": {
+          "specName": "088-top-bar-component",
+          "taskTitle": "Documentation and Integration",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": [
+            "Leonardo can now query `find_components({ context: \"app-bars\" })` and get header components with selection guidance",
+            "The Navigation family grows from 2 to 5 components (SegmentedChoice, TabBar, Header-Base, Header-Page, Header-App)",
+            "Contract concept catalog expanded by 13 concepts (117 → 130) to support header behavioral contracts"
+          ]
+        },
+        "priority": "context",
+        "deliverableType": "Documentation"
+      },
+      {
+        "change": {
+          "specName": "086-component-meta-extraction-pipeline",
+          "taskTitle": "Readiness Infrastructure",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": [
+            "All Application MCP query tiers (catalog, summary, full, find_components) now include per-platform readiness",
+            "Product agents can assess platform availability without reading source code",
+            "Governance agents can make precise readiness-based audit findings",
+            "Prerequisite for MCP scope split (Task 5 / Spec 081)"
+          ]
+        },
+        "priority": "context",
+        "deliverableType": "Infrastructure"
+      },
+      {
+        "change": {
+          "specName": "086-component-meta-extraction-pipeline",
+          "taskTitle": "Extraction Pipeline",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": [
+            "`find_components({ purpose: ... })` queries now return accurate results for all 8 benchmark scenarios",
+            "`find_components({ context: \"dashboards\" })` returns 7 components (up from baseline gap)",
+            "Purpose and contexts can no longer drift from family docs — changes to family docs propagate via extraction",
+            "Controlled vocabulary prevents ad-hoc context tagging"
+          ]
+        },
+        "priority": "context",
+        "deliverableType": "Other"
+      },
+      {
+        "change": {
+          "specName": "085-container-card-base-composition",
+          "taskTitle": "Native Platform Composition",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "context",
+        "deliverableType": "Other"
+      },
+      {
+        "change": {
+          "specName": "085-container-card-base-composition",
+          "taskTitle": "Web Platform Composition",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "context",
+        "deliverableType": "Other"
+      },
+      {
+        "change": {
+          "specName": "069-layout-templates",
+          "taskTitle": "Layout Template Infrastructure",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "context",
+        "deliverableType": "Infrastructure"
+      },
+      {
+        "change": {
+          "specName": "069-layout-templates",
+          "taskTitle": "Responsive Layout Steering Documentation",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "context",
+        "deliverableType": "Documentation"
+      },
+      {
+        "change": {
+          "specName": "069-layout-templates",
+          "taskTitle": "Responsive Layout Learning Foundation",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "context",
+        "deliverableType": "Other"
+      },
+      {
+        "change": {
+          "specName": "082-application-mcp-consistency",
+          "taskTitle": "Family Name Normalization",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": [
+            "306 test suites, 7,965 tests passing",
+            "`getGuidance(\"Button\")`, `getGuidance(\"FormInput\")`, etc. now resolve directly",
+            "Foundation in place for Task 3 (governance enforcement) and Task 4 (documentation sweep)"
+          ]
+        },
+        "priority": "context",
+        "deliverableType": "Other"
+      },
+      {
+        "change": {
+          "specName": "082-application-mcp-consistency",
+          "taskTitle": "Foundation — Registry & Directory Rename",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": [
+            "306 test suites, 7,965 tests passing",
+            "Foundation in place for Task 2 (family name normalization) and Task 3 (governance enforcement)"
+          ]
+        },
+        "priority": "context",
+        "deliverableType": "Other"
+      },
+      {
+        "change": {
+          "specName": "075-mcp-coverage-enforcement",
+          "taskTitle": "Coverage Drift Test",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": [
+            "306 test suites, 7,965 tests passing",
+            "Any future production component or family automatically enters enforcement scope via schema `readiness` field"
+          ]
+        },
+        "priority": "context",
+        "deliverableType": "Other"
+      },
+      {
+        "change": {
+          "specName": "070-agent-architecture",
+          "taskTitle": "Steering Doc Updates and Cross-Reference Integrity",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "context",
+        "deliverableType": "Other"
+      },
+      {
+        "change": {
+          "specName": "070-agent-architecture",
+          "taskTitle": "Product Handoff Protocol",
+          "taskType": "Unknown",
+          "whatWasDone": "",
+          "whyItMatters": "",
+          "keyChanges": [],
+          "impact": []
+        },
+        "priority": "context",
+        "deliverableType": "Other"
+      }
+    ]
+  }
+}

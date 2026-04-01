@@ -2,25 +2,26 @@
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-10.0.1-purple)](docs/releases/RELEASE-NOTES-10.0.1.md)
+[![Version](https://img.shields.io/badge/Version-10.1.0-purple)](docs/releases/RELEASE-NOTES-10.1.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Tests-7960%2B-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/Tests-8090%2B-brightgreen)](.)
 
 [![Punk Your Design w/ Peter Michaels Allen | Wireframe Live](https://img.youtube.com/vi/sFjNMasG_mU/maxresdefault.jpg)](https://www.youtube.com/live/sFjNMasG_mU)
 *🎬 Punk Your Design w/ Peter Michaels Allen — Wireframe Live on Design Systems House*
 
 ---
 
-## Latest Release: v10.0.0
+## Latest Release: v10.1.0
 
-**Rosetta Mode Architecture & Nav-TabBar-Base** (Specs 080 + 050) — Dark mode infrastructure and the first Navigation family component:
+**Component Discoverability, Nav-Header, & Unified Blur Tokens** (Specs 086 + 088 + 089) — Metadata infrastructure, the top bar component family, and token unification:
 
-- **Rosetta Mode Architecture** (Spec 080): Two-level mode resolution (Level 1 primitive + Level 2 semantic override), 4-context resolution matrix (light-base, light-wcag, dark-base, dark-wcag), full Option B generators, mode parity audit tooling, and theme template generation. All four output targets (CSS, Swift, Kotlin, DTCG JSON) now produce mode-aware light/dark output.
-- **Nav-TabBar-Base** (Spec 050): True Native tab bar component across Web, iOS, and Android. Floating pill container (web) with dynamic browser chrome tracking, three-phase selection animation choreography, radial glow gradients, `blend.pressedLighter` for pressed feedback, full keyboard navigation, ARIA/VoiceOver/TalkBack accessibility, and haptic feedback (iOS/Android). 20 behavioral contracts, 123 new tests.
-- **New governance**: `visual_gradient_glow` contract template added to the Concept Catalog via ballot measure.
-- 306 test suites, 7,963 tests passing, 30 production components, 210 behavioral contract concepts.
+- **Component Discoverability** (Spec 086): Build-time metadata extraction pipeline, per-platform readiness model derived from filesystem, controlled vocabulary for component contexts, 8/8 benchmark queries passing, Platform Resource Map, escape hatch governance pattern, MCP scope split design for Spec 081.
+- **Nav-Header Components** (Spec 088): True Native top bar across Web, iOS, and Android. Nav-Header-Base (primitive: safe area, landmark, three-region layout, translucent blur), Nav-Header-Page (semantic: h1 title, back/close/trailing actions, collapsible scroll, platform-native title alignment), Nav-Header-App (semantic: permissive scaffold for product-defined app-level chrome). 24 behavioral contracts, 13 new contract concepts.
+- **Unified Blur Token Family** (Spec 089): 9 blur primitives (base 16) replacing shadow blur and glow blur families. Zero visual change — same values, unified scale. All platform token files regenerated.
+- **Agent Knowledge Bases** (Spec 087): `/knowledge` CLI integration for platform-filtered, searchable source access. All 7 agents configured with domain-scoped knowledge bases.
+- 309 test suites, 8,090 tests passing, 33 production components, 131 behavioral contract concepts.
 
 [Full Release Notes →](docs/releases/RELEASE-NOTES-10.0.0.md)
 
