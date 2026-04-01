@@ -1,0 +1,196 @@
+version: "1.0.0"
+component: Nav-Header-Page
+family: Navigation
+inherits: Nav-Header-Base
+
+contracts:
+  # ============================================================
+  # ACCESSIBILITY CONTRACTS (1 — extends inherited)
+  # ============================================================
+
+  accessibility_heading:
+    category: accessibility
+    description: Title rendered as h1 heading
+    behavior: |
+      The title prop is rendered as an h1 heading element.
+      Web: <h1> element. iOS: .isHeader accessibility trait.
+      Android: heading() semantics modifier.
+      Heading level is variant-determined (always h1 for Page),
+      not configurable via props.
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation:
+      - Title renders as h1 (web)
+      - Title has .isHeader trait (iOS)
+      - Title has heading() semantics (Android)
+    test_approach: |
+      Verify heading element/trait/semantics on each platform.
+    required: true
+
+  # ============================================================
+  # INTERACTION CONTRACTS (2)
+  # ============================================================
+
+  interaction_back_navigation:
+    category: interaction
+    description: Back action triggers navigation callback
+    behavior: |
+      When leadingAction type is 'back', a chevron icon renders via
+      Button-Icon (medium, tertiary). Pressing invokes onPress.
+      Accessibility label defaults to "Back" with optional override.
+      No visible text label (D2).
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Back button renders chevron icon
+      - Press invokes onPress callback
+      - Accessibility label is "Back" or custom override
+      - No visible text label next to chevron
+    test_approach: |
+      Render with leadingAction type 'back'. Verify icon, press callback,
+      and accessibility label.
+    required: true
+
+  interaction_close_positioning:
+    category: interaction
+    description: Close action always at inline-end edge
+    behavior: |
+      When closeAction is present, it renders at the absolute inline-end
+      edge of the header, separated from trailing actions by
+      space.grouped.tight gap. Close is semantically distinct from
+      trailing actions (dismissal vs operation). Accessibility label
+      defaults to "Close" with optional override.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Close action is at inline-end edge
+      - Gap between trailing actions and close uses space.grouped.tight
+      - Close action has correct accessibility label
+    test_approach: |
+      Render with trailingActions and closeAction. Verify close is
+      positioned after trailing actions with correct gap.
+    required: true
+
+  # ============================================================
+  # VISUAL CONTRACTS (2)
+  # ============================================================
+
+  visual_title_alignment:
+    category: visual
+    description: Title alignment with platform-native defaults
+    behavior: |
+      Title alignment defaults to platform convention:
+      iOS: center, Android: leading, Web: leading.
+      Override via titleAlignment prop. When centered, title is
+      centered in the full bar width (not remaining space).
+      Long titles truncate with ellipsis before overlapping
+      leading or trailing regions.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - iOS default is center
+      - Android default is leading
+      - Web default is leading
+      - Override changes alignment
+      - Centered title truncates before overlapping regions
+    test_approach: |
+      Render on each platform with default, verify alignment.
+      Render with override, verify change. Render with long title,
+      verify truncation.
+    required: true
+
+  visual_action_styling:
+    category: visual
+    description: All actions use Button-Icon medium tertiary
+    behavior: |
+      All interactive actions (back, menu, custom, trailing, close)
+      render as Button-Icon at size medium, variant tertiary.
+      20px icon, no background, no border, 48px touch target.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Actions render as Button-Icon medium tertiary
+      - Icon size is 20px (icon.size075)
+      - No visible button chrome
+    test_approach: |
+      Render with actions, verify Button-Icon composition and styling.
+    required: true
+
+  # ============================================================
+  # LAYOUT CONTRACT (1)
+  # ============================================================
+
+  layout_platform_height:
+    category: layout
+    description: Platform-specific content height
+    behavior: |
+      Content height is content-driven with 48px floor (Button-Icon box).
+      iOS and Web: no bar padding, 48px total.
+      Android: space.inset.100 (8px) vertical padding, 64dp total.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - iOS content height is 48px
+      - Web content height is 48px
+      - Android content height is 64dp (48 + 16 padding)
+    test_approach: |
+      Measure bar height on each platform.
+    required: true
+
+  # ============================================================
+  # ANIMATION CONTRACT (1)
+  # ============================================================
+
+  animation_collapsible_scroll:
+    category: animation
+    description: Collapsible scroll hides on scroll down, reveals on scroll up
+    behavior: |
+      When scrollBehavior is 'collapsible':
+      - Scroll down past 8px threshold: bar translates off-screen
+      - Scroll up past 8px threshold: bar translates back to position
+      - Safe area remains protected when hidden
+      - Animation uses motion tokens (duration, easing)
+      - Reduced motion: bar remains fixed (visible, collapsible disabled)
+      Platform scroll context:
+      - iOS: native scroll observation
+      - Android: NestedScrollConnection
+      - Web: window scroll default, scrollContainerRef for nested
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Scroll down hides bar
+      - Scroll up reveals bar
+      - 8px threshold prevents flicker
+      - Safe area protected when hidden
+      - Reduced motion keeps bar visible
+    test_approach: |
+      Simulate scroll events, verify bar visibility state.
+      Test with reduced motion enabled.
+    required: true
+
+  # ============================================================
+  # CONTENT CONTRACT (1)
+  # ============================================================
+
+  content_badge_threshold:
+    category: content
+    description: Trailing action badges render only when count > 0
+    behavior: |
+      TrailingAction.badge renders a Badge-Count-Base only when the
+      value is present and greater than 0. badge=0 or badge=undefined
+      renders no badge. No showZero behavior on header actions.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - badge=5 renders badge
+      - badge=0 renders no badge
+      - badge=undefined renders no badge
+    test_approach: |
+      Render trailing action with various badge values, verify presence.
+    required: true
+
+excluded:
+  state_disabled:
+    reason: "DesignerPunk does not support disabled states. Unavailable actions are not rendered."
+    category: state
+    reference: "design-outline.md § DesignerPunk Philosophy Alignment"

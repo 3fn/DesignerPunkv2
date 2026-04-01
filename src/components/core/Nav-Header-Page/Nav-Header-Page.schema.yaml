@@ -1,0 +1,169 @@
+# Nav-Header-Page Component Schema
+#
+# Stemma System: Navigation Family
+# Component Type: Semantic (inherits Nav-Header-Base)
+# Naming Convention: [Family]-[Type]-[Variant] = Nav-Header-Page
+#
+# Opinionated page-level navigation bar for pushed or presented screens.
+# Back/close actions, title (h1), trailing actions, scroll behavior.
+#
+# DesignerPunk Philosophy: NO DISABLED STATES
+
+name: Nav-Header-Page
+type: semantic
+family: Navigation
+version: "1.0.0"
+inherits: Nav-Header-Base
+readiness:
+  web:
+    reviewed: false
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
+
+description: |
+  Opinionated page-level navigation bar for pushed or presented screens.
+  Inherits safe area, background, layout, and landmark semantics from
+  Nav-Header-Base. Adds: h1 heading title, back/close/trailing actions
+  via Button-Icon (medium, tertiary), configurable title alignment with
+  platform-native defaults, and fixed/collapsible scroll behavior.
+
+  Key Characteristics:
+  - Title rendered as h1 heading (variant-determined, not configurable)
+  - Leading action: back (chevron), menu, or custom
+  - Close action: always at inline-end edge with space.grouped.tight gap
+  - Trailing actions: global-context actions with optional badge
+  - Title alignment: center (iOS default), leading (Android/Web default)
+  - Scroll: fixed (default) or collapsible (hide on scroll down, reveal on scroll up)
+  - All actions: Button-Icon medium tertiary
+  - Content height: 48px (iOS/Web), 64dp (Android with space.inset.100)
+  - Reduced motion: collapsible degrades to fixed
+
+  DesignerPunk Philosophy: NO DISABLED STATES
+  If an action is unavailable, do not include it.
+
+properties:
+  title:
+    type: string
+    required: true
+    description: |
+      Screen title rendered as h1 heading. Truncates with ellipsis
+      when centered title approaches leading/trailing regions.
+
+  leadingAction:
+    type: LeadingAction
+    required: false
+    description: |
+      Leading action slot. Types: back (chevron icon, triggers navigation),
+      menu (hamburger icon), custom (custom icon + label).
+      Back button accessibility label defaults to "Back" with optional override.
+
+  trailingActions:
+    type: "TrailingAction[]"
+    required: false
+    description: |
+      Trailing actions for global-context page operations.
+      Each action rendered as Button-Icon medium tertiary.
+      Optional badge count (renders only when > 0).
+
+  closeAction:
+    type: CloseAction
+    required: false
+    description: |
+      Close/dismiss action. Always positioned at absolute inline-end edge,
+      separated from trailing actions by space.grouped.tight gap.
+      Semantically distinct from trailing actions (dismissal vs operation).
+
+  titleAlignment:
+    type: "'center' | 'leading'"
+    required: false
+    default: "Platform convention (iOS: center, Android/Web: leading)"
+    description: |
+      Title alignment. Defaults to platform convention.
+      Override to achieve unified cross-platform identity.
+
+  scrollBehavior:
+    type: "'fixed' | 'collapsible'"
+    required: false
+    default: "'fixed'"
+    description: |
+      Fixed: bar stays visible. Collapsible: hides on scroll down,
+      reveals on scroll up. 8px direction threshold. Safe area
+      protected when hidden. Reduced motion: degrades to fixed.
+
+  scrollContainerRef:
+    type: "React.RefObject<HTMLElement>"
+    required: false
+    description: |
+      Web-only. Ref to nested scroll container for collapsible behavior.
+      Defaults to window scroll when omitted.
+
+  appearance:
+    type: "'opaque' | 'translucent'"
+    required: false
+    default: "'opaque'"
+    description: Inherited from Nav-Header-Base.
+
+  showSeparator:
+    type: boolean
+    required: false
+    default: "true"
+    description: Inherited from Nav-Header-Base.
+
+  testID:
+    type: string
+    required: false
+    description: |
+      Test identifier. Platform-specific:
+      - Web: data-testid
+      - iOS: accessibilityIdentifier
+      - Android: testTag
+
+tokens:
+  typography:
+    - typography.labelMd
+  color:
+    - color.action.navigation
+  spacing:
+    - space.inset.100
+    - space.grouped.tight
+  composition:
+    - buttonIcon.inset.medium
+    - buttonIcon.size.medium
+    - icon.size075
+  motion:
+    - duration150
+    - duration350
+    - easingStandard
+    - easingAccelerate
+    - easingDecelerate
+
+composition:
+  internal:
+    - component: Nav-Header-Base
+      role: Structural primitive (safe area, background, layout, landmark)
+      required: true
+    - component: Icon-Base
+      role: Action icons (back chevron, menu, trailing, close)
+      required: true
+    - component: Button-Icon
+      role: Action tap targets (medium, tertiary)
+      required: true
+  optional:
+    - component: Badge-Count-Base
+      role: Optional badge on trailing actions
+    - component: Badge-Count-Notification
+      role: Optional notification badge on trailing actions
+
+platforms:
+  - web
+  - ios
+  - android
+
+accessibility:
+  landmark: true
+  landmark_role: banner
+  heading: true
+  heading_level: 1
+  focus_order: "leading → title → trailing → close"
