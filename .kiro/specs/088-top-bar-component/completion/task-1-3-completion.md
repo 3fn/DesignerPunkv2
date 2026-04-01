@@ -35,4 +35,11 @@
 
 ## Review Note
 
-Pending Kenya review per Leonardo's process flag. Key areas: safe area integration, `.thinMaterial` mapping (should it be `.systemThinMaterial`?), VoiceOver announcement behavior.
+~~Pending Kenya review per Leonardo's process flag.~~
+
+**Kenya R1 review complete (2026-03-31)**. Three issues found, all resolved:
+1. Bug: `.thinMaterial` → `.systemThinMaterial` ✅
+2. Structural: Added `.ignoresSafeArea(.container, edges: .top)` ✅
+3. Structural: Removed duplicated `View.if`, inlined conditional ✅
+
+Also fixed: hard-coded 48 → `NavHeaderTokens.minHeight` (token-first).

@@ -199,6 +199,10 @@ Nav-Header-Base (Primitive) [PLANNED]
 - **Purpose**: Navigate between top-level app destinations via a persistent bottom tab bar with icon-only tabs and animated dot indicator.
 - **Contexts**: navigation-tabs, app-bars
 
+### Nav-Header-Base — Metadata
+- **Purpose**: Structural primitive for top-of-screen navigation bars providing safe area, background, layout regions, and landmark semantics. Internal only — use Nav-Header-Page or Nav-Header-App.
+- **Contexts**: app-bars
+
 ---
 
 ## Usage Guidelines

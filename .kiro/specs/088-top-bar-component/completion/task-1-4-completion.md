@@ -34,4 +34,10 @@
 
 ## Review Note
 
-Pending Data review per Leonardo's process flag. Key areas: `WindowInsets.statusBars` correctness, TalkBack announcement behavior, Divider vs custom separator.
+~~Pending Data review per Leonardo's process flag.~~
+
+**Data R1 review complete (2026-03-31)**. Two blocking + two non-blocking issues found, all resolved:
+1. Blocking: Added TalkBack semantics `contentDescription = "Navigation bar"` ✅
+2. Blocking: Hard-coded `48.dp` → `NavHeaderTokens.minHeight` ✅
+3. Non-blocking: Added modifier order comment for edge-to-edge ✅
+4. Non-blocking: Replaced Material `Divider` with token-driven `Box` ✅
