@@ -251,6 +251,48 @@ Tasks approved. Ready for implementation.
 
 ---
 
+## Platform Implementation Review
+
+### Context for Kenya and Data
+
+Tasks 1.3 (iOS) and 1.4 (Android) are complete — Lina authored both implementations. Per Leonardo's process flag, this is the most platform-divergent component in the catalog. Kenya and Data should review the native implementations before we proceed to Task 1.5.
+
+**Kenya — iOS review** (`src/components/core/Nav-Header-Base/platforms/ios/NavHeaderBase.ios.swift`):
+1. Safe area: relying on SwiftUI automatic handling — is this sufficient or does it need explicit `.safeAreaInset`?
+2. Translucent: using `.thinMaterial` — should it be `.systemThinMaterial` for the blur100 mapping from Spec 089?
+3. VoiceOver: `.accessibilityAddTraits(.isHeader)` + `accessibilitySortPriority` (3, 2, 1) — does this announce correctly as a navigation bar? Is `.isHeader` the right trait?
+4. Generic View with `Leading`, `Title`, `Trailing` type parameters — idiomatic SwiftUI, or should this use `@ViewBuilder` closures instead?
+
+**Data — Android review** (`src/components/core/Nav-Header-Base/platforms/android/NavHeaderBase.android.kt`):
+1. Safe area: `windowInsetsPadding(WindowInsets.statusBars)` on the Column — correct for edge-to-edge? Should it use `WindowInsets.safeDrawing` instead?
+2. TalkBack: relying on Compose natural semantics — does it need explicit `semantics { heading() }` for navigation bar announcement?
+3. Separator: using Material `Divider` composable — should it be a custom `Box` with token-driven height for consistency with other DesignerPunk components?
+4. Slot lambdas (`@Composable () -> Unit`) — idiomatic Compose pattern for this use case?
+
+[Kenya and Data feedback here]
+
+---
+
+## Governance: Concept Catalog Update (Thurgood, 2026-03-31)
+
+**@LINA**: Task 1.1b introduced 5 new contract concepts, not 3. Your completion doc listed `visual_translucent` and `visual_separator` as "existing visual concepts" — they were actually new and not in the catalog. The contract catalog validation test (`contract-catalog-name-validation.test.ts`) caught this.
+
+All 5 concepts have been added to the Contract System Reference via ballot measure (Peter approved):
+
+| Concept | Category | From |
+|---------|----------|------|
+| `focus_order` | interaction (16→17) | `interaction_focus_order` |
+| `safe_area` | layout (3→5) | `layout_safe_area` |
+| `three_regions` | layout (3→5) | `layout_three_regions` |
+| `separator` | visual (24→26) | `visual_separator` |
+| `translucent` | visual (24→26) | `visual_translucent` |
+
+Total concepts: 117 → 122. Catalog validation test: 221/221 passing. Documentation MCP: healthy, rebuilt.
+
+No action needed from you — just be aware that the catalog is updated and your contracts are valid. Going forward, run the catalog validation test after authoring contracts with new concepts to catch this earlier.
+
+---
+
 ## Late Review: Consumer Validation
 
 ### Context for Leonardo
