@@ -20,6 +20,7 @@
  * @see .kiro/specs/050-nav-tabbar-base/requirements.md R1–R9
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { NavTabBarBase } from '../platforms/web/NavTabBarBase.web';
 
 // ---------------------------------------------------------------------------
@@ -90,7 +91,7 @@ describe('Nav-TabBar-Base — Web Behavioral Contract Tests', () => {
   });
 
   afterEach(() => {
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ==========================================================================

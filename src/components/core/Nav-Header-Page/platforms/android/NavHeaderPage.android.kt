@@ -47,7 +47,7 @@ import kotlin.math.roundToInt
 // MARK: - Tokens
 
 object NavHeaderPageTokens {
-    // Token values are raw floats — platform builder generates unitless constants
+    // Token values are raw — platform builder generates correct units
     val titleColor = DesignTokens.colorActionNavigation
     val closeGap = DesignTokens.spaceGroupedTight
     val androidPadding = DesignTokens.spaceInset100
@@ -114,7 +114,7 @@ fun NavHeaderPage(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = NavHeaderPageTokens.androidPadding.dp)
+                    .padding(vertical = NavHeaderPageTokens.androidPadding)
                     .semantics { heading() },
             )
         },
@@ -122,7 +122,7 @@ fun NavHeaderPage(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 trailingActions?.invoke()
                 if (closeAction != null) {
-                    Spacer(modifier = Modifier.width(NavHeaderPageTokens.closeGap.dp))
+                    Spacer(modifier = Modifier.width(NavHeaderPageTokens.closeGap))
                     closeAction()
                 }
             }

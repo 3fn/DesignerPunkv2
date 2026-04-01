@@ -28,6 +28,7 @@
  * @see Requirements: 4.1-4.6, 7.4, 13.1, 13.5 in .kiro/specs/045-chip-base/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { ChipFilterElement } from '../platforms/web/ChipFilter.web';
 
 describe('Chip-Filter Web Component', () => {
@@ -45,7 +46,7 @@ describe('Chip-Filter Web Component', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ============================================================================

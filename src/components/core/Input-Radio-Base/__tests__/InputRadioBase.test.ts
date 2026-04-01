@@ -28,6 +28,7 @@
  * @see Requirements: 12.1, 12.4, 12.5, 12.6 in .kiro/specs/047-input-radio-base/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { InputRadioBaseElement } from '../platforms/web/InputRadioBase.web';
 
 describe('Input-Radio-Base Web Component', () => {
@@ -42,7 +43,7 @@ describe('Input-Radio-Base Web Component', () => {
   });
 
   afterEach(() => {
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // Helper to create, append, and wait for render

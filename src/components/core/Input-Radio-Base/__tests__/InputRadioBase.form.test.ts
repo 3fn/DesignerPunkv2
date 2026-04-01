@@ -19,6 +19,7 @@
  * @see Requirements: 8.7, 8.8, 8.9 in .kiro/specs/047-input-radio-base/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { InputRadioBaseElement } from '../platforms/web/InputRadioBase.web';
 
 describe('Input-Radio-Base Form Integration', () => {
@@ -36,7 +37,7 @@ describe('Input-Radio-Base Form Integration', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ============================================================================

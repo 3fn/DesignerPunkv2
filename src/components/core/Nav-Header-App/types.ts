@@ -13,13 +13,13 @@
 
 export interface NavHeaderAppProps {
   /** Content for the leading region — product-defined */
-  leadingContent?: React.ReactNode;
+  leadingContent?: unknown;
 
   /** Content for the center region — product-defined */
-  centerContent?: React.ReactNode;
+  centerContent?: unknown;
 
   /** Content for the trailing region — product-defined */
-  trailingContent?: React.ReactNode;
+  trailingContent?: unknown;
 
   /** Visual style */
   appearance?: 'opaque' | 'translucent';

@@ -27,6 +27,7 @@
  * @see Requirements: 5.1-5.6, 7.5, 13.1, 13.5 in .kiro/specs/045-chip-base/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { ChipInputElement } from '../platforms/web/ChipInput.web';
 
 describe('Chip-Input Web Component', () => {
@@ -44,7 +45,7 @@ describe('Chip-Input Web Component', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ============================================================================

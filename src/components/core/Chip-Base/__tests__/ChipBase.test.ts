@@ -26,6 +26,7 @@
  * @see Requirements: 13.1-13.7 in .kiro/specs/045-chip-base/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { ChipBaseElement } from '../platforms/web/ChipBase.web';
 
 describe('Chip-Base Web Component', () => {
@@ -43,7 +44,7 @@ describe('Chip-Base Web Component', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ============================================================================

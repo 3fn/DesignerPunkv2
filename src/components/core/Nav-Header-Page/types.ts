@@ -42,7 +42,7 @@ export interface NavHeaderPageProps {
   scrollBehavior?: 'fixed' | 'collapsible';
 
   /** Web-only: ref to nested scroll container (defaults to window scroll) */
-  scrollContainerRef?: React.RefObject<HTMLElement>;
+  scrollContainerRef?: { current: HTMLElement | null };
 
   /** Visual style — affects background treatment */
   appearance?: 'opaque' | 'translucent';

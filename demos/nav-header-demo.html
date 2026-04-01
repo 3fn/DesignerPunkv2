@@ -10,10 +10,12 @@
 </head>
 <body>
   <a href="index.html" class="demo-back-link">← Back to Index</a>
-  <h1 class="demo-page-title">Nav-Header Components</h1>
+  <div class="demo-header">
+    <h1 class="demo-page-title">Nav-Header Components</h1>
+  </div>
 
   <section class="demo-section">
-    <h2 class="demo-section-title">Nav-Header-Page — Basic with back button</h2>
+    <h2 class="demo-section-title">Usage Example: Nav-Header-Page with back button</h2>
     <div class="demo-viewport">
       <nav-header-page title="Settings">
         <button-icon slot="leading-action" icon="chevron-left" aria-label="Back" variant="tertiary" size="medium"></button-icon>
@@ -22,7 +24,7 @@
   </section>
 
   <section class="demo-section">
-    <h2 class="demo-section-title">Nav-Header-Page — With trailing actions and close</h2>
+    <h2 class="demo-section-title">Usage Example: Nav-Header-Page with trailing actions and close</h2>
     <div class="demo-viewport">
       <nav-header-page title="Edit Profile" title-alignment="center">
         <button-icon slot="leading-action" icon="chevron-left" aria-label="Back" variant="tertiary" size="medium"></button-icon>
@@ -33,13 +35,22 @@
   </section>
 
   <section class="demo-section">
-    <h2 class="demo-section-title">Nav-Header-App — Scaffold with product content</h2>
+    <h2 class="demo-section-title">Usage Example: Nav-Header-App scaffold</h2>
     <div class="demo-viewport">
       <nav-header-app>
         <span slot="leading" style="font-weight: 600;">MyApp</span>
         <button-icon slot="trailing" icon="search" aria-label="Search" variant="tertiary" size="medium"></button-icon>
         <button-icon slot="trailing" icon="bell" aria-label="Notifications" variant="tertiary" size="medium"></button-icon>
       </nav-header-app>
+    </div>
+  </section>
+
+  <section class="demo-section">
+    <h2 class="demo-section-title">Token Verification</h2>
+    <div class="demo-viewport">
+      <nav-header-page title="Token Check" appearance="opaque" show-separator="true">
+        <button-icon slot="leading-action" icon="chevron-left" aria-label="Back" variant="tertiary" size="medium"></button-icon>
+      </nav-header-page>
     </div>
   </section>
 

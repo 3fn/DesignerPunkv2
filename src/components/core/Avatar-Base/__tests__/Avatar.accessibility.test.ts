@@ -19,6 +19,7 @@
  * @see Requirements: 9.1, 9.2, 9.3, 9.4 in .kiro/specs/042-avatar-component/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { AvatarBaseElement } from '../platforms/web/Avatar.web';
 
 describe('Avatar Component Accessibility', () => {
@@ -36,7 +37,7 @@ describe('Avatar Component Accessibility', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ============================================================================

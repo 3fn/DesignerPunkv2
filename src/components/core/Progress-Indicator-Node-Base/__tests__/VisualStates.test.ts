@@ -24,6 +24,7 @@
  * @see .kiro/specs/048-progress-family/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import * as fs from 'fs';
 import * as path from 'path';
 import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals';
@@ -68,7 +69,7 @@ describe('Progress-Indicator-Node-Base — Visual States', () => {
   });
 
   beforeEach(() => {
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ==========================================================================
@@ -251,7 +252,7 @@ describe('Progress-Indicator-Node-Base — Visual States', () => {
         const el = createNode({ state, size: 'md' });
         const node = el.shadowRoot!.querySelector('.node') as HTMLElement;
         expect(node.classList.contains(`node--${state}`)).toBe(true);
-        document.body.innerHTML = '';
+        cleanupDOM();
       }
     });
   });

@@ -26,6 +26,7 @@
  * @see .kiro/specs/038-vertical-list-buttons/design.md - Error Handling
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import {
   setupRequiredTokens,
   cleanupRequiredTokens,
@@ -35,13 +36,13 @@ import {
 
 describe('Button-VerticalList-Item Fail-Loudly Tests', () => {
   beforeEach(() => {
-    document.body.innerHTML = '';
+    cleanupDOM();
     setupRequiredTokens();
   });
   
   afterEach(() => {
     cleanupRequiredTokens();
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   describe('Disabled State Rejection', () => {

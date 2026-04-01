@@ -28,6 +28,7 @@
  * Ported from: TextInputField/__tests__/touchTargetSizing.test.ts
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import * as fs from 'fs';
 import * as path from 'path';
 import { describe, it, expect, beforeEach, afterEach, beforeAll } from '@jest/globals';
@@ -78,7 +79,7 @@ describe('Input-Text-Base - Touch Target Sizing', () => {
     setupBlendColorProperties();
     
     // Clear any existing elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   afterEach(() => {

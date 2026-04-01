@@ -44,13 +44,13 @@ export interface CloseAction {
  */
 export interface NavHeaderBaseProps {
   /** Content for the leading region (inline-start) */
-  leadingSlot?: React.ReactNode;
+  leadingSlot?: unknown;
 
   /** Content for the title region */
-  titleSlot?: React.ReactNode;
+  titleSlot?: unknown;
 
   /** Content for the trailing region (inline-end) */
-  trailingSlot?: React.ReactNode;
+  trailingSlot?: unknown;
 
   /** Visual style — affects background treatment */
   appearance?: 'opaque' | 'translucent';

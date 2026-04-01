@@ -28,6 +28,7 @@
  * @see Requirements: 3.1-3.8, 6.1, 6.2, 15.1, 15.2 in .kiro/specs/042-avatar-component/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { AvatarBaseElement } from '../platforms/web/Avatar.web';
 import { IconBaseElement } from '../../Icon-Base/platforms/web/IconBase.web';
 import { AvatarSize } from '../types';
@@ -51,7 +52,7 @@ describe('Avatar Icon Integration', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ============================================================================

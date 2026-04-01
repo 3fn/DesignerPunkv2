@@ -19,6 +19,7 @@
  * @see Requirements: 5.1-5.6 in .kiro/specs/042-avatar-component/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { AvatarBaseElement } from '../platforms/web/Avatar.web';
 
 describe('Avatar Component Image Handling', () => {
@@ -36,7 +37,7 @@ describe('Avatar Component Image Handling', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ============================================================================

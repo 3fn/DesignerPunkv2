@@ -28,6 +28,7 @@
  * @see Requirements: 12.7, 12.8 in .kiro/specs/047-input-radio-base/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { InputRadioSetElement } from '../platforms/web/InputRadioSet.web';
 import { InputRadioBaseElement } from '../../Input-Radio-Base/platforms/web/InputRadioBase.web';
 
@@ -47,7 +48,7 @@ describe('Input-Radio-Set Web Component', () => {
   });
 
   afterEach(() => {
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // Helper to create a radio set with child radios

@@ -20,6 +20,7 @@
  * @see Requirements: 1.1, 1.2, 2.1-2.6, 7.1-7.4, 8.1-8.2 in .kiro/specs/042-avatar-component/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { AvatarBaseElement } from '../platforms/web/Avatar.web';
 import { AvatarSize } from '../types';
 
@@ -38,7 +39,7 @@ describe('Avatar Component Rendering', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ============================================================================

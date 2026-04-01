@@ -28,6 +28,7 @@
  * @see Requirements: 11.1-11.6 in .kiro/specs/046-input-checkbox-base/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { InputCheckboxBaseElement } from '../platforms/web/InputCheckboxBase.web';
 import { IconBaseElement } from '../../Icon-Base/platforms/web/IconBase.web';
 
@@ -50,7 +51,7 @@ describe('Input-Checkbox-Base Web Component', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ============================================================================

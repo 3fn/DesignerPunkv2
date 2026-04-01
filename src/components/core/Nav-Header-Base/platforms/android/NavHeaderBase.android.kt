@@ -43,7 +43,7 @@ object NavHeaderTokens {
 
     // Separator (contract: visual_separator)
     val separatorColor: Color = Color(DesignTokens.colorStructureBorderSubtle)
-    val separatorWidth = DesignTokens.borderWidth100.dp
+    val separatorWidth = DesignTokens.borderWidth100
 
     // Touch target (contract: accessibility_touch_target)
     val minHeight = DesignTokens.tapAreaRecommended.dp

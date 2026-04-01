@@ -21,6 +21,7 @@
  * @module Button-CTA/platforms/web/__tests__/icon-integration
  */
 
+import { cleanupDOM } from '../../../../../../__tests__/helpers/web-component-test-utils';
 import { ButtonCTA } from '../ButtonCTA.web';
 import { IconBaseElement } from '../../../../Icon-Base/platforms/web/IconBase.web';
 
@@ -52,7 +53,7 @@ describe('Button-CTA Icon Integration', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   /**

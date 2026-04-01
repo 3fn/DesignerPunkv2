@@ -15,6 +15,7 @@
  * @see .kiro/specs/049-nav-segmentedchoice-base/requirements.md Req 3, 7, 9
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { NavSegmentedChoiceBase } from '../platforms/web/NavSegmentedChoiceBase.web';
 
 // ---------------------------------------------------------------------------
@@ -95,7 +96,7 @@ describe('Nav-SegmentedChoice-Base — Animation & Visual', () => {
   });
 
   afterEach(() => {
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ==========================================================================

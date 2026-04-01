@@ -19,6 +19,7 @@
  * @see Requirements: 11.1 in .kiro/specs/042-avatar-component/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { AvatarBaseElement } from '../platforms/web/Avatar.web';
 
 describe('Avatar Web Component Lifecycle', () => {
@@ -36,7 +37,7 @@ describe('Avatar Web Component Lifecycle', () => {
 
   afterEach(() => {
     // Clean up any created elements
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ============================================================================

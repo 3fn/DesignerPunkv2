@@ -16,6 +16,7 @@
  * @see .kiro/specs/038-vertical-list-buttons/design.md - Testing Strategy
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import { ButtonVerticalListItem } from '../platforms/web/ButtonVerticalListItem.web';
 import { IconBaseElement } from '../../Icon-Base/platforms/web/IconBase.web';
 import { iconBaseSizes } from '../../Icon-Base/types';
@@ -357,14 +358,14 @@ describe('Button-VerticalList-Item Integration Tests', () => {
     beforeEach(() => {
       // Start with clean state - remove all tokens
       cleanupRequiredTokens();
-      document.body.innerHTML = '';
+      cleanupDOM();
     });
     
     afterEach(() => {
       // Restore tokens after each test
       setupRequiredTokens();
       // Clean up any elements
-      document.body.innerHTML = '';
+      cleanupDOM();
     });
     
     it('should throw error when disabled attribute is set', async () => {

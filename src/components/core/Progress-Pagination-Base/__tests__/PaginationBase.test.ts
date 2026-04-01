@@ -25,6 +25,7 @@
  * @see .kiro/specs/048-progress-family/requirements.md
  */
 
+import { cleanupDOM } from '../../../../__tests__/helpers/web-component-test-utils';
 import * as fs from 'fs';
 import * as path from 'path';
 import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals';
@@ -73,7 +74,7 @@ describe('Progress-Pagination-Base', () => {
   });
 
   beforeEach(() => {
-    document.body.innerHTML = '';
+    cleanupDOM();
   });
 
   // ==========================================================================
