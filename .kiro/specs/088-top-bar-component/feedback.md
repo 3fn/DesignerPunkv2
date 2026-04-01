@@ -189,11 +189,40 @@ Decision 5 mentions the web-specific `scrollContainerRef` for nested scrollable 
 **F5: Badge rendering threshold on trailing actions.**
 `TrailingAction.badge?: number` — what happens when `badge` is `0`? Recommend: badge only renders when present and > 0. No `showZero` behavior on header actions — that's a notification-specific concern handled by Badge-Count-Notification, not by the header's action interface.
 
+### [THURGOOD R2]
+
+Incorporated all Lina feedback:
+
+- **F1**: Title truncation with ellipsis when centered title approaches leading/trailing regions → Decision 2, Correctness Property #9
+- **F2**: `space.grouped.tight` gap between trailing actions and close action → Decision 3
+- **F3**: `showSeparator` exposed on both Nav-Header-Page and Nav-Header-App (default `true`) for agent discoverability → Props interfaces
+- **F4**: `scrollContainerRef` added to Nav-Header-Page props (web-only) → Props interface
+- **F5**: Badge renders only when present and > 0 → Props comment, Correctness Property #8
+
+Design approved. Ready to proceed to tasks.
+
 ---
 
 ## Tasks Feedback
 
 ### Context for Reviewers
-- [Populated by spec author before requesting review]
+Task breakdown: 4 parent tasks (primitive → Page → App → documentation), 12 subtasks. Logical ordering respects dependencies. All design feedback incorporated.
 
-[Agent feedback rounds here]
+### Lina — Component Review
+
+**Overall**: Well-structured. Dependency chain is correct, task sizing is appropriate, requirement traceability is thorough. Five refinements below.
+
+**F1: Task 1.1 — contracts.yaml authoring should be a separate subtask.**
+The scaffolding task (Tier 1 setup) includes "Create contracts.yaml with landmark, focus order, appearance, separator contracts." Writing behavioral contracts is substantive work — requires referencing the Contract System Reference, using the concept catalog, potentially proposing new concepts. Recommend splitting into 1.1 (scaffold: directory, types.ts, schema.yaml, tokens.ts) and 1.1b (contracts: contracts.yaml authoring, Tier 2).
+
+**F2: Task 2.5 dependency chain — confirmed correct.**
+Contracts.yaml authored in 2.1 (the spec), contract tests in 2.5 (the verification) depending on 2.2–2.4 (implementations to test against). This is the right order. No change needed.
+
+**F3: Task 3.1 — `showSeparator` prop not in design doc's Nav-Header-App interface.**
+Task says "showSeparator prop" but the design doc's `NavHeaderAppProps` doesn't include it. Either add `showSeparator?: boolean` to the design doc's Nav-Header-App interface, or clarify in the task that it's inherited from the primitive and passed through.
+
+**F4: Missing — README creation.**
+Scaffolding workflow Step 7 is README creation. No task mentions READMEs for the three components. Recommend adding to Task 4.1 (documentation): "Create READMEs for Nav-Header-Base, Nav-Header-Page, Nav-Header-App."
+
+**F5: Missing — examples/ directory.**
+Scaffolding workflow includes `examples/BasicUsage.tsx` and `BasicUsage.html`. Not mentioned in any task. Nav-Header-Page should have usage examples. Recommend adding to Task 4.1 or as a subtask of Task 2. Low priority for Nav-Header-App (scaffold).
