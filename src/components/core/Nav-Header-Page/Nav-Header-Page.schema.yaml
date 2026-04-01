@@ -43,6 +43,12 @@ description: |
   DesignerPunk Philosophy: NO DISABLED STATES
   If an action is unavailable, do not include it.
 
+behaviors:
+  - renderable
+  - focusable
+  - accessible
+  - animatable
+
 properties:
   title:
     type: string

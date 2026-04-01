@@ -32,6 +32,10 @@ description: |
 
   Readiness: scaffold — architectural foundation, not production-ready.
 
+behaviors:
+  - renderable
+  - accessible
+
 properties:
   leadingContent:
     type: "React.ReactNode"

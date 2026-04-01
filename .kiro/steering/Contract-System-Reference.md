@@ -46,11 +46,11 @@ This document is the authoritative reference for contract conventions. For the d
 
 117 concepts across 10 categories. Derived from the 29 deployed contracts.yaml files as of Spec 078 audit.
 
-Updated: 130 concepts after Spec 088 Nav-Header-Page added `heading`, `back_navigation`, `close_positioning`, `title_alignment`, `action_styling`, `platform_height`, `collapsible_scroll`, `badge_threshold`.
+Updated: 131 concepts after Spec 088 Nav-Header-Page added `heading`, `no_heading`, `back_navigation`, `close_positioning`, `title_alignment`, `action_styling`, `platform_height`, `collapsible_scroll`, `badge_threshold`.
 
-### accessibility (24)
+### accessibility (25)
 
-`actual_position` · `alt_text` · `announces_changes` · `aria_controls` · `aria_label` · `aria_pressed` · `aria_role` · `aria_roles` · `color_contrast` · `decorative` · `decorative_mode` · `dismiss_label` · `error_announcement` · `heading` · `hidden` · `list_role` · `non_interactive` · `pluralized_announcements` · `progressbar_role` · `radiogroup_role` · `reduced_motion` · `role` · `text_scaling` · `touch_target`
+`actual_position` · `alt_text` · `announces_changes` · `aria_controls` · `aria_label` · `aria_pressed` · `aria_role` · `aria_roles` · `color_contrast` · `decorative` · `decorative_mode` · `dismiss_label` · `error_announcement` · `heading` · `hidden` · `list_role` · `no_heading` · `non_interactive` · `pluralized_announcements` · `progressbar_role` · `radiogroup_role` · `reduced_motion` · `role` · `text_scaling` · `touch_target`
 
 ### animation (4)
 

@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
+// Composition: IconBase( via ButtonIcon slots), ButtonIcon( via consumer slots)
+
 // MARK: - Tokens
 
 object NavHeaderPageTokens {

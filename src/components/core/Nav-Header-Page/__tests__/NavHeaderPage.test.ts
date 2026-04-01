@@ -19,6 +19,7 @@
  */
 
 import { NavHeaderPage } from '../platforms/web/NavHeaderPage.web';
+import '../../../Nav-Header-Base/platforms/web/NavHeaderBase.web';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -221,8 +222,9 @@ describe('content_badge_threshold', () => {
   // This test validates the contract at the type/documentation level.
 
   test('TrailingAction badge type allows undefined', () => {
-    // TypeScript enforces this — runtime test confirms the interface
-    const action = { icon: 'search', accessibilityLabel: 'Search', onPress: () => {} };
+    const action: { icon: string; accessibilityLabel: string; onPress: () => void; badge?: number } = {
+      icon: 'search', accessibilityLabel: 'Search', onPress: () => {}
+    };
     expect(action.badge).toBeUndefined();
   });
 });

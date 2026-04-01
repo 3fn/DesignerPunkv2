@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nav-Header Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+</head>
+<body>
+  <a href="index.html" class="demo-back-link">← Back to Index</a>
+  <h1 class="demo-page-title">Nav-Header Components</h1>
+
+  <section class="demo-section">
+    <h2 class="demo-section-title">Nav-Header-Page — Basic with back button</h2>
+    <div class="demo-viewport">
+      <nav-header-page title="Settings">
+        <button-icon slot="leading-action" icon="chevron-left" aria-label="Back" variant="tertiary" size="medium"></button-icon>
+      </nav-header-page>
+    </div>
+  </section>
+
+  <section class="demo-section">
+    <h2 class="demo-section-title">Nav-Header-Page — With trailing actions and close</h2>
+    <div class="demo-viewport">
+      <nav-header-page title="Edit Profile" title-alignment="center">
+        <button-icon slot="leading-action" icon="chevron-left" aria-label="Back" variant="tertiary" size="medium"></button-icon>
+        <button-icon slot="trailing-actions" icon="share" aria-label="Share" variant="tertiary" size="medium"></button-icon>
+        <button-icon slot="close-action" icon="close" aria-label="Close" variant="tertiary" size="medium"></button-icon>
+      </nav-header-page>
+    </div>
+  </section>
+
+  <section class="demo-section">
+    <h2 class="demo-section-title">Nav-Header-App — Scaffold with product content</h2>
+    <div class="demo-viewport">
+      <nav-header-app>
+        <span slot="leading" style="font-weight: 600;">MyApp</span>
+        <button-icon slot="trailing" icon="search" aria-label="Search" variant="tertiary" size="medium"></button-icon>
+        <button-icon slot="trailing" icon="bell" aria-label="Notifications" variant="tertiary" size="medium"></button-icon>
+      </nav-header-app>
+    </div>
+  </section>
+
+  <script>
+    if (window.location.protocol === 'file:') {
+      var banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+  </script>
+</body>
+</html>

@@ -12,6 +12,7 @@
 
 import SwiftUI
 
+// Composition: IconBase( via ButtonIcon), ButtonIcon( direct)
 // MARK: - Swift Types (from types.ts)
 
 enum LeadingAction {

@@ -6,7 +6,7 @@
 
 /// <reference lib="dom" />
 
-import '../../../Nav-Header-Base/platforms/web/NavHeaderBase.web';
+import '../../../Nav-Header-Base/platforms/web/NavHeaderBase.web'; // composes: nav-header-base
 
 export class NavHeaderApp extends HTMLElement {
   private _shadowRoot: ShadowRoot;

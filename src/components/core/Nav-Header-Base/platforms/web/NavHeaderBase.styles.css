@@ -29,7 +29,7 @@
 .nav-header {
   display: flex;
   align-items: center;
-  min-block-size: 48px;
+  min-block-size: var(--tap-area-recommended, 48px);
   background-color: var(--color-structure-canvas);
 }
 
