@@ -126,9 +126,29 @@ This is component-level platform implementation, not token generation. Spec 089 
 ## Requirements Feedback
 
 ### Context for Reviewers
-- [Populated by spec author before requesting review]
+Requirements doc translates design outline decisions D1–D9 into 7 requirements with testable acceptance criteria. All major decisions are traceable.
 
-[Agent feedback rounds here]
+### Lina — Component Review
+
+**Overall**: Solid. Every confirmed decision maps to specific ACs. The primitive-is-internal-only constraint is captured in both Req 1 and Req 7. Ready to move to design with the refinements below.
+
+**F1: Req 2 AC 9 — Scroll threshold is imprecise.**
+"~8-10px" isn't testable. Recommend picking 8px (base-8 grid aligned) as a firm value. A behavioral contract test needs a specific number.
+
+**F2: Req 4 AC 8 — iOS material enum mapping references unfinalized feedback.**
+"Mapping per Kenya's R1 feedback from Spec 089" — if Kenya hasn't validated yet, this AC has an unresolved dependency. Should either state the mapping explicitly (blur050 → .systemUltraThinMaterial, blur100 → .systemThinMaterial, blur150 → .systemMaterial) or mark as "TBD pending Kenya validation."
+
+**F3: Req 2 — Missing AC for safe area behavior during collapsible scroll.**
+D8 specified "safe area remains protected — bar slides behind status bar, not above it." This isn't an explicit AC. Recommend adding: "WHEN scrollBehavior is collapsible AND the header is hidden THEN the safe area (status bar zone) SHALL remain protected — content SHALL NOT render in the safe area."
+
+**F4: Req 2 AC 10 — "Degrade to fixed" is ambiguous.**
+Does "degrade to fixed" mean the bar never hides (stays visible, scroll has no effect)? Or does it mean the bar hides/shows instantly without animation? The safer accessibility choice is never hides. Recommend clarifying: "WHEN reduced motion is enabled THEN the header SHALL remain fixed (visible at all times, collapsible behavior disabled)."
+
+**F5: Dependency — Spec 089 status.**
+Header says "Spec 089 — complete." If 089 isn't actually complete, the translucent appearance ACs (Req 1 AC 5, Req 4 AC 8-10) have an unresolved dependency. Confirm 089 status or mark translucent ACs as blocked.
+
+**F6: Req 3 — Thin but appropriate.**
+Nav-Header-App has 5 ACs, two of which are documentation notes rather than testable criteria (AC 4 readiness status, AC 5 "value is in what it inherits"). This is fine — the component is intentionally thin. The thinness of the requirements reflects the thinness of the scaffold.
 
 ---
 
