@@ -8,11 +8,13 @@
 
 ## Tasks Feedback
 
-### Context for Reviewers
+### Ada — Token Review
 
-Thurgood produced a task breakdown directly from the design outline, skipping the requirements doc. The design outline was originally scoped as a "just do it" change (3 surface blur tokens), but expanded during Ada + Peter discussion into a full unification of shadow blur, glow blur, and surface blur into a single primitive family. The scope grew significantly — the "just do it" framing in the outline no longer reflects the actual work.
+**Approved.** Sequencing is correct, requirement traceability is complete, earlier feedback incorporated (full PrimitiveToken shape in 1.1, generic pass in 1.4, correctness property #6 as standalone verification in 1.6).
 
-This feedback addresses the task doc and the missing process steps.
+**Implementation note for Task 1.4:** The `TokenFileGenerator` generic primitive pass will pick up blur tokens automatically via `getAllPrimitiveTokens()` — no explicit registration needed there. The real work is in the DTCG generator, which directly imports `shadowBlur` from `ShadowBlurTokens.ts` and `glowBlur` from `GlowBlurTokens.ts` (lines 46 and 51 of `DTCGFormatGenerator.ts`). Those imports break when the old files are deleted. The DTCG generator also uses `shadowBlur` in `resolveShadowPrimitive()` (line 920) and iterates `glowBlur` directly (line 1023). All of these need to be updated to reference the unified `BlurTokens`. This is within task 1.4's scope — just flagging the specific locations.
+
+Ready for implementation.
 
 ### Ada — Token Review
 
