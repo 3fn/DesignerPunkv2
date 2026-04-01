@@ -12,14 +12,18 @@
 
 package com.designerpunk.components.core
 
-import androidx.compose.foundation.layout.Box
+import android.provider.Settings
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,21 +33,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
+
+// MARK: - Tokens
 
 object NavHeaderPageTokens {
+    // Token values are raw floats — platform builder generates unitless constants
     val titleColor = DesignTokens.colorActionNavigation
-    val trailingGap = DesignTokens.spaceGroupedMinimal.dp
-    val closeGap = DesignTokens.spaceGroupedTight.dp
-    val androidPadding = DesignTokens.spaceInset100.dp
+    val closeGap = DesignTokens.spaceGroupedTight
+    val androidPadding = DesignTokens.spaceInset100
     val scrollThreshold = 8f
+    val animationDuration = DesignTokens.duration150.toInt()
 }
 
 enum class PageTitleAlignment { CENTER, LEADING }
+enum class NavHeaderScrollBehavior { FIXED, COLLAPSIBLE }
 
 @Composable
 fun NavHeaderPage(
@@ -57,14 +68,42 @@ fun NavHeaderPage(
     showSeparator: Boolean = true,
     testID: String? = null,
 ) {
+    // Collapsible state
+    var isHidden by remember { mutableStateOf(false) }
+    val offsetY = remember { Animatable(0f) }
+    val reduceMotion = isReduceMotionEnabled()
+
+    // Animate offset when hidden state changes
+    LaunchedEffect(isHidden) {
+        val target = if (isHidden) -NavHeaderTokens.minHeight.value else 0f
+        if (reduceMotion) {
+            offsetY.snapTo(0f) // Reduced motion: never hide
+        } else {
+            offsetY.animateTo(
+                targetValue = target,
+                animationSpec = tween(durationMillis = NavHeaderPageTokens.animationDuration)
+            )
+        }
+    }
+
+    // Provide scroll connection when collapsible
+    val scrollConnection = if (scrollBehavior == NavHeaderScrollBehavior.COLLAPSIBLE && !reduceMotion) {
+        remember {
+            navHeaderCollapsibleConnection(
+                onHide = { isHidden = true },
+                onReveal = { isHidden = false },
+            )
+        }
+    } else null
+
     NavHeaderBase(
         leadingSlot = { leadingAction?.invoke() },
         titleSlot = {
             Text(
                 text = title,
                 color = NavHeaderPageTokens.titleColor,
-                fontSize = DesignTokens.typographyLabelMdFontSize,
-                fontWeight = DesignTokens.typographyLabelMdFontWeight,
+                fontSize = DesignTokens.typographyLabelMd.fontSize,
+                fontWeight = DesignTokens.typographyLabelMd.fontWeight,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = when (titleAlignment) {
@@ -73,7 +112,7 @@ fun NavHeaderPage(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = NavHeaderPageTokens.androidPadding)
+                    .padding(vertical = NavHeaderPageTokens.androidPadding.dp)
                     .semantics { heading() },
             )
         },
@@ -81,7 +120,7 @@ fun NavHeaderPage(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 trailingActions?.invoke()
                 if (closeAction != null) {
-                    Spacer(modifier = Modifier.width(NavHeaderPageTokens.closeGap))
+                    Spacer(modifier = Modifier.width(NavHeaderPageTokens.closeGap.dp))
                     closeAction()
                 }
             }
@@ -89,10 +128,9 @@ fun NavHeaderPage(
         appearance = appearance,
         showSeparator = showSeparator,
         testID = testID,
+        modifier = Modifier.offset { IntOffset(0, offsetY.value.roundToInt()) },
     )
 }
-
-enum class NavHeaderScrollBehavior { FIXED, COLLAPSIBLE }
 
 /**
  * NestedScrollConnection for collapsible Nav-Header-Page.
@@ -115,4 +153,16 @@ fun navHeaderCollapsibleConnection(
         }
         return Offset.Zero
     }
+}
+
+/** Check if reduce motion is enabled on Android. */
+@Composable
+private fun isReduceMotionEnabled(): Boolean {
+    val context = LocalContext.current
+    val scale = Settings.Global.getFloat(
+        context.contentResolver,
+        Settings.Global.ANIMATOR_DURATION_SCALE,
+        1f
+    )
+    return scale == 0f
 }
