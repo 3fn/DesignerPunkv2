@@ -117,7 +117,7 @@
     - Create `tokens.ts` with component token references
     - _Requirements: 2.1, 6.1, 6.2, 6.3_
 
-  - [ ] 2.2 Web implementation
+  - [x] 2.2 Web implementation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

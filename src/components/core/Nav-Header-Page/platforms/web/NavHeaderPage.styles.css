@@ -1,0 +1,90 @@
+/**
+ * Nav-Header-Page Styles for Web Platform
+ *
+ * Token-based styling using CSS custom properties.
+ *
+ * Stemma System: Navigation Family, Semantic (inherits Nav-Header-Base)
+ *
+ * @see .kiro/specs/088-top-bar-component/design.md
+ */
+
+/* ==========================================================================
+   Title
+   ========================================================================== */
+
+.nav-header-page__title {
+  font-family: var(--typography-label-md-font-family);
+  font-size: var(--typography-label-md-font-size);
+  font-weight: var(--typography-label-md-font-weight);
+  line-height: var(--typography-label-md-line-height);
+  letter-spacing: var(--typography-label-md-letter-spacing);
+  color: var(--color-action-navigation);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   Title Alignment
+   ========================================================================== */
+
+.nav-header-page__title-wrapper--center {
+  position: absolute;
+  inset-inline: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.nav-header-page__title-wrapper--center .nav-header-page__title {
+  max-inline-size: 60%;
+  text-align: center;
+}
+
+.nav-header-page__title-wrapper--leading {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* ==========================================================================
+   Actions
+   ========================================================================== */
+
+.nav-header-page__trailing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-grouped-minimal, 4px);
+  flex-shrink: 0;
+}
+
+.nav-header-page__close-gap {
+  inline-size: var(--space-grouped-tight, 8px);
+}
+
+/* ==========================================================================
+   Collapsible
+   ========================================================================== */
+
+:host {
+  transition: transform var(--duration-150, 150ms) var(--easing-standard, ease);
+}
+
+:host(.nav-header-page--hidden) {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Android padding
+   ========================================================================== */
+
+:host(.nav-header-page--android-padding) .nav-header__content {
+  padding-block: var(--space-inset-100, 8px);
+}
