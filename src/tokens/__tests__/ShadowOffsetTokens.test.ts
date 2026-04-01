@@ -366,9 +366,9 @@ describe('Shadow Offset Tokens', () => {
         (token: any) => token.category === TokenCategory.SHADOW
       );
       
-      // Should have 9 X tokens + 5 Y tokens + 6 blur tokens + 6 opacity tokens = 26 total
-      // (blur and opacity each include a "None" variant: shadowBlurNone, shadowOpacityNone)
-      expect(shadowTokensInArray).toHaveLength(26);
+      // Should have 9 X tokens + 5 Y tokens + 6 opacity tokens = 20 total
+      // (blur tokens moved to TokenCategory.BLUR in Spec 089)
+      expect(shadowTokensInArray).toHaveLength(20);
     });
 
     test('should return shadow offset tokens from getTokensByCategory()', () => {

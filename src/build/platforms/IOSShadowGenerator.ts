@@ -14,7 +14,7 @@ import {
   shadowOffsetX, 
   shadowOffsetY 
 } from '../../tokens/ShadowOffsetTokens';
-import { shadowBlur } from '../../tokens/ShadowBlurTokens';
+import { blur as blurTokens } from '../../tokens/BlurTokens';
 import { shadowOpacityTokens } from '../../tokens/ShadowOpacityTokens';
 import { colorTokens } from '../../tokens/ColorTokens';
 import { PrimitiveToken } from '../../types/PrimitiveToken';
@@ -73,7 +73,7 @@ export class IOSShadowGenerator {
     // Resolve primitive tokens
     const offsetXToken = this.resolvePrimitiveToken(offsetX, shadowOffsetX);
     const offsetYToken = this.resolvePrimitiveToken(offsetY, shadowOffsetY);
-    const blurToken = this.resolvePrimitiveToken(blur, shadowBlur);
+    const blurToken = this.resolvePrimitiveToken(blur, blurTokens);
     const opacityToken = this.resolvePrimitiveToken(opacity, shadowOpacityTokens);
     const colorToken = this.resolveColorToken(color);
     

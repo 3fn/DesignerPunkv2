@@ -47,7 +47,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.000',
       offsetY: 'shadowOffsetY.000',
-      blur: 'shadowBlurNone',
+      blur: 'blur000',
       opacity: 'shadowOpacityNone',
       color: 'shadowBlack100'
     },
@@ -72,7 +72,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.000',
       offsetY: 'shadowOffsetY.100',
-      blur: 'shadowBlurModerate',
+      blur: 'blur075',
       opacity: 'shadowOpacityModerate',
       color: 'shadowBlack100'
     },
@@ -97,7 +97,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.000',
       offsetY: 'shadowOffsetY.100',
-      blur: 'shadowBlurSoft',
+      blur: 'blur125',
       opacity: 'shadowOpacitySoft',
       color: 'shadowBlack100'
     },
@@ -122,7 +122,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.000',
       offsetY: 'shadowOffsetY.100',
-      blur: 'shadowBlurModerate',
+      blur: 'blur075',
       opacity: 'shadowOpacityModerate',
       color: 'shadowBlack100'
     },
@@ -147,7 +147,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.000',
       offsetY: 'shadowOffsetY.200',
-      blur: 'shadowBlurDepth200',
+      blur: 'blur100',
       opacity: 'shadowOpacityDepth200',
       color: 'shadowBlack100'
     },
@@ -172,7 +172,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.000',
       offsetY: 'shadowOffsetY.300',
-      blur: 'shadowBlurDepth300',
+      blur: 'blur150',
       opacity: 'shadowOpacityDepth300',
       color: 'shadowBlack100'
     },
@@ -197,7 +197,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.000',
       offsetY: 'shadowOffsetY.300',
-      blur: 'shadowBlurDepth300',
+      blur: 'blur150',
       opacity: 'shadowOpacityDepth300',
       color: 'shadowBlack100'
     },
@@ -222,7 +222,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.300',
       offsetY: 'shadowOffsetY.400',
-      blur: 'shadowBlurHard',
+      blur: 'blur025',
       opacity: 'shadowOpacityHard',
       color: 'shadowBlue100'
     },
@@ -247,7 +247,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.000',
       offsetY: 'shadowOffsetY.100',
-      blur: 'shadowBlurSoft',
+      blur: 'blur125',
       opacity: 'shadowOpacitySoft',
       color: 'shadowBlack100'
     },
@@ -272,7 +272,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.000',
       offsetY: 'shadowOffsetY.000',
-      blur: 'shadowBlurHard',
+      blur: 'blur025',
       opacity: 'shadowOpacitySoft',
       color: 'shadowBlack100'
     },
@@ -299,7 +299,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.n300',
       offsetY: 'shadowOffsetY.200',
-      blur: 'shadowBlurModerate',
+      blur: 'blur075',
       opacity: 'shadowOpacityModerate',
       color: 'shadowBlue100'
     },
@@ -324,7 +324,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.n150',
       offsetY: 'shadowOffsetY.200',
-      blur: 'shadowBlurModerate',
+      blur: 'blur075',
       opacity: 'shadowOpacityModerate',
       color: 'shadowBlack100'
     },
@@ -349,7 +349,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.000',
       offsetY: 'shadowOffsetY.200',
-      blur: 'shadowBlurModerate',
+      blur: 'blur075',
       opacity: 'shadowOpacityModerate',
       color: 'shadowBlack100'
     },
@@ -375,7 +375,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.150',
       offsetY: 'shadowOffsetY.200',
-      blur: 'shadowBlurModerate',
+      blur: 'blur075',
       opacity: 'shadowOpacityModerate',
       color: 'shadowBlack100'
     },
@@ -401,7 +401,7 @@ export const shadowTokens: Record<string, ShadowToken> = {
     primitiveReferences: {
       offsetX: 'shadowOffsetX.300',
       offsetY: 'shadowOffsetY.200',
-      blur: 'shadowBlurModerate',
+      blur: 'blur075',
       opacity: 'shadowOpacityModerate',
       color: 'shadowBlue100'
     },

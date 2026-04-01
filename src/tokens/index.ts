@@ -144,14 +144,6 @@ export {
 } from './ShadowOffsetTokens';
 
 export {
-  SHADOW_BLUR_BASE_VALUE,
-  shadowBlur,
-  shadowBlurNames,
-  getShadowBlurToken,
-  getAllShadowBlurTokens
-} from './ShadowBlurTokens';
-
-export {
   SHADOW_OPACITY_BASE_VALUE,
   shadowOpacityTokens,
   shadowOpacityTokenNames,
@@ -252,7 +244,6 @@ import { radiusTokens } from './RadiusTokens';
 import { colorTokens } from './ColorTokens';
 import { borderWidthTokens } from './BorderWidthTokens';
 import { shadowOffsetX, shadowOffsetY } from './ShadowOffsetTokens';
-import { shadowBlur } from './ShadowBlurTokens';
 import { shadowOpacityTokens } from './ShadowOpacityTokens';
 import { glowBlur } from './GlowBlurTokens';
 import { glowOpacity } from './GlowOpacityTokens';
@@ -280,7 +271,7 @@ export const allTokens = {
   [TokenCategory.TAP_AREA]: tapAreaTokens,
   [TokenCategory.COLOR]: colorTokens,
   [TokenCategory.BORDER_WIDTH]: borderWidthTokens,
-  [TokenCategory.SHADOW]: { ...shadowOffsetX, ...shadowOffsetY, ...shadowBlur, ...shadowOpacityTokens },
+  [TokenCategory.SHADOW]: { ...shadowOffsetX, ...shadowOffsetY, ...shadowOpacityTokens },
   [TokenCategory.GLOW]: { ...glowBlur, ...glowOpacity },
   [TokenCategory.OPACITY]: opacityTokens,
   [TokenCategory.BLEND]: blendTokens,
@@ -312,7 +303,6 @@ export function getAllPrimitiveTokens(): PrimitiveToken[] {
     ...Object.values(borderWidthTokens),
     ...Object.values(shadowOffsetX),
     ...Object.values(shadowOffsetY),
-    ...Object.values(shadowBlur),
     ...Object.values(shadowOpacityTokens),
     ...Object.values(glowBlur),
     ...Object.values(glowOpacity),

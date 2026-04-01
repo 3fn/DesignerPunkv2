@@ -41,7 +41,7 @@
     - Verify: TypeScript compiles, new tokens accessible
     - _Requirements: 1.1, 1.2, 1.4_
 
-  - [ ] 1.2 Migrate shadow composite references
+  - [x] 1.2 Migrate shadow composite references
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada

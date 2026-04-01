@@ -31,7 +31,7 @@ import { spacingTokens } from '../../SpacingTokens';
 import { colorTokens as primitiveColorTokens } from '../../ColorTokens';
 import { opacityTokens } from '../../OpacityTokens';
 import { shadowOffsetX, shadowOffsetY } from '../../ShadowOffsetTokens';
-import { shadowBlur } from '../../ShadowBlurTokens';
+import { blur } from '../../BlurTokens';
 import { shadowOpacityTokens } from '../../ShadowOpacityTokens';
 import { borderWidthTokens } from '../../BorderWidthTokens';
 import { blendTokens } from '../../BlendTokens';
@@ -55,7 +55,7 @@ describe('Primitive Reference Validation', () => {
     // Add shadow tokens with their full names (e.g., "shadowOffsetX.000")
     Object.values(shadowOffsetX).forEach(token => allPrimitiveTokens.add(token.name));
     Object.values(shadowOffsetY).forEach(token => allPrimitiveTokens.add(token.name));
-    Object.values(shadowBlur).forEach(token => allPrimitiveTokens.add(token.name));
+    Object.values(blur).forEach(token => allPrimitiveTokens.add(token.name));
     Object.values(shadowOpacityTokens).forEach(token => allPrimitiveTokens.add(token.name));
 
     // Add all primitive color tokens (including all color families)

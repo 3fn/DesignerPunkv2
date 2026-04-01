@@ -43,7 +43,7 @@ import { scaleTokens, SCALE_BASE_VALUE } from '../tokens/ScaleTokens';
 import { blendTokens, BLEND_BASE_VALUE } from '../tokens/BlendTokens';
 
 // Shadow primitive token imports
-import { shadowBlur, SHADOW_BLUR_BASE_VALUE } from '../tokens/ShadowBlurTokens';
+import { blur, BLUR_BASE_VALUE } from '../tokens/BlurTokens';
 import { shadowOffsetX, shadowOffsetY, SHADOW_OFFSET_BASE_VALUE } from '../tokens/ShadowOffsetTokens';
 import { shadowOpacityTokens, SHADOW_OPACITY_BASE_VALUE } from '../tokens/ShadowOpacityTokens';
 
@@ -917,7 +917,7 @@ export class DTCGFormatGenerator {
       // Resolve primitive values
       const offsetXToken = this.resolveShadowPrimitive(refs.offsetX, shadowOffsetX);
       const offsetYToken = this.resolveShadowPrimitive(refs.offsetY, shadowOffsetY);
-      const blurToken = this.resolveShadowPrimitive(refs.blur, shadowBlur);
+      const blurToken = this.resolveShadowPrimitive(refs.blur, blur);
       const opacityToken = this.resolveShadowPrimitive(refs.opacity, shadowOpacityTokens);
       const colorToken = (colorTokens as Record<string, PrimitiveToken>)[refs.color];
 
