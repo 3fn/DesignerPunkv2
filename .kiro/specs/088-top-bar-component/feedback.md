@@ -226,3 +226,81 @@ Scaffolding workflow Step 7 is README creation. No task mentions READMEs for the
 
 **F5: Missing — examples/ directory.**
 Scaffolding workflow includes `examples/BasicUsage.tsx` and `BasicUsage.html`. Not mentioned in any task. Nav-Header-Page should have usage examples. Recommend adding to Task 4.1 or as a subtask of Task 2. Low priority for Nav-Header-App (scaffold).
+
+### Lina — Implementation Note (Task 1.1b)
+
+**New contract concepts for catalog ballot measure.**
+The Nav-Header-Base contracts introduce 3 concepts not in the current concept catalog (117 concepts as of Spec 078 audit):
+- `three_regions` (layout) — three-region horizontal layout with collapsible empty regions
+- `safe_area` (layout) — platform safe area integration (iOS status bar, Android system bar)
+- `focus_order` (interaction) — enforced focus traversal order across regions
+
+These are used in `contracts.yaml` following `{category}_{concept}` naming. Not blocking — contracts are valid and usable. But the concept catalog needs updating. Thurgood: does this change anything in the spec, or is it a standalone catalog update?
+
+### [THURGOOD R2]
+
+Incorporated Lina's feedback:
+
+- **F1**: Split Task 1.1 — scaffold (Tier 1) and contracts authoring (Tier 2, new Task 1.1b). Contracts are substantive work requiring Contract System Reference.
+- **F2**: Confirmed correct, no change.
+- **F3**: `showSeparator` is already in the design doc's Nav-Header-App interface (line 97). No change needed — Lina may have been looking at an older version.
+- **F4**: READMEs added to Task 4.1.
+- **F5**: Usage examples for Nav-Header-Page added to Task 4.1.
+
+Tasks approved. Ready for implementation.
+
+---
+
+## Late Review: Consumer Validation
+
+### Context for Leonardo
+
+**@LEONARDO**: You're the primary consumer of Nav-Header-Page and Nav-Header-App. Please review the design doc (`design.md`) — specifically:
+
+1. Does the `Nav-Header-Page` prop interface (title, leadingAction, trailingActions, closeAction, titleAlignment, scrollBehavior) give you what you need for screen specs?
+2. Does `Nav-Header-App` (permissive slots, scaffold readiness) make sense for how you'd spec app-level chrome?
+3. Does the Page vs App distinction match how you think about screen types?
+4. Any product-level scenarios the design doesn't cover?
+
+This is a consumer validation pass, not a full spec review. Focus on whether the component meets your workflow needs.
+
+### Leonardo — Consumer Validation
+
+**Verdict**: Approved. The component covers my workflow needs. Two deferrable gaps, one process flag.
+
+#### Q1: Nav-Header-Page Props — Sufficient?
+
+Yes. The interface covers every page-level screen I'd spec: pushed screens (back), presented screens (close), contextual actions (trailing with badges), platform-native title alignment with override, and collapsible scroll. The dedicated `closeAction` prop is the right call — separating dismissal from operations is semantically clearer than burying close in the trailing array.
+
+**v2 consideration**: No subtitle or breadcrumb slot. `title` is a string only. When I spec a detail screen showing "Settings > Account > Privacy," I'd need either a subtitle prop or richer title composition. Not blocking for v1 — most page headers are title-only.
+
+#### Q2: Nav-Header-App — Clear Enough?
+
+Yes. The intent statement ("it orients, it doesn't navigate") is the right mental model. When I spec a root destination screen, I'd reach for Nav-Header-App and fill the slots with product content. The scaffold readiness is honest — the value is architectural (inheriting safe area, landmark, tokens), not behavioral.
+
+**Noted**: Product content in Nav-Header-App slots is arbitrary ReactNode — not validated by `validate_assembly`. Acceptable trade-off for a scaffold. Means I can't validate the app-level header's component tree the way I can a Nav-Header-Page tree.
+
+#### Q3: Page vs App Distinction — Matches My Mental Model?
+
+Exactly. Every screen I've specced in my research maps cleanly:
+
+- Dashboard, Settings, Inbox (root destinations) → Nav-Header-App
+- Notification detail (pushed) → Nav-Header-Page with back
+- Profile edit (presented) → Nav-Header-Page with close
+- Onboarding step (presented) → Nav-Header-Page with close or back
+
+The first question when decomposing a product into screens is "root destination or pushed/presented?" — that maps directly to App vs Page.
+
+#### Q4: Uncovered Product Scenarios
+
+Two, both deferrable:
+
+1. **Search mode**: Tapping a search icon should transition the header into a search bar (text input replaces title, cancel button appears). Common on iOS and Android. Not addressed in current design. Could be a future variant (Nav-Header-Search) or a mode on Nav-Header-Page. Products can compose a separate search bar below the header for v1.
+
+2. **Large title**: Already deferred to v2 in the design outline. The counter-argument is correct — iOS settings and inbox screens expect large title behavior. I'd need an escape hatch for iOS screens that require it until v2 ships. Manageable.
+
+#### Process Flag: Platform Agent Review
+
+The task plan has Lina doing all 6 platform implementations (web + iOS + Android for both primitive and Page). The design outline itself calls this "the most platform-divergent component in the catalog." Lina's iOS/Android verification depth is honest (from 086 feedback — confident on web, less so on native). For a component where platform conventions diverge structurally, I'd want Kenya and Data to at least review the iOS and Android implementations.
+
+**Counter-argument**: D1 chose custom implementations over platform-native wrappers, so platform-specific API expertise is less critical. Behavioral contracts catch cross-platform consistency. Platform agent review can happen during product work when Kenya/Data first consume the component. May be fine as-is — flagging it for Peter's judgment. -- [LEONARDO R2]
