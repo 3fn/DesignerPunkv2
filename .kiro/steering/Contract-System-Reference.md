@@ -46,31 +46,31 @@ This document is the authoritative reference for contract conventions. For the d
 
 117 concepts across 10 categories. Derived from the 29 deployed contracts.yaml files as of Spec 078 audit.
 
-Updated: 122 concepts after Spec 088 (Nav-Header-Base) added `focus_order`, `safe_area`, `three_regions`, `separator`, `translucent`.
+Updated: 130 concepts after Spec 088 Nav-Header-Page added `heading`, `back_navigation`, `close_positioning`, `title_alignment`, `action_styling`, `platform_height`, `collapsible_scroll`, `badge_threshold`.
 
-### accessibility (23)
+### accessibility (24)
 
-`actual_position` · `alt_text` · `announces_changes` · `aria_controls` · `aria_label` · `aria_pressed` · `aria_role` · `aria_roles` · `color_contrast` · `decorative` · `decorative_mode` · `dismiss_label` · `error_announcement` · `hidden` · `list_role` · `non_interactive` · `pluralized_announcements` · `progressbar_role` · `radiogroup_role` · `reduced_motion` · `role` · `text_scaling` · `touch_target`
+`actual_position` · `alt_text` · `announces_changes` · `aria_controls` · `aria_label` · `aria_pressed` · `aria_role` · `aria_roles` · `color_contrast` · `decorative` · `decorative_mode` · `dismiss_label` · `error_announcement` · `heading` · `hidden` · `list_role` · `non_interactive` · `pluralized_announcements` · `progressbar_role` · `radiogroup_role` · `reduced_motion` · `role` · `text_scaling` · `touch_target`
 
-### animation (3)
+### animation (4)
 
-`checkmark` · `coordination` · `initial_render`
+`checkmark` · `collapsible_scroll` · `coordination` · `initial_render`
 
 ### composition (7)
 
 `all_primitives` · `error_propagation` · `icon_precedence` · `mutual_exclusivity` · `node_and_connector` · `node_only` · `state_coordination`
 
-### content (16)
+### content (17)
 
-`displays_count` · `displays_fallback` · `displays_image` · `displays_label` · `dual_icons` · `float_label` · `helper_text` · `international_formats` · `label_text` · `phone_formatting` · `renders` · `supports_icon` · `trailing_dismiss_icon` · `trailing_icon` · `truncates_at_max` · `truncation`
+`badge_threshold` · `displays_count` · `displays_fallback` · `displays_image` · `displays_label` · `dual_icons` · `float_label` · `helper_text` · `international_formats` · `label_text` · `phone_formatting` · `renders` · `supports_icon` · `trailing_dismiss_icon` · `trailing_icon` · `truncates_at_max` · `truncation`
 
-### interaction (17)
+### interaction (19)
 
-`dismiss` · `email_autocomplete` · `expanded_tap_area` · `focus_order` · `focus_ring` · `focusable` · `hover` · `keyboard_activation` · `keyboard_navigation` · `noop_active` · `password_autocomplete` · `password_toggle` · `pressable` · `pressed` · `roving_tabindex` · `secure_input` · `toggle_selection`
+`back_navigation` · `close_positioning` · `dismiss` · `email_autocomplete` · `expanded_tap_area` · `focus_order` · `focus_ring` · `focusable` · `hover` · `keyboard_activation` · `keyboard_navigation` · `noop_active` · `password_autocomplete` · `password_toggle` · `pressable` · `pressed` · `roving_tabindex` · `secure_input` · `toggle_selection`
 
-### layout (5)
+### layout (6)
 
-`contains_children` · `flexible_length` · `padding` · `safe_area` · `three_regions`
+`contains_children` · `flexible_length` · `padding` · `platform_height` · `safe_area` · `three_regions`
 
 ### performance (1)
 
@@ -84,9 +84,9 @@ Updated: 122 concepts after Spec 088 (Nav-Header-Base) added `focus_order`, `saf
 
 `audit_trail` · `email_format` · `explicit_consent` · `form_integration` · `group_required` · `on_blur` · `phone_format` · `selection_constraints` · `size_restriction`
 
-### visual (26)
+### visual (28)
 
-`background` · `border` · `boundary` · `checkmark_icon` · `circular_shape` · `color_inheritance` · `entity_shape` · `gradient_glow` · `notification_color` · `optical_balance` · `pill_container` · `pill_shape` · `radius` · `renders_icon` · `renders_svg` · `rounded_corners` · `separator` · `shadow` · `size_emphasis` · `size_variants` · `state_colors` · `thickness` · `translucent` · `typography` · `variant_styling` · `viewport_clipping`
+`action_styling` · `background` · `border` · `boundary` · `checkmark_icon` · `circular_shape` · `color_inheritance` · `entity_shape` · `gradient_glow` · `notification_color` · `optical_balance` · `pill_container` · `pill_shape` · `radius` · `renders_icon` · `renders_svg` · `rounded_corners` · `separator` · `shadow` · `size_emphasis` · `size_variants` · `state_colors` · `thickness` · `title_alignment` · `translucent` · `typography` · `variant_styling` · `viewport_clipping`
 
 ---
 

@@ -510,3 +510,181 @@ Contract says "Empty regions do not reserve space." Empty `Box {}` with empty la
 | F5: Empty region collapse | Contract nuance | No |
 
 Both blocking issues are straightforward fixes. Solid foundation overall.
+
+---
+
+## Semantic Variant Platform Review
+
+### Kenya — Nav-Header-Page iOS Review (Task 2.3)
+
+**File reviewed**: `src/components/core/Nav-Header-Page/platforms/ios/NavHeaderPage.ios.swift`
+**Date**: 2026-03-31
+
+**Overall: Good structure, but four issues — two won't compile, one is a missing implementation, one is a contract gap.**
+
+#### Issue 1 (Won't Compile): `typographyLabelMdFontSize` doesn't exist
+
+The title uses:
+```swift
+.font(.system(
+    size: DesignTokens.typographyLabelMdFontSize,
+    weight: .medium
+))
+```
+
+There is no `typographyLabelMdFontSize` property on `DesignTokens`. The generated token is `typographyLabelMd`, which is a `Typography` struct. The established pattern in the codebase (ButtonCTA, VerticalListButtonItem) is to access the struct's property:
+
+```swift
+.font(.system(
+    size: DesignTokens.typographyLabelMd.fontSize,
+    weight: .medium
+))
+```
+
+This is a compile error, not a style preference.
+
+#### Issue 2 (Won't Compile): Swift types for LeadingAction, TrailingAction, CloseAction are missing
+
+The view references `LeadingAction`, `TrailingAction`, and `CloseAction` types but they're never defined in any Swift file. The TypeScript definitions exist in `types.ts`, but there's no Swift equivalent.
+
+These need to be defined — either in the NavHeaderPage file or in a shared types file. Based on the TypeScript union types:
+
+```swift
+enum LeadingAction {
+    case back(accessibilityLabel: String? = nil, onPress: () -> Void)
+    case menu(onPress: () -> Void)
+    case custom(icon: IconBaseName, accessibilityLabel: String, onPress: () -> Void)
+}
+
+struct TrailingAction: Identifiable {
+    let id = UUID()
+    let icon: IconBaseName
+    let accessibilityLabel: String
+    let onPress: () -> Void
+    var badge: Int? = nil
+}
+
+struct CloseAction {
+    let onPress: () -> Void
+    var accessibilityLabel: String? = nil
+}
+```
+
+The `switch` statement in `leadingView` already destructures correctly for this enum shape, so the implementation logic is right — just the type definitions are missing.
+
+#### Issue 3 (Missing Implementation): Collapsible scroll is not implemented
+
+The `scrollBehavior` prop exists and `isHidden` state is declared, but there's no actual scroll observation. The implementation just does:
+
+```swift
+.offset(y: isHidden ? -100 : 0)
+.animation(reduceMotion ? nil : .easeInOut(duration: 0.15), value: isHidden)
+```
+
+Nothing ever sets `isHidden` to `true`. There's no `PreferenceKey`, no `ScrollViewReader`, no `UIScrollView` delegate — no scroll tracking at all. The completion doc flags this honestly ("currently offset-based, may need PreferenceKey for real scroll tracking"), but "may need" understates it — there is no scroll tracking.
+
+This is the most complex piece of the iOS implementation. The approach should be:
+
+1. Define a `ScrollOffsetPreferenceKey` that child scroll views report to
+2. Use `.onPreferenceChange` to track scroll position
+3. Compare against the 8px threshold to toggle `isHidden`
+4. Respect `reduceMotion` by never setting `isHidden = true`
+
+The web implementation handles this with `window.addEventListener('scroll')` and a threshold check — the iOS equivalent needs the same logic via SwiftUI's preference key system.
+
+I'd also flag that the offset value `-100` is a magic number. It should be derived from the bar's actual height (which is content-driven with a 48pt floor). If the bar is taller than 100pt (unlikely but possible with custom content), it won't fully hide.
+
+**Counter-argument**: Task 2.5 (behavioral contract tests) depends on 2.3, so maybe Lina intentionally stubbed the scroll behavior to unblock the task chain. If so, it should be explicitly marked as a stub with a TODO, not left as implicit dead code.
+
+#### Issue 4 (Contract Gap): Motion tokens not used for animation
+
+The animation uses:
+```swift
+.animation(reduceMotion ? nil : .easeInOut(duration: 0.15), value: isHidden)
+```
+
+The contract (`animation_collapsible_scroll`) specifies "Animation uses motion tokens (duration, easing)." The schema lists `duration150`, `duration350`, `easingStandard`, `easingAccelerate`, `easingDecelerate` as token dependencies.
+
+Should be:
+```swift
+.animation(reduceMotion ? nil : DesignTokens.MotionModalSlide.easing.speed(1.0 / DesignTokens.MotionModalSlide.duration), value: isHidden)
+```
+
+Or whichever semantic motion token is appropriate for a slide-out animation. `MotionModalSlide` (350ms, decelerate) seems right for a bar sliding off-screen — it's the same "element leaving view" pattern. `.easeInOut(duration: 0.15)` is both the wrong easing and the wrong duration for this interaction.
+
+#### What's Good
+
+- **Composition pattern is correct.** NavHeaderPage composes NavHeaderBase with leading/title/trailing views — clean separation of concerns.
+- **Title alignment** with `.frame(maxWidth: .infinity, alignment:)` is the right SwiftUI approach for centering in the full bar width.
+- **Trailing actions layout** is well-structured — HStack with `spaceGroupedMinimal` gap between actions, `spaceGroupedTight` gap before close. Matches the spec exactly.
+- **Badge rendering** with `if let badge = action.badge, badge > 0` correctly implements the threshold contract.
+- **Reduced motion** via `@Environment(\.accessibilityReduceMotion)` is the correct SwiftUI API.
+- **Close action positioning** at inline-end with the gap spacer is correct.
+- **LeadingAction switch** destructuring is clean and handles all three cases.
+
+#### Summary
+
+| # | Severity | Issue | Fix |
+|---|----------|-------|-----|
+| 1 | Won't compile | `typographyLabelMdFontSize` → `typographyLabelMd.fontSize` | One-line fix |
+| 2 | Won't compile | LeadingAction/TrailingAction/CloseAction Swift types missing | Add enum + structs |
+| 3 | Missing impl | Collapsible scroll has no scroll observation | Implement PreferenceKey-based tracking |
+| 4 | Contract gap | Hard-coded `.easeInOut(duration: 0.15)` instead of motion tokens | Use semantic motion token |
+
+Issues 1 and 2 are quick fixes. Issue 3 is the real work — scroll observation via PreferenceKey is non-trivial but well-documented in SwiftUI. Issue 4 is a one-line fix once the right motion token is chosen.
+
+### Data — Android Implementation Review (Task 2.4)
+
+**File reviewed**: `src/components/core/Nav-Header-Page/platforms/android/NavHeaderPage.android.kt`
+**Date**: 2026-03-31
+
+**Primitive fixes confirmed**: All Task 1.4 blocking feedback addressed (TalkBack semantics, token-driven height, modifier order comment, Box separator). Primitive is solid.
+
+#### Blocking
+
+**F1: No reduced motion handling — contract violation.**
+Contract `animation_collapsible_scroll` requires: "Reduced motion: header remains fixed (visible, collapsible disabled)." `navHeaderCollapsibleConnection()` has no reduced motion check. Needs `LocalReduceMotion` or `ANIMATOR_DURATION_SCALE` check — connection should be a no-op when reduced motion is enabled.
+
+#### Needs Resolution
+
+**F2: `scrollBehavior` prop accepted but not consumed.**
+The parameter exists in the signature but is never read. The composable doesn't conditionally apply behavior based on it, doesn't expose the `NestedScrollConnection`, and doesn't prevent consumers from using the connection when `FIXED`. The prop is decorative. Either wire it to behavior (composable manages/exposes the connection when collapsible) or remove it and document that collapsible is achieved by the consumer attaching `navHeaderCollapsibleConnection()`. Current state is a misleading API.
+
+**F3: No scroll animation — contract gap.**
+Contract says "Animation uses motion tokens (duration, easing)." The connection fires binary `onHide`/`onReveal` callbacks with no animation. A proper implementation should manage an `Animatable` offset translating the header off-screen using motion tokens. Current approach pushes all animation to the consumer, defeating the component's purpose.
+
+**F4: `.dp` on potentially-already-Dp token values.**
+```kotlin
+val trailingGap = DesignTokens.spaceGroupedMinimal.dp
+val closeGap = DesignTokens.spaceGroupedTight.dp
+val androidPadding = DesignTokens.spaceInset100.dp
+```
+Generated `DesignTokens.android.kt` defines spacing semantics as `Dp` values (e.g., `val space_grouped_tight = space_050` where `space_050 = 4.dp`). If these references resolve to `Dp`, appending `.dp` is a compile error. Needs verification — either the token source exposes raw floats (document which), or drop the `.dp` suffix.
+
+#### Non-Blocking
+
+**F5: `colorActionNavigation` for title — questionable semantic fit.**
+`color.action.navigation` is for interactive navigation elements (links, nav items). A page title is a label, not an action. `color.text.default` would be semantically correct. If the navigation color is a deliberate design choice for visual cohesion, it should be documented. If Lina chose it because "navigation bar → navigation color," that's a semantic mismatch.
+
+**F6: Dead `trailingGap` token.**
+`trailingGap` references `spaceGroupedMinimal` but is never used in the composable. Only `closeGap` is used. If intended for inter-trailing-action spacing, the name/value is correct but it's dead code.
+
+#### What Works Well
+
+- Composing `NavHeaderBase` via slot lambdas — correct Stemma inheritance
+- `heading()` semantics on title Text — satisfies h1 contract
+- `TextOverflow.Ellipsis` + `maxLines = 1` — satisfies truncation contract
+- `fillMaxWidth()` with `TextAlign` — correct center/leading alignment approach
+- Android-default `LEADING` — matches platform convention
+- Scroll threshold accumulation logic in `navHeaderCollapsibleConnection` is sound
+
+#### Summary
+
+| Issue | Severity | Blocking? |
+|-------|----------|-----------|
+| F1: No reduced motion | Contract violation | Yes |
+| F2: `scrollBehavior` prop not consumed | Misleading API | Needs resolution |
+| F3: No scroll animation | Contract gap | Needs resolution |
+| F4: `.dp` on Dp tokens | Potential compile error | Needs verification |
+| F5: Title color semantic fit | Design clarification | No |
+| F6: Dead token | Dead code | No |
