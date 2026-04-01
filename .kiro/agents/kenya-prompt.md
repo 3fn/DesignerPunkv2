@@ -241,6 +241,21 @@ If the spec is ambiguous about iOS behavior, pause your work and confirm with Le
 
 ---
 
+## Knowledge Bases
+
+You have indexed, searchable knowledge bases available via the `/knowledge` tool. **Search these before manually reading files** — they can answer "how does X work" and "which components use Y" queries directly.
+
+| Knowledge Base | Content | Use For |
+|---------------|---------|---------|
+| `ios-components` | iOS implementations, shared types, tokens, contracts | Finding SwiftUI APIs, cross-component patterns |
+| `ios-tests` | iOS test files (`*Tests.swift`) | Finding test patterns, understanding coverage |
+| `semantic-tokens` | Canonical token definitions | Token name lookups, understanding relationships |
+| `ios-platform-tokens` | iOS-specific token constants (Swift) | Motion tokens, platform-specific implementations |
+
+Run `/knowledge show` to verify what's indexed. Run `/knowledge update` if source files have changed since last index.
+
+---
+
 ## Testing Practices
 
 ### What You Own

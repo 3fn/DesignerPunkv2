@@ -13,7 +13,7 @@
 | 0 | Top bar (nav bar / app bar) | Lina (component spec) | Direct — new component spec | TBD (new spec) | Not started |
 | 1 | Content list item | Lina (component spec) | Direct — new component spec | TBD (new spec) | Not started |
 | 2 | Linear progress bar | Lina (component spec) | Direct — new component spec | TBD (new spec) | Not started |
-| 3 | Container-Card-Base readiness | Lina (readiness) | Holistic — composition refactor (Spec 085) + two-part readiness model (Spec 086 synthesis) | Spec 085 (complete), Spec 086 (in progress) | Partially addressed |
+| 3 | Container-Card-Base readiness | Lina (readiness) | Holistic — composition refactor (Spec 085) + two-part readiness model (Spec 086) | Spec 085 (complete), Spec 086 (complete) | Complete |
 
 ---
 
@@ -40,9 +40,9 @@
 
 | # | Gap | Original Downstream | Resolution Approach | Resolution Vehicle | Status |
 |---|-----|--------------------|--------------------|-------------------|--------|
-| 16 | Purpose search misses | Lina (meta enrichment) | Holistic — purpose rewrite with consumer search terms + Option C extraction from family docs | Spec 086 | In progress |
-| 17 | Context/purpose cross-ref | Lina (content fix) | Holistic — controlled vocabulary for contexts + Option C extraction | Spec 086 | In progress |
-| 18 | Dashboard context underserved | Lina (meta enrichment) | Holistic — controlled vocabulary + context enrichment via extraction | Spec 086 | In progress |
+| 16 | Purpose search misses | Lina (meta enrichment) | Holistic — purpose rewrite with consumer search terms + extraction from family docs | Spec 086 (complete) | Complete |
+| 17 | Context/purpose cross-ref | Lina (content fix) | Holistic — controlled vocabulary (14 values) + extraction pipeline | Spec 086 (complete) | Complete |
+| 18 | Dashboard context underserved | Lina (meta enrichment) | Holistic — controlled vocabulary + context enrichment. `find_components({ context: "dashboards" })` returns 7 components | Spec 086 (complete) | Complete |
 | 19 | Pattern names error | Task 2.3 (resolved) | Direct — already resolved | Spec 083 Task 2.3 | Complete |
 
 ---
@@ -51,13 +51,12 @@
 
 | Status | Count |
 |--------|-------|
-| Complete | 1 (#19) |
-| In progress | 4 (#3, #16, #17, #18) |
+| Complete | 5 (#3, #16, #17, #18, #19) |
 | Reframed | 3 (#4, #7, #13) |
 | Not started | 3 (#0, #1, #2) |
 | Dependent | 1 (#9) |
 | Deferred | 1 (#11) |
-| Closed (product-specific) | 6 (#5, #6, #8, #10, #12, #14, #15) |
+| Closed (product-specific) | 7 (#5, #6, #8, #10, #12, #14, #15) |
 
 ---
 

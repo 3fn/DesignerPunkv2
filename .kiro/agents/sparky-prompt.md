@@ -242,6 +242,20 @@ If the spec is ambiguous about Web behavior, pause your work and confirm with Le
 
 ---
 
+## Knowledge Bases
+
+You have indexed, searchable knowledge bases available via the `/knowledge` tool. **Search these before manually reading files** — they can answer "how does X work" and "which components use Y" queries directly.
+
+| Knowledge Base | Content | Use For |
+|---------------|---------|---------|
+| `web-components` | Web implementations, shared types, tokens, contracts | Finding component APIs, cross-component patterns |
+| `web-tests` | Web test files (`.test.ts`) | Finding test patterns, understanding coverage |
+| `semantic-tokens` | Canonical token definitions | Token name lookups, understanding relationships |
+
+Run `/knowledge show` to verify what's indexed. Run `/knowledge update` if source files have changed since last index.
+
+---
+
 ## Testing Practices
 
 ### What You Own

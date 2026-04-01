@@ -111,6 +111,7 @@ This session defines the detailed patterns that implement these principles.
 - Cross-MCP reference pattern specification
 - Product MCP tool design (query interface)
 - Template or convention for product teams adopting DesignerPunk
+- Dedicated MCP agent definition and creation (see below)
 
 ### Out of Scope
 - Product MCP server implementation (separate engineering spec)
@@ -131,6 +132,33 @@ This spec is a direct child of Spec 070's MCP Relationship Model. It does not re
 | Access model (who queries what) | Product MCP query tools |
 | Interface contract principles | Detailed reference syntax and validation |
 | Product primitives concept | Product primitives schema |
+| — | Dedicated MCP agent (new) |
+
+---
+
+## Dedicated MCP Agent
+
+**Added**: 2026-03-29 (from Spec 086 Task 5.1 scope boundary discussion)
+
+With three MCPs in production, no single existing agent owns the cross-cutting infrastructure concerns. A dedicated MCP agent should be defined and created as part of this spec so it's born alongside the Product MCP with all three MCPs in scope from day one.
+
+### Proposed Scope
+- Index health monitoring across all three MCPs
+- Metadata validation (correct headers, required fields)
+- Cross-MCP reference integrity (stability contract enforcement)
+- Rebuild triggers when indexes are stale or corrupted
+- Recommending alignment specs or tasks when drift is detected between MCPs
+
+### Operating Model
+- **Audits and recommends** — does not modify domain content
+- Domain agents (Ada, Lina) still own their content; the MCP agent owns infrastructure and integrity
+- Same audit-vs-write distinction as Thurgood's test governance role
+
+### Open Questions
+1. Agent name and identity
+2. Which tools does it need access to? (All three MCPs' health/index tools at minimum)
+3. Does it need write access to any MCP configuration, or is it purely advisory?
+4. Relationship to Thurgood — Thurgood currently uses Documentation MCP tools for spec work. Does the MCP agent subsume that, or do they coexist?
 
 ---
 

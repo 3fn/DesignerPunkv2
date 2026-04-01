@@ -168,6 +168,15 @@ export {
   getAllGlowBlurTokens
 } from './GlowBlurTokens';
 
+// Unified blur tokens
+export {
+  BLUR_BASE_VALUE,
+  blur,
+  blurNames,
+  getBlurToken,
+  getAllBlurTokens
+} from './BlurTokens';
+
 export {
   GLOW_OPACITY_BASE_VALUE,
   glowOpacity,
@@ -253,6 +262,7 @@ import { breakpointTokens } from './BreakpointTokens';
 import { durationTokens } from './DurationTokens';
 import { easingTokens } from './EasingTokens';
 import { scaleTokens } from './ScaleTokens';
+import { blur } from './BlurTokens';
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 
 /**
@@ -277,7 +287,8 @@ export const allTokens = {
   [TokenCategory.BREAKPOINT]: breakpointTokens,
   [TokenCategory.EASING]: easingTokens,
   [TokenCategory.DURATION]: durationTokens,
-  [TokenCategory.SCALE]: scaleTokens
+  [TokenCategory.SCALE]: scaleTokens,
+  [TokenCategory.BLUR]: blur
 };
 
 /**
@@ -310,7 +321,8 @@ export function getAllPrimitiveTokens(): PrimitiveToken[] {
     ...Object.values(breakpointTokens),
     ...Object.values(durationTokens),
     ...Object.values(easingTokens),
-    ...Object.values(scaleTokens)
+    ...Object.values(scaleTokens),
+    ...Object.values(blur)
   ];
 }
 

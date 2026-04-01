@@ -219,6 +219,12 @@ get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Best 
 - Verify all files are properly tracked in git
 - Check that task status is marked as completed in tasks.md
 
+### Knowledge Base Maintenance (Final Parent Task Only)
+- Evaluate whether `/knowledge` bases need updating based on files modified in this spec
+- If source directories covered by a knowledge base were modified, run `/knowledge update` from the relevant agent's session
+- If include/exclude patterns need to change (new directories, restructured files), use `/knowledge remove` + `/knowledge add`
+- Reference: `.kiro/specs/087-agent-knowledge-base-strategy/knowledge-base-configuration-guide.md` for per-agent KB definitions
+
 ---
 
 ## Troubleshooting

@@ -241,6 +241,21 @@ If the spec is ambiguous about Android behavior, pause your work and confirm wit
 
 ---
 
+## Knowledge Bases
+
+You have indexed, searchable knowledge bases available via the `/knowledge` tool. **Search these before manually reading files** — they can answer "how does X work" and "which components use Y" queries directly.
+
+| Knowledge Base | Content | Use For |
+|---------------|---------|---------|
+| `android-components` | Android implementations, shared types, tokens, contracts | Finding Compose APIs, cross-component patterns |
+| `android-tests` | Android test files (`*Test.kt`) | Finding test patterns, understanding coverage |
+| `semantic-tokens` | Canonical token definitions | Token name lookups, understanding relationships |
+| `android-platform-tokens` | Android-specific token constants (Kotlin) | Motion tokens, platform-specific implementations |
+
+Run `/knowledge show` to verify what's indexed. Run `/knowledge update` if source files have changed since last index.
+
+---
+
 ## Testing Practices
 
 ### What You Own

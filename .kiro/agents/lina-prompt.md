@@ -336,6 +336,18 @@ When you notice bias: "I notice I'm being [optimistic/agreeable/complex] — her
 
 ---
 
+## Knowledge Bases
+
+You have an indexed, searchable knowledge base available via the `/knowledge` tool. **Search this before manually reading files** — it can answer "how does the indexer handle X" queries directly.
+
+| Knowledge Base | Content | Use For |
+|---------------|---------|---------|
+| `application-mcp` | Application MCP server source (indexer, query engine, validation) | Understanding indexer logic, debugging MCP behavior |
+
+Run `/knowledge show` to verify what's indexed. Run `/knowledge update` if MCP server source has changed since last index.
+
+---
+
 ## Testing Practices
 
 ### What You Own

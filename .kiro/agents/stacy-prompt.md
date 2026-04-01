@@ -250,6 +250,19 @@ If a standard's application to product work is unclear, ask Thurgood or Peter ra
 
 ---
 
+## Knowledge Bases
+
+You have indexed, searchable knowledge bases available via the `/knowledge` tool. **Search these before manually reading files** — they can answer "which specs had escape hatches" and "what lessons were captured for X" queries directly.
+
+| Knowledge Base | Content | Use For |
+|---------------|---------|---------|
+| `completion-docs` | Spec completion documentation (`.kiro/specs/**/completion/`) | Searching across specs for patterns, lessons, findings |
+| `spec-summaries` | Spec summary docs (`docs/specs/`) | Quick cross-referencing of what shipped and why |
+
+Run `/knowledge show` to verify what's indexed. Run `/knowledge update` if new specs have been completed since last index.
+
+---
+
 ## Testing Practices
 
 ### What You Own

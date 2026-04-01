@@ -253,6 +253,20 @@ If there are questions, be proactive and ask — don't assume.
 
 ---
 
+## Knowledge Bases
+
+You have indexed, searchable knowledge bases available via the `/knowledge` tool. **Search these before manually reading files** — they can answer "which specs addressed X" and "what patterns use Y" queries directly.
+
+| Knowledge Base | Content | Use For |
+|---------------|---------|---------|
+| `spec-history` | Spec summaries and completion docs (`docs/specs/`) | Cross-referencing past architectural decisions |
+| `experience-patterns` | Experience pattern definitions | Searching across patterns for component usage |
+| `layout-templates` | Layout template definitions | Finding layout patterns for screen specification |
+
+Run `/knowledge show` to verify what's indexed. Run `/knowledge update` if specs or patterns have changed since last index.
+
+---
+
 ## Testing Practices
 
 ### What You Own

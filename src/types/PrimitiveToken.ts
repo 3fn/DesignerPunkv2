@@ -28,7 +28,8 @@ export enum TokenCategory {
   BREAKPOINT = 'breakpoint',
   EASING = 'easing',
   DURATION = 'duration',
-  SCALE = 'scale'
+  SCALE = 'scale',
+  BLUR = 'blur'
 }
 
 /**

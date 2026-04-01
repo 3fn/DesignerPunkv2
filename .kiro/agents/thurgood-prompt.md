@@ -302,6 +302,20 @@ When you notice bias: "I notice I'm being [optimistic/agreeable/complex/alarmist
 
 ---
 
+## Knowledge Bases
+
+You have indexed, searchable knowledge bases available via the `/knowledge` tool. **Search these before manually reading files** — they can answer "which tests cover X" and "how is Y tested" queries directly.
+
+| Knowledge Base | Content | Use For |
+|---------------|---------|---------|
+| `test-infrastructure` | Shared test utilities (`src/__tests__/`) | Finding test helpers, fixtures, shared patterns |
+| `mcp-tests` | Application MCP compliance tests | Auditing MCP test coverage, understanding compliance checks |
+| `component-tests` | Component-level test files | Auditing component test coverage, finding test patterns |
+
+Run `/knowledge show` to verify what's indexed. Run `/knowledge update` if test files have changed since last index.
+
+---
+
 ## Testing Practices
 
 ### What You Own

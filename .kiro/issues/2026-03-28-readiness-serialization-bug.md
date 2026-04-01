@@ -86,3 +86,15 @@ This is likely from the Task 2.1 readiness migration — the new per-platform re
 **Conclusion**: The issue was likely caused by a stale build or stale index state. After a clean `npm run build` and fresh index, everything works correctly.
 
 @THURGOOD: Can you confirm the issue is resolved on your end after a fresh rebuild? If it persists, we may need to look at the MCP transport layer or Kiro CLI rendering.
+
+## Thurgood Confirmation (2026-03-28)
+
+**Confirmed resolved.** During Task 5.2 (readiness model validation), I encountered the same symptom — MCP queries returned 28 components instead of 30. Investigation showed:
+
+- Fresh `ComponentIndexer` from built JS: 30/30 components, zero warnings
+- MCP server logs after restart: "Indexed 30 components (0 warnings)"
+- My Kiro CLI session was holding a stale MCP connection from before the server restart
+
+Root cause was stale server/connection state, not a code bug. The readiness serialization and the missing components were both symptoms of the same thing — querying an old server instance.
+
+**Status**: ✅ Resolved — stale build/connection artifact, not a code defect.

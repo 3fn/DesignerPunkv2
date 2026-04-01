@@ -54,3 +54,15 @@ description: Platform-specific file paths for component implementations, tokens,
 - Web tests live in the component-level `__tests__/` directory (`.test.ts`). iOS and Android tests live in their respective platform directories.
 - `component-meta.yaml` is a generated artifact (via `npm run extract:meta`). Purpose and contexts are extracted from family docs; usage and alternatives may be hand-authored.
 - `dist/` contains build artifacts — not source files. Do not reference for implementation work.
+
+## Indexed Knowledge Bases
+
+Platform agents have searchable, platform-filtered knowledge bases available via the `/knowledge` tool. Use these **before** manually navigating files — they can answer "how does X work" and "which components use Y" queries directly.
+
+| Knowledge Base | Content | Use For |
+|---------------|---------|---------|
+| `web-components` / `ios-components` / `android-components` | Platform implementations, shared types, tokens, contracts | Finding component APIs, cross-component patterns, token usage |
+| `web-tests` / `ios-tests` / `android-tests` | Platform test files | Finding test patterns, understanding test coverage |
+| `semantic-tokens` | Canonical token definitions | Token name lookups, understanding token relationships |
+
+**Tip**: Try a natural language search first (e.g., "how does Button-CTA handle icon integration"). Fall back to `fs_read` only if the knowledge base doesn't have what you need.
