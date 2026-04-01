@@ -89,7 +89,7 @@
     - Verify `npm test` — full suite passes
     - _Requirements: 5.3_
 
-  - [ ] 1.7 Update documentation
+  - [x] 1.7 Update documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada

@@ -33,45 +33,38 @@ Glow primitives are the foundational building blocks for creating emphasis effec
 
 ### Glow Blur Tokens
 
-Glow blur determines the radial spread of glow effects. Glow blur tokens use an extended blur range compared to shadow blur tokens, providing larger blur amounts suitable for emphasis and energy effects.
+Glow blur primitives are part of the unified Blur Token Family. See [Token-Family-Blur.md](Token-Family-Blur.md) for the complete blur primitive scale.
 
-| Token | Value | Description | Use Case |
-|-------|-------|-------------|----------|
-| `glowBlur100` | 8px | Base glow blur value | Subtle glow effects, small elements |
-| `glowBlur200` | 16px | Moderate glow blur | Standard glow effects, medium elements |
-| `glowBlur300` | 24px | Strong glow blur | Prominent glow effects, large elements |
-| `glowBlur400` | 32px | Intense glow blur | Dramatic glow effects, hero elements |
-| `glowBlur500` | 40px | Maximum glow blur | Maximum emphasis, focal points |
+Glow effects use the upper range of the blur scale for radial spread:
 
-**Mathematical Foundation**: Base value = 8px (8px baseline grid alignment)
-
-**Scale Progression**: Linear progression with base × multiplier (1x, 2x, 3x, 4x, 5x)
-
-**Comparison to Shadow Blur**:
-- Shadow blur range: 4px - 24px (for depth effects)
-- Glow blur range: 8px - 40px (for emphasis effects)
-- Glow blur starts higher and extends further for radial spread
+| Glow Use | Blur Token | Value |
+|----------|------------|-------|
+| Subtle glow | `blur050` | 8 |
+| Standard glow | `blur100` | 16 |
+| Strong glow | `blur150` | 24 |
+| Intense glow | `blur200` | 32 |
+| Maximum glow | `blur250` | 40 |
 
 #### Usage Examples
 
 ```typescript
 // Subtle glow for small interactive elements
 const subtleGlow = {
-  blur: 'glowBlur100',  // 8px
+  blur: 'blur050',  // 8px
   opacity: 'glowOpacity100',  // 0.8
   color: 'glow.neonPurple'
 };
 
 // Standard glow for buttons and CTAs
 const standardGlow = {
-  blur: 'glowBlur200',  // 16px
+  blur: 'blur100',  // 16px
   opacity: 'glowOpacity200',  // 0.6
   color: 'glow.neonCyan'
 };
 
 // Dramatic glow for hero elements
 const dramaticGlow = {
-  blur: 'glowBlur500',  // 40px
+  blur: 'blur250',  // 40px
   opacity: 'glowOpacity100',  // 0.8
   color: 'glow.neonYellow'
 };

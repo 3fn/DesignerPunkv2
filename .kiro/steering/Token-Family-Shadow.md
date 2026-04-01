@@ -70,24 +70,18 @@ Vertical offsets scale with depth (all positive - shadows fall downward):
 
 ### Shadow Blur Tokens
 
-Shadow blur determines edge definition based on shadow quality and depth.
+Shadow blur primitives are part of the unified Blur Token Family. See [Token-Family-Blur.md](Token-Family-Blur.md) for the complete blur primitive scale.
 
-#### Quality-Based Blur
+Shadow composites reference these blur primitives:
 
-| Token | Value | Description | Use Case |
-|-------|-------|-------------|----------|
-| `shadowBlurHard` | 4px | Sharp, defined edges | Strong shadows, high contrast |
-| `shadowBlurModerate` | 12px | Balanced definition | Standard UI shadows |
-| `shadowBlurSoft` | 20px | Diffuse, gentle edges | Subtle shadows, hover states |
-
-#### Depth-Based Blur
-
-| Token | Value | Description | Use Case |
-|-------|-------|-------------|----------|
-| `shadowBlurDepth200` | 16px | Increased blur for raised elements | Modals, elevated cards |
-| `shadowBlurDepth300` | 24px | Maximum blur for floating elements | FABs, tooltips |
-
-**Mathematical Foundation**: Base value = 4px, scales with multipliers (1x, 3x, 4x, 5x, 6x)
+| Shadow Use | Blur Token | Value |
+|-----------|------------|-------|
+| No shadow | `blur000` | 0 |
+| Sharp edges | `blur025` | 4 |
+| Standard UI | `blur075` | 12 |
+| Raised elements | `blur100` | 16 |
+| Subtle/hover | `blur125` | 20 |
+| Floating elements | `blur150` | 24 |
 
 ### Shadow Opacity Tokens
 
