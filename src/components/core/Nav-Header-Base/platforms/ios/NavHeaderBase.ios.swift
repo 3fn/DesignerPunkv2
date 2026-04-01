@@ -25,6 +25,9 @@ enum NavHeaderTokens {
     // Separator (contract: visual_separator)
     static let separatorColor: Color = Color(DesignTokens.colorStructureBorderSubtle)
     static let separatorWidth: CGFloat = DesignTokens.borderWidth100
+
+    // Touch target (contract: accessibility_touch_target)
+    static let minHeight: CGFloat = DesignTokens.tapAreaRecommended
 }
 
 // MARK: - Nav-Header-Base View
@@ -56,7 +59,7 @@ struct NavHeaderBase<Leading: View, Title: View, Trailing: View>: View {
                 trailingSlot
                     .accessibilitySortPriority(1)
             }
-            .frame(minHeight: 48)
+            .frame(minHeight: NavHeaderTokens.minHeight)
             .background(backgroundView)
 
             // Separator (contract: visual_separator)
@@ -67,11 +70,12 @@ struct NavHeaderBase<Leading: View, Title: View, Trailing: View>: View {
                     .accessibilityHidden(true)
             }
         }
+        // Safe area: background extends behind status bar, content stays below
+        // (contract: layout_safe_area)
+        .ignoresSafeArea(.container, edges: .top)
         .accessibilityElement(children: .contain)
         .accessibilityAddTraits(.isHeader)
-        .if(testID != nil) { view in
-            view.accessibilityIdentifier(testID!)
-        }
+        .accessibilityIdentifier(testID ?? "")
     }
 
     // MARK: - Background
@@ -82,9 +86,9 @@ struct NavHeaderBase<Leading: View, Title: View, Trailing: View>: View {
         case .opaque:
             NavHeaderTokens.canvasBackground
         case .translucent:
-            // iOS system material for translucent backdrop
-            // blur050→.systemUltraThinMaterial, blur100→.systemThinMaterial, blur150→.systemMaterial
-            Color.clear.background(.thinMaterial)
+            // iOS system material for translucent backdrop (Kenya R1: use .system* variants)
+            // blur100 → .systemThinMaterial (designed for system chrome like navigation bars)
+            Color.clear.background(.systemThinMaterial)
         }
     }
 }
@@ -94,13 +98,4 @@ struct NavHeaderBase<Leading: View, Title: View, Trailing: View>: View {
 enum NavHeaderAppearance {
     case opaque
     case translucent
-}
-
-// MARK: - Conditional Modifier
-
-private extension View {
-    @ViewBuilder
-    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition { transform(self) } else { self }
-    }
 }

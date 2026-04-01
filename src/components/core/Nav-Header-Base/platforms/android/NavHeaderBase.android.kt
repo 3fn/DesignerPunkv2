@@ -21,17 +21,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 
@@ -45,6 +44,9 @@ object NavHeaderTokens {
     // Separator (contract: visual_separator)
     val separatorColor: Color = Color(DesignTokens.colorStructureBorderSubtle)
     val separatorWidth = DesignTokens.borderWidth100.dp
+
+    // Touch target (contract: accessibility_touch_target)
+    val minHeight = DesignTokens.tapAreaRecommended.dp
 }
 
 /** Appearance mode for Nav-Header-Base. */
@@ -81,18 +83,23 @@ fun NavHeaderBase(
         NavHeaderAppearance.TRANSLUCENT -> NavHeaderTokens.canvasBackground
     }
 
+    // Modifier order matters for edge-to-edge:
+    // 1. .background() first — extends behind status bar
+    // 2. .windowInsetsPadding() second — pushes content below status bar
+    // This ensures the background fills the status bar area while content stays safe.
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
             .windowInsetsPadding(WindowInsets.statusBars)
+            .semantics { contentDescription = "Navigation bar" }
             .then(if (testID != null) Modifier.testTag(testID) else Modifier)
     ) {
         // Three-region layout (contract: layout_three_regions)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 48.dp),
+                .heightIn(min = NavHeaderTokens.minHeight),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Leading region (inline-start)
@@ -110,11 +117,13 @@ fun NavHeaderBase(
             Box { trailingSlot() }
         }
 
-        // Separator (contract: visual_separator)
+        // Separator (contract: visual_separator) — token-driven, no Material Divider
         if (showSeparator) {
-            Divider(
-                color = NavHeaderTokens.separatorColor,
-                thickness = NavHeaderTokens.separatorWidth,
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(NavHeaderTokens.separatorWidth)
+                    .background(NavHeaderTokens.separatorColor)
             )
         }
     }
