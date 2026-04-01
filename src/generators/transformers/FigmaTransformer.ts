@@ -113,6 +113,7 @@ const PRIMITIVE_GROUPS = [
   'easing',
   'scale',
   'blend',
+  'blur',
 ] as const;
 
 /**

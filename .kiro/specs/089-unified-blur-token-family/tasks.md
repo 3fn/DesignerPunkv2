@@ -58,7 +58,7 @@
     - Verify: glow-related tests pass (zero consumer updates expected)
     - _Requirements: 3.1, 3.2_
 
-  - [ ] 1.4 Update generation pipeline and regenerate
+  - [x] 1.4 Update generation pipeline and regenerate
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada

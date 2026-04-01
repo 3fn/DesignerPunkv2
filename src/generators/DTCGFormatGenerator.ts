@@ -139,6 +139,7 @@ export class DTCGFormatGenerator {
     output.easing = this.generateEasingTokens();
     output.scale = this.generateScaleTokens();
     output.blend = this.generateBlendTokens();
+    output.blur = this.generateBlurTokens();
 
     // --- Semantic token groups ---
     output.semanticColor = this.generateSemanticColorTokens();
@@ -492,6 +493,18 @@ export class DTCGFormatGenerator {
     for (const [key, token] of Object.entries(scaleTokens)) {
       const extensions = this.buildPrimitiveExtensions(token, 'scale', SCALE_BASE_VALUE);
       group[key] = this.toDTCGToken(token.baseValue, 'number', token.description, extensions);
+    }
+    return group;
+  }
+
+  /**
+   * Generate blur primitive tokens as DTCG dimension type.
+   */
+  private generateBlurTokens(): DTCGGroup {
+    const group: DTCGGroup = { $type: 'dimension' };
+    for (const [key, token] of Object.entries(blurTokens)) {
+      const extensions = this.buildPrimitiveExtensions(token, 'blur', BLUR_BASE_VALUE);
+      group[key] = this.toDTCGToken(`${token.baseValue}px`, 'dimension', token.description, extensions);
     }
     return group;
   }
