@@ -270,12 +270,12 @@ describe('token completeness', () => {
       EasingTokens: 'easing',
       ScaleTokens: 'scale',
       BlendTokens: 'blend',
-      // Shadow primitives are folded into the shadow group
-      ShadowBlurTokens: 'shadow',
+      // Shadow primitives are folded into the shadow group (blur moved to unified blur group)
       ShadowOffsetTokens: 'shadow',
       ShadowOpacityTokens: 'shadow',
-      // Glow primitives have their own group
-      GlowBlurTokens: 'glow',
+      // Unified blur primitives have their own group
+      BlurTokens: 'blur',
+      // Glow opacity remains in glow group (glow blur moved to unified blur group)
       GlowOpacityTokens: 'glow',
     };
 

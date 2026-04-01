@@ -69,7 +69,7 @@
     - Verify: all 9 blur primitives present in generated output, existing shadow/glow values unchanged
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-  - [ ] 1.5 Migrate and add tests
+  - [x] 1.5 Migrate and add tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
