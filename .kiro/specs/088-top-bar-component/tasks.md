@@ -57,19 +57,19 @@
     - Verify: renders correctly in browser, landmark semantics correct
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 4.1_
 
-  - [ ] 1.3 iOS implementation
+  - [x] 1.3 iOS implementation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Kenya reviews after completion)
+    **Agent**: Lina (pending Kenya review) (Kenya reviews after completion)
     - Create `platforms/ios/NavHeaderBase.ios.swift`
     - Implement: SwiftUI View, three-region HStack, safe area (status bar), opaque/translucent appearance (system materials: blur050→.systemUltraThinMaterial, blur100→.systemThinMaterial, blur150→.systemMaterial), bottom separator, focus order
     - Verify: renders correctly, safe area integration works
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 4.1, 4.8_
 
-  - [ ] 1.4 Android implementation
+  - [x] 1.4 Android implementation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Data reviews after completion)
+    **Agent**: Lina (pending Data review) (Data reviews after completion)
     - Create `platforms/android/NavHeaderBase.android.kt`
     - Implement: Compose Row, three-region layout, safe area (system bar), opaque appearance (solid background for translucent — blur tokens available but not consumed), bottom separator, focus order
     - Verify: renders correctly, safe area integration works
