@@ -3,7 +3,7 @@
 **Date**: 2026-04-03
 **Author**: Ada
 **Purpose**: Define a new primitive token family for component dimensions (width, height, box size)
-**Status**: Design Outline — Draft
+**Status**: Complete (2026-04-03)
 **Origin**: Audit of 6+ component families using spacing primitives for non-spacing dimensional values
 
 ---

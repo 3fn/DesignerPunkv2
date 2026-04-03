@@ -2,7 +2,7 @@
 
 **Date**: 2026-04-03
 **Spec**: 092 - Sizing Token Family
-**Status**: Implementation
+**Status**: Complete
 **Agent**: Ada (primitives, pipeline), Lina (component token files)
 **Dependencies**: None (Spec 090 benefits from this spec)
 **Constraint**: Zero visual change
@@ -147,7 +147,7 @@
     - Regenerate `dist/` and verify all platform output correct
     - _Requirements: 2.7, 3.4, 4.3_
 
-- [ ] 3. Documentation
+- [x] 3. Documentation
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -165,7 +165,7 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Sizing Documentation"`
 
-  - [ ] 3.1 Create Token-Family-Sizing.md
+  - [x] 3.1 Create Token-Family-Sizing.md
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -173,7 +173,7 @@
     - Verify: queryable via Documentation MCP `get_section()`
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 3.2 Update existing documentation
+  - [x] 3.2 Update existing documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada

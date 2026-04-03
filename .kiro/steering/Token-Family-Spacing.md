@@ -20,6 +20,8 @@ description: Spacing token family — layout and component spacing on 8-unit bas
 
 The DesignerPunk spacing token system provides a mathematically consistent foundation for layout and component spacing across all platforms. Spacing tokens follow an 8-unit baseline grid with strategic flexibility exceptions, using numeric naming that exposes mathematical relationships.
 
+**Spacing is for gaps between and around elements** — margins, padding, gutters. For component dimensions (widths, heights, box sizes), use the [Sizing Token Family](Token-Family-Sizing.md) instead.
+
 **Key Principles**:
 - **Numeric Naming**: Token names use numbers (050, 100, 150, etc.) that represent mathematical relationships
 - **Mathematical Foundation**: All values derive from base unit (space100 = 8px) with clear multipliers

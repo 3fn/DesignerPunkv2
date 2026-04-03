@@ -31,6 +31,7 @@ This document serves as a routing table for token documentation—it helps AI ag
 |------------|---------|-------------------|
 | Color | Semantic color tokens organized by concept (feedback, identity, action, contrast, structure) | `.kiro/steering/Token-Family-Color.md` |
 | Spacing | Layout spacing values based on 8px baseline grid (stack, inline, inset patterns) | `.kiro/steering/Token-Family-Spacing.md` |
+| Sizing | Component dimensions (width, height, box size) based on 8px grid — separate from spacing | `.kiro/steering/Token-Family-Sizing.md` |
 | Typography | Font styles and sizes combining fontSize, lineHeight, fontFamily, fontWeight, letterSpacing | `.kiro/steering/Token-Family-Typography.md` |
 | Shadow | Elevation shadows for depth and hierarchy (sm, md, lg, xl levels) | `.kiro/steering/Token-Family-Shadow.md` |
 | Glow | Glow effects for emphasis and interactive states | `.kiro/steering/Token-Family-Glow.md` |
