@@ -44,43 +44,49 @@ Today we don't have density modes, so the coupling is theoretical. But the seman
 
 ## Mathematical Foundation
 
-**Base value**: 16 (consistent with `fontSize100`, `blur100`)
+**Base value**: 8 (aligns with the 8px baseline grid and spacing base — `size100 = 8` means one grid unit, matching `space100 = 8`)
 
 ### Proposed Scale
 
 | Token | Formula | Value | Consumers |
 |-------|---------|-------|-----------|
-| `size025` | base × 0.25 | 4 | Progress-Bar sm |
-| `size050` | base × 0.5 | 8 | Progress-Bar md |
-| `size075` | base × 0.75 | 12 | Progress-Bar lg, Progress-Node sm |
-| `size100` | base × 1 | 16 | Progress-Node md |
-| `size150` | base × 1.5 | 24 | Progress-Node lg, Checkbox sm, Radio sm, Avatar xs |
-| `size200` | base × 2 | 32 | Button-Icon sm, Checkbox md, Radio md, Avatar sm |
-| `size250` | base × 2.5 | 40 | Button-Icon md, Checkbox lg, Radio lg, Avatar md |
-| `size300` | base × 3 | 48 | Button-Icon lg, Avatar lg |
-| `size500` | base × 5 | 80 | Avatar xl |
-| `size800` | base × 8 | 128 | Avatar xxl |
+| `size050` | base × 0.5 | 4 | Progress-Bar sm |
+| `size100` | base × 1 | 8 | Progress-Bar md |
+| `size150` | base × 1.5 | 12 | Progress-Bar lg, Progress-Node sm |
+| `size200` | base × 2 | 16 | Progress-Node md |
+| `size300` | base × 3 | 24 | Progress-Node lg, Checkbox sm, Radio sm, Avatar xs |
+| `size400` | base × 4 | 32 | Button-Icon sm, Checkbox md, Radio md, Avatar sm |
+| `size500` | base × 5 | 40 | Button-Icon md, Checkbox lg, Radio lg, Avatar md |
+| `size600` | base × 6 | 48 | Button-Icon lg, Avatar lg |
+| `size700` | base × 7 | 56 | (available) |
+| `size800` | base × 8 | 64 | (available) |
+| `size1000` | base × 10 | 80 | Avatar xl |
+| `size1600` | base × 16 | 128 | Avatar xxl |
 
-10 tokens covering all existing component sizing values. All multiples of 4 (baseline grid aligned).
+12 tokens covering all existing component sizing values plus two preemptive values (56, 64). All multiples of 4 (baseline grid aligned).
 
-**Note**: The scale has a gap between `size300` (48) and `size500` (80). This reflects actual usage — no component currently needs 56 or 64 as a dimension. We can add `size350` (56), `size400` (64) later if needed. The naming convention accommodates this without renumbering.
+**Why base 8 instead of 16**: Sizing and spacing are the most closely related families — same grid, same value ranges, same consumers (component tokens). Having `size300 = 24` match `space300 = 24` is immediately intuitive. The numeric suffixes mean the same thing across both families. This outweighs consistency with blur (`blur100 = 16`) and fontSize (`fontSize100 = 16`), which operate in different domains.
+
+**Note**: The scale has a gap between `size800` (64) and `size1000` (80), and between `size1000` (80) and `size1600` (128). This reflects actual usage — Avatar xl and xxl are exceptional sizes. The naming convention accommodates future additions (e.g., `size900` = 72, `size1200` = 96) without renumbering.
 
 ### Comparison to Spacing Scale
 
 | Value | Spacing Token | Sizing Token | Both Exist? |
 |-------|--------------|-------------|-------------|
-| 4 | `space050` | `size025` | ✅ |
-| 8 | `space100` | `size050` | ✅ |
-| 12 | `space150` | `size075` | ✅ |
-| 16 | `space200` | `size100` | ✅ |
-| 24 | `space300` | `size150` | ✅ |
-| 32 | `space400` | `size200` | ✅ |
-| 40 | `space500` | `size250` | ✅ |
-| 48 | `space600` | `size300` | ✅ |
-| 80 | — | `size500` | Sizing only |
-| 128 | — | `size800` | Sizing only |
+| 4 | `space050` | `size050` | ✅ |
+| 8 | `space100` | `size100` | ✅ |
+| 12 | `space150` | `size150` | ✅ |
+| 16 | `space200` | `size200` | ✅ |
+| 24 | `space300` | `size300` | ✅ |
+| 32 | `space400` | `size400` | ✅ |
+| 40 | `space500` | `size500` | ✅ |
+| 48 | `space600` | `size600` | ✅ |
+| 56 | `space700` | `size700` | ✅ |
+| 64 | `space800` | `size800` | ✅ |
+| 80 | — | `size1000` | Sizing only |
+| 128 | — | `size1600` | Sizing only |
 
-The values overlap significantly — that's expected, since both are built on the baseline grid. The difference is semantic, not mathematical. The naming differs because the base values differ (spacing base = 8, sizing base = 16).
+With base 8, the numeric suffixes align perfectly between spacing and sizing for all shared values. The difference is purely semantic — spacing describes gaps, sizing describes dimensions.
 
 ---
 
@@ -115,9 +121,9 @@ The sizing primitive family is for **component box dimensions** — the physical
 
 | Old Reference | New Reference | Value (unchanged) |
 |--------------|--------------|-------------------|
-| `space600` | `size300` | 48 |
-| `space500` | `size250` | 40 |
-| `space400` | `size200` | 32 |
+| `space600` | `size600` | 48 |
+| `space500` | `size500` | 40 |
+| `space400` | `size400` | 32 |
 
 Consumer: `src/components/core/Button-Icon/buttonIcon.tokens.ts`
 
@@ -136,7 +142,7 @@ No migration — Spec 090 would reference sizing primitives from the start.
 ## Scope
 
 ### In Scope
-- Sizing primitive definitions (10 tokens in `SizingTokens.ts`)
+- Sizing primitive definitions (12 tokens in `SizingTokens.ts`)
 - `TokenCategory.SIZING` (new category)
 - Token registration in `src/tokens/index.ts`
 - Generation pipeline (generic primitive pass — same as blur)
@@ -145,6 +151,7 @@ No migration — Spec 090 would reference sizing primitives from the start.
 - Test coverage (formula validation, mathematical relationships, cross-platform consistency)
 - Regenerate `dist/` platform token files
 - Button-Icon component token migration (`space*` → `size*`)
+- Remaining component family migrations (Avatar, Checkbox, Radio, Progress-Node, Progress-Bar) — scope confirmed pending Lina's input
 
 ### Out of Scope
 - Avatar, Checkbox, Radio, Progress-Node component token migrations — these should be coordinated with Lina and may be separate subtasks or a follow-up
@@ -157,13 +164,24 @@ No migration — Spec 090 would reference sizing primitives from the start.
 
 ---
 
+## Confirmed Decisions (Ada + Peter, 2026-04-03)
+
+### Q1: Scale Completeness — Include 56 and 64
+Include `size700` (56) and `size800` (64) preemptively. They fill the gap between 48 and 80, sit on the baseline grid, and the naming convention accommodates them cleanly.
+
+### Q2: Base Value — 8
+Base 8 aligns with the baseline grid and spacing base. `size300 = 24` matches `space300 = 24` — numeric suffixes mean the same thing across both families.
+
+### Q3: Naming — `size` Prefix
+`size` is shorter, matches existing component token naming (`buttonIcon.size.large`), and is universally understood.
+
+---
+
 ## Open Questions
 
-1. **Scale completeness**: Should we include `size350` (56) and `size400` (64) preemptively? They're on the baseline grid and correspond to `space700` and `space800`. No current consumers, but they fill the gap between 48 and 80. Lean no — add when needed, naming accommodates it.
+1. **Component token migration scope**: Intent is to migrate all 6 component families. Lina's input needed on which component token files reference spacing primitives directly vs hard-coded values, and whether any have migration complications.
 
-2. **Component token migration scope**: Should this spec migrate all 6 component families, or just Button-Icon (the only one explicitly referencing spacing primitives) and leave others for follow-up? Lina's input needed.
-
-3. **Naming**: `size` prefix vs `dimension` prefix? `size` is shorter and matches how components already name their tokens (`buttonIcon.size.large`). `dimension` is more precise but verbose. Lean `size`.
+2. **DTCG export**: Include all 12 sizing primitives? Lean yes for consistency with spacing, blur, and other primitive families.
 
 ---
 
