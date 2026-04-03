@@ -189,7 +189,7 @@
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 3.8 Navigation Family (Nav-SegmentedChoice-Base, Nav-TabBar-Base)
+  - [x] 3.8 Navigation Family (Nav-SegmentedChoice-Base, Nav-TabBar-Base)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation

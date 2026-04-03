@@ -204,7 +204,7 @@ fun NavTabBarBase(
         val tabWidthPx = totalWidthPx / tabs.size
 
         // Top stroke (contract: visual_background)
-        Divider(color = NavTabBarTokens.borderColor, thickness = NavTabBarTokens.borderWidth.dp)
+        Divider(color = NavTabBarTokens.borderColor, thickness = NavTabBarTokens.borderWidth)
 
         // Contract: animation_initial_render
         LaunchedEffect(Unit) {
