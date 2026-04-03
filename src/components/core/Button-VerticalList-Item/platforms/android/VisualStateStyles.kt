@@ -100,16 +100,7 @@ val DesignTokens.Companion.color_feedback_error_text: Int
 // MARK: - Border Tokens
 
 /** Default border width (1dp) - borderDefault
- * Requirements: 1.1, 1.3, 1.4, 1.5
- */
-val DesignTokens.Companion.border_border_default: Float
-    get() = DesignTokens.border_width_100
-
-/** Emphasis border width (2dp) - borderEmphasis
- * Requirements: 1.2, 3.1
- */
-val DesignTokens.Companion.border_border_emphasis: Float
-    get() = DesignTokens.border_width_200
+// border_border_default/emphasis extensions removed — use DesignTokens.border_default/border_emphasis directly
 
 // MARK: - Visual State Enum
 
@@ -260,7 +251,7 @@ data class VisualStateStyles(
          */
         val rest = VisualStateStyles(
             background = Color(DesignTokens.color_structure_canvas),
-            borderWidth = DesignTokens.border_border_default.dp,
+            borderWidth = DesignTokens.border_default.dp,
             borderColor = Color.Transparent,
             labelColor = Color(DesignTokens.color_text_default),
             iconColor = Color(DesignTokens.color_text_default),
@@ -274,7 +265,7 @@ data class VisualStateStyles(
          */
         val selected = VisualStateStyles(
             background = Color(DesignTokens.color_feedback_select_background_rest),
-            borderWidth = DesignTokens.border_border_emphasis.dp,
+            borderWidth = DesignTokens.border_emphasis.dp,
             borderColor = Color(DesignTokens.color_feedback_select_text_rest),
             labelColor = Color(DesignTokens.color_feedback_select_text_rest),
             iconColor = Color(DesignTokens.color_feedback_select_text_rest),
@@ -288,7 +279,7 @@ data class VisualStateStyles(
          */
         val notSelected = VisualStateStyles(
             background = Color(DesignTokens.color_feedback_select_background_default),
-            borderWidth = DesignTokens.border_border_default.dp,
+            borderWidth = DesignTokens.border_default.dp,
             borderColor = Color.Transparent,
             labelColor = Color(DesignTokens.color_feedback_select_text_default),
             iconColor = Color(DesignTokens.color_feedback_select_text_default),
@@ -302,7 +293,7 @@ data class VisualStateStyles(
          */
         val checked = VisualStateStyles(
             background = Color(DesignTokens.color_feedback_select_background_rest),
-            borderWidth = DesignTokens.border_border_default.dp,
+            borderWidth = DesignTokens.border_default.dp,
             borderColor = Color.Transparent,
             labelColor = Color(DesignTokens.color_feedback_select_text_rest),
             iconColor = Color(DesignTokens.color_feedback_select_text_rest),
@@ -315,7 +306,7 @@ data class VisualStateStyles(
          */
         val unchecked = VisualStateStyles(
             background = Color(DesignTokens.color_structure_canvas),
-            borderWidth = DesignTokens.border_border_default.dp,
+            borderWidth = DesignTokens.border_default.dp,
             borderColor = Color.Transparent,
             labelColor = Color(DesignTokens.color_text_default),
             iconColor = Color(DesignTokens.color_text_default),
@@ -332,7 +323,7 @@ data class VisualStateStyles(
         fun errorSelectMode(checkmarkVisible: Boolean): VisualStateStyles {
             return VisualStateStyles(
                 background = Color(DesignTokens.color_feedback_error_background),
-                borderWidth = DesignTokens.border_border_emphasis.dp,
+                borderWidth = DesignTokens.border_emphasis.dp,
                 borderColor = Color(DesignTokens.color_feedback_error_text),
                 labelColor = Color(DesignTokens.color_feedback_error_text),
                 iconColor = Color(DesignTokens.color_feedback_error_text),
@@ -486,7 +477,7 @@ fun calculatePaddingBlock(borderWidth: Dp): Dp {
     // borderEmphasis (2dp) requires 10dp padding
     // borderDefault (1dp) requires 11dp padding
     // Uses component tokens for consistency with design system
-    return if (borderWidth >= DesignTokens.border_border_emphasis.dp) {
+    return if (borderWidth >= DesignTokens.border_emphasis.dp) {
         VERTICAL_LIST_ITEM_PADDING_BLOCK_SELECTED
     } else {
         VERTICAL_LIST_ITEM_PADDING_BLOCK_REST

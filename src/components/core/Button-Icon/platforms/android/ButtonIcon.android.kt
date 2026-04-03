@@ -297,7 +297,7 @@ private fun getIconColor(variant: ButtonIconVariant): Color {
  */
 private fun getBorderWidth(variant: ButtonIconVariant): Dp {
     return when (variant) {
-        ButtonIconVariant.SECONDARY -> DesignTokens.border_border_default  // borderDefault (1dp)
+        ButtonIconVariant.SECONDARY -> DesignTokens.border_default  // borderDefault (1dp)
         ButtonIconVariant.PRIMARY, ButtonIconVariant.TERTIARY -> 0.dp
     }
 }

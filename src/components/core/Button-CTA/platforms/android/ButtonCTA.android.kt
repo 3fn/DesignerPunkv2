@@ -411,7 +411,7 @@ private fun getButtonCTAStyleConfig(style: ButtonCTAStyle, isPressed: Boolean, d
             backgroundColor = secondaryBgColor,      // Requirement 2.2, 7.2: color.structure.canvas with blend states
             textColor = colorActionPrimary,                // Requirement 2.2: color.action.primary
             iconColor = secondaryIconColor,          // Requirement 9.2, 7.4: color.action.primary with optical balance
-            borderWidth = DesignTokens.border_border_default.toInt(), // border.default (1dp)
+            borderWidth = DesignTokens.border_default.toInt(), // border.default (1dp)
             borderColor = colorActionPrimary               // Requirement 2.2: color.action.primary
         )
         ButtonCTAStyle.TERTIARY -> ButtonCTAStyleConfig(
