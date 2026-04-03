@@ -1,0 +1,101 @@
+# Progress-Bar-Base Component Schema
+#
+# Stemma System: ProgressIndicator Family
+# Component Type: Primitive (standalone)
+#
+# Continuous/percentage-based progress indicator.
+# Determinate (0–1 value) and indeterminate (pulsing) modes.
+#
+# DesignerPunk Philosophy: NO DISABLED STATES
+
+name: Progress-Bar-Base
+type: primitive
+family: ProgressIndicator
+version: "1.0.0"
+readiness:
+  web:
+    reviewed: false
+  ios:
+    reviewed: false
+  android:
+    reviewed: false
+
+description: |
+  Horizontal progress bar showing continuous completion from 0% to 100%.
+  Two modes: determinate (known percentage with smooth fill transition)
+  and indeterminate (pulsing opacity for unknown-duration operations).
+
+  Key Characteristics:
+  - Continuous: 0–1 normalized value, not discrete steps
+  - Two modes: determinate and indeterminate (discriminated union)
+  - Three sizes: sm (4px), md (8px), lg (12px)
+  - Non-interactive: display-only, no user interaction
+  - Fail loudly: runtime error on value outside 0–1
+  - Milestone announcements: screen reader at 0/25/50/75/100%
+  - Capsule shape: radiusFull on track and fill
+
+behaviors:
+  - renderable
+  - accessible
+  - animatable
+
+properties:
+  mode:
+    type: "'determinate' | 'indeterminate'"
+    required: false
+    default: "'determinate'"
+    description: Determinate shows specific progress. Indeterminate shows activity.
+
+  value:
+    type: number
+    required: false
+    description: |
+      Progress value 0–1. Required when mode is determinate.
+      Runtime error if outside range. Not accepted in indeterminate mode.
+
+  accessibilityLabel:
+    type: string
+    required: true
+    description: Describes what the bar represents (e.g., "Profile completion").
+
+  size:
+    type: "'sm' | 'md' | 'lg'"
+    required: false
+    default: "'md'"
+    description: |
+      Size variant. sm=4px (size050), md=8px (size100), lg=12px (size150).
+
+  testID:
+    type: string
+    required: false
+
+tokens:
+  color:
+    - color.progress.pending.background
+    - color.progress.completed.background
+    - color.progress.current.background
+  sizing:
+    - size050
+    - size100
+    - size150
+  border:
+    - radiusFull
+  motion:
+    - duration150
+    - duration350
+    - easingStandard
+
+composition:
+  internal: []
+
+platforms:
+  - web
+  - ios
+  - android
+
+accessibility:
+  role: progressbar
+  aria_valuenow: true (determinate only)
+  aria_valuemin: 0
+  aria_valuemax: 1
+  milestone_announcements: [0, 25, 50, 75, 100]
