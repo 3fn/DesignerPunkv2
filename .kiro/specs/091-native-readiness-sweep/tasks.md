@@ -106,89 +106,110 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: All Issues Fixed"`
 
-  - [x] 3.1 Container Family (Container-Base, Container-Card-Base)
+  - [ ] 3.1 Container Family (Container-Base, Container-Card-Base)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Kenya reviews iOS fixes, Data reviews Android fixes)
-    - iOS: P3 hard-coded focus color (2 fixes), P4 duplicated `View.if` (2 fixes), P2 local motion constants (2 fixes), P7 module-level hard-coded constants including wrong shadow values (~14 fixes in Card-Base)
-    - Android: Focus color wrong + hard-coded (2 fixes), corner radius hard-coded (2 fixes), link→button role mapping (1 fix)
-    - Non-blocking: P1 easing curves, P5 preview colors — fix while in the files
+    **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation
+    **Status**: Lina fixes complete. Data full Android review complete (see feedback-container-android.md). Kenya full iOS review pending.
+    **Feedback docs**: `feedback/feedback-container-ios.md` (Kenya), `feedback/feedback-container-android.md` (Data)
+    - Lina fixes all issues from findings (iOS + Android) ✅
+    - Kenya: Full production-quality review of iOS implementations — document in `feedback-container-ios.md`. Assess: token architecture, accessibility, SwiftUI idioms, code organization, error handling patterns. Flag anything you wouldn't be comfortable building product screens against.
+    - Data: Full production-quality review of Android implementations ✅ (see feedback-container-android.md — found C1-C8, new issues beyond original findings)
+    - Lina: Fix ALL issues found in feedback docs — blocking, non-blocking, and new issues discovered during production-quality review
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2, 5.5_
 
-  - [x] 3.2 Button Family (Button-CTA, Button-Icon, Button-VerticalList-Item, Button-VerticalList-Set)
+  - [ ] 3.2 Button Family (Button-CTA, Button-Icon, Button-VerticalList-Item, Button-VerticalList-Set)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Kenya reviews iOS fixes, Data reviews Android fixes)
-    - iOS: P8 DesignTokens extension shadowing in VerticalList-Item (~12 properties, system colors → DesignerPunk tokens, typography tuples → struct refs) and VerticalList-Set (1 property). P6 wrong token path (1 fix)
-    - Android: `.dp` on Dp token in VerticalList-Set (1 fix), `.dp` verification on Button-CTA style config
-    - Non-blocking: P1 easing in VerticalList-Item, Divider in Button-Icon previews — fix while in the files
+    **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation
+    **Feedback docs**: `feedback/feedback-button-ios.md` (Kenya), `feedback/feedback-button-android.md` (Data)
+    - Lina: Fix all issues from findings
+    - Kenya: Full production-quality review — document in `feedback-button-ios.md`
+    - Data: Full production-quality review — document in `feedback-button-android.md`
+    - Lina: Fix ALL issues found in feedback docs
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2, 5.5_
 
-  - [ ] 3.3 Icon Family (Icon-Base)
+  - [x] 3.3 Icon Family (Icon-Base)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Kenya reviews iOS, Data reviews Android)
-    - iOS: Review implementation for production quality — verify token usage, accessibility, SwiftUI idioms
-    - Android: Review implementation for production quality — verify token usage, accessibility, Compose idioms
-    - Fix any issues found (findings reported clean, but verify independently)
+    **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation
+    **Feedback docs**: `feedback/feedback-icon-ios.md` (Kenya), `feedback/feedback-icon-android.md` (Data)
+    - Kenya: Full production-quality review — document in `feedback-icon-ios.md`
+    - Data: Full production-quality review — document in `feedback-icon-android.md`
+    - Lina: Fix ALL issues found in feedback docs
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2_
 
   - [ ] 3.4 FormInput Family (Input-Text-Base, Email, Password, PhoneNumber, Checkbox-Base, Checkbox-Legal, Radio-Base, Radio-Set)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Kenya reviews iOS fixes, Data reviews Android fixes)
-    - iOS: Non-blocking P1 easing in Checkbox-Base and Radio-Base
-    - Android: Missing easing + no reduced motion check in Checkbox-Base and Radio-Base (non-blocking)
-    - All Text inputs clean on both platforms
+    **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation
+    **Feedback docs**: `feedback/feedback-forminput-ios.md` (Kenya), `feedback/feedback-forminput-android.md` (Data)
+    - Lina: Fix all issues from findings
+    - Kenya: Full production-quality review — document in `feedback-forminput-ios.md`
+    - Data: Full production-quality review — document in `feedback-forminput-android.md`
+    - Lina: Fix ALL issues found in feedback docs
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2, 5.5_
 
   - [ ] 3.5 Badge Family (Badge-Count-Base, Badge-Count-Notification, Badge-Label-Base)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Kenya reviews iOS, Data reviews Android)
-    - iOS: Review all 3 implementations for production quality — verify token usage, accessibility, SwiftUI idioms
-    - Android: Review all 3 implementations for production quality — verify token usage, accessibility, Compose idioms
-    - Fix any issues found (findings reported clean, but verify independently)
+    **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation
+    **Feedback docs**: `feedback/feedback-badge-ios.md` (Kenya), `feedback/feedback-badge-android.md` (Data)
+    - Kenya: Full production-quality review — document in `feedback-badge-ios.md`
+    - Data: Full production-quality review — document in `feedback-badge-android.md`
+    - Lina: Fix ALL issues found in feedback docs
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2_
 
   - [ ] 3.6 Chip Family (Chip-Base, Chip-Filter, Chip-Input)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Data reviews Android fixes)
-    - iOS: Non-blocking P1 easing in Chip-Filter
-    - Android: Hard-coded shape in all 3 Chip components (blocking, 3 fixes)
+    **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation
+    **Feedback docs**: `feedback/feedback-chip-ios.md` (Kenya), `feedback/feedback-chip-android.md` (Data)
+    - Lina: Fix all issues from findings
+    - Kenya: Full production-quality review — document in `feedback-chip-ios.md`
+    - Data: Full production-quality review — document in `feedback-chip-android.md`
+    - Lina: Fix ALL issues found in feedback docs
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2, 5.5_
 
   - [ ] 3.7 Avatar Family (Avatar-Base)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Kenya reviews iOS, Data reviews Android)
-    - iOS: Fix non-blocking border width issue. Review implementation for production quality.
-    - Android: Review implementation for production quality — verify token usage, accessibility, Compose idioms (findings reported clean, but verify independently)
+    **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation
+    **Feedback docs**: `feedback/feedback-avatar-ios.md` (Kenya), `feedback/feedback-avatar-android.md` (Data)
+    - Lina: Fix all issues from findings
+    - Kenya: Full production-quality review — document in `feedback-avatar-ios.md`
+    - Data: Full production-quality review — document in `feedback-avatar-android.md`
+    - Lina: Fix ALL issues found in feedback docs
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 3.8 Navigation Family (Nav-SegmentedChoice-Base, Nav-TabBar-Base sanity check)
+  - [ ] 3.8 Navigation Family (Nav-SegmentedChoice-Base, Nav-TabBar-Base)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina
-    - iOS: Non-blocking P1 easing in TabBar
-    - Android: Nav-SegmentedChoice-Base is gold standard (clean). TabBar: `.dp` verification on borderWidth, Divider usage (non-blocking)
+    **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation
+    **Feedback docs**: `feedback/feedback-navigation-ios.md` (Kenya), `feedback/feedback-navigation-android.md` (Data)
+    - Lina: Fix all issues from findings
+    - Kenya: Full production-quality review — document in `feedback-navigation-ios.md`
+    - Data: Full production-quality review — document in `feedback-navigation-android.md`
+    - Lina: Fix ALL issues found in feedback docs
     - Verify: `npm test` passes
-    - _Requirements: 5.1, 5.2_
+    - _Requirements: 5.1, 5.2, 5.5_
 
   - [ ] 3.9 ProgressIndicator Family (Node-Base, Connector-Base, Label-Base, Pagination-Base, Stepper-Base, Stepper-Detailed)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (Kenya reviews iOS fixes)
-    - iOS: Progress-Indicator-Label-Base hard-coded font size (blocking, 1 fix)
-    - Android: Clean per findings
+    **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation
+    **Feedback docs**: `feedback/feedback-progress-ios.md` (Kenya), `feedback/feedback-progress-android.md` (Data)
+    - Lina: Fix all issues from findings
+    - Kenya: Full production-quality review — document in `feedback-progress-ios.md`
+    - Data: Full production-quality review — document in `feedback-progress-android.md`
+    - Lina: Fix ALL issues found in feedback docs
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2, 5.5_
 
@@ -196,8 +217,8 @@
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
-    - Extract `View.if` extension to shared iOS utility (or remove and inline) — resolves P4 across Container-Base and Container-Card-Base
-    - This is a cross-family concern, handled after per-family fixes
+    - Extract `View.if` extension to shared iOS utility (or remove and inline)
+    - Cross-family concern, handled after per-family fixes
     - Verify: no duplicate extensions, all consumers updated
     - _Requirements: 5.1_
 
