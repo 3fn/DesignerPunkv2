@@ -10,6 +10,7 @@ whenToUse:
   - "Showing position in a carousel, onboarding flow, or swipeable content (Pagination-Base)"
   - "Displaying progress through a linear multi-step flow with visual connectors (Stepper-Base)"
   - "Showing labeled steps with descriptions and icons in complex workflows (Stepper-Detailed)"
+  - "Displaying continuous percentage-based completion or loading state (Progress-Bar-Base)"
 
 whenNotToUse:
   - "Navigation between views or pages — Progress indicators show position, they don't enable movement. Use Navigation family instead"
@@ -30,6 +31,9 @@ selectionRules:
   - scenario: "Custom progress visualization not covered by semantic variants"
     recommend: Progress-Indicator-Node-Base
     rationale: "Escape hatch — compose primitives (Node-Base, Connector-Base, Label-Base) directly. You own state management and accessibility"
+  - scenario: "Continuous percentage-based completion (profile completeness, upload progress)"
+    recommend: Progress-Bar-Base
+    rationale: "Horizontal bar with 0–1 value. Determinate for known progress, indeterminate (pulsing) for unknown duration. Not for discrete steps — use Stepper or Pagination"
 
 discouragedPatterns:
   - pattern: "Using Node-Base, Connector-Base, or Label-Base directly in product code"

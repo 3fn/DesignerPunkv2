@@ -357,6 +357,10 @@ All values align to the 4px baseline grid.
 - **Purpose**: Guide users through a multi-step workflow with labeled nodes, step descriptions, and connector lines showing full progress detail.
 - **Contexts**: onboarding-flows, forms
 
+### Progress-Bar-Base — Metadata
+- **Purpose**: Display continuous percentage-based progress as a horizontal bar with determinate and indeterminate modes for completion tracking and loading states.
+- **Contexts**: onboarding-flows, forms, dashboards, profile-sections
+
 ---
 
 ## Usage Guidelines

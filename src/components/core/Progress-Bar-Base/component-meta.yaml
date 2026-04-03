@@ -1,0 +1,24 @@
+purpose: "Display continuous percentage-based progress as a horizontal bar with determinate and indeterminate modes for completion tracking and loading states."
+
+usage:
+  when_to_use:
+    - "Profile completeness indicators"
+    - "File upload or download progress"
+    - "Onboarding completion tracking"
+    - "Loading state for unknown-duration operations (indeterminate mode)"
+  when_not_to_use:
+    - "Discrete multi-step workflows — use Progress-Stepper-Base or Progress-Stepper-Detailed"
+    - "Carousel or page position indicators — use Progress-Pagination-Base"
+    - "Step-by-step navigation — use Progress-Stepper-Base"
+
+contexts:
+  - "onboarding-flows"
+  - "forms"
+  - "dashboards"
+  - "profile-sections"
+
+alternatives:
+  - component: Progress-Stepper-Base
+    reason: "When progress is discrete steps with labels, not continuous percentage"
+  - component: Progress-Pagination-Base
+    reason: "When showing position in a sequence of pages, not completion percentage"
