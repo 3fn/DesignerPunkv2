@@ -741,15 +741,7 @@ func mapContainerBaseLayeringToZIndex(_ layering: ContainerBaseLayeringValue?) -
 // @see WCAG 2.4.7 Focus Visible (Level AA)
 // @see WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
 
-/// Focus indicator outline offset from component bounds (2px)
-/// References: accessibility.focus.offset → space025 primitive token
-let accessibilityFocusOffset: CGFloat = 2 /* space025 */
-
-/// Focus indicator outline width (2px)
-/// References: accessibility.focus.width → borderWidth200 primitive token
-let accessibilityFocusWidth: CGFloat = 2 /* borderWidth200 */
-
-/// Focus indicator outline color (purple300 - primary brand color)
-/// References: accessibility.focus.color → purple300 primitive token
-/// Ensures 3:1 contrast ratio per WCAG 1.4.11
-let accessibilityFocusColor: Color = Color(red: 0.69, green: 0.15, blue: 1.00) /* purple300 */
+/// Focus indicator tokens — reference generated DesignTokens
+let accessibilityFocusOffset: CGFloat = DesignTokens.accessibilityFocusOffset
+let accessibilityFocusWidth: CGFloat = DesignTokens.accessibilityFocusWidth
+let accessibilityFocusColor: Color = Color(DesignTokens.accessibilityFocusColor)

@@ -666,8 +666,8 @@ fun mapCardShadowToElevation(shadow: CardShadow): Dp {
 fun getCardCornerRadiusPx(borderRadius: CardBorderRadius): Float {
     // Token references: radius-100, radius-200
     return when (borderRadius) {
-        CardBorderRadius.Normal -> 8f /* radius-100 = 8dp */
-        CardBorderRadius.Loose -> 16f /* radius-200 = 16dp */
+        CardBorderRadius.Normal -> DesignTokens.radius100
+        CardBorderRadius.Loose -> DesignTokens.radius200
     }
 }
 

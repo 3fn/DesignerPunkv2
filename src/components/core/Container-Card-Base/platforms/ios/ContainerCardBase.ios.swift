@@ -812,72 +812,45 @@ func mapCardShadowToProperties(_ shadow: CardShadow) -> CardShadowProperties {
 
 /**
  * Conditional view modifier extension
- * 
- * Allows conditional application of view modifiers.
- * Used for optional modifiers like interactive behavior and accessibility.
- */
-extension View {
-    @ViewBuilder
-    func `if`<Transform: View>(_ condition: Bool, transform: (Self) -> Transform) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
-    }
-}
+// View.if extension defined in Container-Base — not duplicated here
 
 // MARK: - Token Constants
-// These would be imported from the design token system in a real implementation
+// All values reference generated DesignTokens — no hard-coded values
 
-// Space tokens (space.inset.*)
-let spaceInset050: CGFloat = 4   /* space.inset.050 */
-let spaceInset100: CGFloat = 8   /* space.inset.100 */
-let spaceInset150: CGFloat = 12  /* space.inset.150 */
-let spaceInset200: CGFloat = 16  /* space.inset.200 */
+// Space tokens
+let spaceInset050: CGFloat = DesignTokens.spaceInset050
+let spaceInset100: CGFloat = DesignTokens.spaceInset100
+let spaceInset150: CGFloat = DesignTokens.spaceInset150
+let spaceInset200: CGFloat = DesignTokens.spaceInset200
 
 // Radius tokens
-let radius100: CGFloat = 8   /* radius-100 */
-let radius200: CGFloat = 16  /* radius-200 */
+let radius100: CGFloat = DesignTokens.radius100
+let radius200: CGFloat = DesignTokens.radius200
 
 // Border tokens
-let borderDefault: CGFloat = 1  /* border.border.default */
+let borderDefault: CGFloat = DesignTokens.borderDefault
 
 // Color tokens
-let colorSurfacePrimary: Color = Color(DesignTokens.colorStructureSurfacePrimary)      /* color.structure.surface.primary */
-let colorSurfaceSecondary: Color = Color(DesignTokens.colorStructureSurfaceSecondary)  /* color.structure.surface.secondary */
-let colorSurfaceTertiary: Color = Color(DesignTokens.colorStructureSurfaceTertiary)    /* color.structure.surface.tertiary */
-let colorBorder: Color = Color(UIColor.separator)                     /* color.border.default */
-let colorBorderSubtle: Color = Color(UIColor.separator).opacity(0.5)  /* color.structure.border.subtle */
+let colorSurfacePrimary: Color = Color(DesignTokens.colorStructureSurfacePrimary)
+let colorSurfaceSecondary: Color = Color(DesignTokens.colorStructureSurfaceSecondary)
+let colorSurfaceTertiary: Color = Color(DesignTokens.colorStructureSurfaceTertiary)
+let colorBorder: Color = Color(DesignTokens.colorStructureBorder)
+let colorBorderSubtle: Color = Color(DesignTokens.colorStructureBorderSubtle)
 
-// Shadow tokens (shadow.container)
-let shadowContainerColor: Color = Color.black.opacity(0.1)
-let shadowContainerRadius: CGFloat = 8
-let shadowContainerX: CGFloat = 0
-let shadowContainerY: CGFloat = 2
+// Shadow tokens — reference generated shadow composite
+let shadowContainerColor: Color = Color.black.opacity(Double(DesignTokens.shadowOpacityModerate))
+let shadowContainerRadius: CGFloat = DesignTokens.blur075
+let shadowContainerX: CGFloat = DesignTokens.shadowOffsetX000
+let shadowContainerY: CGFloat = DesignTokens.shadowOffsetY100
 
 // Motion tokens
-// Note: Duration value 0.15 corresponds to motion.focusTransition token (150ms)
-let motionFocusTransitionDuration: Double = 0.15 /* motion.focusTransition */
-let motionFocusTransition: Animation = .easeOut(duration: motionFocusTransitionDuration)
+let motionFocusTransitionDuration: Double = DesignTokens.MotionFocusTransition.duration
+let motionFocusTransition: Animation = DesignTokens.MotionFocusTransition.easing
 
-// MARK: - Accessibility Focus Tokens
-// WCAG 2.4.7 Focus Visible (Level AA) - Focus indicator must be visible
-// WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
-// @see src/tokens/semantic/AccessibilityTokens.ts
-
-/// Focus indicator outline offset from component bounds (2px)
-/// References: accessibility.focus.offset → space025 primitive token
-let cardAccessibilityFocusOffset: CGFloat = 2 /* space025 */
-
-/// Focus indicator outline width (2px)
-/// References: accessibility.focus.width → borderWidth200 primitive token
-let cardAccessibilityFocusWidth: CGFloat = 2 /* borderWidth200 */
-
-/// Focus indicator outline color (purple300 - primary brand color)
-/// References: accessibility.focus.color → purple300 primitive token
-/// Ensures 3:1 contrast ratio per WCAG 1.4.11
-let cardAccessibilityFocusColor: Color = Color(red: 0.69, green: 0.15, blue: 1.00) /* purple300 */
+// Accessibility focus tokens
+let cardAccessibilityFocusOffset: CGFloat = DesignTokens.accessibilityFocusOffset
+let cardAccessibilityFocusWidth: CGFloat = DesignTokens.accessibilityFocusWidth
+let cardAccessibilityFocusColor: Color = Color(DesignTokens.accessibilityFocusColor)
 
 // MARK: - Preview
 

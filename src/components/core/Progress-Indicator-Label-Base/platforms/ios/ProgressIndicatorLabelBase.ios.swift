@@ -27,7 +27,7 @@ import SwiftUI
  * 
  * @see Requirements 1.8 - Apply typography.labelSm token (14px)
  */
-private let labelFontSize: CGFloat = 14  // typography.labelSm → fontSize075
+private let labelFontSize: CGFloat = DesignTokens.typographyLabelSm.fontSize
 private let labelFontWeight: Font.Weight = .medium  // fontWeight500
 
 // MARK: - Progress-Indicator-Label-Base View
