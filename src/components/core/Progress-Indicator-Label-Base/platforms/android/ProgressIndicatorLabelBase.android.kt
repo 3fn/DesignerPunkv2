@@ -46,7 +46,7 @@ import com.designerpunk.tokens.DesignTokens
  * 
  * @see Requirements 1.8 - Apply typography.labelSm token (14px)
  */
-private val labelFontSize = 14.sp  // typography.labelSm → fontSize075
+private val labelFontSize = DesignTokens.font_size_075
 private val labelFontWeight = FontWeight.Medium  // fontWeight500
 
 // MARK: - Progress-Indicator-Label-Base Composable
