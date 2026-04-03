@@ -16,9 +16,9 @@ readiness:
   web:
     reviewed: true
   ios:
-    reviewed: false
+    reviewed: true
   android:
-    reviewed: false
+    reviewed: true
 
 description: |
   Primitive radio button component supporting selected/unselected states

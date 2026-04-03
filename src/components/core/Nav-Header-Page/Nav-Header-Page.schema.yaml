@@ -16,11 +16,11 @@ version: "1.0.0"
 inherits: Nav-Header-Base
 readiness:
   web:
-    reviewed: false
+    reviewed: true
   ios:
-    reviewed: false
+    reviewed: true
   android:
-    reviewed: false
+    reviewed: true
 
 description: |
   Opinionated page-level navigation bar for pushed or presented screens.

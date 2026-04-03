@@ -26,9 +26,9 @@ readiness:
   web:
     reviewed: true
   ios:
-    reviewed: false
+    reviewed: true
   android:
-    reviewed: false
+    reviewed: true
 
 composition:
   internal:

@@ -27,9 +27,9 @@ readiness:
   web:
     reviewed: true
   ios:
-    reviewed: false
+    reviewed: true
   android:
-    reviewed: false
+    reviewed: true
 
 # Inheritance declaration
 inherits: Chip-Base

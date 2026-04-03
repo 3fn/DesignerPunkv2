@@ -4,11 +4,11 @@ family: ProgressIndicator
 version: "1.0.0"
 readiness:
   web:
-    reviewed: false
+    reviewed: true
   ios:
-    reviewed: false
+    reviewed: true
   android:
-    reviewed: false
+    reviewed: true
 
 description: |
   Primitive label component for the Progress Indicator family.
