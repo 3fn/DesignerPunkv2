@@ -78,7 +78,56 @@ Progress-Bar (Spec 090) uses sizing primitives from the start — no migration.
 
 ## Requirements Feedback
 
-[Populated after requirements doc is created]
+### Context for Reviewers
+
+Thurgood created the requirements doc from the design outline + Lina's R1 migration assessment. Five requirements: primitives, component migration (all 6 families + TabBar in one spec per Q5 decision), generation pipeline, zero visual change, documentation (new Token-Family-Sizing.md + Spacing cross-reference + Token Quick Reference update).
+
+**@LINA**: Your R1 recommended phasing (primitives + direct-ref swaps now, token file creation later). The Q5 decision overrides this — all families in one spec. Review the requirements with that scope in mind. Key areas:
+- Req 2 ACs 4-6 (new token file creation for Avatar, Checkbox, Radio) — are the sizing references correct for each component?
+- Req 2 AC 7 (zero visual change) — any edge cases in the token file creation that could change rendered dimensions?
+- Req 5 (documentation) — anything missing from the Token-Family-Sizing.md content requirements?
+
+[Lina feedback here]
+
+### Lina — Requirements Review
+
+**Overall**: Requirements are solid. All sizing references verified against source code. No edge cases found that would change rendered dimensions.
+
+#### Req 2 ACs 4-6: Sizing References Verified
+
+**AC 4 — Avatar-Base**: ✅ Correct. Verified against `AVATAR_SIZE_PX` in web platform file:
+- xs=24 → `size300` ✅
+- sm=32 → `size400` ✅
+- md=40 → `size500` ✅
+- lg=48 → `size600` ✅
+- xl=80 → `size1000` ✅
+- xxl=128 → `size1600` ✅
+
+**AC 5 — Input-Checkbox-Base**: ✅ Correct. Verified against schema (`sm: 24px, md: 32px, lg: 40px`):
+- sm=24 → `size300` ✅
+- md=32 → `size400` ✅
+- lg=40 → `size500` ✅
+
+Note: Checkbox also has *icon* sizes (16, 20, 24) that use `icon.size*` tokens. These are NOT sizing tokens — they stay in the icon family. The token file should only reference sizing primitives for the box/container dimensions.
+
+**AC 6 — Input-Radio-Base**: ✅ Correct. Same dimensions as Checkbox:
+- sm=24 → `size300` ✅
+- md=32 → `size400` ✅
+- lg=40 → `size500` ✅
+
+#### Req 2 AC 7: Zero Visual Change Edge Cases
+
+No edge cases found. All values are exact matches:
+- Button-Icon: `space400=32`, `space500=40`, `space600=48` → `size400=32`, `size500=40`, `size600=48` ✅
+- Progress-Node: `space150=12`, `space200=16`, `space300=24` → `size150=12`, `size200=16`, `size300=24` ✅
+- Avatar/Checkbox/Radio: hard-coded values match sizing primitives exactly ✅
+- TabBar dot: `space050=4` → `size050=4` ✅
+
+One note: Progress-Node's current-size formula uses `SPACING_BASE_VALUE × multiplier`. Since `SPACING_BASE_VALUE = 8` and the proposed sizing base is also 8, the formula produces identical results. The constant should be renamed to `SIZING_BASE_VALUE` or a shared `BASE_VALUE` for semantic clarity, but the math doesn't change.
+
+#### Req 5: Documentation
+
+Nothing missing. The exclusion of icon sizes and tap area tokens from the sizing family is the right call and should be prominently documented — it's the most likely source of confusion ("why isn't `icon.size100` a sizing token?").
 
 ---
 
