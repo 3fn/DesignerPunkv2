@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.designerpunk.tokens.DesignTokens
+import com.designerpunk.components.core.IconBase
 
 // MARK: - Design Token Provider
 
@@ -571,45 +572,7 @@ fun VerticalListButtonItem(
 
 // MARK: - IconBase Placeholder
 
-/**
- * Placeholder IconBase composable for icon rendering.
- * 
- * In production, this would be the actual IconBase component from the design system.
- * This placeholder provides the expected interface for the VerticalListButtonItem.
- * 
- * @param name Icon name (e.g., "check", "bell", "gear")
- * @param size Icon size in dp
- * @param color Icon color
- * @param opticalBalance Whether to apply optical balance blend
- * @param modifier Modifier for the icon
- * @param testTag Optional test tag for automated testing
- */
-@Composable
-fun IconBase(
-    name: String,
-    size: Dp,
-    color: Color,
-    opticalBalance: Boolean = false,
-    modifier: Modifier = Modifier,
-    testTag: String? = null
-) {
-    // Placeholder implementation
-    // In production, this would render the actual icon from the icon system
-    Box(
-        modifier = modifier
-            .size(size)
-            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
-        contentAlignment = Alignment.Center
-    ) {
-        // Placeholder: In production, render actual icon
-        // For now, just show a colored box representing the icon
-        Box(
-            modifier = Modifier
-                .size(size * 0.8f)
-                .background(color, RoundedCornerShape(DesignTokens.radius_050))
-        )
-    }
-}
+// IconBase imported from com.designerpunk.components.core — placeholder removed
 
 // MARK: - Preview
 

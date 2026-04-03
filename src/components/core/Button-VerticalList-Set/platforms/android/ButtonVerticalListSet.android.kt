@@ -505,10 +505,11 @@ fun ButtonVerticalListSet(
                     }
                 }
                 
-                // Apply aria-invalid for errors
+                // Communicate error state to TalkBack
                 // Requirements: 7.6
                 if (error) {
-                    error("Invalid selection")
+                    stateDescription = errorMessage ?: "Invalid selection"
+                    liveRegion = LiveRegionMode.Assertive
                 }
             }
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
