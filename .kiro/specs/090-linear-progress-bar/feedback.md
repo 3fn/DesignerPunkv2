@@ -120,14 +120,29 @@ Req 2 AC 4 defines a named constant for the reduced-motion static fill width. 0.
 
 No other issues. Requirements approved.
 
+### [THURGOOD R3]
+
+Incorporated Lina's requirements feedback:
+
+- **F1**: `INDETERMINATE_STATIC_FILL` rationale comment noted for implementation — "Visually distinct from empty and complete states while communicating ongoing activity." No requirements change needed; this is a code comment concern.
+
+Requirements approved. Ready to proceed to design.
+
 ---
 
 ## Design Feedback
 
 ### Context for Reviewers
-- [Populated by spec author before requesting review]
+Design doc translates outline + requirements into architecture, interfaces, and testing strategy. Discriminated union props, pulsing animation, fail-loudly validation, milestone announcements.
 
-[Agent feedback rounds here]
+### Lina — Component Review
+
+**Overall**: Clean, all decisions traceable, correctness properties are tight. One minor question.
+
+**F1: `tokens.ts` — reference file vs skip.**
+The component consumes only existing primitives and semantics (no component-specific tokens like `buttonIcon.inset.*`). The `tokens.ts` file would be a reference re-export, not a definition file. Some components skip this when they only consume existing tokens directly. Not a blocker — the schema's token list serves the same purpose. Create it if we want consistency across all components, skip it if we want to avoid empty-ish files.
+
+Design approved.
 
 ---
 
