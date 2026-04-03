@@ -112,7 +112,7 @@ fun InputTextBase(
     id: String,
     label: String,
     value: String,
-    onValueChange: (String) -> Void,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     onFocus: (() -> Unit)? = null,
     onBlur: (() -> Unit)? = null,
