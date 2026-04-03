@@ -35,6 +35,45 @@ The design says "static fill at ~30% width" for reduced motion indeterminate. Be
 - Use cases: does the determinate/indeterminate split cover your product scenarios (profile completeness, upload progress, onboarding)?
 - Any product-level scenarios not covered?
 
+### Leonardo — Consumer Review
+
+**Verdict**: Approved. Clean, well-scoped, covers my workflow.
+
+#### Props Interface — No Label/Percentage Prop
+
+Prefer it this way. Text around a progress bar is always context-specific:
+
+- Profile completeness: "75% complete" below the bar
+- File upload: "Uploading... 3 of 8 files" above the bar
+- Onboarding: "Step 2 of 5" with a stepper above and bar below
+
+Layout, typography, and positioning vary per use case. A `label` or `showPercentage` prop would be either too rigid or too configurable. Composition is the right call. Small amount of repeated spec work per screen, but honest work — the text really is different every time.
+
+#### Use Cases — Determinate/Indeterminate Coverage
+
+Covers all my scenarios:
+
+- Profile completeness (dashboard stat card): Determinate ✅
+- File upload: Determinate during transfer, indeterminate during post-upload processing ✅
+- Onboarding completion: Determinate (completed steps / total) ✅
+- Data fetching loading state: Indeterminate ✅
+
+#### Uncovered Scenarios
+
+One deferrable: **buffer/preload progress** — two fill levels on one track (e.g., video buffered vs played). The `mode` prop is extensible for this (`'buffer'` mentioned in props rationale). Not blocking — not in near-term product scope.
+
+#### Indeterminate Animation
+
+Pulsing opacity is the right choice. A sliding bar implies directionality and progress when there is none. Pulsing says "alive and working" without false promises. Correct product signal for "we don't know how long this will take."
+
+#### Thurgood F1 + Ada Response
+
+Agree with both. 0.33 as `INDETERMINATE_STATIC_FILL` named constant in types.ts. Behavioral constant, not a design token.
+
+#### Product-Side Note on Value Validation
+
+The design says runtime error when value outside 0–1 (Decision 2, Peter confirmed). I agree with fail-loudly as principle. Noting the product trade-off: if a backend returns `1.05` due to rounding, the component throws and the screen breaks. For a display-only component, clamping to 0/1 with a warning would be a softer failure mode. Not requesting a change — Peter confirmed the decision and it's consistent with Nav-SegmentedChoice-Base. Just documenting the consumer perspective for future reference if this causes friction in practice. -- [LEONARDO R1]
+
 ### Ada — Token Review
 
 **Token usage: Correct.**
@@ -55,14 +94,31 @@ Existing tokens are namespaced under `progress.node.*` and `progress.connector.*
 
 **No additional token concerns.** All tokens exist. No new tokens needed.
 
+### [THURGOOD R2]
+
+Design outline approved by all reviewers. Incorporations:
+
+- **F1 (reduced motion)**: Resolved — `INDETERMINATE_STATIC_FILL = 0.33` as named behavioral constant in types.ts. Consensus from Ada, Leonardo, and Thurgood.
+- **Leonardo**: No changes needed. Buffer mode deferral noted. Value validation trade-off documented for future reference.
+- **Ada**: No changes needed. Token usage, family architecture, and sizing references all confirmed correct.
+
+Ready to proceed to requirements.
+
 ---
 
 ## Requirements Feedback
 
 ### Context for Reviewers
-- [Populated by spec author before requesting review]
+Requirements translate the design outline into 7 requirements with testable ACs. All open questions resolved. Union type enforced, fail-loudly validation, pulsing animation, sizing tokens from Spec 092.
 
-[Agent feedback rounds here]
+### Lina — Component Review
+
+**Overall**: Clean, ready to move forward. One minor note.
+
+**F1: `INDETERMINATE_STATIC_FILL` (0.33) rationale should be documented.**
+Req 2 AC 4 defines a named constant for the reduced-motion static fill width. 0.33 is a reasonable choice — visually distinct from empty (0) and nearly-complete (1). The constant's comment in types.ts should document *why* one-third: "Visually distinct from empty and complete states while communicating ongoing activity."
+
+No other issues. Requirements approved.
 
 ---
 
