@@ -12,7 +12,8 @@ import SwiftUI
 // MARK: - Constants
 
 let INDETERMINATE_STATIC_FILL: CGFloat = 0.33
-
+private let PULSE_OPACITY_MIN: Double = 0.3
+private let PULSE_OPACITY_MAX: Double = 1.0
 private let MILESTONES: [Int] = [0, 25, 50, 75, 100]
 
 // MARK: - Tokens
@@ -21,7 +22,8 @@ enum ProgressBarTokens {
     static let trackColor = Color(DesignTokens.colorProgressPendingBackground)
     static let determinateFillColor = Color(DesignTokens.colorProgressCompletedBackground)
     static let indeterminateFillColor = Color(DesignTokens.colorProgressCurrentBackground)
-    static let animationDuration: Double = DesignTokens.duration150 / 1000
+    static let valueDuration: Double = DesignTokens.Duration.duration150
+    static let pulseDuration: Double = DesignTokens.Duration.duration350
 
     static func height(for size: ProgressBarSize) -> CGFloat {
         switch size {
@@ -42,7 +44,7 @@ struct ProgressBarBase: View {
     var size: ProgressBarSize = .md
     var testID: String? = nil
 
-    @State private var pulseOpacity: Double = 0.3
+    @State private var pulseOpacity: Double = PULSE_OPACITY_MIN
     @State private var lastAnnouncedMilestone: Int = -1
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -50,11 +52,11 @@ struct ProgressBarBase: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 // Track
-                RoundedRectangle(cornerRadius: .infinity)
+                Capsule()
                     .fill(ProgressBarTokens.trackColor)
 
                 // Fill
-                RoundedRectangle(cornerRadius: .infinity)
+                Capsule()
                     .fill(fillColor)
                     .frame(width: fillWidth(in: geometry.size.width))
                     .opacity(fillOpacity)
@@ -82,16 +84,17 @@ struct ProgressBarBase: View {
         switch mode {
         case .determinate(let value):
             validateValue(value)
+            announceMilestone(for: value)
             return trackWidth * CGFloat(value)
         case .indeterminate:
-            return reduceMotion ? trackWidth * INDETERMINATE_STATIC_FILL : trackWidth * INDETERMINATE_STATIC_FILL
+            return trackWidth * INDETERMINATE_STATIC_FILL
         }
     }
 
     private var fillOpacity: Double {
         switch mode {
-        case .determinate: return 1.0
-        case .indeterminate: return reduceMotion ? 1.0 : pulseOpacity
+        case .determinate: return PULSE_OPACITY_MAX
+        case .indeterminate: return reduceMotion ? PULSE_OPACITY_MAX : pulseOpacity
         }
     }
 
@@ -99,8 +102,11 @@ struct ProgressBarBase: View {
 
     private func startPulseIfNeeded() {
         guard case .indeterminate = mode, !reduceMotion else { return }
-        withAnimation(.easeInOut(duration: ProgressBarTokens.animationDuration).repeatForever(autoreverses: true)) {
-            pulseOpacity = 1.0
+        withAnimation(
+            .easeInOut(duration: ProgressBarTokens.pulseDuration)
+                .repeatForever(autoreverses: true)
+        ) {
+            pulseOpacity = PULSE_OPACITY_MAX
         }
     }
 
@@ -110,6 +116,14 @@ struct ProgressBarBase: View {
         switch mode {
         case .determinate(let value): return "\(Int(value * 100))%"
         case .indeterminate: return "Loading"
+        }
+    }
+
+    private func announceMilestone(for value: Double) {
+        let percentage = Int(value * 100)
+        for milestone in MILESTONES where percentage >= milestone && lastAnnouncedMilestone < milestone {
+            lastAnnouncedMilestone = milestone
+            UIAccessibility.post(notification: .announcement, argument: "\(milestone)%")
         }
     }
 
@@ -123,7 +137,7 @@ struct ProgressBarBase: View {
 
 // MARK: - Mode
 
-enum ProgressBarMode {
+enum ProgressBarMode: Equatable {
     case determinate(value: Double)
     case indeterminate
 }
