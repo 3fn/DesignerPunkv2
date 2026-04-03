@@ -53,22 +53,29 @@ If semantic variants are needed later, they compose this primitive (like Stepper
 ## Proposed Props Interface
 
 ```typescript
-interface ProgressBarBaseProps {
-  /** Progress value, 0 to 1. Ignored when mode is 'indeterminate'. */
-  value?: number;
-
-  /** Display mode */
-  mode?: 'determinate' | 'indeterminate';
-
-  /** Accessible label describing what the bar represents */
-  accessibilityLabel: string;
-
-  /** Size variant */
-  size?: 'sm' | 'md' | 'lg';
-
-  /** Test identifier */
-  testID?: string;
-}
+type ProgressBarBaseProps =
+  | {
+      /** Determinate mode — value required */
+      mode?: 'determinate';
+      /** Progress value, 0 to 1. Runtime error if outside range. */
+      value: number;
+      /** Accessible label describing what the bar represents */
+      accessibilityLabel: string;
+      /** Size variant */
+      size?: 'sm' | 'md' | 'lg';
+      /** Test identifier */
+      testID?: string;
+    }
+  | {
+      /** Indeterminate mode — no value */
+      mode: 'indeterminate';
+      /** Accessible label describing what the bar represents */
+      accessibilityLabel: string;
+      /** Size variant */
+      size?: 'sm' | 'md' | 'lg';
+      /** Test identifier */
+      testID?: string;
+    };
 ```
 
 ### Design Decisions in the Props
@@ -131,9 +138,9 @@ Track and fill use `radiusFull` (pill shape) — the bar is a capsule, not a rec
 - Duration: `duration150` (quick, responsive feel)
 - Easing: `easingStandard`
 
-**Indeterminate**: A fill segment animates continuously from inline-start to inline-end.
+**Indeterminate**: The fill pulses in opacity — a steady breathing animation communicating "working" without projecting indecisiveness.
 - Duration: `duration350` per cycle (or longer — needs visual tuning)
-- Easing: `easingStandard` or a custom loop easing
+- Easing: `easingStandard` (smooth in/out for breathing feel)
 
 **Reduced motion**: Both animations collapse to immediate state. Determinate shows the fill at the target width instantly. Indeterminate shows a static fill at ~30% width (visual indication that something is happening without animation).
 
@@ -182,21 +189,21 @@ All tokens exist. No new tokens needed — Spec 092 (Sizing Token Family) resolv
 | `visual_track_fill` | visual | Track and fill render with correct tokens |
 | `visual_size_variants` | visual | Three size variants with correct heights |
 | `animation_value_transition` | animation | Smooth fill transition on value change |
-| `animation_indeterminate_loop` | animation | Continuous animation in indeterminate mode |
+| `animation_indeterminate_loop` | animation | Pulsing opacity animation in indeterminate mode |
 | `accessibility_reduced_motion` | accessibility | Animations collapse to immediate/static |
-| `content_value_clamping` | content | Values outside 0–1 clamped, not errored |
+| `validation_value_range` | validation | Runtime error when value outside 0–1 |
 
 ---
 
-## Open Questions
+## Confirmed Decisions (Peter, 2026-04-03)
 
-1. **Indeterminate animation style**: Sliding bar (Material), shimmer (iOS), or pulsing? Recommend sliding bar — it's the most universally recognized pattern.
+1. ~~**Indeterminate animation style**~~ **Pulsing** — opacity animation on the fill. Platform-neutral, doesn't project indecisiveness like a sliding bar. Reduced motion: static fill at partial width.
 
-2. **Value clamping vs error**: When `value` is < 0 or > 1, clamp silently or throw? Recommend clamp silently (0 for negatives, 1 for > 1) with a dev-mode console warning. Consistent with how Badge-Count-Base handles overflow.
+2. ~~**Value out-of-range**~~ **Fail loudly** — runtime error when `value` is outside 0–1. Progress out-of-range is a developer bug, not a data edge case. Descriptive error: "Progress-Bar-Base: value must be between 0 and 1, received {value}". Consistent with Nav-SegmentedChoice-Base's segment count validation.
 
-3. **RTL behavior**: Fill grows from inline-start to inline-end. In RTL, this means right-to-left. CSS logical properties handle this on web. iOS and Android need explicit RTL support. Confirm this is the expected behavior.
+3. ~~**RTL behavior**~~ **Confirmed** — fill grows from inline-start to inline-end. RTL = right-to-left. CSS logical properties on web, layout direction on iOS/Android.
 
-4. ~~**Component token creation**: Ada to create 3 height tokens.~~ **Resolved** — Spec 092 (Sizing Token Family) created sizing primitives. `size050` (4), `size100` (8), `size150` (12) are available. No new tokens needed.
+4. ~~**Component token creation**~~ **Resolved** — Spec 092 (Sizing Token Family) created sizing primitives. `size050` (4), `size100` (8), `size150` (12) available. No new tokens needed.
 
 ---
 
