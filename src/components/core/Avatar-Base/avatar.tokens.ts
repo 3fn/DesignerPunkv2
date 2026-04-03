@@ -53,7 +53,7 @@
  */
 
 import { defineComponentTokens } from '../../../build/tokens';
-import { spacingTokens, SPACING_BASE_VALUE } from '../../../tokens/SpacingTokens';
+import { sizingTokens, SIZING_BASE_VALUE } from '../../../tokens/SizingTokens';
 
 /**
  * Avatar component tokens defined using the hybrid authoring API.
@@ -65,10 +65,10 @@ import { spacingTokens, SPACING_BASE_VALUE } from '../../../tokens/SpacingTokens
  * These component tokens are primarily used for iOS/Android platforms and documentation.
  * 
  * Size token values:
- * - size.xs: 24px (3 × base, references space300)
- * - size.sm: 32px (4 × base, references space400)
- * - size.md: 40px (5 × base, references space500)
- * - size.lg: 48px (6 × base, references space600)
+ * - size.xs: 24px (3 × base, references size300)
+ * - size.sm: 32px (4 × base, references size400)
+ * - size.md: 40px (5 × base, references size500)
+ * - size.lg: 48px (6 × base, references size600)
  * - size.xl: 80px (10 × base, derivation)
  * - size.xxl: 128px (16 × base, derivation)
  * 
@@ -84,38 +84,38 @@ export const AvatarTokens = defineComponentTokens({
   tokens: {
     // Size tokens for avatar dimensions
     'size.xs': {
-      reference: spacingTokens.space300,
+      reference: sizingTokens.size300,
       reasoning: 'Extra small avatar (24px = 3× base) for inline mentions and compact UI contexts where minimal visual footprint is needed',
     },
     'size.sm': {
-      reference: spacingTokens.space400,
+      reference: sizingTokens.size400,
       reasoning: 'Small avatar (32px = 4× base) for list items and secondary UI contexts with moderate visual presence',
     },
     'size.md': {
-      reference: spacingTokens.space500,
+      reference: sizingTokens.size500,
       reasoning: 'Medium avatar (40px = 5× base) as the default size, providing balanced visual weight for most UI contexts',
     },
     'size.lg': {
-      reference: spacingTokens.space600,
+      reference: sizingTokens.size600,
       reasoning: 'Large avatar (48px = 6× base) for profile headers and primary UI contexts requiring prominent visual presence',
     },
     'size.xl': {
-      value: SPACING_BASE_VALUE * 10,
+      reference: sizingTokens.size1000,
       reasoning: 'Extra large avatar (80px = 10× base) for profile pages and hero sections where avatar is a focal point',
     },
     'size.xxl': {
-      value: SPACING_BASE_VALUE * 16,
+      reference: sizingTokens.size1600,
       reasoning: 'Extra extra large avatar (128px = 16× base) for hero profiles and full-page profile views requiring maximum visual impact',
     },
     
     // Icon size tokens (gap fillers for sizes without existing icon tokens)
     // These fill gaps where no standard icon token exists at the required 50% ratio
     'icon.size.xs': {
-      value: SPACING_BASE_VALUE * 1.5,
+      value: SIZING_BASE_VALUE * 1.5,
       reasoning: 'Icon size for xs avatar (12px = 1.5× base) maintains 50% ratio (12/24). No existing icon token at this size, so component token fills the gap.',
     },
     'icon.size.xxl': {
-      value: SPACING_BASE_VALUE * 8,
+      value: SIZING_BASE_VALUE * 8,
       reasoning: 'Icon size for xxl avatar (64px = 8× base) maintains 50% ratio (64/128). No existing icon token at this size, so component token fills the gap.',
     },
   },
@@ -271,23 +271,23 @@ export function getAvatarIconSize(variant: AvatarIconSizeVariant): number {
  * @see Requirements 2.1-2.6 in .kiro/specs/042-avatar-component/requirements.md
  */
 export const AvatarSizeTokenReferences = {
-  /** Extra small size (24px) references space300 */
-  xs: 'space300',
+  /** Extra small size (24px) references size300 */
+  xs: 'size300',
   
-  /** Small size (32px) references space400 */
-  sm: 'space400',
+  /** Small size (32px) references size400 */
+  sm: 'size400',
   
-  /** Medium size (40px) references space500 */
-  md: 'space500',
+  /** Medium size (40px) references size500 */
+  md: 'size500',
   
-  /** Large size (48px) references space600 */
-  lg: 'space600',
+  /** Large size (48px) references size600 */
+  lg: 'size600',
   
-  /** Extra large size (80px) derivation: SPACING_BASE_VALUE * 10 */
-  xl: 'SPACING_BASE_VALUE * 10',
+  /** Extra large size (80px) derivation: SIZING_BASE_VALUE * 10 */
+  xl: 'SIZING_BASE_VALUE * 10',
   
-  /** Extra extra large size (128px) derivation: SPACING_BASE_VALUE * 16 */
-  xxl: 'SPACING_BASE_VALUE * 16',
+  /** Extra extra large size (128px) derivation: SIZING_BASE_VALUE * 16 */
+  xxl: 'SIZING_BASE_VALUE * 16',
 } as const;
 
 /**
@@ -327,10 +327,10 @@ export const AvatarIconSizeTokenReferences = {
  * 
  * @example
  * ```typescript
- * getAvatarSizeTokenReference('xs')   // Returns 'space300'
- * getAvatarSizeTokenReference('md')   // Returns 'space500'
- * getAvatarSizeTokenReference('xl')   // Returns 'SPACING_BASE_VALUE * 10'
- * getAvatarSizeTokenReference('xxl')  // Returns 'SPACING_BASE_VALUE * 16'
+ * getAvatarSizeTokenReference('xs')   // Returns 'size300'
+ * getAvatarSizeTokenReference('md')   // Returns 'size500'
+ * getAvatarSizeTokenReference('xl')   // Returns 'SIZING_BASE_VALUE * 10'
+ * getAvatarSizeTokenReference('xxl')  // Returns 'SIZING_BASE_VALUE * 16'
  * ```
  * 
  * @see Requirements 2.1-2.6 in .kiro/specs/042-avatar-component/requirements.md

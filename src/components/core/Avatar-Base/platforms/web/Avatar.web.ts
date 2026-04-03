@@ -195,12 +195,12 @@ const AVATAR_ICON_SIZE_MAP: Record<AvatarSize, IconBaseSize | 'xs' | 'xxl'> = {
  * @see Requirements: 2.1-2.6 in .kiro/specs/042-avatar-component/requirements.md
  */
 const AVATAR_SIZE_PX: Record<AvatarSize, number> = {
-  xs: AvatarSizingTokens.tokens['size.xs'].value,
-  sm: AvatarSizingTokens.tokens['size.sm'].value,
-  md: AvatarSizingTokens.tokens['size.md'].value,
-  lg: AvatarSizingTokens.tokens['size.lg'].value,
-  xl: AvatarSizingTokens.tokens['size.xl'].value,
-  xxl: AvatarSizingTokens.tokens['size.xxl'].value,
+  xs: AvatarSizingTokens['size.xs'],
+  sm: AvatarSizingTokens['size.sm'],
+  md: AvatarSizingTokens['size.md'],
+  lg: AvatarSizingTokens['size.lg'],
+  xl: AvatarSizingTokens['size.xl'],
+  xxl: AvatarSizingTokens['size.xxl'],
 };
 
 /**

@@ -17,9 +17,9 @@
  * - buttonIcon.inset.large (12px) references space150
  * - buttonIcon.inset.medium (10px) references space125 (strategic flexibility token)
  * - buttonIcon.inset.small (8px) references space100
- * - buttonIcon.size.large (48px) references space600
- * - buttonIcon.size.medium (40px) references space500
- * - buttonIcon.size.small (32px) references space400
+ * - buttonIcon.size.large (48px) references size600
+ * - buttonIcon.size.medium (40px) references size500
+ * - buttonIcon.size.small (32px) references size400
  * 
  * @see .kiro/specs/035-button-icon-component/design.md for token consumption strategy
  * @see .kiro/specs/034-component-architecture-system for Stemma System details
@@ -155,14 +155,14 @@ export const ButtonIconInsetTokenReferences = {
  * @see Requirements 6.1, 6.2, 6.3 in .kiro/specs/040-component-alignment/requirements.md
  */
 export const ButtonIconSizeTokenReferences = {
-  /** Large size (48px) references space600 */
-  large: 'space600',
+  /** Large size (48px) references size600 */
+  large: 'size600',
   
-  /** Medium size (40px) references space500 */
-  medium: 'space500',
+  /** Medium size (40px) references size500 */
+  medium: 'size500',
   
-  /** Small size (32px) references space400 */
-  small: 'space400',
+  /** Small size (32px) references size400 */
+  small: 'size400',
 } as const;
 
 /**
@@ -190,9 +190,9 @@ export function getButtonIconInsetTokenReference(variant: ButtonIconInsetVariant
  * 
  * @example
  * ```typescript
- * getButtonIconSizeTokenReference('large')  // Returns 'space600'
- * getButtonIconSizeTokenReference('medium') // Returns 'space500'
- * getButtonIconSizeTokenReference('small')  // Returns 'space400'
+ * getButtonIconSizeTokenReference('large')  // Returns 'size600'
+ * getButtonIconSizeTokenReference('medium') // Returns 'size500'
+ * getButtonIconSizeTokenReference('small')  // Returns 'size400'
  * ```
  * 
  * @see Requirements 6.1, 6.2, 6.3 in .kiro/specs/040-component-alignment/requirements.md

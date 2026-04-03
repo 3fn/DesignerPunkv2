@@ -596,6 +596,7 @@ export class TokenFileGenerator {
   private getFamilyClassName(family: string): string {
     const familyClassMap: Record<string, string> = {
       'spacing': 'SpacingTokens',
+      'sizing': 'SizingTokens',
       'radius': 'RadiusTokens',
       'fontSize': 'FontSizeTokens',
       'color': 'ColorTokens',
