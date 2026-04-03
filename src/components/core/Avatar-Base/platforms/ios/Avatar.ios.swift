@@ -97,12 +97,12 @@ enum AvatarTokens {
     /// Default border width (1px)
     /// References: borderDefault → borderWidth100
     /// @see Requirements: 7.1 - Border width for xs-xl sizes
-    static let borderWidthDefault: CGFloat = 1
+    static let borderWidthDefault: CGFloat = DesignTokens.borderWidth100
     
     /// Emphasis border width (2px)
     /// References: borderEmphasis → borderWidth200
     /// @see Requirements: 7.3 - Border width for xxl size
-    static let borderWidthEmphasis: CGFloat = 2
+    static let borderWidthEmphasis: CGFloat = DesignTokens.borderWidth200
     
     // MARK: - Avatar Opacity Tokens
     
