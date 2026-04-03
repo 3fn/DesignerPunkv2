@@ -44,6 +44,7 @@ import { blendTokens, BLEND_BASE_VALUE } from '../tokens/BlendTokens';
 
 // Shadow primitive token imports
 import { blur as blurTokens, BLUR_BASE_VALUE } from '../tokens/BlurTokens';
+import { sizingTokens, SIZING_BASE_VALUE } from '../tokens/SizingTokens';
 import { shadowOffsetX, shadowOffsetY, SHADOW_OFFSET_BASE_VALUE } from '../tokens/ShadowOffsetTokens';
 import { shadowOpacityTokens, SHADOW_OPACITY_BASE_VALUE } from '../tokens/ShadowOpacityTokens';
 
@@ -140,6 +141,7 @@ export class DTCGFormatGenerator {
     output.scale = this.generateScaleTokens();
     output.blend = this.generateBlendTokens();
     output.blur = this.generateBlurTokens();
+    output.sizing = this.generateSizingTokens();
 
     // --- Semantic token groups ---
     output.semanticColor = this.generateSemanticColorTokens();
@@ -504,6 +506,18 @@ export class DTCGFormatGenerator {
     const group: DTCGGroup = { $type: 'dimension' };
     for (const [key, token] of Object.entries(blurTokens)) {
       const extensions = this.buildPrimitiveExtensions(token, 'blur', BLUR_BASE_VALUE);
+      group[key] = this.toDTCGToken(`${token.baseValue}px`, 'dimension', token.description, extensions);
+    }
+    return group;
+  }
+
+  /**
+   * Generate sizing primitive tokens as DTCG dimension type.
+   */
+  private generateSizingTokens(): DTCGGroup {
+    const group: DTCGGroup = { $type: 'dimension' };
+    for (const [key, token] of Object.entries(sizingTokens)) {
+      const extensions = this.buildPrimitiveExtensions(token, 'sizing', SIZING_BASE_VALUE);
       group[key] = this.toDTCGToken(`${token.baseValue}px`, 'dimension', token.description, extensions);
     }
     return group;

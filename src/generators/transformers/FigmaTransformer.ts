@@ -114,6 +114,7 @@ const PRIMITIVE_GROUPS = [
   'scale',
   'blend',
   'blur',
+  'sizing',
 ] as const;
 
 /**

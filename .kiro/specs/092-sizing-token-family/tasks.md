@@ -39,7 +39,7 @@
     - Verify: TypeScript compiles, new tokens accessible
     - _Requirements: 1.1, 1.2, 1.3_
 
-  - [ ] 1.2 Update generation pipeline and regenerate
+  - [x] 1.2 Update generation pipeline and regenerate
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
