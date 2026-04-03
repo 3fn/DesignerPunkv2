@@ -29,22 +29,23 @@
 
 import { defineComponentTokens } from '../../../build/tokens';
 import { spacingTokens } from '../../../tokens/SpacingTokens';
+import { sizingTokens } from '../../../tokens/SizingTokens';
 
 /**
  * Button-Icon component tokens defined using the hybrid authoring API.
  * 
- * Each token references a primitive spacing token and includes reasoning
+ * Each token references a primitive token and includes reasoning
  * explaining why the token exists and its purpose in the component.
  * 
- * Inset (padding) token values:
+ * Inset (padding) token values — reference spacing primitives:
  * - inset.large: 12px (1.5 × base, references space150)
  * - inset.medium: 10px (1.25 × base, references space125 strategic flexibility token)
  * - inset.small: 8px (1 × base, references space100)
  * 
  * Size (width/height) token values:
- * - size.large: 48px (6 × base, references space600)
- * - size.medium: 40px (5 × base, references space500)
- * - size.small: 32px (4 × base, references space400)
+ * - size.large: 48px (6 × base, references size600)
+ * - size.medium: 40px (5 × base, references size500)
+ * - size.small: 32px (4 × base, references size400)
  * 
  * @see Requirements 6.1, 6.2, 6.3 in .kiro/specs/040-component-alignment/requirements.md
  */
@@ -65,17 +66,18 @@ export const ButtonIconTokens = defineComponentTokens({
       reference: spacingTokens.space100,
       reasoning: 'Small button variant uses 8px padding (1× base) for minimal footprint in dense UI layouts while meeting minimum touch target requirements',
     },
-    // Size (width/height) tokens - @see Requirements 6.1, 6.2, 6.3
+    // Size (width/height) tokens — reference sizing primitives, not spacing
+    // @see Requirements 6.1, 6.2, 6.3
     'size.large': {
-      reference: spacingTokens.space600,
+      reference: sizingTokens.size600,
       reasoning: 'Large button size (48px = 6× base) provides generous touch target exceeding tapAreaRecommended, calculated as icon (24px) + padding (12px × 2)',
     },
     'size.medium': {
-      reference: spacingTokens.space500,
+      reference: sizingTokens.size500,
       reasoning: 'Medium button size (40px = 5× base) provides standard touch target, calculated as icon (18px) + padding (10px × 2) rounded to grid',
     },
     'size.small': {
-      reference: spacingTokens.space400,
+      reference: sizingTokens.size400,
       reasoning: 'Small button size (32px = 4× base) provides compact visual footprint, calculated as icon (13px) + padding (8px × 2) rounded to grid',
     },
   },
