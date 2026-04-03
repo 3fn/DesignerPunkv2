@@ -15,7 +15,7 @@ New contract concepts introduced during component work that need ballot measure 
 | Spec 088 Nav-Header-Base (Task 1.1b) | `focus_order`, `safe_area`, `three_regions`, `separator`, `translucent` | 5 | ✅ Added (131 concepts) |
 | Spec 088 Nav-Header-Page (Task 2.1) | `heading`, `back_navigation`, `close_positioning`, `title_alignment`, `action_styling`, `platform_height`, `collapsible_scroll`, `badge_threshold` | 8 | ✅ Added (131 concepts — some may overlap) |
 | Spec 088 Nav-Header-App (Task 3.1) | `no_heading` | 1 | ✅ Added (131 concepts) |
-| Spec 090 Progress-Bar-Base (Task 1.2) | `milestone_announcements`, `track_fill`, `value_transition`, `indeterminate_pulse`, `value_range` | 5 | ❌ **Blocking** — 5 test failures in `contract-catalog-name-validation.test.ts` |
+| Spec 090 Progress-Bar-Base (Task 1.2) | `milestone_announcements`, `track_fill`, `value_transition`, `indeterminate_pulse`, `value_range` | 5 | ✅ Added (136 concepts) — resolved in Task 4.2 |
 
 **Issue file**: `.kiro/issues/2026-04-03-progress-bar-contract-catalog-update.md`
 
@@ -36,7 +36,7 @@ Hard-coded `.easeInOut`/`.easeIn`/`.easeOut` instead of token easing across 9+ c
 
 ### Button-Icon Android
 - Data C5: Material ripple vs blend utility inconsistency with Button-CTA
-- Data C6: `border_border_default` double-naming in generated tokens
+- ~~Data C6: `border_border_default` double-naming in generated tokens~~ **Resolved — component-level naming, not generation bug. Fixed in Button-CTA, Button-Icon, VisualStateStyles.**
 
 ### Button-VerticalList-Item
 - Kenya C2: `.easeInOut` instead of token easing (P1)
@@ -82,3 +82,4 @@ These are architectural patterns or design decisions, not per-component bugs:
 | VerticalList-Set `error()` crash in semantics | Fixed — uses stateDescription + liveRegion | 2026-04-03 |
 | Avatar-Base iOS border width hard-coded | Fixed — references DesignTokens.borderWidth100/200 | 2026-04-03 |
 | Container-Base Android `Log.w` for conflicting props | Fixed — uses `require()` (fail-loudly) | 2026-04-03 |
+| Button `border_border_default` naming | Fixed — replaced with `border_default`/`border_emphasis`, extensions removed | 2026-04-03 |
