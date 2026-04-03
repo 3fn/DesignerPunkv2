@@ -12,7 +12,7 @@
 |---|-----|--------------------|--------------------|-------------------|--------|
 | 0 | Top bar (nav bar / app bar) | Lina (component spec) | Direct — new component spec | Spec 088 (complete) | Complete |
 | 1 | Content list item | Lina (component spec) | Direct — new component spec | TBD (new spec) | Not started |
-| 2 | Linear progress bar | Lina (component spec) | Direct — new component spec | TBD (new spec) | Not started |
+| 2 | Linear progress bar | Lina (component spec) | Direct — new component spec | Spec 090 (complete) | Complete |
 | 3 | Container-Card-Base readiness | Lina (readiness) | Holistic — composition refactor (Spec 085) + two-part readiness model (Spec 086) | Spec 085 (complete), Spec 086 (complete) | Complete |
 
 ---
@@ -51,9 +51,9 @@
 
 | Status | Count |
 |--------|-------|
-| Complete | 6 (#0, #3, #16, #17, #18, #19) |
+| Complete | 7 (#0, #2, #3, #16, #17, #18, #19) |
 | Reframed | 3 (#4, #7, #13) |
-| Not started | 2 (#1, #2) |
+| Not started | 1 (#1) |
 | Dependent | 1 (#9) |
 | Deferred | 1 (#11) |
 | Closed (product-specific) | 7 (#5, #6, #8, #10, #12, #14, #15) |
