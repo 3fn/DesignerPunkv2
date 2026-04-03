@@ -449,26 +449,27 @@ struct ContainerCardBase<Content: View>: View {
     
     // Resolve then pass: Card shorthand → Base token name string
     
-    private var resolvedBackground: String? {
-        switch background {
-        case .surfacePrimary: return "color.structure.surface.primary"
-        case .surfaceSecondary: return "color.structure.surface.secondary"
-        case .surfaceTertiary: return "color.structure.surface.tertiary"
-        }
+    private var resolvedBackground: Color? {
+        mapCardBackgroundToColor(background)
     }
     
-    private var resolvedShadow: String? {
+    private var resolvedShadow: ContainerBaseShadowProperties? {
         switch shadow {
         case .none: return nil
-        case .container: return "shadow.container"
+        case .container: return ContainerBaseShadowProperties(
+            color: shadowContainerColor,
+            radius: shadowContainerRadius,
+            x: shadowContainerX,
+            y: shadowContainerY
+        )
         }
     }
     
-    private var resolvedBorderColor: String? {
+    private var resolvedBorderColor: Color? {
         guard border != .none else { return nil }
         switch borderColor {
-        case .borderDefault: return "color.structure.border"
-        case .borderSubtle: return "color.structure.border.subtle"
+        case .borderDefault: return colorBorder
+        case .borderSubtle: return colorBorderSubtle
         }
     }
     

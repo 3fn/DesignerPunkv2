@@ -131,22 +131,22 @@ struct ContainerBase<Content: View>: View {
     let paddingInlineEnd: ContainerBasePaddingValue?
     
     /// Background color token name
-    let background: String?
+    let background: Color?
     
     /// Shadow token name
-    let shadow: String?
+    let shadow: ContainerBaseShadowProperties?
     
     /// Border width value
     let border: ContainerBaseBorderValue
     
     /// Border color token name (defaults to color.border.default when nil)
-    let borderColor: String?
+    let borderColor: Color?
     
     /// Border radius value
     let borderRadius: ContainerBaseBorderRadiusValue
     
     /// Opacity token name
-    let opacity: String?
+    let opacity: Double
     
     /// Layering value for z-index
     let layering: ContainerBaseLayeringValue?
@@ -208,12 +208,12 @@ struct ContainerBase<Content: View>: View {
         paddingBlockEnd: ContainerBasePaddingValue? = nil,
         paddingInlineStart: ContainerBasePaddingValue? = nil,
         paddingInlineEnd: ContainerBasePaddingValue? = nil,
-        background: String? = nil,
-        shadow: String? = nil,
+        background: Color? = nil,
+        shadow: ContainerBaseShadowProperties? = nil,
         border: ContainerBaseBorderValue = .none,
-        borderColor: String? = nil,
+        borderColor: Color? = nil,
         borderRadius: ContainerBaseBorderRadiusValue = .none,
-        opacity: String? = nil,
+        opacity: Double = 1.0,
         layering: ContainerBaseLayeringValue? = nil,
         ignoresSafeArea: Bool = false,
         accessibilityLabel: String? = nil,
@@ -309,7 +309,7 @@ struct ContainerBase<Content: View>: View {
      * Returns Color.clear for nil.
      */
     private var backgroundValue: Color {
-        return resolveContainerBaseColorToken(background)
+        return background ?? Color.clear
     }
     
     /**
@@ -354,7 +354,7 @@ struct ContainerBase<Content: View>: View {
         Group {
             if border != .none {
                 RoundedRectangle(cornerRadius: cornerRadiusValue)
-                    .stroke(resolveContainerBaseBorderColor(borderColor), lineWidth: mapContainerBaseBorderToLineWidth(border))
+                    .stroke(borderColor ?? Color.clear, lineWidth: mapContainerBaseBorderToLineWidth(border))
             }
         }
     }
@@ -390,7 +390,7 @@ struct ContainerBase<Content: View>: View {
      * Returns zero shadow for nil.
      */
     private var shadowProperties: ContainerBaseShadowProperties {
-        return resolveContainerBaseShadowToken(shadow)
+        return shadow ?? ContainerBaseShadowProperties(color: Color.clear, radius: 0, x: 0, y: 0)
     }
     
     /**
@@ -428,7 +428,7 @@ struct ContainerBase<Content: View>: View {
      * Returns 1.0 (fully opaque) for nil.
      */
     private var opacityValue: Double {
-        return resolveContainerBaseOpacityToken(opacity)
+        return opacity
     }
     
     /**
@@ -644,10 +644,8 @@ func mapContainerBasePaddingValueToCGFloat(_ padding: ContainerBasePaddingValue)
     }
 }
 
-func resolveContainerBaseColorToken(_ tokenName: String?) -> Color {
-    // Implementation would resolve token to Color
-    return tokenName != nil ? Color.gray : Color.clear
-}
+// String-based token resolvers removed — Container-Base now accepts typed values directly.
+// See Spec 091 Task 3.1: Stemma-compliant refactor from String? to Color?/struct/Double.
 
 func mapContainerBaseBorderRadiusToCornerRadius(_ borderRadius: ContainerBaseBorderRadiusValue) -> CGFloat {
     // Token references: radius-050, radius-100, radius-200
@@ -667,52 +665,6 @@ func mapContainerBaseBorderToLineWidth(_ border: ContainerBaseBorderValue) -> CG
     case .emphasis: return borderEmphasis /* border.border.emphasis */
     case .heavy: return borderHeavy /* border.border.heavy */
     }
-}
-
-func getContainerBaseBorderColor() -> Color {
-    // Implementation would return color.border token value
-    return Color.gray
-}
-
-/**
- * Resolve border color from token name
- * 
- * Returns the color for the border based on the borderColor prop.
- * If borderColor is nil, defaults to color.border.default.
- * 
- * @param borderColor Optional border color token name
- * @returns SwiftUI Color for the border
- * 
- * @see Requirements 2.1, 2.2, 2.3 - Border color
- */
-func resolveContainerBaseBorderColor(_ borderColor: String?) -> Color {
-    guard let borderColor = borderColor, !borderColor.isEmpty else {
-        // Default to color.border.default when not specified
-        return colorBorder
-    }
-    
-    // Resolve the border color token
-    switch borderColor {
-    case "color.border.default":
-        return colorBorder
-    case "color.structure.border.subtle":
-        return colorBorderSubtle
-    case "color.border.emphasis":
-        return colorBorderEmphasis
-    default:
-        // Fall back to default border color for unknown tokens
-        return colorBorder
-    }
-}
-
-func resolveContainerBaseShadowToken(_ tokenName: String?) -> ContainerBaseShadowProperties {
-    // Implementation would resolve shadow token
-    return ContainerBaseShadowProperties(color: Color.clear, radius: 0, x: 0, y: 0)
-}
-
-func resolveContainerBaseOpacityToken(_ tokenName: String?) -> Double {
-    // Implementation would resolve opacity token
-    return 1.0
 }
 
 func mapContainerBaseLayeringToZIndex(_ layering: ContainerBaseLayeringValue?) -> Double {
