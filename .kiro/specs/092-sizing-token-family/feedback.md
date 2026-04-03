@@ -180,11 +180,29 @@ Incorporated Lina's requirements feedback:
 
 Requirements approved. Ready to proceed to tasks.
 
+### [THURGOOD R3]
+
+Incorporated Ada's requirements feedback:
+
+- **Req 1 AC 1**: Added `size250` (base × 2.5 = 20) — 13 tokens total, not 12. Required by Progress-Node lg base size.
+- **Req 2 AC 2**: Fixed Progress-Node sizes — lg base is 20 (`size250`), not 24. Added current-size (emphasized) token references. Added `SPACING_BASE_VALUE` → `SIZING_BASE_VALUE` rename. Current-size tokens reference primitives directly per Lina's F1 (no base × multiplier computation).
+- **Req 3**: Updated all "12 sizing" references to "13 sizing".
+
+Ada's correction caught a real data error — the design outline's Progress-Node lg value was wrong (24 instead of 20). Good catch.
+
 ---
 
 ## Design Feedback
 
-[Populated after design doc is created]
+### Ada — Token Review
+
+**Approved.** All requirements feedback incorporated — `size250` in scale, Progress-Node current sizes as direct primitive references (Decision 3), `SPACING_BASE_VALUE` rename captured, 13 tokens throughout.
+
+Correctness property #4 ("no spacing primitive referenced for dimensional purposes in migrated components") is a strong grep-verifiable gate — recommend running it as a final validation step, same as blur spec's property #6.
+
+**Implementation note:** Progress-Node gap tokens (`node.gap.sm/md/lg`) remain as spacing refs — gaps are spacing, not sizing. This is implicit in the migration mapping but worth a code comment during implementation to prevent future confusion about why gap tokens weren't migrated.
+
+Ready for tasks.
 
 ---
 
