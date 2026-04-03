@@ -98,7 +98,7 @@
     - Verify: Progress-Node tests pass, dimensions unchanged
     - _Requirements: 2.2, 2.7_
 
-  - [ ] 2.3 Migrate Nav-TabBar-Base dot size
+  - [x] 2.3 Migrate Nav-TabBar-Base dot size
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada

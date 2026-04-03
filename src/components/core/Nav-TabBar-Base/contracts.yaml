@@ -203,7 +203,7 @@ contracts:
     description: Active and inactive tabs have distinct icon and indicator styling
     behavior: |
       Active tab: solid-fill icon using color.action.navigation, with a
-      space050 x space050 indicator dot below the icon in the same color.
+      size050 x size050 indicator dot below the icon in the same color.
       Inactive tab: outline-stroke icon using color.icon.navigation.inactive,
       no indicator dot.
     wcag: null

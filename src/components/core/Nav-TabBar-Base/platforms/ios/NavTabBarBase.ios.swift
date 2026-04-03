@@ -29,7 +29,7 @@ enum NavTabBarTokens {
     static let inactiveIconColor: Color = Color(DesignTokens.colorIconNavigationInactive)
 
     // Dot (contract: visual_state_colors)
-    static let dotSize: CGFloat = DesignTokens.space050
+    static let dotSize: CGFloat = DesignTokens.size050
     static let dotColor: Color = Color(DesignTokens.colorActionNavigation)
 
     // Glow gradient (contract: visual_gradient_glow)

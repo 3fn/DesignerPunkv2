@@ -40,10 +40,10 @@ describe('Nav-TabBar-Base Android — Contract Compliance', () => {
       expect(kt).toContain('color_icon_navigation_inactive');
     });
 
-    it('visual_state_colors: dot uses color.action.navigation and space050', () => {
+    it('visual_state_colors: dot uses color.action.navigation and size050', () => {
       expect(kt).toContain('dotColor');
       expect(kt).toContain('dotSize');
-      expect(kt).toContain('space_050');
+      expect(kt).toContain('size_050');
       expect(kt).toContain('CircleShape');
     });
 
@@ -88,7 +88,7 @@ describe('Nav-TabBar-Base Android — Contract Compliance', () => {
   describe('Spacing Tokens', () => {
     it('uses correct active/inactive padding tokens', () => {
       expect(kt).toContain('space_150'); // active top + inline
-      expect(kt).toContain('space_050'); // active bottom, dot size
+      expect(kt).toContain('size_050'); // active bottom, dot size
       expect(kt).toContain('space_150'); // inactive top
       expect(kt).toContain('space_075'); // inactive bottom
     });

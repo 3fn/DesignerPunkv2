@@ -86,7 +86,7 @@ private object NavTabBarTokens {
     val inactiveIconColor = Color(DesignTokens.color_icon_navigation_inactive)
 
     // Dot (contract: visual_state_colors)
-    val dotSize = DesignTokens.space_050
+    val dotSize = DesignTokens.size_050
     val dotColor = Color(DesignTokens.color_action_navigation)
 
     // Glow gradient (contract: visual_gradient_glow)

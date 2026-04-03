@@ -84,7 +84,7 @@ describe('Nav-TabBar-Base iOS — Contract Compliance', () => {
   describe('Spacing Tokens', () => {
     it('uses correct active/inactive padding tokens', () => {
       expect(swift).toContain('space150'); // active top + inline
-      expect(swift).toContain('space050'); // active bottom, dot size
+      expect(swift).toContain('size050'); // active bottom, dot size
       expect(swift).toContain('space150'); // inactive top
       expect(swift).toContain('space075'); // inactive bottom
     });
