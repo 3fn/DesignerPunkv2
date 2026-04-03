@@ -50,7 +50,7 @@
     - Verify: all 13 sizing primitives present in generated output
     - _Requirements: 1.4, 3.1, 3.2, 3.3_
 
-  - [ ] 1.3 Add sizing primitive tests
+  - [x] 1.3 Add sizing primitive tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
