@@ -154,12 +154,12 @@ public enum AvatarSize: String, CaseIterable {
     /// Width is calculated based on shape (circle = height, hexagon = height × 0.866)
     var dimension: CGFloat {
         switch self {
-        case .xs: return 24
-        case .sm: return 32
-        case .md: return 40
-        case .lg: return 48
-        case .xl: return 80
-        case .xxl: return 128
+        case .xs: return DesignTokens.size300
+        case .sm: return DesignTokens.size400
+        case .md: return DesignTokens.size500
+        case .lg: return DesignTokens.size600
+        case .xl: return DesignTokens.size1000
+        case .xxl: return DesignTokens.size1600
         }
     }
     

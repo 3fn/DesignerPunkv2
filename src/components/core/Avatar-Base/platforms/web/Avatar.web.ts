@@ -17,6 +17,7 @@
  */
 
 import { AvatarType, AvatarSize, AVATAR_DEFAULTS } from '../../types';
+import { AvatarSizingTokens } from '../../avatar-sizing.tokens';
 import { IconBaseSize } from '../../../Icon-Base/types';
 // Import createIconBase for rendering icons within Avatar
 // Using the functional API for simpler integration within shadow DOM
@@ -194,12 +195,12 @@ const AVATAR_ICON_SIZE_MAP: Record<AvatarSize, IconBaseSize | 'xs' | 'xxl'> = {
  * @see Requirements: 2.1-2.6 in .kiro/specs/042-avatar-component/requirements.md
  */
 const AVATAR_SIZE_PX: Record<AvatarSize, number> = {
-  xs: 24,   // space300
-  sm: 32,   // space400
-  md: 40,   // space500
-  lg: 48,   // space600
-  xl: 80,   // SPACING_BASE_VALUE * 10
-  xxl: 128, // SPACING_BASE_VALUE * 16
+  xs: AvatarSizingTokens.tokens['size.xs'].value,
+  sm: AvatarSizingTokens.tokens['size.sm'].value,
+  md: AvatarSizingTokens.tokens['size.md'].value,
+  lg: AvatarSizingTokens.tokens['size.lg'].value,
+  xl: AvatarSizingTokens.tokens['size.xl'].value,
+  xxl: AvatarSizingTokens.tokens['size.xxl'].value,
 };
 
 /**

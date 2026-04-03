@@ -106,7 +106,7 @@
     - Verify: TabBar tests pass, dot dimensions unchanged
     - _Requirements: 2.3, 2.7_
 
-  - [ ] 2.4 Create Avatar-Base component token file
+  - [x] 2.4 Create Avatar-Base component token file
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

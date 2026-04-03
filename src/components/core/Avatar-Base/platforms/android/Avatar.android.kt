@@ -225,32 +225,32 @@ enum class AvatarSize(
     val iconTokenReference: String
 ) {
     Xs(
-        dimension = DesignTokens.space_300,  // 24dp - avatar.size.xs
+        dimension = DesignTokens.size_300,  // 24dp - avatar.size.xs
         iconDimension = AvatarTokens.iconSizeXs,  // 12dp - component token gap filler
         iconTokenReference = "avatar.icon.size.xs"
     ),
     Sm(
-        dimension = DesignTokens.space_400,  // 32dp - avatar.size.sm
+        dimension = DesignTokens.size_400,  // 32dp - avatar.size.sm
         iconDimension = DesignTokens.icon_size_050,  // 16dp
         iconTokenReference = "icon.size050"
     ),
     Md(
-        dimension = DesignTokens.space_500,  // 40dp - avatar.size.md
+        dimension = DesignTokens.size_500,  // 40dp - avatar.size.md
         iconDimension = DesignTokens.icon_size_075,  // 20dp
         iconTokenReference = "icon.size075"
     ),
     Lg(
-        dimension = DesignTokens.space_600,  // 48dp - avatar.size.lg
+        dimension = DesignTokens.size_600,  // 48dp - avatar.size.lg
         iconDimension = DesignTokens.icon_size_100,  // 24dp
         iconTokenReference = "icon.size100"
     ),
     Xl(
-        dimension = GeneratedAvatarTokens.sizeXl,  // 80dp - avatar.size.xl
+        dimension = DesignTokens.size_1000,  // 80dp - avatar.size.xl
         iconDimension = DesignTokens.icon_size_500,  // 40dp
         iconTokenReference = "icon.size500"
     ),
     Xxl(
-        dimension = GeneratedAvatarTokens.sizeXxl,  // 128dp - avatar.size.xxl
+        dimension = DesignTokens.size_1600,  // 128dp - avatar.size.xxl
         iconDimension = AvatarTokens.iconSizeXxl,  // 64dp - component token gap filler
         iconTokenReference = "avatar.icon.size.xxl"
     );
