@@ -49,6 +49,7 @@ const COMPONENT_FAMILY_DEMO_MAP: Record<string, string> = {
   'Nav-SegmentedChoice-Base': 'nav-segmented-choice-demo.html',
   'Nav-TabBar-Base': 'nav-tabbar-base-demo.html',
   'Nav-Header-Base,Nav-Header-Page,Nav-Header-App': 'nav-header-demo.html',
+  'Progress-Bar-Base': 'progress-bar-demo.html',
 };
 
 /** Required CSS classes that demo pages should use for structural consistency */

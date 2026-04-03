@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress-Bar Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+</head>
+<body>
+  <a href="index.html" class="demo-back-link">← Back to Index</a>
+  <div class="demo-header">
+    <h1 class="demo-page-title">Progress-Bar-Base</h1>
+  </div>
+
+  <section class="demo-section">
+    <h2 class="demo-section-title">Usage Example: Determinate progress</h2>
+    <div class="demo-viewport">
+      <progress-bar value="0.75" accessibility-label="Profile completion" size="md"></progress-bar>
+    </div>
+  </section>
+
+  <section class="demo-section">
+    <h2 class="demo-section-title">Usage Example: Indeterminate loading</h2>
+    <div class="demo-viewport">
+      <progress-bar mode="indeterminate" accessibility-label="Loading data" size="md"></progress-bar>
+    </div>
+  </section>
+
+  <section class="demo-section">
+    <h2 class="demo-section-title">Usage Example: Size variants</h2>
+    <div class="demo-viewport" style="display: flex; flex-direction: column; gap: 16px;">
+      <progress-bar value="0.5" accessibility-label="Small" size="sm"></progress-bar>
+      <progress-bar value="0.5" accessibility-label="Medium" size="md"></progress-bar>
+      <progress-bar value="0.5" accessibility-label="Large" size="lg"></progress-bar>
+    </div>
+  </section>
+
+  <section class="demo-section">
+    <h2 class="demo-section-title">Token Verification</h2>
+    <div class="demo-viewport">
+      <progress-bar value="1" accessibility-label="Complete" size="md"></progress-bar>
+    </div>
+  </section>
+
+  <script>
+    if (window.location.protocol === 'file:') {
+      var banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+  </script>
+</body>
+</html>

@@ -89,7 +89,11 @@ export class ProgressBarBase extends HTMLElement {
         fill.style.opacity = '1';
       }
     } else {
-      const value = parseFloat(this.getAttribute('value') || '0');
+      const valueAttr = this.getAttribute('value');
+      if (valueAttr === null) {
+        throw new Error('Progress-Bar-Base: value attribute is required in determinate mode');
+      }
+      const value = parseFloat(valueAttr);
       this._validateValue(value);
 
       fill.className = 'progress-bar__fill progress-bar__fill--determinate';
