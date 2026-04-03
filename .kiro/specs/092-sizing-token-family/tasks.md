@@ -116,7 +116,7 @@
     - Verify: Avatar tests pass, all 6 size variants render at same dimensions
     - _Requirements: 2.4, 2.7, 2.8_
 
-  - [ ] 2.5 Create Input-Checkbox-Base component token file
+  - [x] 2.5 Create Input-Checkbox-Base component token file
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -127,7 +127,7 @@
     - Verify: Checkbox tests pass, all 3 size variants render at same dimensions
     - _Requirements: 2.5, 2.7, 2.8_
 
-  - [ ] 2.6 Create Input-Radio-Base component token file
+  - [x] 2.6 Create Input-Radio-Base component token file
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
