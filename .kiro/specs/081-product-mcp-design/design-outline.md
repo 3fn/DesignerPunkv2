@@ -171,5 +171,25 @@ With three MCPs in production, no single existing agent owns the cross-cutting i
 
 ---
 
+## Reference Bookmarks
+
+### AI Interaction Atlas
+
+**Source**: https://github.com/quietloudlab/ai-interaction-atlas (Apache 2.0)
+**NPM**: `@quietloudlab/ai-interaction-atlas`
+**Relevance**: Design Session 1 (Product Primitives Shape)
+
+An open-source taxonomy for AI interaction design with six dimensions: AI tasks, human tasks, system tasks, data artifacts, constraints, and touchpoints. Each task has typed inputs/outputs, relations to other tasks (enables, commonly_followed_by, incompatible_with), and UX notes (risk, tip, anti_patterns). Available as a queryable npm package.
+
+**Why it's worth reviewing when this spec activates:**
+
+The atlas's data model offers one approach to the "intent signals" question in product primitives. Its `WorkflowTemplate` concept — a graph of connected tasks with typed data flowing between them — is structurally close to what the Product MCP needs for describing how user actions connect to system and AI behavior. The task-relation model (with strength ratings and constraint attachments) is a concrete schema example for encoding product interaction flows.
+
+The atlas's constraint categories (accuracy, bias, privacy, transparency, latency) are also relevant for AI-powered products like WrKing Class, where ethical constraints shape screen-level design decisions.
+
+**Limitations to keep in mind:** The atlas is AI-interaction-specific. The Product MCP needs to serve any product, not just AI-powered ones. The atlas should inform the product primitives shape, not constrain it. Non-AI screens (settings, profile editors, simple forms) still need product primitives without AI task vocabulary.
+
+---
+
 **Organization**: spec-guide
 **Scope**: 081-product-mcp-design
