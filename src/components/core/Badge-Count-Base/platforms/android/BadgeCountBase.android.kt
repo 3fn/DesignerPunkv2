@@ -94,7 +94,7 @@ private object BadgeCountBaseTokens {
      * References: color.surface → white200
      * @see Requirements: Design.md - Default colors
      */
-    val backgroundColor: Color = Color(DesignTokens.color_surface)
+    val backgroundColor: Color = Color(DesignTokens.color_structure_surface)
     
     /** Text color for badge
      * References: color.text.default → gray300

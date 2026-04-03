@@ -179,7 +179,7 @@ fun ProgressIndicatorNodeBase(
     val reduceMotion = remember {
         Settings.Global.getFloat(
             context.contentResolver,
-            Settings.Global.TRANSITION_ANIMATION_SCALE,
+            Settings.Global.ANIMATOR_DURATION_SCALE,
             1f
         ) == 0f
     }

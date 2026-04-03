@@ -120,8 +120,8 @@ enum class NavSegmentedChoiceSize {
     }
 
     val iconSize get() = when (this) {
-        STANDARD -> 28
-        CONDENSED -> 24
+        STANDARD -> DesignTokens.icon_size_125  // 28dp
+        CONDENSED -> DesignTokens.icon_size_100  // 24dp
     }
 }
 
@@ -174,12 +174,12 @@ fun NavSegmentedChoiceBase(
     val indicatorShape = RoundedCornerShape(NavSegmentedChoiceTokens.indicatorRadius)
     val selectedIndex = segments.indexOfFirst { it.value == resolvedSelectedValue }.coerceAtLeast(0)
 
-    // Contract: accessibility_reduced_motion — Settings.Global.TRANSITION_ANIMATION_SCALE
+    // Contract: accessibility_reduced_motion — Settings.Global.ANIMATOR_DURATION_SCALE
     val context = LocalContext.current
     val reduceMotion = remember {
         Settings.Global.getFloat(
             context.contentResolver,
-            Settings.Global.TRANSITION_ANIMATION_SCALE,
+            Settings.Global.ANIMATOR_DURATION_SCALE,
             1f
         ) == 0f
     }

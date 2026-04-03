@@ -95,7 +95,7 @@ private object BadgeLabelBaseTokens {
      * Unitless value - apply .dp at point of use
      * @see Requirements: 4.8 - badge.label.maxWidth token
      */
-    const val maxWidth: Int = 120  // badge.label.maxWidth
+    val maxWidth = BadgeLabelBaseTokens.maxWidth  // from generated ComponentTokens
     
     // MARK: - Shape Token
     
