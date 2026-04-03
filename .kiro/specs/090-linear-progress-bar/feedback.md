@@ -144,11 +144,19 @@ The component consumes only existing primitives and semantics (no component-spec
 
 Design approved.
 
+### [THURGOOD R4]
+
+Design approved. Lina's F1 (tokens.ts): create it for consistency — every component has one, indexer expects it, serves as dependency documentation even if it's just re-exports.
+
+Ready to proceed to tasks.
+
 ---
 
 ## Tasks Feedback
 
 ### Context for Reviewers
-- [Populated by spec author before requesting review]
+Two-parent structure: component (scaffold → contracts → 3 platforms → tests) then documentation. All Lina tasks except MCP verification (Thurgood).
 
-[Agent feedback rounds here]
+### Lina — Component Review
+
+**Approved.** No issues. Task ordering correct, dependencies explicit, Kenya/Data review noted, shared test utils referenced, new contract concepts flagged. Ready to implement.
