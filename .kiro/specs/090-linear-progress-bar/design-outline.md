@@ -6,6 +6,7 @@
 **Status**: Design Outline — Draft
 **Family**: ProgressIndicator
 **Gap Report**: #2 (Spec 083)
+**Dependencies**: Spec 092 (Sizing Token Family — complete)
 
 ---
 
@@ -148,11 +149,11 @@ Track and fill use `radiusFull` (pill shape) — the bar is a capsule, not a rec
 | Border | `radiusFull` | Capsule shape — exists |
 | Motion | `duration150` | Determinate transition — exists |
 | Motion | `easingStandard` | Transition easing — exists |
-| Component | `progressBar.height.sm` | 4px — **needs creation** |
-| Component | `progressBar.height.md` | 8px — **needs creation** |
-| Component | `progressBar.height.lg` | 12px — **needs creation** |
+| Sizing | `size050` | Bar height sm (4px) — exists (Spec 092) |
+| Sizing | `size100` | Bar height md (8px) — exists (Spec 092) |
+| Sizing | `size150` | Bar height lg (12px) — exists (Spec 092) |
 
-3 new component tokens needed for bar height. These reference spacing primitives (`space050` = 4px, `space100` = 8px, `space150` = 12px). Ada to create — small scope, not a separate spec.
+All tokens exist. No new tokens needed — Spec 092 (Sizing Token Family) resolved the height token gap.
 
 ---
 
@@ -195,7 +196,7 @@ Track and fill use `radiusFull` (pill shape) — the bar is a capsule, not a rec
 
 3. **RTL behavior**: Fill grows from inline-start to inline-end. In RTL, this means right-to-left. CSS logical properties handle this on web. iOS and Android need explicit RTL support. Confirm this is the expected behavior.
 
-4. **Component token creation**: Ada to create 3 height tokens. Small enough to be a subtask, not a separate spec. Confirm.
+4. ~~**Component token creation**: Ada to create 3 height tokens.~~ **Resolved** — Spec 092 (Sizing Token Family) created sizing primitives. `size050` (4), `size100` (8), `size150` (12) are available. No new tokens needed.
 
 ---
 
