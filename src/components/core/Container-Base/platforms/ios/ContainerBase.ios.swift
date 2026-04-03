@@ -248,7 +248,7 @@ struct ContainerBase<Content: View>: View {
         content
             .padding(paddingValue)
             .background(currentBackgroundColor)
-            .cornerRadius(cornerRadiusValue)
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadiusValue))
             .overlay(borderOverlay)
             .overlay(focusIndicatorOverlay)
             .shadow(color: shadowColor, radius: shadowRadius, x: shadowX, y: shadowY)

@@ -656,8 +656,7 @@ val accessibilityFocusOffset: Dp = space025 /* space025 */
 val accessibilityFocusWidth: Dp = borderWidth200 /* borderWidth200 */
 
 /**
- * Focus indicator outline color (purple300 - primary brand color)
- * References: accessibility.focus.color → purple300 primitive token
+ * Focus indicator outline color — references accessibility.focus.color token
  * Ensures 3:1 contrast ratio per WCAG 1.4.11
  */
 val accessibilityFocusColor: Color = Color(DesignTokens.accessibilityFocusColor)

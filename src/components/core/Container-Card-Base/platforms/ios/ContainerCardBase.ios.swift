@@ -500,7 +500,7 @@ struct ContainerCardBase<Content: View>: View {
     @ViewBuilder
     private var focusIndicatorOverlay: some View {
         if focusable {
-            RoundedRectangle(cornerRadius: cornerRadiusValue)
+            RoundedRectangle(cornerRadius: mapCardBorderRadiusToCornerRadius(borderRadius))
                 .stroke(cardAccessibilityFocusColor, lineWidth: cardAccessibilityFocusWidth)
                 .padding(-cardAccessibilityFocusOffset)
                 .opacity(isFocused ? 1 : 0)

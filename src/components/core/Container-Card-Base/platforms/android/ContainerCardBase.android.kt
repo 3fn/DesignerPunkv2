@@ -362,6 +362,8 @@ fun ContainerCardBase(
                 if (interactive) {
                     this.role = when (role) {
                         CardRole.Button -> Role.Button
+                        // Compose lacks Role.Link — use Role.Button with link semantics via contentDescription
+                        // TODO: Update when Compose adds Role.Link support
                         CardRole.Link -> Role.Button
                     }
                 }
@@ -400,7 +402,10 @@ fun ContainerCardBase(
 
     // Render: interaction wrapper → ContainerBase → content
     // Card owns interaction; Base owns layout (Design Decision 2)
-    Box(modifier = interactionModifier.background(interactionOverlayColor)) {
+    Box(modifier = interactionModifier
+        .clip(RoundedCornerShape(getCardCornerRadiusPx(borderRadius).dp))
+        .background(interactionOverlayColor)
+    ) {
         ContainerBase(
             padding = resolvedPadding,
             paddingVertical = resolvedPaddingVertical,
