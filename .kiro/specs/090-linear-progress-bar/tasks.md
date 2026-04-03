@@ -40,7 +40,7 @@
     - Create `tokens.ts` with re-exports of consumed tokens (color, sizing, border, motion)
     - _Requirements: 1.1, 3.1, 3.2, 3.3, 3.4_
 
-  - [ ] 1.2 Author behavioral contracts
+  - [x] 1.2 Author behavioral contracts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

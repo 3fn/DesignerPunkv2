@@ -1,0 +1,132 @@
+version: "1.0.0"
+component: Progress-Bar-Base
+family: ProgressIndicator
+
+contracts:
+  accessibility_progressbar_role:
+    category: accessibility
+    description: Correct ARIA progressbar role and value attributes
+    behavior: |
+      Web (determinate): role="progressbar", aria-valuenow={value},
+      aria-valuemin="0", aria-valuemax="1", aria-label={accessibilityLabel}.
+      Web (indeterminate): role="progressbar", aria-label, no aria-valuenow.
+      iOS: .accessibilityValue with percentage (determinate) or "loading" (indeterminate).
+      Android: semantics { progressBarRangeInfo } (determinate) or contentDescription (indeterminate).
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Determinate has role="progressbar" with aria-valuenow
+      - Indeterminate has role="progressbar" without aria-valuenow
+      - aria-label matches accessibilityLabel prop
+    test_approach: |
+      Render in both modes, verify ARIA attributes present/absent.
+    required: true
+
+  accessibility_milestone_announcements:
+    category: accessibility
+    description: Screen reader announcements at milestone thresholds only
+    behavior: |
+      Announcements occur at 0%, 25%, 50%, 75%, 100% — not on every
+      value change. Tracks last announced milestone. Announces when
+      a new threshold is crossed. Prevents noise during continuous updates.
+    wcag: "4.1.3 Status Messages"
+    platforms: [web, ios, android]
+    validation:
+      - Value change from 0.1 to 0.2 does not announce
+      - Value change from 0.2 to 0.26 announces "25%"
+      - Value change from 0.74 to 0.76 announces "75%"
+    test_approach: |
+      Track announcements across value changes, verify only milestones trigger.
+    required: true
+
+  visual_track_fill:
+    category: visual
+    description: Track and fill render with correct progress color tokens
+    behavior: |
+      Track: full width, color.progress.pending.background.
+      Fill (determinate): color.progress.completed.background, width = value × track width.
+      Fill (indeterminate): color.progress.current.background, pulsing opacity.
+      Both track and fill use radiusFull for capsule shape.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Track uses pending background color
+      - Determinate fill uses completed background color
+      - Indeterminate fill uses current background color
+      - Both elements have radiusFull border radius
+    test_approach: |
+      Render in both modes, verify colors and border radius.
+    required: true
+
+  visual_size_variants:
+    category: visual
+    description: Three size variants with sizing token heights
+    behavior: |
+      sm: size050 (4px). md: size100 (8px, default). lg: size150 (12px).
+      Height applies to both track and fill.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - sm height is 4px
+      - md height is 8px (default)
+      - lg height is 12px
+    test_approach: |
+      Render each size variant, verify height.
+    required: true
+
+  animation_value_transition:
+    category: animation
+    description: Smooth fill transition on determinate value change
+    behavior: |
+      When value changes, fill width transitions using duration150
+      and easingStandard. Reduced motion: fill moves instantly.
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Fill transitions smoothly on value change
+      - Reduced motion disables transition
+    test_approach: |
+      Change value, verify transition applied. Enable reduced motion, verify instant.
+    required: true
+
+  animation_indeterminate_pulse:
+    category: animation
+    description: Pulsing opacity animation in indeterminate mode
+    behavior: |
+      Fill opacity cycles between ~0.3 and 1.0 using duration350
+      and easingStandard. Communicates activity without implying direction.
+      Reduced motion: static fill at INDETERMINATE_STATIC_FILL (0.33) width,
+      no animation.
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Indeterminate fill pulses in opacity
+      - Reduced motion shows static fill at 0.33 width
+    test_approach: |
+      Render indeterminate, verify opacity animation. Enable reduced motion,
+      verify static fill.
+    required: true
+
+  validation_value_range:
+    category: validation
+    description: Runtime error when value outside 0–1
+    behavior: |
+      When value < 0 or value > 1, throws runtime error with descriptive
+      message: "Progress-Bar-Base: value must be between 0 and 1, received {value}".
+      Consistent with Nav-SegmentedChoice-Base segment count validation.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - value=-0.1 throws error
+      - value=1.1 throws error
+      - value=0 renders normally
+      - value=1 renders normally
+      - Error message includes the invalid value
+    test_approach: |
+      Pass out-of-range values, verify error thrown with correct message.
+    required: true
+
+excluded:
+  state_disabled:
+    reason: "DesignerPunk does not support disabled states. If progress is not applicable, do not render the bar."
+    category: state
