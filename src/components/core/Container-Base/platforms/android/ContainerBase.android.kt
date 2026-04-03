@@ -212,14 +212,11 @@ fun ContainerBase(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    // Android-specific: Check for conflicting layering + shadow props
-    if (layering != null && shadow != null) {
-        Log.w(
-            "ContainerBase",
-            "Both layering and shadow props provided on Android. " +
-            "Android elevation handles both stacking and shadow. " +
-            "Using layering prop, shadow prop ignored."
-        )
+    // Fail loudly on conflicting props (consistent with DesignerPunk philosophy)
+    require(!(layering != null && shadow != null)) {
+        "ContainerBase: Both layering and shadow props provided. " +
+        "Android elevation handles both stacking and shadow. " +
+        "Use one or the other, not both."
     }
     
     // Get layout direction for inline padding calculations

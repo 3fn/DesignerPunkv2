@@ -54,7 +54,21 @@ Hard-coded `.easeInOut`/`.easeIn`/`.easeOut` instead of token easing across 9+ c
 - Data C8: `indication = null` disables ripple with no fallback
 
 ### Avatar-Base iOS
-- Kenya: `borderWidthDefault: CGFloat = 1` should reference `DesignTokens.borderWidth100`
+- ~~Kenya: `borderWidthDefault: CGFloat = 1` should reference `DesignTokens.borderWidth100`~~ **Resolved in Task 3.7**
+
+---
+
+## Deferred (Not Fixing in This Spec)
+
+These are architectural patterns or design decisions, not per-component bugs:
+
+- **P1 Easing (iOS systemic)**: 9+ files use SwiftUI built-in easing. Requires API pattern change across the codebase. Visual difference is subtle. Track as future modernization.
+- **Button-CTA Android C1-C4**: Config uses `Int` types with `.toInt()` round-trips and hard-coded values. Fixing touch targets alone without fixing the config type system would be inconsistent. Track as Button-CTA modernization.
+- **Button-Icon Android C5**: Ripple vs blend inconsistency — design decision, not a bug.
+- **Button-Icon Android C6**: `border_border_default` double-naming — generated token naming, Ada's domain.
+- **Button-VerticalList-Item C2/C3/C8/C9**: Easing (P1), press overlay, `LocalDesignTokens` pattern — systemic patterns, not per-component fixes.
+- **Container-Base file size**: Architectural — extract mapping functions in a future modernization pass.
+- **Container-Card-Base C6/C8**: Duplicated padding calc and no ripple fallback — architectural, not blocking.
 
 ---
 
@@ -66,3 +80,5 @@ Hard-coded `.easeInOut`/`.easeIn`/`.easeOut` instead of token easing across 9+ c
 | Container-Base String? → typed values refactor | Completed — resolvers deleted, Card-Base passes Color/struct directly | 2026-04-03 |
 | VerticalList-Item placeholder IconBase | Removed, real import added | 2026-04-03 |
 | VerticalList-Set `error()` crash in semantics | Fixed — uses stateDescription + liveRegion | 2026-04-03 |
+| Avatar-Base iOS border width hard-coded | Fixed — references DesignTokens.borderWidth100/200 | 2026-04-03 |
+| Container-Base Android `Log.w` for conflicting props | Fixed — uses `require()` (fail-loudly) | 2026-04-03 |
