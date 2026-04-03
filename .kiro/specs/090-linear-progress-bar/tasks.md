@@ -77,7 +77,7 @@
     - Verify: TalkBack announces correctly, animations work
     - _Requirements: 1.1–1.5, 2.1–2.5, 3.1–3.5, 4.5, 5.1–5.4_
 
-  - [ ] 1.6 Behavioral contract tests
+  - [x] 1.6 Behavioral contract tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
