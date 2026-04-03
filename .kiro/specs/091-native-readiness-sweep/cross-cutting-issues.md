@@ -56,20 +56,20 @@ Hard-coded `.easeInOut`/`.easeIn`/`.easeOut` instead of token easing across 9+ c
 - Non-standard motion token import path
 
 ### Input-Text-Base Android
-- `TRANSITION_ANIMATION_SCALE` vs `ANIMATOR_DURATION_SCALE` inconsistency
+- ~~`TRANSITION_ANIMATION_SCALE` vs `ANIMATOR_DURATION_SCALE` inconsistency~~ **Resolved — fixed across 4 files (Input-Text-Base, Nav-SegmentedChoice-Base, Progress-Node-Base, Progress-Pagination-Base).**
 
 ### Input-Checkbox-Base / Input-Radio-Base Android
 - Missing explicit easing on tween animations
 - Missing reduced motion check (animations are subtle)
 
 ### Badge-Count-Base Android
-- `color_surface` token name — verify semantic fit
+- ~~`color_surface` token name — verify semantic fit~~ **Resolved — was referencing non-existent token. Fixed to `color_structure_surface`.**
 
 ### Badge-Label-Base Android
-- `maxWidth` hard-coded locally instead of referencing ComponentTokens
+- ~~`maxWidth` hard-coded locally instead of referencing ComponentTokens~~ **Resolved — now references `BadgeLabelBaseTokens.maxWidth`.**
 
 ### Nav-SegmentedChoice-Base Android
-- `iconSize` returns Int instead of Dp token reference
+- ~~`iconSize` returns Int instead of Dp token reference~~ **Resolved — now references `DesignTokens.icon_size_125/100`.**
 
 ---
 
@@ -84,3 +84,7 @@ Hard-coded `.easeInOut`/`.easeIn`/`.easeOut` instead of token easing across 9+ c
 | Avatar-Base iOS border width | Fixed — DesignTokens.borderWidth100/200 | 2026-04-03 |
 | Container-Base Android `Log.w` | Fixed — `require()` (fail-loudly) | 2026-04-03 |
 | Button `border_border_default` naming | Fixed — border_default/emphasis, extensions removed | 2026-04-03 |
+| Badge-Count-Base `color_surface` | Fixed — `color_structure_surface` (was non-existent token) | 2026-04-03 |
+| Badge-Label-Base `maxWidth` local | Fixed — references `BadgeLabelBaseTokens.maxWidth` | 2026-04-03 |
+| Nav-SegmentedChoice `iconSize` Int | Fixed — `DesignTokens.icon_size_125/100` | 2026-04-03 |
+| `TRANSITION_ANIMATION_SCALE` inconsistency | Fixed across 4 files → `ANIMATOR_DURATION_SCALE` | 2026-04-03 |
