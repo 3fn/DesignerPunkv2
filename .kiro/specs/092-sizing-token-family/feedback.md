@@ -220,4 +220,20 @@ While verifying the migration mapping, I noticed: base lg = `space300` (24), cur
 
 ## Tasks Feedback
 
-[Populated after tasks doc is created]
+### [THURGOOD R4]
+
+Design feedback from Ada and Lina — no changes needed:
+
+- **Ada**: Approved. Correctness property #4 as grep-verifiable gate noted for tasks. Gap token code comment noted for implementation.
+- **Lina F1**: Token count discrepancy (outline 12, design 13) — design doc is authority after `size250` addition. Outline is historical.
+- **Lina F2**: Pre-existing Progress-Node lg current-size bug (24 instead of 28) — faithfully preserved by zero-visual-change constraint. Not this spec's problem. Filed for awareness.
+
+Design approved. Ready for tasks.
+
+### Ada — Token Review
+
+**Approved.** Clean three-parent structure (primitives, migration, documentation). Agent assignments correct — Ada for token/pipeline work, Lina for component token file creation. Dependencies explicit. All prior feedback incorporated.
+
+**Implementation note for Task 1.2:** Same pattern as Spec 089 (blur) — DTCG generator needs a `generateSizingTokens()` method, Figma transformer needs `'sizing'` in `PRIMITIVE_GROUPS`. Generic platform pass handles CSS/Swift/Kotlin automatically.
+
+Ready for implementation.
