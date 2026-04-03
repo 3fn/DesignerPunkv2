@@ -1,0 +1,52 @@
+/**
+ * Progress-Bar-Base Styles for Web Platform
+ *
+ * @see .kiro/specs/090-linear-progress-bar/design.md
+ */
+
+:host {
+  display: block;
+  inline-size: 100%;
+}
+
+.progress-bar {
+  position: relative;
+  inline-size: 100%;
+  border-radius: var(--radius-full);
+  background-color: var(--color-progress-pending-background);
+  overflow: hidden;
+}
+
+.progress-bar--sm { block-size: var(--size-050); }
+.progress-bar--md { block-size: var(--size-100); }
+.progress-bar--lg { block-size: var(--size-150); }
+
+.progress-bar__fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  border-radius: var(--radius-full);
+  transition: inline-size var(--duration-150) var(--easing-standard);
+}
+
+.progress-bar__fill--determinate {
+  background-color: var(--color-progress-completed-background);
+}
+
+.progress-bar__fill--indeterminate {
+  background-color: var(--color-progress-current-background);
+  inline-size: 33%;
+  animation: pulse var(--duration-350) var(--easing-standard) infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar__fill {
+    transition: none !important;
+    animation: none !important;
+  }
+}

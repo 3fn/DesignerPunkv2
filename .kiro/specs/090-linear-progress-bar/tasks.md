@@ -50,7 +50,7 @@
     - Flag any new concepts for Thurgood ballot measure
     - _Requirements: 6.1, 6.2, 6.3_
 
-  - [ ] 1.3 Web implementation
+  - [x] 1.3 Web implementation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -59,7 +59,7 @@
     - Verify: renders correctly, ARIA correct, animations work, reduced motion degrades
     - _Requirements: 1.1–1.5, 2.1–2.5, 3.1–3.5, 4.1–4.3, 4.6, 5.1–5.4_
 
-  - [ ] 1.4 iOS implementation
+  - [x] 1.4 iOS implementation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina (Kenya reviews after completion)
@@ -68,7 +68,7 @@
     - Verify: VoiceOver announces correctly, animations work
     - _Requirements: 1.1–1.5, 2.1–2.5, 3.1–3.5, 4.4, 5.1–5.4_
 
-  - [ ] 1.5 Android implementation
+  - [x] 1.5 Android implementation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina (Data reviews after completion)
