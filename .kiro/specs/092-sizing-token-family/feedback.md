@@ -74,6 +74,17 @@ Phase 2 (follow-up or part of individual component specs): Create component toke
 
 Progress-Bar (Spec 090) uses sizing primitives from the start — no migration.
 
+#### Design Outline Refinements (Lina R2)
+
+**F1: Progress-Node current-size formula should reference primitives directly, not compute from base.**
+The formula `SPACING_BASE_VALUE × multiplier` produces +4px emphasis sizes (16, 20, 28). After migration this becomes `SIZING_BASE_VALUE × multiplier` — same math, different constant. But if the sizing base changes independently of spacing in the future (the whole point of separation), these emphasis sizes shift. Recommend referencing sizing primitives directly: `node.size.sm.current = size200` (16) instead of `SIZING_BASE_VALUE × 2`. Simpler, more explicit, doesn't break if the base changes.
+
+**F2: Preemptive tokens (size700, size800) should be explicitly noted as having no current consumers.**
+Q1 decision to include them is pragmatic, but the outline should note they're preemptive — no component currently uses 56 or 64 for a dimensional value. Prevents future confusion about why these tokens exist with zero references.
+
+**F3: Nav-TabBar-Base dot migration missing from design outline migration section.**
+The outline's migration section covers Button-Icon and "other components" generically. The TabBar dot (`space050` → `size050` for 4px dot diameter) is a specific case identified in my R1 that should be in the migration table for completeness.
+
 ---
 
 ## Requirements Feedback
