@@ -87,7 +87,7 @@
     - Verify: Button-Icon tests pass, dimensions unchanged
     - _Requirements: 2.1, 2.7_
 
-  - [ ] 2.2 Migrate Progress-Node tokens
+  - [x] 2.2 Migrate Progress-Node tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada

@@ -5,21 +5,14 @@
  * Uses the defineComponentTokens() API for pipeline integration and cross-platform output.
  * 
  * TOKEN COUNT: 10 component tokens
- * - Base sizes: 3 (sm, md, lg) — reference spacing primitives
- * - Current sizes: 3 (sm, md, lg) — formula-based: SPACING_BASE_VALUE × multiplier
+ * - Base sizes: 3 (sm, md, lg) — reference sizing primitives
+ * - Current sizes: 3 (sm, md, lg) — reference sizing primitives (+4px emphasis)
  * - Gaps: 3 (sm, md, lg) — reference spacing primitives
  * - Connector: 1 (thickness) — references borderDefault (borderWidth100)
  * 
- * SIZE FORMULA:
- * Current node sizes use SPACING_BASE_VALUE × multiplier to produce +4px emphasis:
- * - sm: 8 × 2   = 16px (base 12px + 4px)
- * - md: 8 × 2.5 = 20px (base 16px + 4px)
- * - lg: 8 × 3.5 = 28px (base 24px + 4px)
- * 
- * All current sizes are divisible by 4px (baseline grid aligned).
- * 
  * PRIMITIVE REFERENCES:
- * - Base sizes: space150 (12px), space200 (16px), space300 (24px)
+ * - Base sizes: size150 (12px), size200 (16px), size250 (20px)
+ * - Current sizes: size200 (16px), size250 (20px), size300 (24px)
  * - Gaps: space075 (6px), space100 (8px), space150 (12px)
  * - Connector: borderWidth100 (1px)
  * 
@@ -28,7 +21,8 @@
  */
 
 import { defineComponentTokens } from '../../build/tokens';
-import { spacingTokens, SPACING_BASE_VALUE } from '../../tokens/SpacingTokens';
+import { spacingTokens } from '../../tokens/SpacingTokens';
+import { sizingTokens } from '../../tokens/SizingTokens';
 import { borderWidthTokens } from '../../tokens/BorderWidthTokens';
 
 /**
@@ -45,42 +39,42 @@ export const ProgressTokens = defineComponentTokens({
   family: 'spacing',
   tokens: {
     // ========================================================================
-    // BASE NODE SIZES — reference spacing primitives directly
+    // BASE NODE SIZES — reference sizing primitives (dimensions, not spacing)
     // ========================================================================
 
     'node.size.sm': {
-      reference: spacingTokens.space150,
+      reference: sizingTokens.size150,
       reasoning: 'Small node base size (12px). Inactive dots in compact mobile contexts.',
     },
     'node.size.md': {
-      reference: spacingTokens.space200,
+      reference: sizingTokens.size200,
       reasoning: 'Medium node base size (16px). Default inactive dot size.',
     },
     'node.size.lg': {
-      reference: spacingTokens.space250,
+      reference: sizingTokens.size250,
       reasoning: 'Large node base size (20px). Inactive dots in desktop contexts.',
     },
 
     // ========================================================================
-    // CURRENT NODE SIZES — one spacing tier above base for +4px emphasis
+    // CURRENT NODE SIZES — reference sizing primitives directly (+4px emphasis)
     // Provides non-color visual differentiation of active position
     // ========================================================================
 
     'node.size.sm.current': {
-      reference: spacingTokens.space200,
+      reference: sizingTokens.size200,
       reasoning: 'Current node emphasis for sm (16px). +4px over base 12px for non-color visual differentiation.',
     },
     'node.size.md.current': {
-      reference: spacingTokens.space250,
+      reference: sizingTokens.size250,
       reasoning: 'Current node emphasis for md (20px). +4px over base 16px for non-color visual differentiation.',
     },
     'node.size.lg.current': {
-      reference: spacingTokens.space300,
+      reference: sizingTokens.size300,
       reasoning: 'Current node emphasis for lg (24px). +4px over base 20px for non-color visual differentiation.',
     },
 
     // ========================================================================
-    // GAP TOKENS — spacing between nodes, reference spacing primitives
+    // GAP TOKENS — spacing between nodes (gaps are spacing, not sizing)
     // ========================================================================
 
     'node.gap.sm': {
