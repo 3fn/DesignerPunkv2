@@ -99,7 +99,7 @@ enum ChipInputTokens {
     
     /// Animation duration for state transitions
     /// References: motion.selectionTransition (150ms)
-    static let animationDuration: Double = DesignTokens.duration150  // 0.15s
+    static let animationDuration: Double = DesignTokens.Duration.duration150  // 0.15s
 }
 
 // MARK: - ChipInput View

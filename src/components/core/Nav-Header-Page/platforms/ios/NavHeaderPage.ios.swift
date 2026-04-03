@@ -51,7 +51,7 @@ enum NavHeaderPageTokens {
     static let trailingGap: CGFloat = DesignTokens.spaceGroupedMinimal
     static let closeGap: CGFloat = DesignTokens.spaceGroupedTight
     static let scrollThreshold: CGFloat = 8
-    static let animationDuration: Double = DesignTokens.duration150 / 1000 // ms → seconds
+    static let animationDuration: Double = DesignTokens.Duration.duration150
 }
 
 // MARK: - Scroll Offset PreferenceKey

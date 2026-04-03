@@ -106,7 +106,7 @@ enum ChipTokens {
     /// Animation duration for state transitions
     /// References: motion.selectionTransition (150ms)
     /// @see Requirements: 3.4 - State transition animation
-    static let animationDuration: Double = DesignTokens.duration150  // 0.15s
+    static let animationDuration: Double = DesignTokens.Duration.duration150  // 0.15s
 }
 
 // MARK: - ChipBase View

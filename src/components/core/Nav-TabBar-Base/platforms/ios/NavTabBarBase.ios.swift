@@ -56,8 +56,8 @@ enum NavTabBarTokens {
     static let glowHorizontalRadius: CGFloat = DesignTokens.space700
 
     // Motion
-    static let durationShort: Double = DesignTokens.duration150 / 1000.0
-    static let durationGlide: Double = DesignTokens.duration350 / 1000.0
+    static let durationShort: Double = DesignTokens.Duration.duration150
+    static let durationGlide: Double = DesignTokens.Duration.duration350
 }
 
 // MARK: - Tab Option
