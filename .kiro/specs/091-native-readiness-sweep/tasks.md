@@ -213,7 +213,7 @@
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2, 5.5_
 
-  - [ ] 3.10 Shared iOS utility extraction
+  - [x] 3.10 Shared iOS utility extraction
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
