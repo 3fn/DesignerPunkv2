@@ -53,8 +53,9 @@ Today we don't have density modes, so the coupling is theoretical. But the seman
 | `size050` | base × 0.5 | 4 | Progress-Bar sm |
 | `size100` | base × 1 | 8 | Progress-Bar md |
 | `size150` | base × 1.5 | 12 | Progress-Bar lg, Progress-Node sm |
-| `size200` | base × 2 | 16 | Progress-Node md |
-| `size300` | base × 3 | 24 | Progress-Node lg, Checkbox sm, Radio sm, Avatar xs |
+| `size200` | base × 2 | 16 | Progress-Node md, Progress-Node sm.current |
+| `size250` | base × 2.5 | 20 | Progress-Node lg, Progress-Node md.current |
+| `size300` | base × 3 | 24 | Progress-Node lg.current, Checkbox sm, Radio sm, Avatar xs |
 | `size400` | base × 4 | 32 | Button-Icon sm, Checkbox md, Radio md, Avatar sm |
 | `size500` | base × 5 | 40 | Button-Icon md, Checkbox lg, Radio lg, Avatar md |
 | `size600` | base × 6 | 48 | Button-Icon lg, Avatar lg |
@@ -63,7 +64,7 @@ Today we don't have density modes, so the coupling is theoretical. But the seman
 | `size1000` | base × 10 | 80 | Avatar xl |
 | `size1600` | base × 16 | 128 | Avatar xxl |
 
-12 tokens covering all existing component sizing values plus two preemptive values (56, 64). All multiples of 4 (baseline grid aligned).
+13 tokens covering all existing component sizing values plus two preemptive values (56, 64). All multiples of 4 (baseline grid aligned).
 
 **Why base 8 instead of 16**: Sizing and spacing are the most closely related families — same grid, same value ranges, same consumers (component tokens). Having `size300 = 24` match `space300 = 24` is immediately intuitive. The numeric suffixes mean the same thing across both families. This outweighs consistency with blur (`blur100 = 16`) and fontSize (`fontSize100 = 16`), which operate in different domains.
 
@@ -77,6 +78,7 @@ Today we don't have density modes, so the coupling is theoretical. But the seman
 | 8 | `space100` | `size100` | ✅ |
 | 12 | `space150` | `size150` | ✅ |
 | 16 | `space200` | `size200` | ✅ |
+| 20 | `space250` | `size250` | ✅ |
 | 24 | `space300` | `size300` | ✅ |
 | 32 | `space400` | `size400` | ✅ |
 | 40 | `space500` | `size500` | ✅ |
@@ -133,6 +135,14 @@ Avatar, Progress-Node, Checkbox, Radio — these have component tokens with valu
 
 Scope TBD — needs Lina's input on which component token files need updating and whether any reference spacing primitives directly.
 
+### Nav-TabBar-Base (dot size)
+
+| Old Reference | New Reference | Value (unchanged) |
+|--------------|--------------|-------------------|
+| `space050` | `size050` | 4 |
+
+Consumer: Nav-TabBar-Base dot indicator diameter. Dimensional value, not spacing.
+
 ### Progress-Bar (new component, Spec 090)
 
 No migration — Spec 090 would reference sizing primitives from the start.
@@ -142,7 +152,7 @@ No migration — Spec 090 would reference sizing primitives from the start.
 ## Scope
 
 ### In Scope
-- Sizing primitive definitions (12 tokens in `SizingTokens.ts`)
+- Sizing primitive definitions (13 tokens in `SizingTokens.ts`)
 - `TokenCategory.SIZING` (new category)
 - Token registration in `src/tokens/index.ts`
 - Generation pipeline (generic primitive pass — same as blur)
@@ -180,7 +190,7 @@ Base 8 aligns with the baseline grid and spacing base. `size300 = 24` matches `s
 `size` is shorter, matches existing component token naming (`buttonIcon.size.large`), and is universally understood.
 
 ### Q4: DTCG Export — Yes
-All 12 sizing primitives included in DTCG output, Figma export, and all platform token files. Consistent with spacing, blur, and other primitive families.
+All 13 sizing primitives included in DTCG output, Figma export, and all platform token files. Consistent with spacing, blur, and other primitive families.
 
 ### Q5: Migration Scope — All Families in One Spec
 All 6 component families plus Nav-TabBar-Base dot size migrated in this spec. No phasing — buttoned up before product development.

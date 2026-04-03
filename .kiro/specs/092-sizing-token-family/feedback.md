@@ -74,6 +74,34 @@ Phase 2 (follow-up or part of individual component specs): Create component toke
 
 Progress-Bar (Spec 090) uses sizing primitives from the start — no migration.
 
+### Ada — Token Review
+
+**Approved with one correction and one scale addition.**
+
+**Correction: Req 2 AC 2 — Progress-Node sizes are wrong.**
+
+The requirements list Progress-Node base sizes as `size150` (12), `size200` (16), `size300` (24). Checking the actual token file (`src/tokens/component/progress.ts`), the base sizes are:
+
+- sm: `space150` = 12 ✅
+- md: `space200` = 16 ✅
+- lg: `space250` = 20 ❌ (requirements say 24)
+
+And the current (emphasized) sizes are:
+- sm.current: `space200` = 16
+- md.current: `space250` = 20
+- lg.current: `space300` = 24
+
+The lg base is 20px, not 24px. The requirements should reference `size250` for lg base. This also means we need `size250` (base × 2.5 = 20) in the primitive scale — it's not currently in the proposed 12 tokens.
+
+Additionally, the current-size tokens (16, 20, 24) are also dimensional values that should reference sizing primitives, and the `SPACING_BASE_VALUE` constant in the formula should be renamed to `SIZING_BASE_VALUE` (same value of 8, different semantic name). The gap tokens (`node.gap.sm/md/lg`) are actual spacing and should remain as spacing refs.
+
+**Action**: 
+1. Add `size250` (base × 2.5 = 20) to the primitive scale — 13 tokens total
+2. Revise Req 2 AC 2 to: Progress-Node base sizes `size150` (sm/12), `size200` (md/16), `size250` (lg/20); current sizes `size200` (sm.current/16), `size250` (md.current/20), `size300` (lg.current/24)
+3. Rename `SPACING_BASE_VALUE` to `SIZING_BASE_VALUE` in progress.ts formula
+
+**Everything else looks good.** Pipeline handling correct (Req 1 AC 4), zero visual change formalized (Req 4), documentation updates comprehensive (Req 5 AC 3 and AC 4 catch Spacing doc and Quick Reference).
+
 #### Design Outline Refinements (Lina R2)
 
 **F1: Progress-Node current-size formula should reference primitives directly, not compute from base.**
@@ -139,6 +167,18 @@ One note: Progress-Node's current-size formula uses `SPACING_BASE_VALUE × multi
 #### Req 5: Documentation
 
 Nothing missing. The exclusion of icon sizes and tap area tokens from the sizing family is the right call and should be prominently documented — it's the most likely source of confusion ("why isn't `icon.size100` a sizing token?").
+
+### [THURGOOD R2]
+
+Incorporated Lina's requirements feedback:
+
+- **Req 1**: Preemptive tokens (size700, size800) marked as "no current consumers" in the scale table
+- **Req 2 AC 5**: Clarified Checkbox sizing is box/container dimensions only — icon sizes stay in icon family
+- **Design outline**: Added Nav-TabBar-Base dot migration to migration tables for visibility
+- All sizing references verified by Lina against source code — zero edge cases
+- Progress-Node `SPACING_BASE_VALUE` rename to `SIZING_BASE_VALUE` noted for implementation
+
+Requirements approved. Ready to proceed to tasks.
 
 ---
 
