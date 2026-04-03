@@ -29,7 +29,8 @@ export enum TokenCategory {
   EASING = 'easing',
   DURATION = 'duration',
   SCALE = 'scale',
-  BLUR = 'blur'
+  BLUR = 'blur',
+  SIZING = 'sizing'
 }
 
 /**

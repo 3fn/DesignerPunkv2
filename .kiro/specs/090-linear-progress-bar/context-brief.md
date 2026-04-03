@@ -48,3 +48,15 @@ All existing components model discrete/sequential progress. A linear bar models 
 - Progress family: `.kiro/steering/Component-Family-Progress.md`
 - Progress guidance: `family-guidance/progress.yaml`
 - Inheritance structures: `.kiro/steering/Component-Inheritance-Structures.md`
+
+## Open Questions from Thurgood (Spec Formalization)
+
+These need answers before requirements can be written:
+
+1. **Naming**: `Progress-Bar-Base` or `Progress-Linear-Base`? Where does it fit in the `Progress-Indicator-*` / `Progress-Stepper-*` / `Progress-Pagination-*` naming hierarchy?
+
+2. **Indeterminate mode**: Does it support a loading/indeterminate state (animated bar, no percentage)? This significantly affects scope — different ARIA pattern (`aria-busy` vs `aria-valuenow`), different animation contracts, different prop interface. If deferred, say so explicitly.
+
+3. **Semantic variants or standalone**: Just `Progress-Bar-Base` (one component), or primitive + semantic variants (e.g., `Progress-Bar-Upload` with cancel, `Progress-Bar-Steps` showing "Step 2 of 5")? Affects spec size and task count.
+
+4. **Token gap**: Does the Progress family have tokens for bar height, track color, fill color, and border radius? Or does Ada need to create new tokens (dependency like Spec 089 was for 088)?

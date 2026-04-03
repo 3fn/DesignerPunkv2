@@ -21,7 +21,7 @@ DesignerPunk uses spacing primitives for both gaps between elements and physical
 
 #### Acceptance Criteria
 
-1. A `SizingTokens.ts` file SHALL define 12 sizing primitives with base value 8:
+1. A `SizingTokens.ts` file SHALL define 13 sizing primitives with base value 8:
 
    | Token | Formula | Value |
    |-------|---------|-------|
@@ -29,6 +29,7 @@ DesignerPunk uses spacing primitives for both gaps between elements and physical
    | `size100` | base × 1 | 8 |
    | `size150` | base × 1.5 | 12 |
    | `size200` | base × 2 | 16 |
+   | `size250` | base × 2.5 | 20 |
    | `size300` | base × 3 | 24 |
    | `size400` | base × 4 | 32 |
    | `size500` | base × 5 | 40 |
@@ -49,7 +50,7 @@ DesignerPunk uses spacing primitives for both gaps between elements and physical
 #### Acceptance Criteria
 
 1. Button-Icon component tokens SHALL reference sizing primitives: `size400` (sm/32), `size500` (md/40), `size600` (lg/48)
-2. Progress-Node component tokens SHALL reference sizing primitives: `size150` (sm/12), `size200` (md/16), `size300` (lg/24)
+2. Progress-Node component tokens SHALL reference sizing primitives: base sizes `size150` (sm/12), `size200` (md/16), `size250` (lg/20); current (emphasized) sizes `size200` (sm.current/16), `size250` (md.current/20), `size300` (lg.current/24). `SPACING_BASE_VALUE` SHALL be renamed to `SIZING_BASE_VALUE`. Current-size tokens SHALL reference sizing primitives directly, not compute from base × multiplier.
 3. Nav-TabBar-Base dot size SHALL reference `size050` instead of `space050`
 4. Avatar-Base SHALL have a `*.tokens.ts` file created with sizing primitive references for all 6 sizes: `size300` (xs/24), `size400` (sm/32), `size500` (md/40), `size600` (lg/48), `size1000` (xl/80), `size1600` (xxl/128)
 5. Input-Checkbox-Base SHALL have a `*.tokens.ts` file created with sizing primitive references for box/container dimensions: `size300` (sm/24), `size400` (md/32), `size500` (lg/40). Icon sizes within the checkbox (checkmark) SHALL remain in the icon family — they are NOT sizing tokens.
@@ -63,9 +64,9 @@ DesignerPunk uses spacing primitives for both gaps between elements and physical
 
 #### Acceptance Criteria
 
-1. Generated platform token files SHALL include all 12 sizing primitives as numeric values (px for web CSS, pt for iOS Swift, dp for Android Kotlin)
-2. DTCG output SHALL include all 12 sizing primitives
-3. Figma export SHALL include all 12 sizing primitives
+1. Generated platform token files SHALL include all 13 sizing primitives as numeric values (px for web CSS, pt for iOS Swift, dp for Android Kotlin)
+2. DTCG output SHALL include all 13 sizing primitives
+3. Figma export SHALL include all 13 sizing primitives
 4. WHEN platform token files are regenerated THEN all existing component dimensions SHALL resolve to the same numeric values
 
 ### Requirement 4: Zero Visual Change Verification
