@@ -224,7 +224,7 @@ fun ChipInput(
     // @see Requirements: 5.4 - Tap anywhere calls onDismiss
     Surface(
         onClick = onDismiss,
-        shape = RoundedCornerShape(50),  // Pill shape (radius.full equivalent)
+        shape = RoundedCornerShape(DesignTokens.radius_full),  // Pill shape via radius.full token
         color = backgroundColor,
         border = BorderStroke(
             width = ChipInputTokens.borderWidth,

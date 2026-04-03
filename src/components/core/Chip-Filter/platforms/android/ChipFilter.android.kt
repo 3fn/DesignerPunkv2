@@ -281,7 +281,7 @@ fun ChipFilter(
             onSelectionChange(newSelected)
             onClick()
         },
-        shape = RoundedCornerShape(50),  // Pill shape (radius.full equivalent)
+        shape = RoundedCornerShape(DesignTokens.radius_full),  // Pill shape via radius.full token
         color = backgroundColor,
         border = BorderStroke(
             width = ChipFilterTokens.borderWidth,

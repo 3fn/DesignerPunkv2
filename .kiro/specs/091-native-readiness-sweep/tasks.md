@@ -165,7 +165,7 @@
     - Verify: `npm test` passes
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 3.6 Chip Family (Chip-Base, Chip-Filter, Chip-Input)
+  - [x] 3.6 Chip Family (Chip-Base, Chip-Filter, Chip-Input)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina fixes, Kenya reviews full iOS implementation, Data reviews full Android implementation

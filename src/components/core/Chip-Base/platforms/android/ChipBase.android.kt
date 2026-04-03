@@ -225,7 +225,7 @@ fun ChipBase(
     // @see Requirements: 2.6 - 48dp minimum tap area
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(50),  // Pill shape (radius.full equivalent)
+        shape = RoundedCornerShape(DesignTokens.radius_full),  // Pill shape via radius.full token
         color = backgroundColor,
         border = BorderStroke(
             width = ChipTokens.borderWidth,
