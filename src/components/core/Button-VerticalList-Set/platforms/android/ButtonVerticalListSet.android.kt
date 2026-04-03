@@ -536,7 +536,7 @@ fun ButtonVerticalListSet(
         // Requirements: 2.3, 2.4, 2.5 - Vertical stack with token spacing
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(DesignTokens.space_grouped_normal.dp)
+            verticalArrangement = Arrangement.spacedBy(DesignTokens.space_grouped_normal)
         ) {
             items.forEachIndexed { index, item ->
                 // Derive visual state from controlled props

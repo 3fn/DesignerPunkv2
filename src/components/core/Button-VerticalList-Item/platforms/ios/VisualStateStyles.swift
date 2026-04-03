@@ -165,7 +165,7 @@ public struct VisualStateStyles: Equatable {
     /// Requirements: 1.1 - color.structure.canvas, borderDefault (1px), color.text.default
     public static let rest = VisualStateStyles(
         background: Color(DesignTokens.colorStructureCanvas),
-        borderWidth: DesignTokens.borderBorderDefault,
+        borderWidth: DesignTokens.borderDefault,
         borderColor: .clear,
         labelColor: Color(DesignTokens.colorTextDefault),
         iconColor: Color(DesignTokens.colorTextDefault),
@@ -177,7 +177,7 @@ public struct VisualStateStyles: Equatable {
     ///               color.feedback.select.text.rest for border and label
     public static let selected = VisualStateStyles(
         background: Color(DesignTokens.colorFeedbackSelectBackgroundRest),
-        borderWidth: DesignTokens.borderBorderEmphasis,
+        borderWidth: DesignTokens.borderEmphasis,
         borderColor: Color(DesignTokens.colorFeedbackSelectTextRest),
         labelColor: Color(DesignTokens.colorFeedbackSelectTextRest),
         iconColor: Color(DesignTokens.colorFeedbackSelectTextRest),
@@ -189,7 +189,7 @@ public struct VisualStateStyles: Equatable {
     ///               transparent border, color.feedback.select.text.default
     public static let notSelected = VisualStateStyles(
         background: Color(DesignTokens.colorFeedbackSelectBackgroundDefault),
-        borderWidth: DesignTokens.borderBorderDefault,
+        borderWidth: DesignTokens.borderDefault,
         borderColor: .clear,
         labelColor: Color(DesignTokens.colorFeedbackSelectTextDefault),
         iconColor: Color(DesignTokens.colorFeedbackSelectTextDefault),
@@ -201,7 +201,7 @@ public struct VisualStateStyles: Equatable {
     ///               transparent border, color.feedback.select.text.rest
     public static let checked = VisualStateStyles(
         background: Color(DesignTokens.colorFeedbackSelectBackgroundRest),
-        borderWidth: DesignTokens.borderBorderDefault,
+        borderWidth: DesignTokens.borderDefault,
         borderColor: .clear,
         labelColor: Color(DesignTokens.colorFeedbackSelectTextRest),
         iconColor: Color(DesignTokens.colorFeedbackSelectTextRest),
@@ -213,7 +213,7 @@ public struct VisualStateStyles: Equatable {
     ///               transparent border, color.text.default
     public static let unchecked = VisualStateStyles(
         background: Color(DesignTokens.colorStructureCanvas),
-        borderWidth: DesignTokens.borderBorderDefault,
+        borderWidth: DesignTokens.borderDefault,
         borderColor: .clear,
         labelColor: Color(DesignTokens.colorTextDefault),
         iconColor: Color(DesignTokens.colorTextDefault),
@@ -228,7 +228,7 @@ public struct VisualStateStyles: Equatable {
     public static func errorSelectMode(checkmarkVisible: Bool) -> VisualStateStyles {
         return VisualStateStyles(
             background: Color(DesignTokens.colorFeedbackErrorBackground),
-            borderWidth: DesignTokens.borderBorderEmphasis,
+            borderWidth: DesignTokens.borderEmphasis,
             borderColor: Color(DesignTokens.colorFeedbackErrorText),
             labelColor: Color(DesignTokens.colorFeedbackErrorText),
             iconColor: Color(DesignTokens.colorFeedbackErrorText),
@@ -383,9 +383,9 @@ public func calculatePaddingBlock(borderWidth: CGFloat) -> CGFloat {
     // borderEmphasis (2pt) requires 10pt padding
     // borderDefault (1pt) requires 11pt padding
     // Uses component tokens for consistency with design system
-    return borderWidth == DesignTokens.borderBorderEmphasis 
-        ? DesignTokens.verticalListItemPaddingBlockSelected 
-        : DesignTokens.verticalListItemPaddingBlockRest
+    return borderWidth == DesignTokens.borderEmphasis 
+        ? VerticalListItemTokens.paddingBlockSelected 
+        : VerticalListItemTokens.paddingBlockRest
 }
 
 /**
@@ -435,18 +435,5 @@ public func calculatePaddingBlock(for visualState: VisualState, error: Bool) -> 
  * - 6.2: 10pt padding for 2pt border
  * - 6.3: Constant 48pt total height
  */
-extension DesignTokens {
-    // MARK: - Component Tokens (Padding Compensation)
-    
-    /// Block padding for rest state (11pt) - used with 1pt border
-    /// Requirements: 6.1 - 11pt padding for 1pt border
-    /// Formula: SPACING_BASE_VALUE * 1.375 = 8 * 1.375 = 11
-    /// Height calculation: 1pt border + 11pt padding + 24pt content + 11pt padding + 1pt border = 48pt
-    public static let verticalListItemPaddingBlockRest: CGFloat = 11
-    
-    /// Block padding for selected state (10pt) - used with 2pt border
-    /// Requirements: 6.2 - 10pt padding for 2pt border
-    /// References: space125 primitive token
-    /// Height calculation: 2pt border + 10pt padding + 24pt content + 10pt padding + 2pt border = 48pt
-    public static let verticalListItemPaddingBlockSelected: CGFloat = 10
-}
+// Component token references — from generated ComponentTokens.ios.swift
+// Extension removed: previously shadowed generated tokens with hard-coded values

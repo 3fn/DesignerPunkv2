@@ -953,11 +953,7 @@ struct ErrorAccessibilityModifier: ViewModifier {
 
 // MARK: - DesignTokens Extensions
 
-extension DesignTokens {
-    /// Grouped normal spacing (8pt)
-    /// Requirements: 2.4 - Gap between child items
-    public static let spaceGroupedNormal: CGFloat = 8
-}
+// Extension removed: spaceGroupedNormal exists on generated DesignTokens
 
 // MARK: - Preview
 
