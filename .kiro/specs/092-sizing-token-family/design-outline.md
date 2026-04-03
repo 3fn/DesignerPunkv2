@@ -175,13 +175,14 @@ Base 8 aligns with the baseline grid and spacing base. `size300 = 24` matches `s
 ### Q3: Naming — `size` Prefix
 `size` is shorter, matches existing component token naming (`buttonIcon.size.large`), and is universally understood.
 
+### Q4: DTCG Export — Yes
+All 12 sizing primitives included in DTCG output, Figma export, and all platform token files. Consistent with spacing, blur, and other primitive families.
+
 ---
 
 ## Open Questions
 
 1. **Component token migration scope**: Intent is to migrate all 6 component families. Lina's input needed on which component token files reference spacing primitives directly vs hard-coded values, and whether any have migration complications.
-
-2. **DTCG export**: Include all 12 sizing primitives? Lean yes for consistency with spacing, blur, and other primitive families.
 
 ---
 
