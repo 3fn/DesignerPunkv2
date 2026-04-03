@@ -204,6 +204,18 @@ Correctness property #4 ("no spacing primitive referenced for dimensional purpos
 
 Ready for tasks.
 
+### Lina — Component Review
+
+**Overall**: Clean, thorough, all migration mappings verified. One discrepancy to flag, one pre-existing issue discovered.
+
+**F1: Token count 13 vs outline's 12 — `size250` (20) added.**
+The design doc adds `size250` (base × 2.5 = 20) which wasn't in the original outline. This is correct — Progress-Node md current-size is 20px and needs a sizing primitive. The outline's table and Req 1 AC 1 say 12 — the design doc is the authority at this stage. Minor bookkeeping.
+
+**F2: Pre-existing issue in Progress-Node lg current-size.**
+While verifying the migration mapping, I noticed: base lg = `space300` (24), current lg = `space300` (24). The +4px emphasis pattern gives sm: 12→16 (+4), md: 16→20 (+4), lg: 24→24 (+0). The lg current-size should be 28 (+4), but it references `space300` (24) — same as the base. This is a pre-existing bug in `progress.ts`, not introduced by 092. The design doc's migration table shows `size300` (24) for lg current, which faithfully preserves the existing (possibly wrong) value. Zero visual change is maintained. Flagging for awareness — may warrant a separate fix.
+
+**Ada's implementation note seconded**: Progress-Node gap tokens staying as spacing refs is correct and should be commented. Gaps are spacing, dimensions are sizing — the distinction is exactly what this spec is about.
+
 ---
 
 ## Tasks Feedback
