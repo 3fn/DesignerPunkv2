@@ -150,11 +150,15 @@ No migration — Spec 090 would reference sizing primitives from the start.
 - Token-Family-Sizing.md steering doc
 - Test coverage (formula validation, mathematical relationships, cross-platform consistency)
 - Regenerate `dist/` platform token files
-- Button-Icon component token migration (`space*` → `size*`)
-- Remaining component family migrations (Avatar, Checkbox, Radio, Progress-Node, Progress-Bar) — scope confirmed pending Lina's input
+- Button-Icon component token migration (`space*` → `size*` — 3 refs)
+- Progress-Node component token migration (`space*` → `size*`, rename `SPACING_BASE_VALUE` to sizing base — 3 refs + formula constant)
+- Avatar-Base component token file creation + sizing primitive references (6 sizes, currently hard-coded)
+- Input-Checkbox-Base component token file creation + sizing primitive references (3 sizes, currently hard-coded)
+- Input-Radio-Base component token file creation + sizing primitive references (3 sizes, currently hard-coded)
+- Nav-TabBar-Base dot size migration (`space050` → `size050` — 1 ref)
 
 ### Out of Scope
-- Avatar, Checkbox, Radio, Progress-Node component token migrations — these should be coordinated with Lina and may be separate subtasks or a follow-up
+- Progress-Bar (Spec 090) — references sizing primitives from the start, no migration
 - Icon size tokens — remain in the semantic icon family (typography-derived)
 - Tap area tokens — remain in the accessibility family (constraint tokens)
 - Density mode implementation — future concern that motivates the separation but isn't part of this spec
@@ -178,11 +182,18 @@ Base 8 aligns with the baseline grid and spacing base. `size300 = 24` matches `s
 ### Q4: DTCG Export — Yes
 All 12 sizing primitives included in DTCG output, Figma export, and all platform token files. Consistent with spacing, blur, and other primitive families.
 
+### Q5: Migration Scope — All Families in One Spec
+All 6 component families plus Nav-TabBar-Base dot size migrated in this spec. No phasing — buttoned up before product development.
+
+- Button-Icon, Progress-Node: swap spacing refs (low complexity)
+- Avatar, Checkbox, Radio: create component token files + reference sizing primitives (medium complexity, coordinated with Lina)
+- Nav-TabBar-Base: swap dot size ref (low complexity)
+
 ---
 
 ## Open Questions
 
-1. **Component token migration scope**: Intent is to migrate all 6 component families. Lina's input needed on which component token files reference spacing primitives directly vs hard-coded values, and whether any have migration complications.
+None — all decisions confirmed.
 
 ---
 
@@ -195,6 +206,6 @@ All 12 sizing primitives included in DTCG output, Figma export, and all platform
 
 ## Risk Assessment
 
-Low risk for the primitive family creation. The migration surface depends on open question 2 — Button-Icon only is small, all 6 families is broader but still mechanical (same values, different references).
+Low-medium risk. The primitive family creation and direct-ref migrations (Button-Icon, Progress-Node, TabBar) are mechanical. The component token file creation (Avatar, Checkbox, Radio) is broader — these components don't have `*.tokens.ts` files today, so the migration includes creating new infrastructure, not just swapping references. This is Lina's domain and requires coordination.
 
-Mitigated by: zero visual change, strong test coverage, component token layer insulating consumers from primitive changes.
+Mitigated by: zero visual change, strong test coverage, Lina's detailed migration assessment confirming no dual-purpose tokens or complications, and the component token layer insulating consumers from primitive changes.
