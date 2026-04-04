@@ -41,6 +41,7 @@ The Sizing Token Family provides primitives for component dimensions — widths,
 | `size600` | base × 6 | 48 | 48px / 48pt / 48dp |
 | `size700` | base × 7 | 56 | 56px / 56pt / 56dp |
 | `size800` | base × 8 | 64 | 64px / 64pt / 64dp |
+| `size900` | base × 9 | 72 | 72px / 72pt / 72dp |
 | `size1000` | base × 10 | 80 | 80px / 80pt / 80dp |
 | `size1600` | base × 16 | 128 | 128px / 128pt / 128dp |
 
@@ -69,6 +70,7 @@ Sizing and spacing share the same base value (8) and the same grid. Numeric suff
 
 | Component | Tokens Used | Sizes |
 |-----------|------------|-------|
+| Button-CTA | `size700`, `size900`, `size1000` | minWidth: sm=56, md=72, lg=80 |
 | Button-Icon | `size400`, `size500`, `size600` | sm=32, md=40, lg=48 |
 | Avatar-Base | `size300`–`size1600` | xs=24, sm=32, md=40, lg=48, xl=80, xxl=128 |
 | Progress-Node | `size150`–`size300` | sm=12/16, md=16/20, lg=20/24 (base/current) |
@@ -92,7 +94,7 @@ Sizing and spacing share the same base value (8) and the same grid. Numeric suff
 ## Mathematical Foundation
 
 - **Base value**: 8 (same as spacing)
-- **Progression**: Linear multipliers (0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 10, 16)
+- **Progression**: Linear multipliers (0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 10, 16)
 - **Grid alignment**: All values are multiples of 4
 - **Source file**: `src/tokens/SizingTokens.ts`
 - **Category**: `TokenCategory.SIZING`
