@@ -23,7 +23,7 @@ describe('ComponentQueryEngine', () => {
     it('returns all indexed components', () => {
       const result = engine.getCatalog();
       expect(result.error).toBeNull();
-      expect(result.data!.length).toBe(30);
+      expect(result.data!.length).toBe(34);
       expect(result.metrics.responseTimeMs).toBeDefined();
     });
   });
@@ -125,23 +125,23 @@ describe('ComponentQueryEngine', () => {
     });
 
     it('filters by context (exact match against contexts array)', () => {
-      const result = engine.findComponents({ context: 'form-footers' });
+      const result = engine.findComponents({ context: 'forms' });
       expect(result.data!.length).toBeGreaterThan(0);
       for (const s of result.data!) {
-        expect(s.contexts).toContain('form-footers');
+        expect(s.contexts).toContain('forms');
       }
     });
 
     it('context filter excludes components without annotations', () => {
-      const result = engine.findComponents({ context: 'form-footers' });
+      const result = engine.findComponents({ context: 'forms' });
       for (const s of result.data!) {
         expect(s.annotations).not.toBeNull();
       }
     });
 
     it('context filter conjunctive with other filters', () => {
-      const contextOnly = engine.findComponents({ context: 'form-footers' });
-      const combined = engine.findComponents({ context: 'form-footers', platform: 'web' });
+      const contextOnly = engine.findComponents({ context: 'forms' });
+      const combined = engine.findComponents({ context: 'forms', platform: 'web' });
       expect(combined.data!.length).toBeLessThanOrEqual(contextOnly.data!.length);
     });
 
@@ -151,7 +151,7 @@ describe('ComponentQueryEngine', () => {
     });
 
     it('returns ApplicationSummary with promoted annotation fields', () => {
-      const result = engine.findComponents({ context: 'form-footers' });
+      const result = engine.findComponents({ context: 'forms' });
       const first = result.data![0];
       expect(first).toHaveProperty('purpose');
       expect(first).toHaveProperty('whenToUse');

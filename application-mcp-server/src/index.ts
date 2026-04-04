@@ -79,6 +79,11 @@ const tools = [
     inputSchema: { type: 'object' as const, properties: {} },
   },
   {
+    name: 'rebuild_index',
+    description: 'Rebuild the component index from scratch. Use when index is stale or out of sync. Returns new health status after reindex.',
+    inputSchema: { type: 'object' as const, properties: {} },
+  },
+  {
     name: 'list_experience_patterns',
     description: 'List all experience patterns with name, description, category, tags, step count, and component count.',
     inputSchema: { type: 'object' as const, properties: {} },
@@ -169,7 +174,7 @@ class ComponentMCPServer {
       const params = (args ?? {}) as Record<string, unknown>;
 
       try {
-        const result = this.handleTool(name, params);
+        const result = await this.handleTool(name, params);
         return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
@@ -178,7 +183,7 @@ class ComponentMCPServer {
     });
   }
 
-  private handleTool(name: string, params: Record<string, unknown>): unknown {
+  private async handleTool(name: string, params: Record<string, unknown>): Promise<unknown> {
     switch (name) {
       case 'get_component_catalog':
         return this.queryEngine.getCatalog();
@@ -195,6 +200,9 @@ class ComponentMCPServer {
           params.parentProps as Record<string, unknown> | undefined,
         );
       case 'get_component_health':
+        return this.queryEngine.getHealth();
+      case 'rebuild_index':
+        await this.indexer.indexComponents(this.componentsDir);
         return this.queryEngine.getHealth();
       case 'list_experience_patterns':
         return this.queryEngine.getPatternCatalog();

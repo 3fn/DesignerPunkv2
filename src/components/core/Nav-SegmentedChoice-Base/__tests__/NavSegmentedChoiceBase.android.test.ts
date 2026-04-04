@@ -161,7 +161,7 @@ describe('Nav-SegmentedChoice-Base Android — Contract Compliance', () => {
     });
 
     it('accessibility_reduced_motion: checks TRANSITION_ANIMATION_SCALE', () => {
-      expect(kt).toContain('Settings.Global.TRANSITION_ANIMATION_SCALE');
+      expect(kt).toContain('Settings.Global.ANIMATOR_DURATION_SCALE');
       expect(kt).toContain('reduceMotion');
     });
   });
@@ -211,8 +211,8 @@ describe('Nav-SegmentedChoice-Base Android — Contract Compliance', () => {
     });
 
     it('should use the same icon sizes as web and iOS (28 standard, 24 condensed)', () => {
-      expect(kt).toContain('STANDARD -> 28');
-      expect(kt).toContain('CONDENSED -> 24');
+      expect(kt).toContain('STANDARD -> DesignTokens.icon_size_125');
+      expect(kt).toContain('CONDENSED -> DesignTokens.icon_size_100');
     });
   });
 });

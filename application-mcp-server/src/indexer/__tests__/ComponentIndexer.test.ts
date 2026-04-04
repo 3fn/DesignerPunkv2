@@ -21,8 +21,8 @@ describe('ComponentIndexer', () => {
     it('indexes components that have schema.yaml files', () => {
       const health = indexer.getHealth();
       expect(health.componentsIndexed).toBeGreaterThan(0);
-      // 30 of 30 have schema.yaml, all components indexed
-      expect(health.componentsIndexed).toBe(30);
+      // 34 of 34 have schema.yaml, all components indexed
+      expect(health.componentsIndexed).toBe(34);
     });
 
     it('has no schema warnings when all components have schema.yaml', () => {
@@ -84,7 +84,7 @@ describe('ComponentIndexer', () => {
   describe('getCatalog', () => {
     it('returns lightweight entries for all indexed components', () => {
       const catalog = indexer.getCatalog();
-      expect(catalog.length).toBe(30);
+      expect(catalog.length).toBe(34);
       const entry = catalog.find(c => c.name === 'Badge-Count-Base');
       expect(entry).toBeDefined();
       expect(entry!.family).toBe('Badge');

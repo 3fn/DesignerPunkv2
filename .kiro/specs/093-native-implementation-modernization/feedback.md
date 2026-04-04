@@ -190,3 +190,71 @@ Ready for tasks.
 ### Lina — Component Review
 
 **Approved.** No issues. Task breakdown matches requirements 1:1, subtasks right-sized, iOS easing batched by family for review efficiency, dependencies correct. Ready to implement.
+
+---
+
+## Implementation Review — iOS Easing (Kenya)
+
+### Task 2.1: FormInput Family (Checkbox-Base, Radio-Base) — ✅ Approved
+
+5 easing replacements across 2 files. All semantically correct:
+
+| Animation context | Token used | Correct? |
+|-------------------|-----------|----------|
+| Press feedback | `MotionButtonPress.easing` | ✅ |
+| Selection state change | `MotionSelectionTransition.easing` | ✅ |
+| Indeterminate state | `MotionSelectionTransition.easing` | ✅ |
+
+- No `.speed()` modifier — clean direct usage
+- `reduceMotion ? .none : ...` pattern preserved
+- Zero hard-coded easing remaining
+
+### Task 2.2: Chip Family (Chip-Base, Chip-Filter, Chip-Input) — ✅ Approved with note
+
+4 replacements across 3 files. 3 of 4 semantically correct.
+
+**Note**: Chip-Filter line 329 uses `MotionButtonPress.easing` for the `selected` state change. This is semantically a selection transition — `MotionSelectionTransition.easing` (250ms, standard) would be more accurate than `MotionButtonPress.easing` (150ms, accelerate). Non-blocking — animation works and feels responsive. Flagging for semantic correctness.
+
+### Task 2.3: Button-VerticalList-Item — ✅ Approved
+
+2 replacements. Both semantically correct:
+
+| Animation context | Token used | Correct? |
+|-------------------|-----------|----------|
+| State transition (visualState, error, padding, colors) | `MotionSelectionTransition.easing` | ✅ |
+| Checkmark fade-in/fade-out | `MotionSelectionTransition.easing` | ✅ |
+
+- `.delay(transitionDelay)` preserved for staggered animations — correct
+- Both `stateAnimation` and `checkmarkAnimation` computed properties use the same token, which is right — both are selection state changes
+- Zero hard-coded easing remaining
+
+### Task 2.4: Progress-Pagination-Base — ✅ Approved
+
+2 replacements. Both semantically correct:
+
+| Animation context | Token used | Correct? |
+|-------------------|-----------|----------|
+| Dot state change (current item selection) | `MotionSelectionTransition.easing` | ✅ |
+| Scroll-to-center (settling into position) | `MotionSettleTransition.easing` | ✅ |
+
+- Reduced motion check via `UIAccessibility.isReduceMotionEnabled` — correct (this component uses UIKit API rather than `@Environment`, both valid)
+- Reduced motion disables animation for state changes (`nil`) and uses instant scroll (no `withAnimation`) — correct
+- Two different semantic tokens for two different interaction types — good semantic precision
+
+### Task 2.5: Nav-TabBar-Base — ✅ Approved with note
+
+3 animation sites. 2 replaced with semantic tokens, 1 uses raw `timingCurve`.
+
+| Animation context | Token used | Correct? |
+|-------------------|-----------|----------|
+| Dot glide between tabs | `Animation.timingCurve(0.0, 0.0, 0.2, 1.0, duration: durationGlide)` | ⚠️ See note |
+| Departing tab glow dim | `MotionSelectionTransition.easing` | ✅ |
+| Arriving tab glow brighten | `MotionSelectionTransition.easing` | ✅ |
+
+**Note on dot glide**: The raw `timingCurve(0.0, 0.0, 0.2, 1.0)` is exactly `DesignTokens.Easing.easingDecelerate`. Could reference the token. However, the duration is `durationGlide` (350ms) — making this effectively `MotionModalSlide` (350ms + decelerate). But a tab indicator gliding isn't semantically a "modal slide." The raw curve with an explicit duration is arguably more honest than forcing a semantic token that doesn't match the interaction. Acceptable as-is.
+
+- Glow animations correctly use `MotionSelectionTransition` — tab selection is a selection state change
+- The `.easeIn`/`.easeOut` from the original code are gone
+- Multi-phase animation architecture (gliding → departing → arriving → idle) preserved
+
+Detailed per-task reviews in `feedback/task-2-1-ios-review.md` and `feedback/task-2-2-ios-review.md`.

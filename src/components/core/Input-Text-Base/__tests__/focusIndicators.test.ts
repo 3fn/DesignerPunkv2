@@ -304,7 +304,7 @@ describe('Input-Text-Base Focus Indicators', () => {
       
       // Verify reduce motion is checked
       expect(androidComponentContent).toContain('reduceMotion');
-      expect(androidComponentContent).toContain('TRANSITION_ANIMATION_SCALE');
+      expect(androidComponentContent).toContain('ANIMATOR_DURATION_SCALE');
     });
   });
 });
