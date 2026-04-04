@@ -54,19 +54,35 @@ DesignTokens.MotionFocusTransition.duration // TimeInterval
 
 ### Recommended Pattern
 
-Use the semantic motion token's `Animation` directly when it matches the use case:
+Every animation references a semantic motion token directly:
 ```swift
-withAnimation(DesignTokens.MotionFocusTransition.easing) { ... }
+withAnimation(DesignTokens.MotionSelectionTransition.easing) { ... }
+withAnimation(DesignTokens.MotionButtonPress.easing) { ... }
 ```
 
-When no semantic motion token matches (raw duration + easing needed):
-```swift
-withAnimation(.timingCurve(0.4, 0.0, 0.2, 1.0, duration: DesignTokens.Duration.duration150)) { ... }
-```
+No raw easing + duration combinations. No `.speed()` modifier. If a future animation doesn't have a matching semantic motion token, create one — don't fall back to raw tokens.
 
 ### Can It Be Incremental?
 
-Yes. Each file can be updated independently. The visual difference is subtle — `.easeInOut` (symmetric) vs `easingStandard` (cubic-bezier 0.4, 0.0, 0.2, 1.0 — fast start, slow end). No file depends on another file's easing. Batch by family for review efficiency.
+Yes. Each file can be updated independently. Batch by family for review efficiency.
+
+### Semantic Motion Token Mapping (per Kenya F1)
+
+Every animation uses a semantic motion token. No raw easing + duration fallbacks — if an animation doesn't have a matching semantic token, one is created. The `.speed()` pattern is not used.
+
+| File | Current Easing | Semantic Motion Token |
+|------|---------------|----------------------|
+| Input-Checkbox-Base | `.easeOut` (press), `.easeInOut` (selection) | `MotionButtonPress`, `MotionSelectionTransition` |
+| Input-Radio-Base | `.easeOut` (press), `.easeInOut` (selection) | `MotionButtonPress`, `MotionSelectionTransition` |
+| Chip-Base | `.easeInOut` (press) | `MotionButtonPress` |
+| Chip-Filter | `.easeInOut` (press/selection) | `MotionButtonPress` |
+| Chip-Input | `.easeInOut` (press) | `MotionButtonPress` |
+| Button-VerticalList-Item | `.easeInOut` (selection) | `MotionSelectionTransition` |
+| Progress-Pagination-Base | `.easeInOut` (selection) | `MotionSelectionTransition` |
+| Nav-TabBar-Base | `.easeIn`/`.easeOut` (tab switch) | `MotionSelectionTransition` |
+| Container-Card-Base | Already fixed (091) | `MotionFocusTransition` ✅ |
+
+All 8 remaining files have matching semantic motion tokens. No new tokens needed.
 
 ### Ada Input Needed
 
@@ -110,6 +126,8 @@ data class ButtonCTASizeConfig(
 ```
 
 Reference tokens directly — no `.toInt()` round-trip. `minWidth` and `touchTargetHeight` derive from sizing/accessibility tokens.
+
+**Token dependency**: `size900` (72, base × 9) needed for Button-CTA medium `minWidth`. Ada to add to `SizingTokens.ts` — same pattern as `size250` addition in Spec 092.
 
 ---
 
@@ -181,8 +199,18 @@ This isn't an inconsistency — it's a design choice. Add to the Button family d
 
 1. **Fixes vs design decisions**: Issues 1-5, 7 are fixes. Issue 6 (ripple vs blend) is a design decision to document. Issues 8-10 are deferred architectural concerns.
 
-2. **P1 easing incremental?**: Yes. Each file independent. Batch by family for review efficiency.
+2. **P1 easing incremental?**: Yes. Each file independent. Semantic motion tokens mapped per file (see table above).
 
 3. **LocalDesignTokens pattern**: Remove. It's an outlier with no benefit.
 
 4. **Estimated effort**: ~2 days. Focused cleanup, not multi-week architecture work.
+
+---
+
+## Tracking Confirmation (Data F4 / Kenya F3)
+
+The two blocking component bugs flagged by Data and Kenya are **already fixed in Spec 091**:
+- Button-VerticalList-Set `error()` crash → fixed in Task 3.2 (stateDescription + liveRegion)
+- Input-Text-Base `Void → Unit` → fixed in Task 3.4
+
+These are component-specific bugs, not systemic patterns — correctly out of scope for this spec.

@@ -19,6 +19,7 @@
  * - size600:  48   (base × 6)
  * - size700:  56   (base × 7)
  * - size800:  64   (base × 8)
+ * - size900:  72   (base × 9)
  * - size1000: 80   (base × 10)
  * - size1600: 128  (base × 16)
  *
@@ -170,6 +171,18 @@ export const sizingTokens: Record<string, PrimitiveToken> = {
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
     platforms: generateSizingPlatformValues(SIZING_BASE_VALUE * 8)
+  },
+  size900: {
+    name: 'size900',
+    category: TokenCategory.SIZING,
+    baseValue: SIZING_BASE_VALUE * 9,
+    familyBaseValue: SIZING_BASE_VALUE,
+    description: 'Size 900 - large prominent component dimension',
+    mathematicalRelationship: `base × 9 = ${SIZING_BASE_VALUE} × 9 = ${SIZING_BASE_VALUE * 9}`,
+    baselineGridAlignment: true,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: generateSizingPlatformValues(SIZING_BASE_VALUE * 9)
   },
   size1000: {
     name: 'size1000',

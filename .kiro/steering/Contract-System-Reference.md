@@ -46,15 +46,15 @@ This document is the authoritative reference for contract conventions. For the d
 
 117 concepts across 10 categories. Derived from the 29 deployed contracts.yaml files as of Spec 078 audit.
 
-Updated: 131 concepts after Spec 088 Nav-Header-Page added `heading`, `no_heading`, `back_navigation`, `close_positioning`, `title_alignment`, `action_styling`, `platform_height`, `collapsible_scroll`, `badge_threshold`.
+Updated: 136 concepts after Spec 090 (Progress-Bar-Base) added `milestone_announcements`, `track_fill`, `value_transition`, `indeterminate_pulse`, `value_range`.
 
-### accessibility (25)
+### accessibility (26)
 
-`actual_position` · `alt_text` · `announces_changes` · `aria_controls` · `aria_label` · `aria_pressed` · `aria_role` · `aria_roles` · `color_contrast` · `decorative` · `decorative_mode` · `dismiss_label` · `error_announcement` · `heading` · `hidden` · `list_role` · `no_heading` · `non_interactive` · `pluralized_announcements` · `progressbar_role` · `radiogroup_role` · `reduced_motion` · `role` · `text_scaling` · `touch_target`
+`actual_position` · `alt_text` · `announces_changes` · `aria_controls` · `aria_label` · `aria_pressed` · `aria_role` · `aria_roles` · `color_contrast` · `decorative` · `decorative_mode` · `dismiss_label` · `error_announcement` · `heading` · `hidden` · `list_role` · `milestone_announcements` · `no_heading` · `non_interactive` · `pluralized_announcements` · `progressbar_role` · `radiogroup_role` · `reduced_motion` · `role` · `text_scaling` · `touch_target`
 
-### animation (4)
+### animation (6)
 
-`checkmark` · `collapsible_scroll` · `coordination` · `initial_render`
+`checkmark` · `collapsible_scroll` · `coordination` · `indeterminate_pulse` · `initial_render` · `value_transition`
 
 ### composition (7)
 
@@ -80,13 +80,13 @@ Updated: 131 concepts after Spec 088 Nav-Header-Page added `heading`, `no_headin
 
 `binary_derivation` · `checked` · `connector_derivation` · `controlled` · `disabled` · `error` · `indeterminate` · `loading` · `mode_driven` · `priority_derivation` · `selected` · `selected_styling` · `styling` · `success` · `visual_driven`
 
-### validation (9)
+### validation (10)
 
-`audit_trail` · `email_format` · `explicit_consent` · `form_integration` · `group_required` · `on_blur` · `phone_format` · `selection_constraints` · `size_restriction`
+`audit_trail` · `email_format` · `explicit_consent` · `form_integration` · `group_required` · `on_blur` · `phone_format` · `selection_constraints` · `size_restriction` · `value_range`
 
-### visual (28)
+### visual (29)
 
-`action_styling` · `background` · `border` · `boundary` · `checkmark_icon` · `circular_shape` · `color_inheritance` · `entity_shape` · `gradient_glow` · `notification_color` · `optical_balance` · `pill_container` · `pill_shape` · `radius` · `renders_icon` · `renders_svg` · `rounded_corners` · `separator` · `shadow` · `size_emphasis` · `size_variants` · `state_colors` · `thickness` · `title_alignment` · `translucent` · `typography` · `variant_styling` · `viewport_clipping`
+`action_styling` · `background` · `border` · `boundary` · `checkmark_icon` · `circular_shape` · `color_inheritance` · `entity_shape` · `gradient_glow` · `notification_color` · `optical_balance` · `pill_container` · `pill_shape` · `radius` · `renders_icon` · `renders_svg` · `rounded_corners` · `separator` · `shadow` · `size_emphasis` · `size_variants` · `state_colors` · `thickness` · `title_alignment` · `track_fill` · `translucent` · `typography` · `variant_styling` · `viewport_clipping`
 
 ---
 

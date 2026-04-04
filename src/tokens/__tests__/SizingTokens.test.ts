@@ -19,10 +19,10 @@ describe('Sizing Tokens', () => {
   });
 
   describe('Token Count', () => {
-    it('should define 13 sizing tokens', () => {
-      expect(Object.keys(sizingTokens)).toHaveLength(13);
-      expect(sizingTokenNames).toHaveLength(13);
-      expect(getAllSizingTokens()).toHaveLength(13);
+    it('should define 14 sizing tokens', () => {
+      expect(Object.keys(sizingTokens)).toHaveLength(14);
+      expect(sizingTokenNames).toHaveLength(14);
+      expect(getAllSizingTokens()).toHaveLength(14);
     });
   });
 
@@ -39,6 +39,7 @@ describe('Sizing Tokens', () => {
       size600:  { multiplier: 6, value: 48 },
       size700:  { multiplier: 7, value: 56 },
       size800:  { multiplier: 8, value: 64 },
+      size900:  { multiplier: 9, value: 72 },
       size1000: { multiplier: 10, value: 80 },
       size1600: { multiplier: 16, value: 128 },
     };
