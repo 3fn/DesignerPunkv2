@@ -326,7 +326,7 @@ extension NavTabBarBase {
         // At 8%: departing tab settles down, glow dims
         DispatchQueue.main.asyncAfter(deadline: .now() + NavTabBarTokens.durationGlide * 0.08) {
             phase = .departing
-            withAnimation(.easeIn(duration: NavTabBarTokens.durationShort)) {
+            withAnimation(DesignTokens.MotionSelectionTransition.easing) {
                 glowOpacities[prevValue] = 0.0
             }
         }
@@ -334,7 +334,7 @@ extension NavTabBarBase {
         // At 50%: arriving tab lifts up, glow brightens
         DispatchQueue.main.asyncAfter(deadline: .now() + NavTabBarTokens.durationGlide * 0.5) {
             phase = .arriving
-            withAnimation(.easeOut(duration: NavTabBarTokens.durationShort)) {
+            withAnimation(DesignTokens.MotionSelectionTransition.easing) {
                 glowOpacities[newValue] = 1.0
             }
 

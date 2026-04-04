@@ -290,7 +290,7 @@ struct ChipInputButtonStyle: ButtonStyle {
                         lineWidth: ChipInputTokens.borderWidth
                     )
             )
-            .animation(.easeInOut(duration: ChipInputTokens.animationDuration), value: configuration.isPressed)
+            .animation(DesignTokens.MotionButtonPress.easing, value: configuration.isPressed)
             .onChange(of: configuration.isPressed) { newValue in
                 isPressed = newValue
             }

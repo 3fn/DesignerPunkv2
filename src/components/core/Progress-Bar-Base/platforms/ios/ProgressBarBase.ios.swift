@@ -103,7 +103,7 @@ struct ProgressBarBase: View {
     private func startPulseIfNeeded() {
         guard case .indeterminate = mode, !reduceMotion else { return }
         withAnimation(
-            .easeInOut(duration: ProgressBarTokens.pulseDuration)
+            DesignTokens.MotionSettleTransition.easing
                 .repeatForever(autoreverses: true)
         ) {
             pulseOpacity = PULSE_OPACITY_MAX

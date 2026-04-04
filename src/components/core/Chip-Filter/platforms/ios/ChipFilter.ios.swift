@@ -325,8 +325,8 @@ struct ChipFilterButtonStyle: ButtonStyle {
                         lineWidth: ChipFilterTokens.borderWidth
                     )
             )
-            .animation(.easeInOut(duration: ChipFilterTokens.animationDuration), value: configuration.isPressed)
-            .animation(.easeInOut(duration: ChipFilterTokens.animationDuration), value: selected)
+            .animation(DesignTokens.MotionButtonPress.easing, value: configuration.isPressed)
+            .animation(DesignTokens.MotionSelectionTransition.easing, value: selected)
             .onChange(of: configuration.isPressed) { newValue in
                 isPressed = newValue
             }

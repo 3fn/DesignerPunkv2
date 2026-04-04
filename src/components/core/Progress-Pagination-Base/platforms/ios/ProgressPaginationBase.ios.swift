@@ -129,7 +129,7 @@ public struct ProgressPaginationBase: View {
         let reduceMotion = UIAccessibility.isReduceMotionEnabled
         let stateAnimation: Animation? = reduceMotion
             ? nil
-            : .easeInOut(duration: DesignTokens.MotionSelectionTransition.duration)
+            : DesignTokens.MotionSelectionTransition.easing
 
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
@@ -151,7 +151,7 @@ public struct ProgressPaginationBase: View {
                 if reduceMotion {
                     proxy.scrollTo(newValue, anchor: .center)
                 } else {
-                    withAnimation(.easeOut(duration: DesignTokens.MotionSettleTransition.duration)) {
+                    withAnimation(DesignTokens.MotionSettleTransition.easing) {
                         proxy.scrollTo(newValue, anchor: .center)
                     }
                 }

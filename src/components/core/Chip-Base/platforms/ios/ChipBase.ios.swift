@@ -286,7 +286,7 @@ struct ChipButtonStyle: ButtonStyle {
                         lineWidth: ChipTokens.borderWidth
                     )
             )
-            .animation(.easeInOut(duration: ChipTokens.animationDuration), value: configuration.isPressed)
+            .animation(DesignTokens.MotionButtonPress.easing, value: configuration.isPressed)
             .onChange(of: configuration.isPressed) { newValue in
                 isPressed = newValue
             }

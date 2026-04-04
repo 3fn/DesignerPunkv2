@@ -91,7 +91,7 @@ struct NavHeaderPage: View {
         )
         .offset(y: isHidden ? -NavHeaderTokens.minHeight : 0)
         .animation(
-            reduceMotion ? nil : .easeOut(duration: NavHeaderPageTokens.animationDuration),
+            reduceMotion ? nil : DesignTokens.MotionSelectionTransition.easing,
             value: isHidden
         )
         .onPreferenceChange(ScrollOffsetPreferenceKey.self) { offset in

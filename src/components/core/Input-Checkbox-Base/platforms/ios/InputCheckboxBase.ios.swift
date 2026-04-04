@@ -362,15 +362,15 @@ struct InputCheckboxBase: View {
         }
         .scaleEffect(isPressed ? DesignTokens.scale096 : 1.0)
         .animation(
-            reduceMotion ? .none : .easeOut(duration: DesignTokens.MotionButtonPress.duration),
+            reduceMotion ? .none : DesignTokens.MotionButtonPress.easing,
             value: isPressed
         )
         .animation(
-            reduceMotion ? .none : .easeInOut(duration: DesignTokens.MotionSelectionTransition.duration),
+            reduceMotion ? .none : DesignTokens.MotionSelectionTransition.easing,
             value: checked
         )
         .animation(
-            reduceMotion ? .none : .easeInOut(duration: DesignTokens.MotionSelectionTransition.duration),
+            reduceMotion ? .none : DesignTokens.MotionSelectionTransition.easing,
             value: indeterminate
         )
     }

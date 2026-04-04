@@ -264,7 +264,7 @@ public struct VerticalListButtonItem: View {
     /// The animation is applied with the transitionDelay prop for staggered animations
     private var stateAnimation: Animation {
         return Animation
-            .easeInOut(duration: DesignTokens.MotionSelectionTransition.duration)
+            DesignTokens.MotionSelectionTransition.easing
             .delay(transitionDelay)
     }
     
@@ -272,7 +272,7 @@ public struct VerticalListButtonItem: View {
     /// Requirements: 7.2, 7.3 - Checkmark fade-in/fade-out using motion.selectionTransition
     private var checkmarkAnimation: Animation {
         return Animation
-            .easeInOut(duration: DesignTokens.MotionSelectionTransition.duration)
+            DesignTokens.MotionSelectionTransition.easing
             .delay(transitionDelay)
     }
     
