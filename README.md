@@ -2,102 +2,14 @@
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-10.1.0-purple)](docs/releases/RELEASE-NOTES-10.1.0.md)
+[![Version](https://img.shields.io/badge/Version-10.2.0-purple)](docs/releases/RELEASE-NOTES-10.2.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Tests-8090%2B-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/Tests-8138%2B-brightgreen)](.)
 
 [![Punk Your Design w/ Peter Michaels Allen | Wireframe Live](https://img.youtube.com/vi/sFjNMasG_mU/maxresdefault.jpg)](https://www.youtube.com/live/sFjNMasG_mU)
 *🎬 Punk Your Design w/ Peter Michaels Allen — Wireframe Live on Design Systems House*
-
----
-
-## Latest Release: v10.1.0
-
-**Component Discoverability, Nav-Header, & Unified Blur Tokens** (Specs 086 + 088 + 089) — Metadata infrastructure, the top bar component family, and token unification:
-
-- **Component Discoverability** (Spec 086): Build-time metadata extraction pipeline, per-platform readiness model derived from filesystem, controlled vocabulary for component contexts, 8/8 benchmark queries passing, Platform Resource Map, escape hatch governance pattern, MCP scope split design for Spec 081.
-- **Nav-Header Components** (Spec 088): True Native top bar across Web, iOS, and Android. Nav-Header-Base (primitive: safe area, landmark, three-region layout, translucent blur), Nav-Header-Page (semantic: h1 title, back/close/trailing actions, collapsible scroll, platform-native title alignment), Nav-Header-App (semantic: permissive scaffold for product-defined app-level chrome). 24 behavioral contracts, 13 new contract concepts.
-- **Unified Blur Token Family** (Spec 089): 9 blur primitives (base 16) replacing shadow blur and glow blur families. Zero visual change — same values, unified scale. All platform token files regenerated.
-- **Agent Knowledge Bases** (Spec 087): `/knowledge` CLI integration for platform-filtered, searchable source access. All 7 agents configured with domain-scoped knowledge bases.
-- **Product Agent Team** (Spec 070): Five new AI agents — Leonardo (product architect), Sparky (web), Kenya (iOS), Data (Android), Stacy (governance). Kenya and Data validated native implementations via platform review, catching 5 issues in Spec 088.
-- 309 test suites, 8,090 tests passing, 33 production components, 131 behavioral contract concepts.
-
-[Full Release Notes →](docs/releases/RELEASE-NOTES-10.0.0.md)
-
----
-
-## One Thing First
-
-This is **my design system foundation**—15+ years of industry experience distilled into an opinionated, mathematically-grounded system. I built it for my own work. If it's useful for yours too, excellent. But I'm sharing it because I believe these principles and patterns represent genuinely better approaches to design systems.
-
----
-
-## What This Actually Is
-
-DesignerPunk isn't a design system you download and use off-the-shelf. It's:
-
-1. **A complete toolkit I use for my own projects** - Including components, tokens, build systems, and tooling
-2. **A case study in design system thinking** - Portfolio work demonstrating deep expertise in cross-platform design systems
-3. **A working exploration of AI-assisted design development** - With a production-grade MCP server that actually reduces AI context load by 82%
-
----
-
-## Core Systems
-
-DesignerPunk is built on two interconnected systems:
-
-![High-Level Architecture](docs/architecture/High-Level%20Architecture.png)
-
-### Rosetta System — The Mathematical Foundation
-
-![Rosetta System](docs/architecture/Rosetta.png)
-
-A token system + build pipeline that translates design intent into platform-native code.
-
-- **Tokens**: ~310 mathematical values (spacing, color, typography, radius, shadow, glow, motion, opacity, blend)
-- **Build Pipeline**: Converts tokens to CSS (web), Swift (iOS), Kotlin (Android)
-- **Documentation**: Mechanical parsing + MCP servers for AI-friendly access
-- **Purpose**: Single source of truth that generates consistent output across platforms
-
-Think of it as: **Define once, generate everywhere**
-
-**What's included:**
-- Three-tier architecture: Primitive → Semantic → Component tokens
-- Cross-platform generation with platform-native syntax
-- MCP Documentation Server with 82% token reduction for AI agents
-- Application MCP Server with 6 query tools for agent-driven component selection
-- Empirically validated performance and token efficiency
-
-### Stemma System — The Component Architecture
-
-![Stemma System](docs/architecture/Stemma.png)
-
-A framework for building components that work identically across platforms while staying native.
-
-- **Naming Convention**: `[Family]-[Type]-[Variant]` (AI-discoverable)
-- **Behavioral Contracts**: 10-category taxonomy with 210 concepts — explicit specifications ensuring cross-platform consistency
-- **Application MCP Server**: Machine-readable metadata with 10 query tools for agent-driven component selection, experience patterns, family guidance, and assembly validation
-- **11 Component Families**: Navigation, Form Inputs, Core, Progress Indicators, Data Displays, etc.
-- **Purpose**: Systematic, scalable component development with shared architecture
-
-Think of it as: **Build once, implement natively everywhere**
-
-**What's included:**
-- Form Inputs family (4 production-ready components)
-- Core components (11 production-ready components)
-- Placeholder families with documented patterns (5 families, ready for implementation)
-- Health guardrails with 270+ validation tests
-- Component token API for lightweight, reasoned token authoring
-- 30 contracts.yaml files with formal inheritance and intentional exclusions
-- 30 component-meta.yaml semantic annotations for agent selection guidance
-
-#### Unified Contract System
-
-![Unified Contract System](docs/architecture/Unified%20Contract%20System.png)
-
-Every component makes explicit behavioral promises organized by a 10-category taxonomy (layout, interaction, state, validation, accessibility, composition, content, animation, visual, performance), with formal inheritance and intentional exclusions. Contracts define WHAT behavior occurs across platforms — implementations define HOW. The Application MCP server makes these contracts queryable by agents.
 
 ---
 
@@ -152,7 +64,7 @@ This is the **producer/musician model**: I don't write the music, but I shape th
 
 **Why this matters**: This demonstrates how modern product teams actually work. You don't need to be an expert coder to build sophisticated systems—you need to understand architecture, make good decisions, and guide implementation effectively.
 
-DesignerPunk has 7,960+ tests, production implementations across Web/iOS/Android, and sophisticated build pipelines—all architected and guided by clear framing, with execution handled by AI.
+DesignerPunk has 8,138+ tests, production implementations across Web/iOS/Android, and sophisticated build pipelines—all architected and guided by clear framing, with execution handled by AI.
 
 This is a working case study in how to lead AI-driven development at scale.
 
@@ -171,26 +83,27 @@ This is a working case study in how to lead AI-driven development at scale.
 - Chips (Base/Filter/Input) — Compact interactive elements for filtering, selection, and input
 - Checkboxes (Base/Legal) — Binary selection controls with legal consent support
 - Radio Buttons (Base/Set) — Single-selection controls with mutual exclusivity and group orchestration
-- Progress Indicators — Node-Base, Connector-Base, Label-Base (primitives) + Pagination-Base, Stepper-Base, Stepper-Detailed (semantic variants) with sliding window virtualization
+- Progress Indicators — Node-Base, Connector-Base, Label-Base (primitives) + Pagination-Base, Stepper-Base, Stepper-Detailed (semantic variants) with sliding window virtualization + Progress-Bar-Base (continuous/percentage-based)
 - Navigation — SegmentedChoice-Base, TabBar-Base with three-phase animation choreography and cross-platform behavioral contracts
-- 30 production-ready components with behavioral contracts
+- Nav-Header — Nav-Header-Base (structural primitive), Nav-Header-Page (semantic: h1 title, back/close/trailing), Nav-Header-App (semantic: permissive scaffold)
+- 34 production-ready components with behavioral contracts
 - Full cross-platform support with platform-native implementations
-- Uniform contract system: 10 categories, 210 concepts, formal inheritance
+- Uniform contract system: 10 categories, 136 concepts, formal inheritance
 
 **Custom Agent System**
-- 3 specialized Kiro agents: Ada (tokens), Lina (components), Thurgood (governance)
-- Domain-scoped configurations with progressive `skill://` resource loading
+- 8 specialized AI agents: Ada (tokens), Lina (components), Thurgood (governance), Leonardo (product architect), Sparky (web), Kenya (iOS), Data (Android), Stacy (product QA)
+- Domain-scoped configurations with progressive resource loading
 - 11 user-triggered validation hooks across all agents
-- 54 steering docs with skill-compatible frontmatter for on-demand loading
+- 85 steering docs with on-demand loading
 
 **Rosetta Token System**
-- 310+ tokens (spacing, typography, color, radius, shadow, glow, motion, opacity, blend)
+- 320+ tokens (spacing, sizing, typography, color, radius, shadow, glow, motion, opacity, blend, blur)
 - Cross-platform generation (CSS, Swift, Kotlin, DTCG JSON)
 - Three-tier architecture (Primitive → Semantic → Component)
 - MCP Documentation Server with 82% token reduction for AI agent queries
 - Application MCP Server with progressive disclosure queries for agent-driven selection
-- 3 experience patterns for assembly guidance (forms, settings, onboarding)
-- 3 family guidance YAML files for machine-queryable component selection (Buttons, Form Inputs, Containers)
+- 9 experience patterns for assembly guidance
+- Family guidance YAML files for machine-queryable component selection
 - Bidirectional Figma integration: token push (Variables + Styles) and design extraction (ComponentAnalysis with three-tier classification)
 
 ### 🟡 Structural Foundation Ready
@@ -217,13 +130,101 @@ This is a working case study in how to lead AI-driven development at scale.
 
 ---
 
+## Latest Release: v10.2.0
+
+**New Component, Sizing Tokens, & Native Platform Sweep** (Specs 090 + 091 + 092 + 093):
+
+- **Progress-Bar-Base** (Spec 090): First continuous/percentage-based progress component. Determinate, indeterminate, and indeterminate-static fill modes. True Native across Web, iOS, Android. Gap report #2 resolved.
+- **Sizing Token Family** (Spec 092): 13 new sizing primitives (size050–size1600, base 8) separating component dimensions from spacing. 6 component families migrated internally. Zero visual change.
+- **Native Readiness Sweep** (Spec 091): 28 components reviewed and fixed across iOS and Android. 10 families touched. All components now `reviewed: true` on both platforms.
+- **Native Implementation Modernization** (Spec 093): iOS spring animations replacing cubic bezier. Android ripple vs blend design decision documented. All 7 correctness properties verified.
+- **Application MCP**: `rebuild_index` tool added for live catalog reindexing.
+- 311 test suites, 8,138 tests passing, 34 production components, 136 behavioral contract concepts.
+
+[Full Release Notes →](docs/releases/RELEASE-NOTES-10.2.0.md)
+
+---
+
+## One Thing First
+
+This is **my design system foundation**—15+ years of industry experience distilled into an opinionated, mathematically-grounded system. I built it for my own work. If it's useful for yours too, excellent. But I'm sharing it because I believe these principles and patterns represent genuinely better approaches to design systems.
+
+---
+
+## What This Actually Is
+
+DesignerPunk isn't a design system you download and use off-the-shelf. It's:
+
+1. **A complete toolkit I use for my own projects** - Including components, tokens, build systems, and tooling
+2. **A case study in design system thinking** - Portfolio work demonstrating deep expertise in cross-platform design systems
+3. **A working exploration of AI-assisted design development** - With a production-grade MCP server that actually reduces AI context load by 82%
+
+---
+
+## Core Systems
+
+DesignerPunk is built on two interconnected systems:
+
+![High-Level Architecture](docs/architecture/High-Level%20Architecture.png)
+
+### Rosetta System — The Mathematical Foundation
+
+![Rosetta System](docs/architecture/Rosetta.png)
+
+A token system + build pipeline that translates design intent into platform-native code.
+
+- **Tokens**: ~320 mathematical values (spacing, sizing, color, typography, radius, shadow, glow, motion, opacity, blend, blur)
+- **Build Pipeline**: Converts tokens to CSS (web), Swift (iOS), Kotlin (Android)
+- **Documentation**: Mechanical parsing + MCP servers for AI-friendly access
+- **Purpose**: Single source of truth that generates consistent output across platforms
+
+Think of it as: **Define once, generate everywhere**
+
+**What's included:**
+- Three-tier architecture: Primitive → Semantic → Component tokens
+- Cross-platform generation with platform-native syntax
+- MCP Documentation Server with 82% token reduction for AI agents
+- Application MCP Server with query tools for agent-driven component selection
+- Empirically validated performance and token efficiency
+
+### Stemma System — The Component Architecture
+
+![Stemma System](docs/architecture/Stemma.png)
+
+A framework for building components that work identically across platforms while staying native.
+
+- **Naming Convention**: `[Family]-[Type]-[Variant]` (AI-discoverable)
+- **Behavioral Contracts**: 10-category taxonomy with 136 concepts — explicit specifications ensuring cross-platform consistency
+- **Application MCP Server**: Machine-readable metadata with query tools for agent-driven component selection, experience patterns, family guidance, and assembly validation
+- **11 Component Families**: Navigation, Form Inputs, Core, Progress Indicators, Data Displays, etc.
+- **Purpose**: Systematic, scalable component development with shared architecture
+
+Think of it as: **Build once, implement natively everywhere**
+
+**What's included:**
+- Form Inputs family (4 production-ready components)
+- Core components (11 production-ready components)
+- Placeholder families with documented patterns (5 families, ready for implementation)
+- Health guardrails with 270+ validation tests
+- Component token API for lightweight, reasoned token authoring
+- 34 contracts.yaml files with formal inheritance and intentional exclusions
+- 34 component-meta.yaml semantic annotations for agent selection guidance
+
+#### Unified Contract System
+
+![Unified Contract System](docs/architecture/Unified%20Contract%20System.png)
+
+Every component makes explicit behavioral promises organized by a 10-category taxonomy (layout, interaction, state, validation, accessibility, composition, content, animation, visual, performance), with formal inheritance and intentional exclusions. Contracts define WHAT behavior occurs across platforms — implementations define HOW. The Application MCP server makes these contracts queryable by agents.
+
+---
+
 ## Getting Started
 
 ### What You Can Actually Use Today
 
 If you want to understand how these ideas work in practice:
 
-1. **The token system** (`src/tokens/`) — 310 tokens organized mathematically with cross-platform generation
+1. **The token system** (`src/tokens/`) — 320+ tokens organized mathematically with cross-platform generation
 2. **Component implementations** (`src/components/`) — Real, production-ready components for Web/iOS/Android
 3. **MCP Documentation Server** (`mcp-server/`) — Working implementation you can integrate with Cursor or Claude
 4. **Application MCP Server** (`application-mcp-server/`) — Agent-driven component selection, experience patterns, and assembly validation
@@ -240,7 +241,7 @@ npm test
 
 ### If You Want to Explore
 
-**5-minute intro**: Read [What This Actually Is](#what-this-actually-is) + [Core Systems](#core-systems)
+**5-minute intro**: Read [The Problem It Solves](#the-problem-it-solves) + [Core Systems](#core-systems)
 
 **30-minute deep dive**: 
 - Read [.kiro/steering/Token System Overview](.kiro/steering/)
@@ -290,7 +291,7 @@ With MCP: *"Query the documentation map → get summary → retrieve specific se
 
 ### Component Selection as a Queryable System
 
-Instead of: *"Parse 28 schema files, 28 contract files, and 28 annotation files"*
+Instead of: *"Parse 34 schema files, 34 contract files, and 34 annotation files"*
 With Application MCP: *"find_components({ context: 'login-forms' }) → get_experience_pattern('simple-form') → get_prop_guidance('Form Inputs') → validate_assembly(tree)"*
 
 **Result**: Agents select components by context, learn assembly patterns, query family-level selection guidance, and validate complete UI trees — all through structured queries
@@ -356,7 +357,7 @@ The following represent areas of active development, sequenced by dependencies a
 
 ### Current Work
 
-- Specs 048-080 (active implementation)
+- Specs 048-093 (active implementation)
 
 ### Near-Term Focus
 
@@ -431,10 +432,10 @@ This project demonstrates:
 |------|----------------|
 | **Complete design system foundation** | Shows understanding of system design, not just components |
 | **Cross-platform native code** | Demonstrates bridge between design and deep technical work |
-| **310+ tokens** | Proves ability to create systematic, scalable foundations |
-| **7,960+ tests** | Shows commitment to reliability and quality |
+| **320+ tokens** | Proves ability to create systematic, scalable foundations |
+| **8,138+ tests** | Shows commitment to reliability and quality |
 | **2 MCP Servers** (docs + application) | Working solutions to real AI collaboration problems |
-| **112+ behavioral contracts** | Explicit cross-platform consistency guarantees |
+| **136 behavioral contract concepts** | Explicit cross-platform consistency guarantees |
 | **Architectural documentation** | Demonstrates design leadership and systems thinking |
 
 For hiring managers: This shows someone who understands both design and engineering deeply enough to build infrastructure that serves both disciplines.
@@ -492,20 +493,3 @@ MIT — Use it however you want.
 This project reflects my opinions about what good design systems look like. You might disagree with some choices (the mathematical relationships, the semantic token structure, the emphasis on AI collaboration). That's fine. The point is to demonstrate *systematic thinking* about design system architecture.
 
 Even if you don't adopt DesignerPunk directly, I hope it influences how you think about design systems in your own work.
-```
-
----
-
-## What Changed from Previous Version
-
-1. ✅ **Added** Nav-TabBar-Base — True Native tab bar component (Web/iOS/Android) with three-phase animation, radial glow gradients, chrome tracking (web), haptics (iOS/Android), and full accessibility (Spec 050)
-2. ✅ **Added** Nav-SegmentedChoice-Base — Segmented choice navigation component (Spec 049)
-3. ✅ **Added** Rosetta Mode Architecture — Two-level mode resolution, 4-context matrix, Option B generators, mode parity audit, theme template generation (Spec 080)
-4. ✅ **Added** `blend.pressedLighter` semantic token — completes blend family directional symmetry
-5. ✅ **Added** `visual_gradient_glow` contract template — new Concept Catalog entry for gradient-based visual emphasis
-6. ✅ **Added** Dark theme infrastructure — `SemanticOverrideResolver`, complete dark theme skeleton, 5 Nav-TabBar-Base dark overrides
-7. ✅ **Updated** All four generators (CSS, Swift, Kotlin, DTCG JSON) produce mode-aware light/dark output
-8. ✅ **Updated** Component count: 28 → 30
-9. ✅ **Updated** Contract concepts: 190 → 210
-10. ✅ **Updated** Test count: 7,820 → 7,963 across 306 suites
-11. ✅ **Updated** Specs reference to 048-080 (active implementation)
