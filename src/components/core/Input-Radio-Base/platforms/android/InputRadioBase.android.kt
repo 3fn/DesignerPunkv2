@@ -290,7 +290,7 @@ private fun RadioCircle(
             selected -> RadioTokens.activeBorderColor
             else -> RadioTokens.defaultBorderColor
         },
-        animationSpec = tween(durationMillis = RadioTokens.animationDuration),
+        animationSpec = if (reduceMotion) snap() else tween(durationMillis = RadioTokens.animationDuration, easing = DesignTokens.Easing.EasingStandard),
         label = "radioBorder"
     )
 
@@ -312,10 +312,10 @@ private fun RadioCircle(
         AnimatedVisibility(
             visible = selected,
             enter = scaleIn(
-                animationSpec = tween(durationMillis = RadioTokens.animationDuration)
+                animationSpec = if (reduceMotion) snap() else tween(durationMillis = RadioTokens.animationDuration, easing = DesignTokens.Easing.EasingStandard)
             ),
             exit = scaleOut(
-                animationSpec = tween(durationMillis = RadioTokens.animationDuration)
+                animationSpec = if (reduceMotion) snap() else tween(durationMillis = RadioTokens.animationDuration, easing = DesignTokens.Easing.EasingStandard)
             )
         ) {
             Box(
@@ -404,6 +404,7 @@ fun InputRadioBase(
 ) {
     val isSelected = selectedValue == value
     val hasError = errorMessage != null
+    val reduceMotion = isReduceMotionEnabled()
     val interactionSource = remember { MutableInteractionSource() }
 
     // Accessibility state description
@@ -681,4 +682,16 @@ fun InputRadioBasePreview() {
             )
         }
     }
+}
+
+
+@Composable
+private fun isReduceMotionEnabled(): Boolean {
+    val context = LocalContext.current
+    val scale = Settings.Global.getFloat(
+        context.contentResolver,
+        Settings.Global.ANIMATOR_DURATION_SCALE,
+        1f
+    )
+    return scale == 0f
 }

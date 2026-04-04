@@ -29,8 +29,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -232,11 +230,10 @@ fun ProgressIndicatorNodeBase(
             }
             // md/lg + checkmark
             effectiveContent == ProgressNodeContent.CHECKMARK -> {
-                Icon(
-                    imageVector = Icons.Filled.Check,
-                    contentDescription = null,
-                    tint = fgColor,
-                    modifier = Modifier.size(dimension * 0.5f)
+                IconBase(
+                    name = "check",
+                    size = dimension * 0.5f,
+                    color = fgColor
                 )
             }
             // md/lg + custom icon

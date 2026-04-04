@@ -633,8 +633,16 @@ Button components resolve tokens through the Rosetta System's semantic-to-primit
 
 - Jetpack Compose Button with custom styling
 - Haptic feedback via HapticFeedback
-- Ripple effect on press
 - Material Design integration
+
+#### Android Press Feedback: Blend vs Ripple (Design Decision)
+
+Android components use two press feedback patterns — this is a deliberate design choice, not an inconsistency:
+
+- **Blend utilities** (`pressedBlend()`): Used for shaped buttons and surfaces — Button-CTA, Button-VerticalList-Item, Container-Card-Base. Uniform darkening across the entire surface. Consistent with iOS (which has no ripple) and web (CSS blend).
+- **Ripple** (`rememberRipple()`): Used for Button-Icon only. Circular spatial feedback matches the circular touch target and provides clear origin-point indication for icon-only actions.
+
+iOS uses scale transforms + color blends for all press feedback. The ripple distinction is Android-specific.
 
 ### Behavioral Consistency
 

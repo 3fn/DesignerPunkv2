@@ -415,6 +415,9 @@ fun InputCheckboxBase(
     val hasError = errorMessage != null
     val isActive = checked || indeterminate
     
+    // Reduced motion check
+    val reduceMotion = isReduceMotionEnabled()
+    
     // Compute effective label font size (typography override or size default)
     val effectiveLabelFontSize = labelTypography.fontSize ?: size.labelFontSize
     
@@ -422,7 +425,7 @@ fun InputCheckboxBase(
     // @see Requirement 1.7 - State transition animation using motion.selectionTransition
     val backgroundColor by animateColorAsState(
         targetValue = if (isActive) CheckboxTokens.checkedBackground else CheckboxTokens.uncheckedBackground,
-        animationSpec = tween(durationMillis = CheckboxTokens.animationDuration),
+        animationSpec = if (reduceMotion) snap() else tween(durationMillis = CheckboxTokens.animationDuration, easing = DesignTokens.Easing.EasingStandard),
         label = "checkboxBackground"
     )
     
@@ -432,7 +435,7 @@ fun InputCheckboxBase(
             isActive -> CheckboxTokens.activeBorderColor
             else -> CheckboxTokens.defaultBorderColor
         },
-        animationSpec = tween(durationMillis = CheckboxTokens.animationDuration),
+        animationSpec = if (reduceMotion) snap() else tween(durationMillis = CheckboxTokens.animationDuration, easing = DesignTokens.Easing.EasingStandard),
         label = "checkboxBorder"
     )
     
@@ -774,4 +777,16 @@ fun InputCheckboxBasePreview() {
             )
         }
     }
+}
+
+
+@Composable
+private fun isReduceMotionEnabled(): Boolean {
+    val context = LocalContext.current
+    val scale = Settings.Global.getFloat(
+        context.contentResolver,
+        Settings.Global.ANIMATOR_DURATION_SCALE,
+        1f
+    )
+    return scale == 0f
 }

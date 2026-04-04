@@ -160,9 +160,9 @@ fun ButtonCTA(
         modifier = Modifier
             // Requirement 13.1-13.4: Touch target accessibility (44dp minimum)
             // Small buttons extend from 40dp visual to 44dp touch target
-            .heightIn(min = sizeConfig.touchTargetHeight.dp)
+            .heightIn(min = sizeConfig.touchTargetHeight)
             // Requirement 6.1-6.3: Minimum width
-            .widthIn(min = sizeConfig.minWidth.dp)
+            .widthIn(min = sizeConfig.minWidth)
             // Requirement 16.5: Test tag for automated testing
             .testTag(testID ?: "")
             // Apply clickable without ripple indication (blend colors handle state feedback)
@@ -175,11 +175,11 @@ fun ButtonCTA(
         // Requirement 2.1-2.3, 7.1-7.5: Background color based on style and state
         color = styleConfig.backgroundColor,
         // Requirement 5.1-5.3: Border radius based on size
-        shape = RoundedCornerShape(sizeConfig.borderRadius.dp),
+        shape = RoundedCornerShape(sizeConfig.borderRadius),
         // Requirement 2.2: Border for secondary style
         border = if (style == ButtonCTAStyle.SECONDARY) {
             BorderStroke(
-                width = styleConfig.borderWidth.dp,
+                width = styleConfig.borderWidth,
                 color = styleConfig.borderColor
             )
         } else null
@@ -187,14 +187,14 @@ fun ButtonCTA(
         // Requirement 3.1-3.3, 4.1-4.3: Padding based on size
         Box(
             modifier = Modifier.padding(
-                horizontal = sizeConfig.horizontalPadding.dp,
-                vertical = sizeConfig.verticalPadding.dp
+                horizontal = sizeConfig.horizontalPadding,
+                vertical = sizeConfig.verticalPadding
             ),
             contentAlignment = Alignment.Center
         ) {
             // Requirement 8.1-8.6: Icon-text layout with Row
             Row(
-                horizontalArrangement = Arrangement.spacedBy(sizeConfig.iconTextSpacing.dp),
+                horizontalArrangement = Arrangement.spacedBy(sizeConfig.iconTextSpacing),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Optional leading icon
@@ -244,15 +244,15 @@ fun ButtonCTA(
  * @property iconTextSpacing Spacing between icon and text in dp
  */
 private data class ButtonCTASizeConfig(
-    val height: Int,
-    val touchTargetHeight: Int,
+    val height: Dp,
+    val touchTargetHeight: Dp,
     val typography: TextStyle,
-    val horizontalPadding: Int,
-    val verticalPadding: Int,
-    val borderRadius: Int,
-    val minWidth: Int,
+    val horizontalPadding: Dp,
+    val verticalPadding: Dp,
+    val borderRadius: Dp,
+    val minWidth: Dp,
     val iconSize: Dp,
-    val iconTextSpacing: Int
+    val iconTextSpacing: Dp
 )
 
 /**
@@ -276,55 +276,37 @@ private data class ButtonCTASizeConfig(
 private fun getButtonCTASizeConfig(size: ButtonCTASize): ButtonCTASizeConfig {
     return when (size) {
         ButtonCTASize.SMALL -> ButtonCTASizeConfig(
-            height = 40,
-            touchTargetHeight = DesignTokens.tap_area_minimum.toInt(), // Requirement 13.1: Extends to 44dp for accessibility (tapAreaMinimum)
-            typography = TextStyle(
-                fontSize = DesignTokens.font_size_100.sp,
-                fontWeight = FontWeight(DesignTokens.font_weight_500.toInt()),
-                lineHeight = DesignTokens.line_height_100.sp,
-                fontFamily = androidx.compose.ui.text.font.FontFamily.Default,
-                letterSpacing = DesignTokens.letter_spacing_100.sp
-            ), // A2: typography.labelMd (medium weight for button emphasis)
-            horizontalPadding = DesignTokens.space_inset_200.toInt(), // space.inset.200 (16dp)
-            verticalPadding = DesignTokens.space_inset_100.toInt(),   // space.inset.100 (8dp)
-            borderRadius = DesignTokens.radius_100.toInt(),            // radius100 (8dp)
-            minWidth = 56,          // Requirement 6.1
-            iconSize = DesignTokens.icon_size_100,      // A3: icon.size100 (24dp) - use Dp directly
-            iconTextSpacing = DesignTokens.space_grouped_tight.toInt() // space.grouped.tight (4dp)
+            height = DesignTokens.size_500,
+            touchTargetHeight = DesignTokens.tap_area_minimum,
+            typography = DesignTokens.typography_button_md,
+            horizontalPadding = DesignTokens.space_inset_200,
+            verticalPadding = DesignTokens.space_inset_100,
+            borderRadius = DesignTokens.radius_100,
+            minWidth = DesignTokens.size_700,
+            iconSize = DesignTokens.icon_size_100,
+            iconTextSpacing = DesignTokens.space_grouped_tight
         )
         ButtonCTASize.MEDIUM -> ButtonCTASizeConfig(
-            height = 48,
-            touchTargetHeight = 48, // Requirement 13.2: Meets 44dp minimum
-            typography = TextStyle(
-                fontSize = DesignTokens.font_size_100.sp,
-                fontWeight = FontWeight(DesignTokens.font_weight_500.toInt()),
-                lineHeight = DesignTokens.line_height_100.sp,
-                fontFamily = androidx.compose.ui.text.font.FontFamily.Default,
-                letterSpacing = DesignTokens.letter_spacing_100.sp
-            ), // A2: typography.labelMd (medium weight for button emphasis)
-            horizontalPadding = DesignTokens.space_inset_300.toInt(), // space.inset.300 (24dp)
-            verticalPadding = DesignTokens.space_inset_150.toInt(),   // space.inset.150 (12dp)
-            borderRadius = DesignTokens.radius_150.toInt(),            // radius150 (12dp)
-            minWidth = 72,          // Requirement 6.2
-            iconSize = DesignTokens.icon_size_100,      // A3: icon.size100 (24dp) - use Dp directly
-            iconTextSpacing = DesignTokens.space_grouped_normal.toInt() // space.grouped.normal (8dp)
+            height = DesignTokens.size_600,
+            touchTargetHeight = DesignTokens.tap_area_recommended,
+            typography = DesignTokens.typography_button_md,
+            horizontalPadding = DesignTokens.space_inset_300,
+            verticalPadding = DesignTokens.space_inset_150,
+            borderRadius = DesignTokens.radius_150,
+            minWidth = DesignTokens.size_900,
+            iconSize = DesignTokens.icon_size_100,
+            iconTextSpacing = DesignTokens.space_grouped_normal
         )
         ButtonCTASize.LARGE -> ButtonCTASizeConfig(
-            height = 56,
-            touchTargetHeight = 56, // Requirement 13.2: Exceeds 44dp minimum
-            typography = TextStyle(
-                fontSize = DesignTokens.font_size_125.sp,
-                fontWeight = FontWeight(DesignTokens.font_weight_500.toInt()),
-                lineHeight = DesignTokens.line_height_125.sp,
-                fontFamily = androidx.compose.ui.text.font.FontFamily.Default,
-                letterSpacing = DesignTokens.letter_spacing_125.sp
-            ), // A2: typography.labelLg (medium weight for button emphasis)
-            horizontalPadding = DesignTokens.space_inset_400.toInt(), // space.inset.400 (32dp)
-            verticalPadding = DesignTokens.space_inset_150.toInt(),   // space.inset.150 (12dp)
-            borderRadius = DesignTokens.radius_200.toInt(),            // radius200 (16dp)
-            minWidth = 80,          // Requirement 6.3
-            iconSize = DesignTokens.icon_size_125,      // A3: icon.size125 (32dp) - use Dp directly
-            iconTextSpacing = DesignTokens.space_grouped_normal.toInt() // space.grouped.normal (8dp)
+            height = DesignTokens.size_700,
+            touchTargetHeight = DesignTokens.size_700,
+            typography = DesignTokens.typography_button_lg,
+            horizontalPadding = DesignTokens.space_inset_400,
+            verticalPadding = DesignTokens.space_inset_150,
+            borderRadius = DesignTokens.radius_200,
+            minWidth = DesignTokens.size_1000,
+            iconSize = DesignTokens.icon_size_125,
+            iconTextSpacing = DesignTokens.space_grouped_normal
         )
     }
 }
@@ -345,7 +327,7 @@ private data class ButtonCTAStyleConfig(
     val backgroundColor: Color,
     val textColor: Color,
     val iconColor: Color,
-    val borderWidth: Int,
+    val borderWidth: Dp,
     val borderColor: Color
 )
 
@@ -411,7 +393,7 @@ private fun getButtonCTAStyleConfig(style: ButtonCTAStyle, isPressed: Boolean, d
             backgroundColor = secondaryBgColor,      // Requirement 2.2, 7.2: color.structure.canvas with blend states
             textColor = colorActionPrimary,                // Requirement 2.2: color.action.primary
             iconColor = secondaryIconColor,          // Requirement 9.2, 7.4: color.action.primary with optical balance
-            borderWidth = DesignTokens.border_default.toInt(), // border.default (1dp)
+            borderWidth = DesignTokens.border_default,
             borderColor = colorActionPrimary               // Requirement 2.2: color.action.primary
         )
         ButtonCTAStyle.TERTIARY -> ButtonCTAStyleConfig(
